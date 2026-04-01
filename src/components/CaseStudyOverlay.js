@@ -65,10 +65,12 @@ export default defineComponent({
     // ── Where the video lands in the expanded view ──
     function videoTarget() {
       const vpW = window.innerWidth
+      // On mobile, cap to viewport width minus 48px padding (24px each side)
+      const size = Math.min(props.heroSize, vpW - 48)
       return {
-        left: (vpW - props.heroSize) / 2,
+        left: (vpW - size) / 2,
         top: 40,
-        size: props.heroSize,
+        size,
       }
     }
 

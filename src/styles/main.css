@@ -2817,9 +2817,23 @@ strong, b {
     height: calc((100vw - 48px) / 3);
   }
 
+  /* ── Expanded about card — tighter side padding on mobile ── */
+  .about-expanded-inner {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
   /* ── Case study header — bring close button to edge on narrow screens ── */
   .cs-header {
     padding: 24px 24px;
+  }
+
+  /* ── Case study hero video — scale down with page padding ── */
+  .cs-hero-video {
+    width:  calc(100vw - 48px) !important;
+    height: calc(100vw - 48px) !important;
+    max-width: 448px;
+    max-height: 448px;
   }
 
   /* ── Case study containers — fit viewport with same padding as text ── */
@@ -2852,4 +2866,35 @@ strong, b {
 
   /* Disable version wrap hover transitions on mobile */
   .cs-version-wrap { transition: none; }
+
+  /* Simplestream logo rail — 150% faster on smaller screen */
+  .pc1-track {
+    animation-duration: 16s;
+  }
+
+  /* ── Always show action icon (no hover needed) ── */
+  .action-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ── Disable hover lift so tap goes straight to click ── */
+  .bento-card:hover {
+    transform: translateZ(0);
+    border-color: var(--color-border-card);
+    box-shadow:
+      0 1px 3px var(--color-shadow-card-rest),
+      0 1px 2px var(--color-shadow-card-rest-2),
+      inset 0 1px 0 var(--color-card-inset-top),
+      inset 0 -1px 0 var(--color-card-inset-bottom);
+  }
+
+  .bento-card.dark:hover {
+    border-color: rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 1px 3px var(--color-shadow-card-rest),
+      0 1px 2px var(--color-shadow-card-rest-2),
+      inset 0 1px 0 var(--color-card-inset-top),
+      inset 0 -1px 0 var(--color-card-inset-bottom);
+  }
 }
