@@ -2979,7 +2979,7 @@ strong, b {
      columns actually fill the available space. */
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: calc((100vw - 66px) / 2);
+    grid-auto-rows: minmax(calc((100vw - 66px) / 2), auto);
     width: 100%;
   }
 
@@ -2992,6 +2992,13 @@ strong, b {
   .bulb-card,
   .duolingo-card {
     aspect-ratio: 1 / 1;
+  }
+
+  /* Quote cards: 50% taller so text doesn't crop.
+     Full-width cards (1/3), alone in their row, so growing is safe. */
+  .ds-quote-card,
+  .ux-quote-card {
+    min-height: calc((100vw - 66px) * 0.75);
   }
 
   /* Card grid placements are driven by inline styles from MOBILE_LAYOUTS

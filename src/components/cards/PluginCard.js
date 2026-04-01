@@ -407,11 +407,11 @@ export default defineComponent({
 
           h('video', {
             class: 'cs-demo-video',
-            'data-src': 'src/assets/videos/rayo-plugin-demo.mp4',
+            src: 'src/assets/videos/rayo-plugin-demo.mp4',
+            autoplay: true,
             loop: true,
             muted: true,
             playsinline: true,
-            preload: 'none',
             disablePictureInPicture: true,
             controlsList: 'nodownload nofullscreen noremoteplayback',
             style: 'pointer-events: none;',
