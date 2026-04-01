@@ -74,6 +74,14 @@ export default defineComponent({
           entries.forEach(entry => {
             if (entry.isIntersecting) {
               entry.target.classList.add('cs-img-visible')
+
+              // Lazy-load videos: swap data-src → src and autoplay
+              if (entry.target.tagName === 'VIDEO' && entry.target.dataset.src) {
+                entry.target.src = entry.target.dataset.src
+                entry.target.removeAttribute('data-src')
+                entry.target.play().catch(() => {})
+              }
+
               imgObserver.unobserve(entry.target)
             }
           })

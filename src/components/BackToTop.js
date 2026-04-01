@@ -4,16 +4,17 @@ export default defineComponent({
   name: 'BackToTop',
   setup() {
     const visible = ref(false)
+    let scrolling = false   // true while our own animation is running
 
     function onScroll() {
+      if (scrolling) return  // ignore scroll events from our animation
       visible.value = window.scrollY > window.innerHeight
     }
 
     function scrollToTop() {
-      // Manual smooth scroll — avoids Safari bug where browser-native
-      // smooth scroll fights with subsequent user input and snaps back.
       const start = window.scrollY
       if (start === 0) return
+      scrolling = true
       const startTime = performance.now()
       const duration = 500
 
@@ -21,7 +22,12 @@ export default defineComponent({
         const progress = Math.min((now - startTime) / duration, 1)
         const ease = 1 - Math.pow(1 - progress, 3)   // ease-out cubic
         window.scrollTo(0, start * (1 - ease))
-        if (progress < 1) requestAnimationFrame(step)
+        if (progress < 1) {
+          requestAnimationFrame(step)
+        } else {
+          scrolling = false
+          visible.value = false
+        }
       }
 
       requestAnimationFrame(step)
