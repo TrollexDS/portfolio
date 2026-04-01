@@ -84,7 +84,15 @@ export default defineComponent({
       hide()
     }
 
+    // Skip entirely on touch / mobile devices (no tooltip needed)
+    const isTouch = 'ontouchstart' in window
+      || navigator.maxTouchPoints > 0
+      || (typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches)
+      || window.innerWidth <= 768
+
     onMounted(() => {
+      if (isTouch) return
+
       // Seed smoothed position so there's no initial jump from (0,0)
       smoothX = window.innerWidth / 2
       smoothY = window.innerHeight / 2

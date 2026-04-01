@@ -179,10 +179,6 @@ export default defineComponent({
           ),
         ]),
 
-        h('a', { href: '#', class: 'nav-resume' }, [
-          'Resume',
-          h('img', { src: ARROW_OUT, alt: '' }),
-        ]),
       ])
     }
   },

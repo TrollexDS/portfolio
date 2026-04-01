@@ -13,8 +13,11 @@ img {
 }
 
 /* ── Custom cursor — native cursor hidden, DOM shape takes over ── */
-*, *::before, *::after {
-  cursor: none !important;
+/* Only hide on wide screens with a fine pointer (mouse/trackpad) */
+@media (pointer: fine) and (min-width: 769px) {
+  *, *::before, *::after {
+    cursor: none !important;
+  }
 }
 
 /* ── Cursor shape (CursorShape.js) — morph driven by rAF in JS ── */
@@ -2725,9 +2728,11 @@ strong, b {
 @media (max-width: 768px) {
 
   /* ── Grid: 4 → 2 columns, fluid width ── */
+  /* Row height = column width → 1:1 cards.
+     Column width = (viewport − 2×24px padding − 18px gap) / 2 */
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-auto-rows: 252px;
+    grid-auto-rows: calc((100vw - 66px) / 2);
   }
 
   /* Card grid placements are driven by inline styles from MOBILE_LAYOUTS
@@ -2748,6 +2753,12 @@ strong, b {
   .duolingo-card      { --card-enter-delay: 1.1s;  }
   .claw-invest-card   { --card-enter-delay: 1.2s;  }
   .strava-card        { --card-enter-delay: 1.3s;  }
+
+  /* ── About card avatar — 1/3 of card width ── */
+  .about-avatar {
+    width:  calc((100vw - 48px) / 3);
+    height: calc((100vw - 48px) / 3);
+  }
 
   /* ── Case study header — bring close button to edge on narrow screens ── */
   .cs-header {

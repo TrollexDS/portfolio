@@ -156,7 +156,15 @@ export default defineComponent({
       rafId = requestAnimationFrame(tick)
     }
 
+    // Skip entirely on touch / mobile devices (no custom cursor needed)
+    const isTouch = 'ontouchstart' in window
+      || navigator.maxTouchPoints > 0
+      || (typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches)
+      || window.innerWidth <= 768
+
     onMounted(() => {
+      if (isTouch) return
+
       svgEl  = document.getElementById('cs-svg')
       pathEl = document.getElementById('cs-path')
 
@@ -176,8 +184,10 @@ export default defineComponent({
       if (rafId) cancelAnimationFrame(rafId)
     })
 
-    return () =>
-      h('div', {
+    return () => {
+      if (isTouch) return null
+
+      return h('div', {
         class: 'cs-root',
         style: `left:${sx.value}px;top:${sy.value}px;opacity:${visible.value ? 1 : 0}`,
       }, [
@@ -203,5 +213,6 @@ export default defineComponent({
           }),
         ]),
       ])
+    }
   },
 })
