@@ -47,5 +47,9 @@ import App from './App.js'
   }, { passive: true })
 })()
 
+// ── iOS :active fix ──────────────────────────────────────────────────────────
+// iOS Safari won't fire :active on touch without a touchstart listener.
+document.addEventListener('touchstart', () => {}, { passive: true })
+
 // ── App ───────────────────────────────────────────────────────────────────────
 createApp(App).mount('#app')

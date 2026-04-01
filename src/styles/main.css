@@ -2903,4 +2903,16 @@ strong, b {
       inset 0 1px 0 var(--color-card-inset-top),
       inset 0 -1px 0 var(--color-card-inset-bottom);
   }
+
+  /* ── Pressed state — MUST come after hover reset to win specificity ── */
+  .bento-card:active,
+  .bento-card--pressed {
+    transform: scale(0.97) translateZ(0) !important;
+    box-shadow:
+      0 1px 3px var(--color-shadow-card-rest),
+      0 1px 2px var(--color-shadow-card-rest-2),
+      inset 0 1px 0 var(--color-card-inset-top),
+      inset 0 -1px 0 var(--color-card-inset-bottom) !important;
+    transition: transform 0.08s ease, box-shadow 0.08s ease !important;
+  }
 }
