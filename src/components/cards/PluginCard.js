@@ -287,10 +287,10 @@ const ErrorSection = defineComponent({
 
 // ── Marquee background rows ──
 const MARQUEE_ROWS = [
-  { imgs: Array.from({ length: 11 }, (_, i) => `/src/assets/images/rayo/rayo-plugin-row/${String(i + 1).padStart(2, '0')}.png`),  dir: 'left'  },
-  { imgs: Array.from({ length: 10 }, (_, i) => `/src/assets/images/rayo/rayo-plugin-row/${String(i + 12).padStart(2, '0')}.png`), dir: 'right' },
-  { imgs: Array.from({ length: 11 }, (_, i) => `/src/assets/images/rayo/rayo-plugin-row/${String(i + 22).padStart(2, '0')}.png`), dir: 'left'  },
-  { imgs: Array.from({ length: 10 }, (_, i) => `/src/assets/images/rayo/rayo-plugin-row/${String(i + 33).padStart(2, '0')}.png`), dir: 'right' },
+  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 1).padStart(2, '0')}.png`),  dir: 'left'  },
+  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 12).padStart(2, '0')}.png`), dir: 'right' },
+  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 22).padStart(2, '0')}.png`), dir: 'left'  },
+  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 33).padStart(2, '0')}.png`), dir: 'right' },
 ]
 
 const HITS_IMG = 'src/assets/images/rayo/rayo-plugin-hits.png'
