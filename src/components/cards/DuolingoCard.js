@@ -8,7 +8,7 @@ const AVATAR_WEBM  = 'src/assets/videos/duolingo-avatar.webm'
 const AVATAR_PNG   = 'src/assets/images/duolingo/duolingo-avatar-fallback.png'
 const PROFILE      = 'https://www.duolingo.com/profile/TrollexHK'
 
-// Safari can't play VP9/WebM (which has alpha). Detect support once.
+// Safari can't play VP9/WebM (which carries the alpha channel).
 const _v = document.createElement('video')
 const CAN_WEBM_ALPHA = _v.canPlayType('video/webm; codecs="vp9"') === 'probably'
 
