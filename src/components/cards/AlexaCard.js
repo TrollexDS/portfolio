@@ -2,7 +2,7 @@ import { defineComponent, h } from 'vue'
 import BentoCard from '../BentoCard.js'
 import { ICON_FULL_SCREEN } from '../../assets/icons/icons.js'
 
-const VIDEO_SRC = '/src/assets/videos/rayo-alexa.mp4'
+const VIDEO_SRC = 'src/assets/videos/rayo-alexa.mp4'
 
 export default defineComponent({
   name: 'AlexaCard',

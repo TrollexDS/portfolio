@@ -3,9 +3,9 @@ import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import ColourVariables from './ColourVariables.js'
 import CollectionCard from './CollectionCard.js'
 
-const VIDEO_SRC         = '/src/assets/videos/rayo-ds-clip.mp4'
-const IMG_DS_POST       = '/src/assets/images/rayo/rayo-ds-post-update.png'
-const IMG_DS_PRE        = '/src/assets/images/rayo/rayo-ds-pre-update.png'
+const VIDEO_SRC         = 'src/assets/videos/rayo-ds-clip.mp4'
+const IMG_DS_POST       = 'src/assets/images/rayo/rayo-ds-post-update.png'
+const IMG_DS_PRE        = 'src/assets/images/rayo/rayo-ds-pre-update.png'
 
 const BeforeAfterToggle = defineComponent({
   name: 'BeforeAfterToggle',
@@ -140,7 +140,7 @@ export default defineComponent({
           // ── Cover image ──
           h('img', {
             class: 'cs-cover-img',
-            src: '/src/assets/images/rayo/rayo-ds-cover.png',
+            src: 'src/assets/images/rayo/rayo-ds-cover.png',
             alt: 'Rayo Design System cover',
           }),
 
@@ -183,7 +183,7 @@ export default defineComponent({
 
           h('video', {
             class: 'cs-demo-video',
-            src: '/src/assets/videos/figma-auto-responsive.mp4',
+            src: 'src/assets/videos/figma-auto-responsive.mp4',
             autoplay: true,
             loop: true,
             muted: true,
@@ -202,7 +202,7 @@ export default defineComponent({
 
           h('img', {
             class: 'cs-cover-img',
-            src: '/src/assets/images/rayo/component-optimisation-old.png',
+            src: 'src/assets/images/rayo/component-optimisation-old.png',
             alt: 'Component optimisation — before refactor',
           }),
           h('p', { class: 'cs-antonym-hint' }, '[BEFORE] On-demand card component'),
@@ -216,7 +216,7 @@ export default defineComponent({
 
           h('img', {
             class: 'cs-cover-img',
-            src: '/src/assets/images/rayo/component-refactor-gradients.png',
+            src: 'src/assets/images/rayo/component-refactor-gradients.png',
             alt: 'New gradient background component',
           }),
           h('p', { class: 'cs-antonym-hint' }, '[NEW] Gradient background component'),
@@ -241,7 +241,7 @@ export default defineComponent({
 
           h('img', {
             class: 'cs-cover-img',
-            src: '/src/assets/images/rayo/component-examples.png',
+            src: 'src/assets/images/rayo/component-examples.png',
             alt: 'Component examples across breakpoints',
           }),
           h('p', { class: 'cs-antonym-hint' }, 'Responsive component structure'),

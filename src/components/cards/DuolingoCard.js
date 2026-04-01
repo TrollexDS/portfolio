@@ -2,9 +2,9 @@ import { defineComponent, h, ref, onMounted } from 'vue'
 import BentoCard from '../BentoCard.js'
 import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
-const FIRE      = '/src/assets/images/duolingo/duolingo-fire.svg'
-const APP_ICON  = '/src/assets/logos/duolingo.svg'
-const AVATAR    = '/src/assets/videos/duolingo-avatar.webm'
+const FIRE      = 'src/assets/images/duolingo/duolingo-fire.svg'
+const APP_ICON  = 'src/assets/logos/duolingo.svg'
+const AVATAR    = 'src/assets/videos/duolingo-avatar.webm'
 const PROFILE   = 'https://www.duolingo.com/profile/TrollexHK'
 
 // Ease-out cubic: fast start, decelerates at the end

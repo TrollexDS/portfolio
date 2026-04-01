@@ -4,7 +4,7 @@ import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
 const HREF       = 'https://t.me/alexchiuclawbot'
 const TOOLTIP    = 'Utilising OpenClaw & local LLM to generate daily market briefs 📈\nDeliver via a Telegram channel'
-const APP_ICON   = '/src/assets/logos/telegram-icon.svg'
+const APP_ICON   = 'src/assets/logos/telegram-icon.svg'
 
 export default defineComponent({
   name: 'ClawInvestCard',

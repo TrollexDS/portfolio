@@ -2680,7 +2680,7 @@ strong, b {
 .claw-invest-bg {
   position: absolute;
   inset: 0;
-  background-image: url('/src/assets/images/general/claw-invest-bg.jpg');
+  background-image: url('../assets/images/general/claw-invest-bg.jpg');
   background-size: cover;
   background-position: center top;
   transition: transform 0.4s ease;

@@ -1,7 +1,7 @@
 import { defineComponent, h, ref, nextTick } from 'vue'
 import { ICON_SHRINK, ICON_EXPAND } from '../../assets/icons/icons.js'
 
-const AVATAR  = '/src/assets/images/general/alex-avatar.png'
+const AVATAR  = 'src/assets/images/general/alex-avatar.png'
 const GRID_W     = 1203  // 4 × 285px + 3 × 21px gaps
 const ABOUT_MAX_W = 800   // max width for the expanded about card
 const ANIM_MS = 700   // must match CSS transition duration

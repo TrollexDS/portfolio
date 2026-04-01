@@ -9,7 +9,7 @@ const CLIENT_SECRET  = '9edb117e27e74ae910a07088505543030dd3bd67'
 const REFRESH_TOKEN  = 'a7f4b1e5543922af3246227aa105b3deacf491d4'
 // Cached access token — avoids the refresh round-trip while still valid
 const CACHED_TOKEN   = 'e8ba6caab8db04c43ff04fa74e5b955af0fbe3f1'
-const APP_ICON       = '/src/assets/logos/strava.svg'
+const APP_ICON       = 'src/assets/logos/strava.svg'
 
 // ── Strava API helpers ────────────────────────────────────────────────────────
 
