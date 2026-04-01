@@ -27,6 +27,7 @@ export default defineComponent({
 
   setup(props, { slots }) {
     const ripples = ref([])
+    const pressed = ref(false)
     let nextId = 0
 
     function spawnRipple(e) {
@@ -44,6 +45,7 @@ export default defineComponent({
       const classes = [
         'bento-card',
         props.dark ? 'dark' : '',
+        pressed.value ? 'bento-card--pressed' : '',
         props.classes,
       ].filter(Boolean).join(' ')
 
@@ -60,6 +62,9 @@ export default defineComponent({
       const rootProps = {
         class: classes,
         ...(props.tooltip && { 'data-tooltip': props.tooltip }),
+        onTouchstart: () => { pressed.value = true },
+        onTouchend:   () => { pressed.value = false },
+        onTouchcancel:() => { pressed.value = false },
         onClick: (e) => {
           spawnRipple(e)
           if (props.href !== '#') window.open(props.href, '_blank', 'noopener,noreferrer')
