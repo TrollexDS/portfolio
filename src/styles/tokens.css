@@ -59,6 +59,7 @@
 
   /* Orange (Strava) */
   --color-primitive-orange-500:  #fc4c02;   /* Strava brand colour          */
+  --color-primitive-orange-alexa: #FF5400;  /* Alexa review star colour     */
 
   /* Yellow (Bulb) */
   --color-primitive-yellow-500:  rgba(255, 205, 0, 0.18);  /* bulb glow strong */
@@ -138,6 +139,9 @@
 
   /* Brand — Strava */
   --color-brand-strava:          var(--color-primitive-orange-500);
+
+  /* Brand — Alexa */
+  --color-brand-alexa-star:      var(--color-primitive-orange-alexa);
 
   /* Brand — Bulb */
   --color-brand-bulb-glow-strong: var(--color-primitive-yellow-500);

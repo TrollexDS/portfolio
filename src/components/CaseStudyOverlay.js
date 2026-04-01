@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, nextTick, onUnmounted } from 'vue'
+import { defineComponent, h, ref, nextTick, onUnmounted, watch } from 'vue'
 import { ICON_SHRINK, ICON_FULL_SCREEN } from '../assets/icons/icons.js'
 
 const ANIM_MS = 700
@@ -47,6 +47,39 @@ export default defineComponent({
     let closeTimer = null
     let flyTimer   = null
     let rippleId   = 0
+    let imgObserver = null
+
+    // ── Scroll-triggered fade-slide-up for static images ──
+    const contentEl = ref(null)
+
+    function setupImageObserver() {
+      if (imgObserver) imgObserver.disconnect()
+      const container = contentEl.value
+      if (!container) return
+
+      imgObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('cs-img-visible')
+              imgObserver.unobserve(entry.target)
+            }
+          })
+        },
+        { threshold: 0.15, root: container.closest('.cs-expanded-inner') }
+      )
+
+      // Observe all static images and grouped image containers
+      container.querySelectorAll('.cs-cover-img, .cs-demo-video, .cs-account-link-steps, .ba-wrap').forEach(el => {
+        imgObserver.observe(el)
+      })
+    }
+
+    function teardownImageObserver() {
+      if (imgObserver) { imgObserver.disconnect(); imgObserver = null }
+    }
+
+    onUnmounted(teardownImageObserver)
 
     // ── Escape key to close ──
     function onKeydown(e) { if (e.key === 'Escape') close() }
@@ -128,6 +161,9 @@ export default defineComponent({
         requestAnimationFrame(() => {
           settled.value = true
 
+          // Set up image reveal observer once content is rendered
+          nextTick(() => setupImageObserver())
+
           const t = videoTarget()
           flyStyle.value = {
             left:         t.left + 'px',
@@ -192,6 +228,7 @@ export default defineComponent({
       }
 
       closing.value = true
+      teardownImageObserver()
       clearTimeout(closeTimer)
       closeTimer = setTimeout(() => {
         expanded.value  = false
@@ -292,7 +329,7 @@ export default defineComponent({
 
           // ── Scrollable content area ──
           h('div', { class: 'cs-expanded-inner' }, [
-            h('div', { class: 'cs-expanded-content' }, [
+            h('div', { ref: contentEl, class: 'cs-expanded-content' }, [
 
               // Hero video (static, replaces flying video after animation)
               h('video', {
