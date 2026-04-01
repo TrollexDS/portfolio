@@ -2885,6 +2885,11 @@ strong, b {
   /* Disable version wrap hover transitions on mobile */
   .cs-version-wrap { transition: none; }
 
+  /* ── Duolingo: scale down streak on mobile ── */
+  .duolingo-streak { top: 20px; }
+  .duolingo-fire   { width: 20px; height: calc(20px * 1.27); }
+  .streak-number   { font-size: 34px; }
+
   /* ── Strava: hide elevation on mobile (too cramped) ── */
   .strava-elevation {
     display: none;
