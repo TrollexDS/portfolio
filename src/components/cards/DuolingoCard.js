@@ -8,11 +8,17 @@ const AVATAR_WEBM  = 'src/assets/videos/duolingo-avatar.webm'
 const AVATAR_PNG   = 'src/assets/images/duolingo/duolingo-avatar-fallback.png'
 const PROFILE      = 'https://www.duolingo.com/profile/TrollexHK'
 
-// WebKit (Safari + all iOS browsers) can play VP9/WebM since 16.4 but
-// still can't decode the VP9 alpha plane — video plays with black bg.
-// Detect WebKit engine rather than just "Safari" UA string, because on
-// iOS every browser (Chrome, Firefox, etc.) uses WebKit under the hood.
-const IS_WEBKIT = 'webkitLineBreak' in document.documentElement.style
+// WebKit can play VP9/WebM since Safari 16.4 but can't decode the VP9
+// alpha plane — video plays with a black background instead of transparent.
+// We need to detect two cases:
+//   1. iOS — every browser uses WebKit (even Chrome, Firefox, etc.)
+//   2. Desktop Safari — WebKit on macOS
+const _ua = navigator.userAgent
+const _iOS = /iPhone|iPad|iPod/.test(_ua)
+  || (navigator.maxTouchPoints > 1 && /Macintosh/.test(_ua))  // iPad UA
+const _desktopSafari = !_iOS
+  && /Safari/.test(_ua) && !/Chrome/.test(_ua) && !/Firefox/.test(_ua)
+const LACKS_VP9_ALPHA = _iOS || _desktopSafari
 
 // Ease-out cubic: fast start, decelerates at the end
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3) }
@@ -50,7 +56,7 @@ export default defineComponent({
             h('img', { class: 'duolingo-fire', src: FIRE, alt: 'Fire' }),
             h('span', { class: 'streak-number' }, String(displayed.value)),
           ]),
-          !IS_WEBKIT
+          !LACKS_VP9_ALPHA
             ? h('video', {
                 class: 'duolingo-avatar',
                 autoplay: true,
