@@ -2,11 +2,15 @@ import { defineComponent, h, ref, onMounted } from 'vue'
 import BentoCard from '../BentoCard.js'
 import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
-const FIRE      = 'src/assets/images/duolingo/duolingo-fire.svg'
-const APP_ICON  = 'src/assets/logos/duolingo.svg'
-const AVATAR_WEBM = 'src/assets/videos/duolingo-avatar.webm'
-const AVATAR_MOV  = 'src/assets/videos/duolingo-avatar.mov'
-const PROFILE   = 'https://www.duolingo.com/profile/TrollexHK'
+const FIRE         = 'src/assets/images/duolingo/duolingo-fire.svg'
+const APP_ICON     = 'src/assets/logos/duolingo.svg'
+const AVATAR_WEBM  = 'src/assets/videos/duolingo-avatar.webm'
+const AVATAR_PNG   = 'src/assets/images/duolingo/duolingo-avatar-fallback.png'
+const PROFILE      = 'https://www.duolingo.com/profile/TrollexHK'
+
+// Safari can't play VP9/WebM (which has alpha). Detect support once.
+const _v = document.createElement('video')
+const CAN_WEBM_ALPHA = _v.canPlayType('video/webm; codecs="vp9"') === 'probably'
 
 // Ease-out cubic: fast start, decelerates at the end
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3) }
@@ -44,16 +48,21 @@ export default defineComponent({
             h('img', { class: 'duolingo-fire', src: FIRE, alt: 'Fire' }),
             h('span', { class: 'streak-number' }, String(displayed.value)),
           ]),
-          h('video', {
-            class: 'duolingo-avatar',
-            autoplay: true,
-            loop: true,
-            muted: true,
-            playsinline: true,
-          }, [
-            h('source', { src: AVATAR_WEBM, type: 'video/webm' }),
-            h('source', { src: AVATAR_MOV,  type: 'video/quicktime' }),
-          ]),
+          CAN_WEBM_ALPHA
+            ? h('video', {
+                class: 'duolingo-avatar',
+                autoplay: true,
+                loop: true,
+                muted: true,
+                playsinline: true,
+              }, [
+                h('source', { src: AVATAR_WEBM, type: 'video/webm' }),
+              ])
+            : h('img', {
+                class: 'duolingo-avatar',
+                src: AVATAR_PNG,
+                alt: 'Duolingo avatar',
+              }),
           h('div', { class: 'duolingo-app-icon' }, [
             h('img', { src: APP_ICON, alt: 'Duolingo' }),
           ]),

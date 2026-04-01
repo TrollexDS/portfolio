@@ -2434,9 +2434,6 @@ strong, b {
   object-fit: contain;
   object-position: bottom;
   z-index: 1;
-  /* Safari fallback: .mov has no alpha channel, so black bg shows through.
-     mix-blend-mode: screen makes black → transparent on light cards. */
-  mix-blend-mode: screen;
 }
 .duolingo-app-icon {
   position: absolute; bottom: 16px; right: 16px;
