@@ -4,7 +4,8 @@ import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
 const FIRE      = 'src/assets/images/duolingo/duolingo-fire.svg'
 const APP_ICON  = 'src/assets/logos/duolingo.svg'
-const AVATAR    = 'src/assets/videos/duolingo-avatar.webm'
+const AVATAR_WEBM = 'src/assets/videos/duolingo-avatar.webm'
+const AVATAR_MOV  = 'src/assets/videos/duolingo-avatar.mov'
 const PROFILE   = 'https://www.duolingo.com/profile/TrollexHK'
 
 // Ease-out cubic: fast start, decelerates at the end
@@ -45,12 +46,14 @@ export default defineComponent({
           ]),
           h('video', {
             class: 'duolingo-avatar',
-            src: AVATAR,
             autoplay: true,
             loop: true,
             muted: true,
             playsinline: true,
-          }),
+          }, [
+            h('source', { src: AVATAR_WEBM, type: 'video/webm' }),
+            h('source', { src: AVATAR_MOV,  type: 'video/quicktime' }),
+          ]),
           h('div', { class: 'duolingo-app-icon' }, [
             h('img', { src: APP_ICON, alt: 'Duolingo' }),
           ]),
