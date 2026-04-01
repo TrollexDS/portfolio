@@ -86,13 +86,24 @@ export default defineComponent({
             }
           })
         },
-        { threshold: 0.15, root: container.closest('.cs-expanded-inner') }
+        { threshold: 0, rootMargin: '200px', root: container.closest('.cs-expanded-inner') }
       )
 
-      // Observe all static images and grouped image containers
+      // Observe all static images, videos, and grouped image containers
       container.querySelectorAll('.cs-cover-img, .cs-demo-video, .cs-account-link-steps, .ba-wrap').forEach(el => {
         imgObserver.observe(el)
       })
+
+      // Safety net: force-load any videos still waiting after 2s
+      // (covers edge cases where the observer doesn't fire)
+      setTimeout(() => {
+        container.querySelectorAll('video[data-src]').forEach(v => {
+          v.src = v.dataset.src
+          v.removeAttribute('data-src')
+          v.play().catch(() => {})
+          v.classList.add('cs-img-visible')
+        })
+      }, 2000)
     }
 
     function teardownImageObserver() {

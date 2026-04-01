@@ -3030,6 +3030,11 @@ strong, b {
     padding: 24px 24px;
   }
 
+  /* ── TLDR bar — align with exit button ── */
+  .tldr-bar {
+    top: 24px;
+  }
+
   /* ── Case study hero video — scale down with page padding ── */
   .cs-hero-video {
     width:  calc(100vw - 48px) !important;
