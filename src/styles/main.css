@@ -499,6 +499,12 @@ strong, b {
 /* Keep grid slot occupied, hide card while expanded */
 .about-card--ghost { opacity: 0; pointer-events: none; }
 
+/* Once the card has been interacted with, kill the entrance animation
+   so it doesn't replay when returning from ghost state */
+.about-card.about-card--was-open {
+  animation: none;
+}
+
 /* ── Backdrop — sits behind expanded card ── */
 .about-backdrop {
   position: fixed;
@@ -661,6 +667,7 @@ strong, b {
 
 /* Ghost — keep grid slot occupied while expanded */
 .cs-card--ghost { opacity: 0; pointer-events: none; }
+.cs-card--was-open { animation: none; }
 
 /* ── Backdrop ── */
 .cs-backdrop {

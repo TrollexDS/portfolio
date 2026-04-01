@@ -38,6 +38,7 @@ export default defineComponent({
     const closing   = ref(false)
     const flyActive  = ref(false)
     const heroReady  = ref(false)
+    const wasOpen    = ref(false)
     const flyStyle  = ref({})
     const ripples   = ref([])
 
@@ -115,6 +116,7 @@ export default defineComponent({
       expanded.value  = true
       settled.value   = false
       closing.value   = false
+      wasOpen.value   = true
       document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
       document.addEventListener('keydown', onKeydown)
@@ -225,6 +227,7 @@ export default defineComponent({
           'bento-card', 'dark',
           props.cardClass,
           expanded.value ? 'cs-card--ghost' : '',
+          wasOpen.value ? 'cs-card--was-open' : '',
         ].filter(Boolean).join(' '),
         onClick: open,
         ...(props.tooltip && { 'data-tooltip': props.tooltip }),

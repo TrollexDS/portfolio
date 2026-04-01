@@ -73,6 +73,7 @@ export default defineComponent({
     const expanded  = ref(false)
     const settled   = ref(false)
     const closing   = ref(false)
+    const wasOpen   = ref(false)    // prevents card-enter animation replaying
     const flyActive       = ref(false)   // is the flying avatar visible?
     const flyStyle        = ref({})      // its inline style
     const expandedRipples = ref([])
@@ -152,6 +153,7 @@ export default defineComponent({
       expanded.value  = true
       settled.value   = false
       closing.value   = false
+      wasOpen.value   = true
       document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
 
@@ -239,7 +241,7 @@ export default defineComponent({
       // ── Collapsed card ────────────────────────────────────
       h('div', {
         ref:            cardEl,
-        class:          ['bento-card', 'about-card', expanded.value ? 'about-card--ghost' : ''].join(' '),
+        class:          ['bento-card', 'about-card', expanded.value ? 'about-card--ghost' : '', wasOpen.value ? 'about-card--was-open' : ''].join(' '),
         onClick:        open,
         'data-tooltip': 'Expand to learn more about me',
       }, [
