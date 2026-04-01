@@ -2411,6 +2411,7 @@ strong, b {
   transform: translateX(-50%);
   display: flex; align-items: center; gap: 2px;
   white-space: nowrap;
+  z-index: 2;
 }
 .duolingo-fire { width: 28px; height: calc(28px * 1.27); flex-shrink: 0; }
 .streak-number {
@@ -2432,6 +2433,10 @@ strong, b {
   width: auto;
   object-fit: contain;
   object-position: bottom;
+  z-index: 1;
+  /* Safari fallback: .mov has no alpha channel, so black bg shows through.
+     mix-blend-mode: screen makes black → transparent on light cards. */
+  mix-blend-mode: screen;
 }
 .duolingo-app-icon {
   position: absolute; bottom: 16px; right: 16px;
@@ -2787,10 +2792,24 @@ strong, b {
 
   /* ── Grid: 4 → 2 columns, fluid width ── */
   /* Row height = column width → 1:1 cards.
-     Column width = (viewport − 2×24px padding − 18px gap) / 2 */
+     Column width = (viewport − 2×24px padding − 18px gap) / 2
+     width: 100% overrides align-items:center on .main so 1fr
+     columns actually fill the available space. */
   .grid {
     grid-template-columns: repeat(2, 1fr);
     grid-auto-rows: calc((100vw - 66px) / 2);
+    width: 100%;
+  }
+
+  /* Single-cell cards: enforce 1:1 via aspect-ratio as a safety net
+     in case grid-auto-rows and column width drift apart. */
+  .strava-card,
+  .claw-invest-card,
+  .gmail-card,
+  .linkedin-card,
+  .bulb-card,
+  .duolingo-card {
+    aspect-ratio: 1 / 1;
   }
 
   /* Card grid placements are driven by inline styles from MOBILE_LAYOUTS
@@ -2867,6 +2886,11 @@ strong, b {
 
   /* Disable version wrap hover transitions on mobile */
   .cs-version-wrap { transition: none; }
+
+  /* ── Strava: hide elevation on mobile (too cramped) ── */
+  .strava-elevation {
+    display: none;
+  }
 
   /* Simplestream logo rail — 150% faster on smaller screen */
   .pc1-track {
