@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Alex Chiu — Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,5 +21,29 @@
   </script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
   <script type="module" src="src/main.js"></script>
+
+  <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
+  <script>
+    (function () {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return
+          const video = entry.target
+          const src = video.dataset.src
+          if (!src) return
+          video.src = src
+          video.removeAttribute('data-src')
+          video.play().catch(() => {})
+          io.unobserve(video)
+        })
+      }, { rootMargin: '200px' })
+
+      // Observe videos as they appear in the DOM (Vue renders asynchronously)
+      const mo = new MutationObserver(() => {
+        document.querySelectorAll('video[data-src]').forEach(v => io.observe(v))
+      })
+      mo.observe(document.getElementById('app'), { childList: true, subtree: true })
+    })()
+  </script>
 </body>
 </html>

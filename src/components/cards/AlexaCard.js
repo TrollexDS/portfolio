@@ -11,11 +11,11 @@ export default defineComponent({
       h(BentoCard, { classes: 'alexa-card', href: '#', actionIconSrc: ICON_FULL_SCREEN, tooltip: 'Improve the voice UX of\nthe Rayo skill in Alexa 🗣️' }, {
         default: () =>
           h('video', {
-            src: VIDEO_SRC,
-            autoplay: true,
+            'data-src': VIDEO_SRC,
             loop: true,
             muted: true,
             playsinline: true,
+            preload: 'none',
             disablePictureInPicture: true,
             controlsList: 'nodownload nofullscreen noremoteplayback',
             style: 'pointer-events: none;',

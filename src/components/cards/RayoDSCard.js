@@ -183,8 +183,8 @@ export default defineComponent({
 
           h('video', {
             class: 'cs-demo-video',
-            src: 'src/assets/videos/figma-auto-responsive.mp4',
-            autoplay: true,
+            'data-src': 'src/assets/videos/figma-auto-responsive.mp4',
+            preload: 'none',
             loop: true,
             muted: true,
             playsinline: true,

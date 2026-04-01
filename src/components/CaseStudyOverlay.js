@@ -207,15 +207,6 @@ export default defineComponent({
     // ── Render ──
     return () => h('div', { class: 'cs-card-wrapper' }, [
 
-      // ── Hidden preload — always in DOM, buffers the video before first open ──
-      h('video', {
-        src:     props.videoSrc,
-        preload: 'auto',
-        muted:   true,
-        'aria-hidden': 'true',
-        style:   'position:absolute;width:0;height:0;opacity:0;pointer-events:none;',
-      }),
-
       // ── Flying video (position:fixed, above everything) ──
       flyActive.value ? h('video', {
         class: 'cs-video-fly',
@@ -246,12 +237,11 @@ export default defineComponent({
 
         h('video', {
           ref:      videoEl,
-          src:      props.videoSrc,
+          'data-src': props.videoSrc,
           class:    props.videoClass,
-          autoplay: true,
           loop:     true,
           muted:    true,
-          preload:  'auto',
+          preload:  'none',
           playsinline:          true,
           disablePictureInPicture: true,
           controlsList: 'nodownload nofullscreen noremoteplayback',
