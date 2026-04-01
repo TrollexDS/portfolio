@@ -38,8 +38,8 @@ export const LAYOUTS = {
     alexa:      { col: '3 / 5', row: '5 / 7' },
     schedule:   { col: '1 / 3', row: '6 / 8' },
     project:    { col: '3 / 5', row: '7 / 9' },
-    clawinvest: { col: '1',     row: '8'     },
-    strava:     { col: '2',     row: '8'     },
+    clawinvest: { col: '2',     row: '8'     },
+    strava:     { col: '1',     row: '8'     },
   },
 
   // ── ABOUT ────────────────────────────────────────────────────────────────
@@ -67,8 +67,8 @@ export const LAYOUTS = {
     alexa:      { col: '3 / 5', row: '5 / 7', dim: true },
     schedule:   { col: '1 / 3', row: '6 / 8', dim: true },
     project:    { col: '3 / 5', row: '7 / 9', dim: true },
-    clawinvest: { col: '1',     row: '8',     dim: true },
-    strava:     { col: '2',     row: '8',     dim: true },
+    clawinvest: { col: '2',     row: '8',     dim: true },
+    strava:     { col: '1',     row: '8',     dim: true },
   },
 
   // ── WORK ─────────────────────────────────────────────────────────────────
@@ -93,8 +93,8 @@ export const LAYOUTS = {
     duolingo:   { col: '2',     row: '7',     dim: true },
     dsquote:    { col: '3 / 5', row: '7',     dim: true },
     uxquote:    { col: '1 / 3', row: '8',     dim: true },
-    clawinvest: { col: '3',     row: '8',     dim: true },
-    strava:     { col: '4',     row: '8',     dim: true },
+    clawinvest: { col: '4',     row: '8',     dim: true },
+    strava:     { col: '3',     row: '8',     dim: true },
   },
 
   // ── SIDE QUESTS ──────────────────────────────────────────────────────────
@@ -109,8 +109,8 @@ export const LAYOUTS = {
   'Side Quests': {
     bulb:       { col: '1',     row: '1'      },
     duolingo:   { col: '2',     row: '1'      },
-    clawinvest: { col: '3',     row: '1'      },
-    strava:     { col: '4',     row: '1'      },
+    clawinvest: { col: '4',     row: '1'      },
+    strava:     { col: '3',     row: '1'      },
     about:      { col: '1 / 3', row: '2',      dim: true },
     gmail:      { col: '3',     row: '2',      dim: true },
     linkedin:   { col: '4',     row: '2',      dim: true },
@@ -146,8 +146,8 @@ export const MOBILE_LAYOUTS = {
     project:    { col: '1 / 3', row: '13 / 15'},
     bulb:       { col: '1',     row: '15'     },     // below Project
     duolingo:   { col: '2',     row: '15'     },
-    clawinvest: { col: '1',     row: '16'     },
-    strava:     { col: '2',     row: '16'     },
+    clawinvest: { col: '2',     row: '16'     },
+    strava:     { col: '1',     row: '16'     },
   },
 
   // ── ABOUT (mobile) ──────────────────────────────────────────────────────
@@ -164,8 +164,8 @@ export const MOBILE_LAYOUTS = {
     project:    { col: '1 / 3', row: '13 / 15',dim: true },
     bulb:       { col: '1',     row: '15',     dim: true },
     duolingo:   { col: '2',     row: '15',     dim: true },
-    clawinvest: { col: '1',     row: '16',     dim: true },
-    strava:     { col: '2',     row: '16',     dim: true },
+    clawinvest: { col: '2',     row: '16',     dim: true },
+    strava:     { col: '1',     row: '16',     dim: true },
   },
 
   // ── WORK (mobile) ───────────────────────────────────────────────────────
@@ -182,16 +182,16 @@ export const MOBILE_LAYOUTS = {
     dsquote:    { col: '1 / 3', row: '14',     dim: true },
     bulb:       { col: '1',     row: '15',     dim: true },
     duolingo:   { col: '2',     row: '15',     dim: true },
-    clawinvest: { col: '1',     row: '16',     dim: true },
-    strava:     { col: '2',     row: '16',     dim: true },
+    clawinvest: { col: '2',     row: '16',     dim: true },
+    strava:     { col: '1',     row: '16',     dim: true },
   },
 
   // ── SIDE QUESTS (mobile) ────────────────────────────────────────────────
   'Side Quests': {
     bulb:       { col: '1',     row: '1'       },
     duolingo:   { col: '2',     row: '1'       },
-    clawinvest: { col: '1',     row: '2'       },
-    strava:     { col: '2',     row: '2'       },
+    clawinvest: { col: '2',     row: '2'       },
+    strava:     { col: '1',     row: '2'       },
     about:      { col: '1 / 3', row: '3',      dim: true },
     gmail:      { col: '1',     row: '4',      dim: true },
     linkedin:   { col: '2',     row: '4',      dim: true },
