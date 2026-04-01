@@ -3050,6 +3050,13 @@ strong, b {
     max-height: 448px;
   }
 
+  /* ── Disable scroll-reveal on demo video only (IO unreliable in overlay on mobile) ── */
+  .cs-expanded-content .cs-demo-video {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
   /* ── Case study containers — fit viewport with same padding as text ── */
   .cs-demo-video {
     width: calc(100vw - 48px) !important;
