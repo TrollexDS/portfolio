@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rayo — Colour Variables</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.prod.min.js"></script>
+  <style>
+    /* ─── Reset & base ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #1e1e1e;
+      --panel-bg: #2c2c2c;
+      --sidebar-bg: #252525;
+      --border: #3a3a3a;
+      --text: #e0e0e0;
+      --text-muted: #999;
+      --hover: #383838;
+      --active: rgba(99, 69, 255, .18);
+      --accent: #9945FF;
+    }
+    html, body { height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    /* ─── App shell ─── */
+    #app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 1100px;
+      margin: 0 auto;
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+    }
+
+    /* ─── Top bar ─── */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel-bg);
+      flex-shrink: 0;
+    }
+    .top-bar h1 {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .02em;
+    }
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--sidebar-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 10px;
+      width: 220px;
+    }
+    .search-box svg { flex-shrink: 0; opacity: .5; }
+    .search-box input {
+      background: none;
+      border: none;
+      color: var(--text);
+      font-size: 12px;
+      width: 100%;
+      outline: none;
+    }
+    .search-box input::placeholder { color: var(--text-muted); }
+
+    /* ─── Main layout ─── */
+    .main {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      width: 210px;
+      flex-shrink: 0;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 8px 0;
+    }
+    .sidebar-section-label {
+      padding: 6px 14px 4px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 14px 5px 14px;
+      cursor: pointer;
+      border-radius: 0;
+      transition: background .12s;
+      font-size: 13px;
+    }
+    .sidebar-item:hover { background: var(--hover); }
+    .sidebar-item.active { background: var(--active); color: #fff; }
+    .sidebar-item .count {
+      font-size: 11px;
+      color: var(--text-muted);
+      min-width: 20px;
+      text-align: right;
+    }
+    .sidebar-item.active .count { color: rgba(255,255,255,.6); }
+    .sidebar-item.indent-1 { padding-left: 28px; }
+    .sidebar-item.indent-2 { padding-left: 42px; }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 6px 14px;
+    }
+
+    /* ─── Table area ─── */
+    .table-area {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: auto;
+    }
+
+    /* ─── Header row ─── */
+    .table-header {
+      display: flex;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--panel-bg);
+      border-bottom: 1px solid var(--border);
+      min-width: fit-content;
+    }
+    .table-header .col {
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .col-name { width: 240px; flex-shrink: 0; }
+    .col-value { flex: 1; min-width: 200px; }
+
+    /* ─── Group heading ─── */
+    .group-heading {
+      padding: 14px 16px 6px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+      min-width: fit-content;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .group-heading .path { color: var(--text-muted); font-weight: 400; }
+
+    /* ─── Variable row ─── */
+    .var-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      min-width: fit-content;
+      transition: background .1s;
+      cursor: default;
+    }
+    .var-row:hover { background: var(--hover); }
+
+    .var-row .cell {
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .var-row .cell-name {
+      width: 240px;
+      flex-shrink: 0;
+      font-size: 13px;
+    }
+    .var-row .cell-name .icon {
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: .45;
+    }
+    .var-row .cell-value {
+      flex: 1;
+      min-width: 200px;
+      font-size: 12px;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    }
+
+    /* ─── Swatch ─── */
+    .swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.12);
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+    /* checkerboard for transparency */
+    .swatch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-conic-gradient(#555 0% 25%, #888 0% 50%) 0 0 / 8px 8px;
+      z-index: 0;
+    }
+    .swatch .fill {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: 3px;
+    }
+
+    /* ─── Alias pill ─── */
+    .alias-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .alias-pill .swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+    /* ─── Number value ─── */
+    .num-value {
+      background: rgba(255,255,255,.06);
+      border-radius: 4px;
+      padding: 2px 10px;
+      font-size: 12px;
+      color: var(--text);
+    }
+
+    /* ─── Detail popup ─── */
+    .detail-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.45);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .detail-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      width: 380px;
+      max-width: 90vw;
+    }
+    .detail-card h3 { font-size: 15px; margin-bottom: 16px; }
+    .detail-card .big-swatch {
+      width: 100%;
+      height: 80px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,.1);
+      margin-bottom: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+    .detail-card .big-swatch::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-conic-gradient(#555 0% 25%, #888 0% 50%) 0 0 / 12px 12px;
+    }
+    .detail-card .big-swatch .fill {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      border-radius: 7px;
+    }
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 12px;
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-row .label { color: var(--text-muted); }
+    .detail-row .val { font-family: 'SF Mono', 'Fira Code', monospace; }
+    .detail-card .close-btn {
+      margin-top: 16px;
+      width: 100%;
+      padding: 8px;
+      background: var(--hover);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .detail-card .close-btn:hover { background: var(--border); }
+
+    /* ─── Empty state ─── */
+    .empty-state {
+      padding: 48px 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* ─── Collection tabs ─── */
+    .collection-tabs {
+      display: flex;
+      gap: 0;
+    }
+    .collection-tab {
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      transition: color .15s, border-color .15s;
+    }
+    .collection-tab:hover { color: var(--text); }
+    .collection-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--accent);
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.25); }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <!-- Top bar -->
+  <div class="top-bar">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <h1>Variables</h1>
+      <div class="collection-tabs">
+        <div class="collection-tab" :class="{active: activeCollection==='primitives'}" @click="activeCollection='primitives'; activeGroup='All'; search=''">Primitives</div>
+        <div class="collection-tab" :class="{active: activeCollection==='tokens'}" @click="activeCollection='tokens'; activeGroup='All'; search=''">Tokens</div>
+      </div>
+    </div>
+    <div class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input v-model="search" placeholder="Search" />
+    </div>
+  </div>
+
+  <div class="main">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-section-label">Groups</div>
+
+      <div class="sidebar-item" :class="{active: activeGroup==='All'}" @click="activeGroup='All'">
+        <span>All</span>
+        <span class="count">{{ totalCount }}</span>
+      </div>
+
+      <template v-for="g in sidebarGroups" :key="g.key">
+        <div class="sidebar-item"
+             :class="[{active: activeGroup===g.key}, g.indent ? 'indent-'+g.indent : '']"
+             @click="activeGroup=g.key">
+          <span>{{ g.label }}</span>
+          <span class="count">{{ g.count }}</span>
+        </div>
+      </template>
+    </div>
+
+    <!-- Table -->
+    <div class="table-area">
+      <!-- Column headers -->
+      <div class="table-header">
+        <div class="col col-name">Name</div>
+        <template v-if="activeCollection==='primitives'">
+          <div class="col col-value">Value</div>
+        </template>
+        <template v-else>
+          <div class="col col-value">Light</div>
+          <div class="col col-value">Dark</div>
+        </template>
+      </div>
+
+      <template v-if="filteredRows.length">
+        <template v-for="(row, i) in filteredRows" :key="i">
+          <!-- Group heading -->
+          <div v-if="row.type==='heading'" class="group-heading">
+            <span v-if="row.parentLabel" class="path">{{ row.parentLabel }} /</span>
+            <span>{{ row.label }}</span>
+          </div>
+
+          <!-- Variable row -->
+          <div v-else class="var-row" @click="openDetail(row)">
+            <div class="cell cell-name">
+              <span class="icon">
+                <svg v-if="row.dataType==='color'" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/></svg>
+                <svg v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/></svg>
+              </span>
+              <span>{{ row.name }}</span>
+            </div>
+
+            <template v-if="activeCollection==='primitives'">
+              <div class="cell cell-value">
+                <template v-if="row.dataType==='color'">
+                  <div class="swatch"><div class="fill" :style="{background: rgbaString(row.value)}"></div></div>
+                  <span>{{ row.value.hex }}</span>
+                  <span v-if="row.value.alpha < 1" style="color:var(--text-muted)">{{ Math.round(row.value.alpha*100) }}%</span>
+                </template>
+                <template v-else>
+                  <span class="num-value">{{ row.value }}</span>
+                </template>
+              </div>
+            </template>
+
+            <template v-else>
+              <!-- Light -->
+              <div class="cell cell-value">
+                <template v-if="row.dataType==='color' && row.lightVal">
+                  <div class="alias-pill">
+                    <div class="swatch"><div class="fill" :style="{background: rgbaString(row.lightVal)}"></div></div>
+                    <span>{{ row.lightAlias || row.lightVal.hex }}</span>
+                  </div>
+                </template>
+                <template v-else-if="row.lightVal != null">
+                  <span class="num-value">{{ row.lightVal }}</span>
+                </template>
+              </div>
+              <!-- Dark -->
+              <div class="cell cell-value">
+                <template v-if="row.dataType==='color' && row.darkVal">
+                  <div class="alias-pill">
+                    <div class="swatch"><div class="fill" :style="{background: rgbaString(row.darkVal)}"></div></div>
+                    <span>{{ row.darkAlias || row.darkVal.hex }}</span>
+                  </div>
+                </template>
+                <template v-else-if="row.darkVal != null">
+                  <span class="num-value">{{ row.darkVal }}</span>
+                </template>
+              </div>
+            </template>
+          </div>
+        </template>
+      </template>
+
+      <div v-else class="empty-state">No variables match your search.</div>
+    </div>
+  </div>
+
+  <!-- Detail popup -->
+  <div v-if="detailVar" class="detail-overlay" @click.self="detailVar=null">
+    <div class="detail-card">
+      <h3>{{ detailVar.name }}</h3>
+
+      <template v-if="detailVar.dataType==='color'">
+        <template v-if="activeCollection==='primitives'">
+          <div class="big-swatch"><div class="fill" :style="{background: rgbaString(detailVar.value)}"></div></div>
+          <div class="detail-row"><span class="label">Hex</span><span class="val">{{ detailVar.value.hex }}</span></div>
+          <div class="detail-row"><span class="label">Alpha</span><span class="val">{{ Math.round(detailVar.value.alpha*100) }}%</span></div>
+          <div class="detail-row"><span class="label">RGB</span><span class="val">{{ rgbDisplay(detailVar.value) }}</span></div>
+        </template>
+        <template v-else>
+          <div style="display:flex;gap:12px;margin-bottom:16px;">
+            <div style="flex:1" v-if="detailVar.lightVal">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Light</div>
+              <div class="big-swatch"><div class="fill" :style="{background: rgbaString(detailVar.lightVal)}"></div></div>
+              <div class="detail-row"><span class="label">Hex</span><span class="val">{{ detailVar.lightVal.hex }}</span></div>
+              <div class="detail-row" v-if="detailVar.lightAlias"><span class="label">Alias</span><span class="val" style="font-size:10px">{{ detailVar.lightAlias }}</span></div>
+            </div>
+            <div style="flex:1" v-if="detailVar.darkVal">
+              <div style="font-size:11px;color:var(--text-muted);margin-bottom:4px;">Dark</div>
+              <div class="big-swatch"><div class="fill" :style="{background: rgbaString(detailVar.darkVal)}"></div></div>
+              <div class="detail-row"><span class="label">Hex</span><span class="val">{{ detailVar.darkVal.hex }}</span></div>
+              <div class="detail-row" v-if="detailVar.darkAlias"><span class="label">Alias</span><span class="val" style="font-size:10px">{{ detailVar.darkAlias }}</span></div>
+            </div>
+          </div>
+        </template>
+      </template>
+      <template v-else>
+        <div class="detail-row"><span class="label">Value</span><span class="val">{{ detailVar.value ?? detailVar.lightVal }}</span></div>
+      </template>
+
+      <button class="close-btn" @click="detailVar=null">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Embedded token data ───
+const VALUE_TOKENS = /* VALUE_DATA_START */
+{
+  "colour": {
+    "neutral": {
+      "neutral-1000": { "$type":"color","$value":{"hex":"#160E21","alpha":1} },
+      "neutral-900":  { "$type":"color","$value":{"hex":"#352A41","alpha":1} },
+      "neutral-850":  { "$type":"color","$value":{"hex":"#42374E","alpha":1} },
+      "neutral-750":  { "$type":"color","$value":{"hex":"#584F63","alpha":1} },
+      "neutral-650":  { "$type":"color","$value":{"hex":"#6E6678","alpha":1} },
+      "neutral-350":  { "$type":"color","$value":{"hex":"#B1ADB6","alpha":1} },
+      "neutral-150":  { "$type":"color","$value":{"hex":"#DEDCE0","alpha":1} },
+      "neutral-50":   { "$type":"color","$value":{"hex":"#F4F3F5","alpha":1} },
+      "neutral-10":   { "$type":"color","$value":{"hex":"#FEFEFE","alpha":1} },
+      "neutral-0":    { "$type":"color","$value":{"hex":"#FFFFFF","alpha":1} }
+    },
+    "primary": {
+      "purple-900": { "$type":"color","$value":{"hex":"#502485","alpha":1} },
+      "purple-700": { "$type":"color","$value":{"hex":"#682FAD","alpha":1} },
+      "purple-600": { "$type":"color","$value":{"hex":"#8E09FD","alpha":1} },
+      "purple-500": { "$type":"color","$value":{"hex":"#9945FF","alpha":1} },
+      "purple-300": { "$type":"color","$value":{"hex":"#C28FFF","alpha":1} },
+      "purple-100": { "$type":"color","$value":{"hex":"#EBDAFF","alpha":1} },
+      "purple-50":  { "$type":"color","$value":{"hex":"#F5ECFF","alpha":1} }
+    },
+    "secondary": {
+      "pink-600": { "$type":"color","$value":{"hex":"#F94DFD","alpha":1} },
+      "pink-500": { "$type":"color","$value":{"hex":"#E367C0","alpha":1} },
+      "aqua-500": { "$type":"color","$value":{"hex":"#4BF0F0","alpha":1} }
+    },
+    "system": {
+      "red-900":   { "$type":"color","$value":{"hex":"#2B181A","alpha":1} },
+      "red-500":   { "$type":"color","$value":{"hex":"#DC3044","alpha":1} },
+      "red-300":   { "$type":"color","$value":{"hex":"#E76E7C","alpha":1} },
+      "red-100":   { "$type":"color","$value":{"hex":"#FCEAEC","alpha":1} },
+      "green-500": { "$type":"color","$value":{"hex":"#28DE9C","alpha":1} },
+      "green-300": { "$type":"color","$value":{"hex":"#237668","alpha":1} }
+    },
+    "transparency": {
+      "neutral-1000-90": { "$type":"color","$value":{"hex":"#160E21","alpha":0.9} },
+      "neutral-1000-80": { "$type":"color","$value":{"hex":"#160E21","alpha":0.8} },
+      "neutral-1000-25": { "$type":"color","$value":{"hex":"#160E21","alpha":0.25} },
+      "neutral-1000-12": { "$type":"color","$value":{"hex":"#160E21","alpha":0.12} },
+      "neutral-1000-0":  { "$type":"color","$value":{"hex":"#160E21","alpha":0} },
+      "purple-900-0":    { "$type":"color","$value":{"hex":"#502485","alpha":0} },
+      "neutral-750-50":  { "$type":"color","$value":{"hex":"#584F63","alpha":0.5} },
+      "neutral-150-50":  { "$type":"color","$value":{"hex":"#DEDCE0","alpha":0.5} },
+      "neutral-0-90":    { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0.9} },
+      "neutral-0-80":    { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0.8} },
+      "neutral-0-25":    { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0.25} },
+      "neutral-0-12":    { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0.12} },
+      "neutral-0-0":     { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0} },
+      "pink-500-25":     { "$type":"color","$value":{"hex":"#E367C0","alpha":0.25} },
+      "purple-50-0":     { "$type":"color","$value":{"hex":"#F5ECFF","alpha":0} }
+    },
+    "premium": {
+      "premium-purple-200": { "$type":"color","$value":{"hex":"#260267","alpha":1} },
+      "premium-purple-100": { "$type":"color","$value":{"hex":"#7606DC","alpha":1} },
+      "premium-gold-200":   { "$type":"color","$value":{"hex":"#BA7F28","alpha":1} },
+      "premium-gold-100":   { "$type":"color","$value":{"hex":"#FFCB46","alpha":1} }
+    },
+    "switcher": {
+      "left-pink-100":    { "$type":"color","$value":{"hex":"#F3E5FD","alpha":1} },
+      "left-pink-0":      { "$type":"color","$value":{"hex":"#F1E1FD","alpha":0} },
+      "right-pink-100":   { "$type":"color","$value":{"hex":"#F1E4FF","alpha":1} },
+      "right-pink-0":     { "$type":"color","$value":{"hex":"#EBD9FF","alpha":0} },
+      "left-purple-100":  { "$type":"color","$value":{"hex":"#57268B","alpha":1} },
+      "left-purple-0":    { "$type":"color","$value":{"hex":"#57258C","alpha":0} },
+      "right-purple-100": { "$type":"color","$value":{"hex":"#52238A","alpha":1} },
+      "right-purple-0":   { "$type":"color","$value":{"hex":"#582193","alpha":0} }
+    },
+    "iOS26": {
+      "glass-light-top":    { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0.16} },
+      "glass-light-bottom": { "$type":"color","$value":{"hex":"#FFFFFF","alpha":0.34} },
+      "glass-dark-top":     { "$type":"color","$value":{"hex":"#000000","alpha":0.16} },
+      "glass-dark-bottom":  { "$type":"color","$value":{"hex":"#000000","alpha":0.34} }
+    }
+  },
+  "spacing": {
+    "half": { "$type":"number","$value":4 },
+    "1":  { "$type":"number","$value":8 },
+    "2":  { "$type":"number","$value":16 },
+    "3":  { "$type":"number","$value":24 },
+    "4":  { "$type":"number","$value":32 },
+    "5":  { "$type":"number","$value":40 },
+    "6":  { "$type":"number","$value":48 },
+    "7":  { "$type":"number","$value":56 },
+    "8":  { "$type":"number","$value":64 },
+    "9":  { "$type":"number","$value":72 },
+    "10": { "$type":"number","$value":80 }
+  },
+  "radius": {
+    "sm":  { "$type":"number","$value":4 },
+    "md":  { "$type":"number","$value":8 },
+    "lg":  { "$type":"number","$value":16 },
+    "xl":  { "$type":"number","$value":32 },
+    "2xl": { "$type":"number","$value":128 },
+    "3xl": { "$type":"number","$value":360 }
+  }
+}
+/* VALUE_DATA_END */;
+
+const LIGHT_TOKENS = {
+  "Primary": {
+    "primary":          { hex:"#9945FF",  alpha:1, alias:"colour/primary/purple-500" },
+    "primary-light":    { hex:"#C28FFF",  alpha:1, alias:"colour/primary/purple-300" },
+    "primary-lightest": { hex:"#F5ECFF",  alpha:1, alias:"colour/primary/purple-50" },
+    "primary-dark":     { hex:"#682FAD",  alpha:1, alias:"colour/primary/purple-700" },
+    "primary-darker":   { hex:"#502485",  alpha:1, alias:"colour/primary/purple-900" }
+  },
+  "Secondary": {
+    "pink": { hex:"#E367C0", alpha:1, alias:"colour/secondary/pink-500" },
+    "aqua": { hex:"#4BF0F0", alpha:1, alias:"colour/secondary/aqua-500" }
+  },
+  "Neutral": {
+    "neutral-constant-1000": { hex:"#160E21", alpha:1, alias:"colour/neutral/neutral-1000" },
+    "neutral-constant-50":   { hex:"#F4F3F5", alpha:1, alias:"colour/neutral/neutral-50" },
+    "neutral-constant-150":  { hex:"#DEDCE0", alpha:1, alias:"colour/neutral/neutral-150" },
+    "neutral-constant-0":    { hex:"#FFFFFF", alpha:1, alias:"colour/neutral/neutral-0" },
+    "neutral":               { hex:"#160E21", alpha:1, alias:"colour/neutral/neutral-1000" },
+    "neutral-invert":        { hex:"#FFFFFF", alpha:1, alias:"colour/neutral/neutral-0" },
+    "neutral-lightest":      { hex:"#FEFEFE", alpha:1, alias:"colour/neutral/neutral-10" },
+    "neutral-light":         { hex:"#F4F3F5", alpha:1, alias:"colour/neutral/neutral-50" },
+    "neutral-dark":          { hex:"#DEDCE0", alpha:1, alias:"colour/neutral/neutral-150" },
+    "neutral-darker":        { hex:"#6E6678", alpha:1, alias:"colour/neutral/neutral-650" },
+    "neutral-opaque":        { hex:"#160E21", alpha:0.25, alias:"colour/transparency/neutral-1000-25" },
+    "neutral-80":            { hex:"#160E21", alpha:0.8, alias:"colour/transparency/neutral-1000-80" }
+  },
+  "System": {
+    "red":       { hex:"#DC3044", alpha:1, alias:"colour/system/red-500" },
+    "red-light": { hex:"#FCEAEC", alpha:1, alias:"colour/system/red-100" },
+    "green":     { hex:"#28DE9C", alpha:1, alias:"colour/system/green-500" }
+  },
+  "Gradient": {
+    "Gradient-0":   { hex:"#FFFFFF", alpha:0, alias:"colour/transparency/neutral-0-0" },
+    "Gradient-25":  { hex:"#FFFFFF", alpha:0.25, alias:"colour/transparency/neutral-0-25" },
+    "Gradient-80":  { hex:"#FFFFFF", alpha:0.8, alias:"colour/transparency/neutral-0-80" },
+    "Gradient-90":  { hex:"#FFFFFF", alpha:0.9, alias:"colour/transparency/neutral-0-90" },
+    "Gradient-100": { hex:"#FFFFFF", alpha:1, alias:"colour/neutral/neutral-0" },
+    "gradient-purple-0":   { hex:"#502485", alpha:0, alias:"colour/transparency/purple-900-0" },
+    "gradient-purple-100": { hex:"#502485", alpha:1, alias:"colour/primary/purple-900" },
+    "gradient-pink-0":     { hex:"#E367C0", alpha:0.25, alias:"colour/transparency/pink-500-25" },
+    "gradient-surface-0":  { hex:"#F5ECFF", alpha:0, alias:"colour/transparency/purple-50-0" }
+  },
+  "Spacing": {
+    "half": 4, "1": 8, "2": 16, "3": 24, "4": 32, "5": 40, "6": 48
+  },
+  "Radius": {
+    "sm": 4, "md": 8, "lg": 16
+  },
+  "Effects": {
+    "blur-amount":   16,
+    "shadow-x":      0,
+    "shadow-y":      2,
+    "shadow-blur":   8,
+    "shadow-spread": 0
+  },
+  "Switcher": {
+    "left-100":  { hex:"#F3E5FD", alpha:1, alias:"colour/switcher/left-pink-100" },
+    "left-0":    { hex:"#F1E1FD", alpha:0, alias:"colour/switcher/left-pink-0" },
+    "right-100": { hex:"#F1E4FF", alpha:1, alias:"colour/switcher/right-pink-100" },
+    "right-0":   { hex:"#EBD9FF", alpha:0, alias:"colour/switcher/right-pink-0" }
+  },
+  "iOS26": {
+    "glass-top":    { hex:"#FFFFFF", alpha:0.16, alias:"colour/iOS26/glass-light-top" },
+    "glass-bottom": { hex:"#FFFFFF", alpha:0.34, alias:"colour/iOS26/glass-light-bottom" }
+  }
+};
+
+const DARK_TOKENS = {
+  "Primary": {
+    "primary":          { hex:"#C28FFF",  alpha:1, alias:"colour/primary/purple-300" },
+    "primary-light":    { hex:"#9945FF",  alpha:1, alias:"colour/primary/purple-500" },
+    "primary-lightest": { hex:"#502485",  alpha:1, alias:"colour/primary/purple-900" },
+    "primary-dark":     { hex:"#EBDAFF",  alpha:1, alias:"colour/primary/purple-100" },
+    "primary-darker":   { hex:"#EBDAFF",  alpha:1, alias:"colour/primary/purple-100" }
+  },
+  "Secondary": {
+    "pink": { hex:"#E367C0", alpha:1, alias:"colour/secondary/pink-500" },
+    "aqua": { hex:"#4BF0F0", alpha:1, alias:"colour/secondary/aqua-500" }
+  },
+  "Neutral": {
+    "neutral-constant-1000": { hex:"#160E21", alpha:1, alias:"colour/neutral/neutral-1000" },
+    "neutral-constant-50":   { hex:"#F4F3F5", alpha:1, alias:"colour/neutral/neutral-50" },
+    "neutral-constant-150":  { hex:"#DEDCE0", alpha:1, alias:"colour/neutral/neutral-150" },
+    "neutral-constant-0":    { hex:"#FFFFFF", alpha:1, alias:"colour/neutral/neutral-0" },
+    "neutral":               { hex:"#FFFFFF", alpha:1, alias:"colour/neutral/neutral-0" },
+    "neutral-invert":        { hex:"#160E21", alpha:1, alias:"colour/neutral/neutral-1000" },
+    "neutral-lightest":      { hex:"#352A41", alpha:1, alias:"colour/neutral/neutral-900" },
+    "neutral-light":         { hex:"#42374E", alpha:1, alias:"colour/neutral/neutral-850" },
+    "neutral-dark":          { hex:"#584F63", alpha:1, alias:"colour/neutral/neutral-750" },
+    "neutral-darker":        { hex:"#B1ADB6", alpha:1, alias:"colour/neutral/neutral-350" },
+    "neutral-opaque":        { hex:"#FFFFFF", alpha:0.25, alias:"colour/transparency/neutral-0-25" },
+    "neutral-80":            { hex:"#FFFFFF", alpha:0.8, alias:"colour/transparency/neutral-0-80" }
+  },
+  "System": {
+    "red":       { hex:"#E76E7C", alpha:1, alias:"colour/system/red-300" },
+    "red-light": { hex:"#2B181A", alpha:1, alias:"colour/system/red-900" },
+    "green":     { hex:"#237668", alpha:1, alias:"colour/system/green-300" }
+  },
+  "Gradient": {
+    "Gradient-0":   { hex:"#160E21", alpha:0, alias:"colour/transparency/neutral-1000-0" },
+    "Gradient-25":  { hex:"#160E21", alpha:0.25, alias:"colour/transparency/neutral-1000-25" },
+    "Gradient-80":  { hex:"#160E21", alpha:0.8, alias:"colour/transparency/neutral-1000-80" },
+    "Gradient-90":  { hex:"#160E21", alpha:0.9, alias:"colour/transparency/neutral-1000-90" },
+    "Gradient-100": { hex:"#160E21", alpha:1, alias:"colour/neutral/neutral-1000" },
+    "gradient-purple-0":   { hex:"#502485", alpha:0, alias:"colour/transparency/purple-900-0" },
+    "gradient-purple-100": { hex:"#502485", alpha:1, alias:"colour/primary/purple-900" },
+    "gradient-pink-0":     { hex:"#E367C0", alpha:0.25, alias:"colour/transparency/pink-500-25" },
+    "gradient-surface-0":  { hex:"#F5ECFF", alpha:0, alias:"colour/transparency/purple-50-0" }
+  },
+  "Spacing": {
+    "half": 4, "1": 8, "2": 16, "3": 24, "4": 32, "5": 40, "6": 48
+  },
+  "Radius": {
+    "sm": 4, "md": 8, "lg": 16
+  },
+  "Effects": {
+    "blur-amount":   16,
+    "shadow-x":      0,
+    "shadow-y":      2,
+    "shadow-blur":   8,
+    "shadow-spread": 0
+  },
+  "Switcher": {
+    "left-100":  { hex:"#57268B", alpha:1, alias:"colour/switcher/left-purple-100" },
+    "left-0":    { hex:"#57258C", alpha:0, alias:"colour/switcher/left-purple-0" },
+    "right-100": { hex:"#52238A", alpha:1, alias:"colour/switcher/right-purple-100" },
+    "right-0":   { hex:"#582193", alpha:0, alias:"colour/switcher/right-purple-0" }
+  },
+  "iOS26": {
+    "glass-top":    { hex:"#000000", alpha:0.16, alias:"colour/iOS26/glass-dark-top" },
+    "glass-bottom": { hex:"#000000", alpha:0.34, alias:"colour/iOS26/glass-dark-bottom" }
+  }
+};
+
+// ─── Vue app ───
+const { createApp, ref, computed } = Vue;
+
+createApp({
+  setup() {
+    const activeCollection = ref('primitives');
+    const activeGroup = ref('All');
+    const search = ref('');
+    const detailVar = ref(null);
+
+    // ── Build primitives flat list ──
+    function buildPrimitiveRows() {
+      const rows = [];
+      const data = VALUE_TOKENS;
+
+      // colour groups
+      if (data.colour) {
+        for (const [groupName, variables] of Object.entries(data.colour)) {
+          rows.push({ type:'heading', label: groupName, parentLabel:'colour', group:'colour/'+groupName });
+          for (const [varName, token] of Object.entries(variables)) {
+            if (token.$type === 'color') {
+              rows.push({
+                type:'variable', name: varName, dataType:'color',
+                value: token.$value,
+                group: 'colour/'+groupName,
+                topGroup: 'colour'
+              });
+            }
+          }
+        }
+      }
+      // spacing
+      if (data.spacing) {
+        rows.push({ type:'heading', label:'spacing', parentLabel:null, group:'spacing' });
+        for (const [varName, token] of Object.entries(data.spacing)) {
+          rows.push({
+            type:'variable', name: varName, dataType:'number',
+            value: token.$value,
+            group:'spacing', topGroup:'spacing'
+          });
+        }
+      }
+      // radius
+      if (data.radius) {
+        rows.push({ type:'heading', label:'radius', parentLabel:null, group:'radius' });
+        for (const [varName, token] of Object.entries(data.radius)) {
+          rows.push({
+            type:'variable', name: varName, dataType:'number',
+            value: token.$value,
+            group:'radius', topGroup:'radius'
+          });
+        }
+      }
+      return rows;
+    }
+
+    // ── Build tokens flat list ──
+    function buildTokenRows() {
+      const rows = [];
+      const allGroups = new Set([...Object.keys(LIGHT_TOKENS), ...Object.keys(DARK_TOKENS)]);
+
+      for (const groupName of allGroups) {
+        const lightGroup = LIGHT_TOKENS[groupName] || {};
+        const darkGroup  = DARK_TOKENS[groupName]  || {};
+        const allVars = new Set([...Object.keys(lightGroup), ...Object.keys(darkGroup)]);
+
+        rows.push({ type:'heading', label: groupName, parentLabel:null, group: groupName });
+
+        for (const varName of allVars) {
+          const lv = lightGroup[varName];
+          const dv = darkGroup[varName];
+          const isColor = (lv && typeof lv === 'object') || (dv && typeof dv === 'object');
+
+          rows.push({
+            type:'variable',
+            name: varName,
+            dataType: isColor ? 'color' : 'number',
+            lightVal: isColor ? (lv || null) : (lv ?? null),
+            darkVal:  isColor ? (dv || null) : (dv ?? null),
+            lightAlias: isColor && lv ? lv.alias : null,
+            darkAlias:  isColor && dv ? dv.alias : null,
+            group: groupName,
+            topGroup: groupName
+          });
+        }
+      }
+      return rows;
+    }
+
+    const primitiveRows = buildPrimitiveRows();
+    const tokenRows = buildTokenRows();
+
+    // ── Sidebar groups ──
+    const sidebarGroups = computed(() => {
+      if (activeCollection.value === 'primitives') {
+        const groups = [];
+        // colour parent
+        const colourChildren = ['neutral','primary','secondary','system','transparency','premium','switcher','iOS26'];
+        const colourCount = primitiveRows.filter(r => r.type === 'variable' && r.topGroup === 'colour').length;
+        groups.push({ key:'colour', label:'colour', count: colourCount, indent: 0 });
+        for (const child of colourChildren) {
+          const c = primitiveRows.filter(r => r.type === 'variable' && r.group === 'colour/'+child).length;
+          if (c > 0) groups.push({ key:'colour/'+child, label: child, count: c, indent: 1 });
+        }
+        // spacing
+        const spCount = primitiveRows.filter(r => r.type === 'variable' && r.group === 'spacing').length;
+        if (spCount) groups.push({ key:'spacing', label:'spacing', count: spCount, indent: 0 });
+        // radius
+        const rCount = primitiveRows.filter(r => r.type === 'variable' && r.group === 'radius').length;
+        if (rCount) groups.push({ key:'radius', label:'radius', count: rCount, indent: 0 });
+        return groups;
+      } else {
+        const groups = [];
+        const seen = new Set();
+        for (const r of tokenRows) {
+          if (r.type === 'variable' && !seen.has(r.group)) seen.add(r.group);
+        }
+        for (const g of seen) {
+          const c = tokenRows.filter(r => r.type === 'variable' && r.group === g).length;
+          groups.push({ key: g, label: g, count: c, indent: 0 });
+        }
+        return groups;
+      }
+    });
+
+    const totalCount = computed(() => {
+      const rows = activeCollection.value === 'primitives' ? primitiveRows : tokenRows;
+      return rows.filter(r => r.type === 'variable').length;
+    });
+
+    // ── Filtered rows ──
+    const filteredRows = computed(() => {
+      const rows = activeCollection.value === 'primitives' ? primitiveRows : tokenRows;
+      const q = search.value.toLowerCase().trim();
+      const g = activeGroup.value;
+
+      return rows.filter(r => {
+        // Group filter
+        if (g !== 'All') {
+          if (activeCollection.value === 'primitives') {
+            // colour parent matches all colour/* children
+            if (g === 'colour') {
+              if (r.type === 'variable' && r.topGroup !== 'colour') return false;
+              if (r.type === 'heading' && !r.group?.startsWith('colour/')) return false;
+            } else {
+              if (r.type === 'variable' && r.group !== g) return false;
+              if (r.type === 'heading' && r.group !== g) return false;
+            }
+          } else {
+            if (r.type === 'variable' && r.group !== g) return false;
+            if (r.type === 'heading' && r.group !== g) return false;
+          }
+        }
+        // Search filter
+        if (q) {
+          if (r.type === 'heading') return true; // keep headings, will be cleaned later
+          const nameMatch = r.name.toLowerCase().includes(q);
+          let valMatch = false;
+          if (r.value && typeof r.value === 'object' && r.value.hex) valMatch = r.value.hex.toLowerCase().includes(q);
+          if (r.lightAlias) valMatch = valMatch || r.lightAlias.toLowerCase().includes(q);
+          if (r.darkAlias)  valMatch = valMatch || r.darkAlias.toLowerCase().includes(q);
+          if (r.lightVal && r.lightVal.hex) valMatch = valMatch || r.lightVal.hex.toLowerCase().includes(q);
+          if (r.darkVal && r.darkVal.hex)   valMatch = valMatch || r.darkVal.hex.toLowerCase().includes(q);
+          return nameMatch || valMatch;
+        }
+        return true;
+      });
+    });
+
+    // ── Helpers ──
+    function hexToRgb(hex) {
+      const h = hex.replace('#','');
+      return {
+        r: parseInt(h.substring(0,2),16),
+        g: parseInt(h.substring(2,4),16),
+        b: parseInt(h.substring(4,6),16)
+      };
+    }
+    function rgbaString(val) {
+      if (!val || !val.hex) return 'transparent';
+      const {r,g,b} = hexToRgb(val.hex);
+      return `rgba(${r},${g},${b},${val.alpha ?? 1})`;
+    }
+    function rgbDisplay(val) {
+      if (!val || !val.hex) return '';
+      const {r,g,b} = hexToRgb(val.hex);
+      return `${r}, ${g}, ${b}`;
+    }
+    function openDetail(row) {
+      detailVar.value = row;
+    }
+
+    return {
+      activeCollection, activeGroup, search, detailVar,
+      sidebarGroups, totalCount, filteredRows,
+      rgbaString, rgbDisplay, openDetail
+    };
+  }
+}).mount('#app');
+</script>
+
+</body>
+</html>

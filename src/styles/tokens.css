@@ -1,0 +1,217 @@
+/*
+ * ═══════════════════════════════════════════════════════════
+ *  COLOUR TOKENS — mirrors the Figma variable structure
+ *  Portfolio · Design System
+ *
+ *  Two-layer architecture:
+ *   1. Primitive  — raw hex values, named by hue + scale
+ *   2. Semantic   — alias to primitives, named by intent
+ *
+ *  These match exactly the variables to set up in Figma:
+ *   File: Portfolio - Design System
+ *   Collection: "Color"
+ * ═══════════════════════════════════════════════════════════
+ */
+
+:root {
+
+  /* ───────────────────────────────────────────
+     LAYER 1 · PRIMITIVES
+     Group: Color/Primitive/…
+     (Raw values — do not use directly in components)
+  ─────────────────────────────────────────── */
+
+  /* Neutral */
+  --color-primitive-neutral-0:   #ffffff;
+  --color-primitive-neutral-50:  #faf9f7;   /* cards, nav background        */
+  --color-primitive-neutral-100: #f0f0f0;   /* skeleton shimmer light       */
+  --color-primitive-neutral-150: #e0e0e0;   /* skeleton shimmer dark        */
+  --color-primitive-neutral-200: #d0d0d0;   /* ceiling mount                */
+  --color-primitive-neutral-900: #2c2c2c;   /* primary text                 */
+  --color-primitive-neutral-950: #181818;   /* expanded bio text            */
+  --color-primitive-neutral-1000:#000000;
+
+  /* Teal — Primary */
+  --color-primitive-teal-500:    #008B8B;   /* primary brand colour         */
+
+  /* Green */
+  --color-primitive-green-100:   #e8f8ee;   /* background gradient start    */
+
+  /* Purple */
+  --color-primitive-purple-100:  #e8ebf8;   /* background gradient mid      */
+  --color-primitive-purple-400:  #9b87f5;   /* schedule card gradient start */
+  --color-primitive-purple-600:  #7c5cfc;   /* schedule card gradient mid   */
+  --color-primitive-purple-800:  #6b46e0;   /* schedule card gradient end   */
+
+  /* Pink */
+  --color-primitive-pink-100:    #f8e8e8;   /* background gradient end      */
+
+  /* Cream */
+  --color-primitive-cream-50:    #fffcf0;   /* bulb-on card background      */
+
+  /* Dark */
+  --color-primitive-dark-900:    #0f0f1a;   /* plugin card background       */
+  --color-primitive-dark-1000:   #0a0a0a;   /* alexa card background        */
+
+  /* Blue (Duolingo) */
+  --color-primitive-blue-400:    #38b3e8;   /* Duolingo card gradient top   */
+  --color-primitive-blue-200:    #95dfff;   /* Duolingo card gradient bottom */
+
+  /* Orange (Strava) */
+  --color-primitive-orange-500:  #fc4c02;   /* Strava brand colour          */
+
+  /* Yellow (Bulb) */
+  --color-primitive-yellow-500:  rgba(255, 205, 0, 0.18);  /* bulb glow strong */
+  --color-primitive-yellow-200:  rgba(255, 185, 0, 0.06);  /* bulb glow soft   */
+
+
+  /* ───────────────────────────────────────────
+     LAYER 2 · SEMANTIC ALIASES
+     Group: Color/…
+     (These are what components should reference)
+  ─────────────────────────────────────────── */
+
+  /* Primary */
+  --color-primary:            var(--color-primitive-teal-500);
+
+  /* Background */
+  --color-bg-body:            #f0ede8;
+  --color-bg-gradient-start:  var(--color-primitive-green-100);
+  --color-bg-gradient-mid:    var(--color-primitive-purple-100);
+  --color-bg-gradient-end:    var(--color-primitive-pink-100);
+
+  /* Border */
+  --color-border-card:             rgba(0, 0, 0, 0.07);
+
+  /* Surface */
+  --color-surface-card:            var(--color-primitive-neutral-50);
+  --color-surface-card-white:      var(--color-primitive-neutral-0);
+  --color-surface-card-dark:       var(--color-primitive-dark-900);
+  --color-surface-card-darkest:    var(--color-primitive-dark-1000);
+  --color-surface-nav:             var(--color-primitive-neutral-50);
+  --color-surface-nav-blur:        rgba(249, 249, 249, 0.5);
+  --color-surface-action-icon:     var(--color-primitive-neutral-50);
+  --filter-action-icon:            none;
+  --filter-checkmark:              brightness(0) invert(1);
+  --color-surface-bulb-on:         var(--color-primitive-cream-50);
+  --color-surface-badge:           rgba(255, 255, 255, 0.92);
+  --color-surface-skeleton-base:   var(--color-primitive-neutral-100);
+  --color-surface-skeleton-shine:  var(--color-primitive-neutral-150);
+  --color-surface-ceiling-mount:   var(--color-primitive-neutral-200);
+
+  /* Text */
+  --color-text-primary:       var(--color-primitive-neutral-900);
+  --color-text-body:          var(--color-primitive-neutral-950);
+  --color-text-subtle:        #aaaaaa;
+  --color-text-on-dark:       rgba(249, 249, 249, 0.80); /* streak counter */
+  --color-text-muted:         rgba(44, 44, 44, 0.30);   /* DS label        */
+  --color-text-muted-dark:    rgba(255, 255, 255, 0.35); /* dark card label */
+  --color-text-muted-purple:  rgba(255, 255, 255, 0.55); /* schedule label  */
+
+  /* Card surface treatment — grain + inset glow */
+  --color-card-inset-top:          rgba(255, 255, 255, 0.90); /* bright lip at top edge */
+  --color-card-inset-bottom:       rgba(0, 0, 0, 0.03);       /* subtle base shadow    */
+  --card-grain-opacity:            0.028;
+  --card-grain-blend:              multiply;
+  --color-card-ripple:             rgba(0, 139, 139, 0.10);   /* teal pulse on light bg */
+
+  /* Shadow */
+  --color-shadow-card-rest:        rgba(0, 0, 0, 0.04);
+  --color-shadow-card-rest-2:      rgba(0, 0, 0, 0.03);
+  --color-shadow-card-hover:       rgba(0, 0, 0, 0.09);
+  --color-shadow-card-hover-2:     rgba(0, 0, 0, 0.05);
+  --color-shadow-card-dark-hover:  rgba(0, 0, 0, 0.22);
+  --color-shadow-card-expanded:    rgba(0, 0, 0, 0.20);
+  --color-shadow-nav:              rgba(0, 0, 0, 0.08);
+  --color-shadow-action-icon:      rgba(0, 0, 0, 0.10);
+  --color-shadow-badge:            rgba(0, 0, 0, 0.12);
+
+  /* Overlay */
+  --color-backdrop:           rgba(0, 0, 0, 0.30);
+  --color-overlay-map:        rgba(0, 0, 0, 0.45);
+  --color-overlay-light:      rgba(255, 255, 255, 0.15);
+  --color-overlay-purple:     rgba(100, 60, 200, 0.30);
+
+  /* Brand — Duolingo */
+  --color-brand-duolingo-top:    var(--color-primitive-blue-400);
+  --color-brand-duolingo-bottom: var(--color-primitive-blue-200);
+
+  /* Brand — Strava */
+  --color-brand-strava:          var(--color-primitive-orange-500);
+
+  /* Brand — Bulb */
+  --color-brand-bulb-glow-strong: var(--color-primitive-yellow-500);
+  --color-brand-bulb-glow-soft:   var(--color-primitive-yellow-200);
+
+  /* Brand — Schedule */
+  --color-brand-schedule-start:  var(--color-primitive-purple-400);
+  --color-brand-schedule-mid:    var(--color-primitive-purple-600);
+  --color-brand-schedule-end:    var(--color-primitive-purple-800);
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+ *  DARK MODE — overrides semantic aliases only
+ *  Activated by toggling data-theme="dark" on <html>
+ * ═══════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+
+  /* Card surface treatment — dark mode overrides */
+  --color-card-ripple:             rgba(0, 210, 200, 0.18);  /* teal pulse on dark bg */
+  --color-card-inset-top:          rgba(255, 255, 255, 0.07); /* whisper-thin highlight */
+  --color-card-inset-bottom:       rgba(0, 0, 0, 0.25);
+  --card-grain-opacity:            0.045;
+  --card-grain-blend:              screen;                    /* screen lightens on dark bg */
+
+  /* Border */
+  --color-border-card:             rgba(255, 255, 255, 0.06);
+
+  /* Background */
+  --color-bg-body:               #0e0e18;
+  --color-bg-gradient-start:     #0c0c14;
+  --color-bg-gradient-mid:       #10101e;
+  --color-bg-gradient-end:       #0e0c16;
+
+  /* Surface */
+  --color-surface-card:            #1a1a2e;
+  --color-surface-card-white:      #1e1e34;
+  --color-surface-card-dark:       #12121e;
+  --color-surface-card-darkest:    #0a0a12;
+  --color-surface-nav:             #1e1e34;
+  --color-surface-nav-blur:        rgba(18, 18, 30, 0.75);
+  --color-surface-action-icon:     #1e1e34;
+  --filter-action-icon:            brightness(0) invert(1);
+  --filter-checkmark:              none;
+  --color-surface-bulb-on:         #1a1a2e;
+  --color-surface-badge:           rgba(30, 30, 50, 0.92);
+  --color-surface-skeleton-base:   #1a1a2e;
+  --color-surface-skeleton-shine:  #28283e;
+  --color-surface-ceiling-mount:   #3a3a55;
+
+  /* Text */
+  --color-text-primary:      #e0e0ea;
+  --color-text-body:         #c8c8d8;
+  --color-text-subtle:       #666680;
+  --color-text-muted:        rgba(224, 224, 234, 0.30);
+  --color-text-muted-dark:   rgba(255, 255, 255, 0.40);
+  --color-text-muted-purple: rgba(255, 255, 255, 0.55);
+
+  /* Shadow */
+  --color-shadow-card-rest:        rgba(0, 0, 0, 0.20);
+  --color-shadow-card-hover:       rgba(0, 0, 0, 0.40);
+  --color-shadow-card-dark-hover:  rgba(0, 0, 0, 0.50);
+  --color-shadow-card-expanded:    rgba(0, 0, 0, 0.50);
+  --color-shadow-nav:              rgba(0, 0, 0, 0.30);
+  --color-shadow-action-icon:      rgba(0, 0, 0, 0.30);
+  --color-shadow-badge:            rgba(0, 0, 0, 0.40);
+
+  /* Overlay */
+  --color-backdrop:          rgba(0, 0, 0, 0.55);
+  --color-overlay-map:       rgba(0, 0, 0, 0.55);
+  --color-overlay-light:     rgba(255, 255, 255, 0.06);
+  --color-overlay-purple:    rgba(100, 60, 200, 0.20);
+
+  /* Brand — Duolingo */
+  --color-brand-duolingo-top:    #010832;
+  --color-brand-duolingo-bottom: #1C37DE;
+}

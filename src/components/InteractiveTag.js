@@ -1,0 +1,28 @@
+import { defineComponent, h } from 'vue'
+
+/**
+ * InteractiveTag — reusable pill badge to indicate interactive content.
+ *
+ * Usage:
+ *   import InteractiveTag from '../InteractiveTag.js'
+ *   h(InteractiveTag, { hint: 'Explore our colour variables' })
+ *
+ * Renders:
+ *   <p class="cs-antonym-hint">
+ *     <span class="cc-interactive-tag">Interactive</span>
+ *     Explore our colour variables
+ *   </p>
+ */
+export default defineComponent({
+  name: 'InteractiveTag',
+  props: {
+    hint: { type: String, default: '' },
+  },
+  setup(props) {
+    return () =>
+      h('p', { class: 'cs-antonym-hint' }, [
+        h('span', { class: 'cc-interactive-tag' }, 'Interactive'),
+        props.hint,
+      ])
+  },
+})
