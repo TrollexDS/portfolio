@@ -11,11 +11,11 @@ function _onResize() { csW.value = Math.min(CS_BASE, window.innerWidth - 48) }
 window.addEventListener('resize', _onResize)
 
 const VIDEO_SRC = 'src/assets/videos/rayo-plugin-clip.mp4'
-const SCREENSHOT         = 'src/assets/images/rayo/rayo-plugin-screenshot.png'
-const PODCAST_SCREENSHOT = 'src/assets/images/rayo/rayo-plugin-podcast-screenshot.png'
-const IMG_SEL_REGION = 'src/assets/images/rayo/select-a-region-hover.png'
-const IMG_FIND_ST = 'src/assets/images/rayo/find-a-station-hover.png'
-const IMG_QUICK = 'src/assets/images/rayo/quick-guide-hover.png'
+const SCREENSHOT         = 'src/assets/images/rayo/plugin/rayo-plugin-screenshot.png'
+const PODCAST_SCREENSHOT = 'src/assets/images/rayo/plugin/rayo-plugin-podcast-screenshot.png'
+const IMG_SEL_REGION = 'src/assets/images/rayo/plugin/select-a-region-hover.png'
+const IMG_FIND_ST = 'src/assets/images/rayo/plugin/find-a-station-hover.png'
+const IMG_QUICK = 'src/assets/images/rayo/plugin/quick-guide-hover.png'
 
 // Card positions taken directly from Figma (680px-wide container)
 const CARDS = [
@@ -132,11 +132,11 @@ const AntonymSection = defineComponent({
 // Figma: bg-white, 32px radius, images absolutely positioned within ~680px container
 // V1: left 58, w 100 | V2–V5: left 182/298/414/530, w 92 | all: top 52, h 175
 const V_IMGS = [
-  { src: 'src/assets/images/rayo/rayo-plugin-V1.png', left: 58, width: 100 },
-  { src: 'src/assets/images/rayo/rayo-plugin-V2.png', left: 182, width: 92 },
-  { src: 'src/assets/images/rayo/rayo-plugin-V3.png', left: 298, width: 92 },
-  { src: 'src/assets/images/rayo/rayo-plugin-V4.png', left: 414, width: 92 },
-  { src: 'src/assets/images/rayo/rayo-plugin-V5.png', left: 530, width: 92 },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V1.png', left: 58, width: 100 },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V2.png', left: 182, width: 92 },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V3.png', left: 298, width: 92 },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V4.png', left: 414, width: 92 },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V5.png', left: 530, width: 92 },
 ]
 
 const CONTAINER_H  = 419
@@ -235,10 +235,10 @@ const VersionSection = defineComponent({
 })
 
 const ERROR_IMGS = [
-  'src/assets/images/rayo/rayo-plugin-error-station.png',
-  'src/assets/images/rayo/rayo-plugin-error-show.png',
-  'src/assets/images/rayo/rayo-plugin-error-podcast.png',
-  'src/assets/images/rayo/rayo-plugin-error-episode.png',
+  'src/assets/images/rayo/plugin/rayo-plugin-error-station.png',
+  'src/assets/images/rayo/plugin/rayo-plugin-error-show.png',
+  'src/assets/images/rayo/plugin/rayo-plugin-error-podcast.png',
+  'src/assets/images/rayo/plugin/rayo-plugin-error-episode.png',
 ]
 
 const ErrorSection = defineComponent({
@@ -278,7 +278,7 @@ const ErrorSection = defineComponent({
       // ── Static Figma toolbar ──
       h('img', {
         class: 'cs-figma-bar',
-        src: 'src/assets/images/rayo/figma-bar.png',
+        src: 'src/assets/images/rayo/plugin/figma-bar.png',
         alt: 'Figma toolbar',
       }),
     ])
@@ -287,13 +287,13 @@ const ErrorSection = defineComponent({
 
 // ── Marquee background rows ──
 const MARQUEE_ROWS = [
-  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 1).padStart(2, '0')}.png`),  dir: 'left'  },
-  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 12).padStart(2, '0')}.png`), dir: 'right' },
-  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 22).padStart(2, '0')}.png`), dir: 'left'  },
-  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/rayo-plugin-row/${String(i + 33).padStart(2, '0')}.png`), dir: 'right' },
+  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/plugin/rayo-plugin-row/${String(i + 1).padStart(2, '0')}.png`),  dir: 'left'  },
+  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/plugin/rayo-plugin-row/${String(i + 12).padStart(2, '0')}.png`), dir: 'right' },
+  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/plugin/rayo-plugin-row/${String(i + 22).padStart(2, '0')}.png`), dir: 'left'  },
+  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/plugin/rayo-plugin-row/${String(i + 33).padStart(2, '0')}.png`), dir: 'right' },
 ]
 
-const HITS_IMG = 'src/assets/images/rayo/rayo-plugin-hits.png'
+const HITS_IMG = 'src/assets/images/rayo/plugin/rayo-plugin-hits.png'
 
 const MarqueeSection = defineComponent({
   name: 'MarqueeSection',

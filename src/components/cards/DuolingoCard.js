@@ -26,7 +26,7 @@ function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3) }
 export default defineComponent({
   name: 'DuolingoCard',
   props: {
-    streak: { type: Number, default: 810 },
+    streak: { type: Number, default: 811 },
   },
   setup(props) {
     const displayed = ref(0)

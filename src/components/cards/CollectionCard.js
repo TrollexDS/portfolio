@@ -11,11 +11,11 @@ const P = 'cc' // CSS class prefix
 
 /* ─── Local asset paths ── */
 const ASSETS = {
-  contentRail: 'src/assets/images/rayo/content-rail.png',
+  contentRail: 'src/assets/images/rayo/plugin/content-rail.png',
   fallbackBg:  'https://www.figma.com/api/mcp/asset/1187763d-e800-412f-b8a8-22e5035f2ef5',
 }
 
-const BG_PATH = 'src/assets/images/rayo/component-bg'
+const BG_PATH = 'src/assets/images/rayo/plugin/component-bg'
 const GRADIENT_OPTIONS = ['Aqua', 'Yellow', 'Orange', 'Red', 'Primary']
 const POSITION_OPTIONS = ['75%', '85%', '100%']
 const CARD_SIZES = { small: { w: 375, h: 375 }, medium: { w: 834, h: 375 } }
