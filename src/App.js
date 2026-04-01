@@ -161,9 +161,10 @@ export default defineComponent({
         h(BackToTop),
 
         // ── Bento Grid ──────────────────────────
-        h('main', { class: 'main' },
-          h('div', { class: 'grid' }, cardSlots)
-        ),
+        h('main', { class: 'main' }, [
+          h('img', { class: 'mobile-page-logo', src: 'src/assets/logos/alex-logo.svg', alt: 'Alex Chiu' }),
+          h('div', { class: 'grid' }, cardSlots),
+        ]),
       ])
     }
   },

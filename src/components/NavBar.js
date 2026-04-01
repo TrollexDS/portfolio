@@ -52,6 +52,12 @@ export default defineComponent({
     let lastScrollY = 0
 
     function onScroll() {
+      // On mobile the nav lives at the bottom and is always visible
+      if (window.innerWidth <= 768) {
+        hidden.value = false
+        lastScrollY = window.scrollY
+        return
+      }
       const currentY = window.scrollY
       if (currentY > lastScrollY && currentY > SCROLL_THRESHOLD) {
         hidden.value = true

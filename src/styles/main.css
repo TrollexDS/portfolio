@@ -241,6 +241,11 @@ strong, b {
 
 .nav-resume img { width: 16px; height: 16px; }
 
+/* ── Mobile-only page logo (above the grid) ── */
+.mobile-page-logo {
+  display: none; /* hidden on desktop */
+}
+
 /* ── Main layout ── */
 .main {
   display: flex;
@@ -2726,6 +2731,46 @@ strong, b {
    MOBILE BREAKPOINT — 2 columns
 ══════════════════════════════════════ */
 @media (max-width: 768px) {
+
+  /* ── Nav: bottom tab-bar ── */
+  .nav {
+    top: auto;
+    bottom: 0;
+    padding: 12px 24px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--color-surface-nav-blur);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  /* Never hide on mobile — thumb needs it reachable */
+  .nav--hidden {
+    transform: none;
+  }
+
+  /* Logo lives at top of page on mobile, not in the nav */
+  .nav-logo {
+    display: none;
+  }
+
+  /* Mobile page logo — centred above the grid */
+  .mobile-page-logo {
+    display: block;
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 20px;
+  }
+
+  /* Pills stay identical to desktop — centred frosted-glass container, no overrides */
+
+  /* Stack logo above grid instead of side-by-side */
+  .main {
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px));
+  }
 
   /* ── Grid: 4 → 2 columns, fluid width ── */
   /* Row height = column width → 1:1 cards.
