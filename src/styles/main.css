@@ -2471,24 +2471,22 @@ strong, b {
 .strava-overlay {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  padding: 28px 16px 14px;
-  background: linear-gradient(to top, var(--color-overlay-map) 0%, transparent 100%);
+  padding: 16px 16px 14px;
   display: flex;
   align-items: baseline;
   gap: 8px;
   z-index: 2;
-  border-radius: 0 0 32px 32px;
 }
 .strava-distance {
   font-size: 16px;
   font-weight: 700;
-  color: var(--color-primitive-neutral-0);
+  color: #FC4C02;
   letter-spacing: -0.01em;
 }
 .strava-elevation {
   font-size: 12px;
   font-weight: 500;
-  color: var(--color-text-on-dark);
+  color: #FC4C02;
 }
 
 /* Strava logo badge — bottom right */
