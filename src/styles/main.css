@@ -2736,8 +2736,8 @@ strong, b {
   .nav {
     top: auto;
     bottom: 0;
-    padding: 12px 24px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    padding: 16px 24px;
+    padding-bottom: calc(32px + env(safe-area-inset-bottom, 0px));
     background: var(--color-surface-nav-blur);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -2762,7 +2762,19 @@ strong, b {
     margin: 0 auto 20px;
   }
 
-  /* Pills stay identical to desktop — centred frosted-glass container, no overrides */
+  /* Pills: drop into flow, remove own glass bg (the nav provides it).
+     Must stay position:relative so the pill-indicator stays contained. */
+  .nav-pills {
+    position: relative;
+    left: 0;
+    transform: none;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+    width: 100%;
+    justify-content: center;
+  }
 
   /* Stack logo above grid instead of side-by-side */
   .main {

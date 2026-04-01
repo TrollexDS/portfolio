@@ -3,61 +3,8 @@ import BentoCard from '../BentoCard.js'
 import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
 const STRAVA_PROFILE = 'https://www.strava.com/athletes/101156627'
-
-const CLIENT_ID      = '211462'
-const CLIENT_SECRET  = '9edb117e27e74ae910a07088505543030dd3bd67'
-const REFRESH_TOKEN  = 'a7f4b1e5543922af3246227aa105b3deacf491d4'
-// Cached access token — avoids the refresh round-trip while still valid
-const CACHED_TOKEN   = 'e8ba6caab8db04c43ff04fa74e5b955af0fbe3f1'
+const ACTIVITY_JSON  = 'src/assets/strava-activity.json'
 const APP_ICON       = 'src/assets/logos/strava.svg'
-
-// ── Strava API helpers ────────────────────────────────────────────────────────
-
-async function refreshAccessToken() {
-  const res = await fetch('https://www.strava.com/oauth/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      client_id:     CLIENT_ID,
-      client_secret: CLIENT_SECRET,
-      refresh_token: REFRESH_TOKEN,
-      grant_type:    'refresh_token',
-    }),
-  })
-  if (!res.ok) throw new Error(`Token refresh failed: ${res.status}`)
-  const data = await res.json()
-  return data.access_token
-}
-
-async function fetchActivity() {
-  // 1. Try the cached token; if expired (401) fall back to a fresh refresh
-  let token = CACHED_TOKEN
-  let res = await fetch(
-    'https://www.strava.com/api/v3/athlete/activities?per_page=1',
-    { headers: { Authorization: `Bearer ${token}` } }
-  )
-  if (res.status === 401) {
-    token = await refreshAccessToken()
-    res = await fetch(
-      'https://www.strava.com/api/v3/athlete/activities?per_page=1',
-      { headers: { Authorization: `Bearer ${token}` } }
-    )
-  }
-  if (!res.ok) throw new Error(`Activities fetch failed: ${res.status}`)
-
-  const [latest] = await res.json()
-  if (!latest) throw new Error('No activities found')
-
-  // 2. Fetch full detail for the high-res polyline
-  const detailRes = await fetch(
-    `https://www.strava.com/api/v3/activities/${latest.id}`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  )
-  if (detailRes.ok) return detailRes.json()
-
-  // Fallback: summary activity has summary_polyline
-  return latest
-}
 
 // ── Google encoded-polyline decoder ──────────────────────────────────────────
 
@@ -113,10 +60,13 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        const [L, activity] = await Promise.all([
+        const [L, activityRes] = await Promise.all([
           loadLeaflet(),
-          fetchActivity(),
+          fetch(ACTIVITY_JSON),
         ])
+
+        if (!activityRes.ok) throw new Error('Could not load activity data — run: node scripts/fetch-strava.js')
+        const activity = await activityRes.json()
 
         if (!activity) throw new Error('No rides found')
 
@@ -126,7 +76,7 @@ export default defineComponent({
           elevation: Math.round(activity.total_elevation_gain) + ' m ↑',
         }
 
-        const encoded = activity.map?.polyline || activity.map?.summary_polyline
+        const encoded = activity.polyline
         if (!encoded) throw new Error('No route data')
 
         const coords = decodePolyline(encoded)
@@ -181,8 +131,6 @@ export default defineComponent({
 
         // ── Loading skeleton ────────────────────────────────
         status.value === 'loading' && h('div', { class: 'strava-skeleton' }),
-
-        // ── Error — hidden in production; map will appear once deployed ──
 
         // ── Stats overlay (bottom of card) ──────────────────
         status.value === 'ready' && rideInfo.value && h('div', { class: 'strava-overlay' }, [
