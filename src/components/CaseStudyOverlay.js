@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, nextTick, onUnmounted, watch } from 'vue'
+import { defineComponent, h, ref, nextTick, onUnmounted, watch, onMounted } from 'vue'
 import { ICON_SHRINK, ICON_FULL_SCREEN } from '../assets/icons/icons.js'
 
 const ANIM_MS = 700
@@ -48,6 +48,18 @@ export default defineComponent({
     let flyTimer   = null
     let rippleId   = 0
     let imgObserver = null
+
+    // ── Back-to-top inside case study ──
+    const scrollHost = ref(null)   // .cs-expanded-inner
+    const bttVisible = ref(false)
+
+    function onCsScroll(e) {
+      bttVisible.value = e.target.scrollTop > window.innerHeight * 0.5
+    }
+
+    function scrollCsToTop() {
+      if (scrollHost.value) scrollHost.value.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
     // ── Scroll-triggered fade-slide-up for static images ──
     const contentEl = ref(null)
@@ -146,6 +158,7 @@ export default defineComponent({
       }
       flyActive.value = true
       heroReady.value = false
+      bttVisible.value = false
       expanded.value  = true
       settled.value   = false
       closing.value   = false
@@ -328,7 +341,7 @@ export default defineComponent({
           ]),
 
           // ── Scrollable content area ──
-          h('div', { class: 'cs-expanded-inner' }, [
+          h('div', { ref: scrollHost, class: 'cs-expanded-inner', onScroll: onCsScroll }, [
             h('div', { ref: contentEl, class: 'cs-expanded-content' }, [
 
               // Hero video (static, replaces flying video after animation)
@@ -360,6 +373,20 @@ export default defineComponent({
               style: { left: r.x + 'px', top: r.y + 'px', width: '20px', height: '20px', marginLeft: '-10px', marginTop: '-10px' },
             })
           ),
+
+          // Back-to-top button (inside expanded card)
+          h('button', {
+            class: ['cs-back-to-top', bttVisible.value ? 'cs-back-to-top--visible' : ''],
+            onClick: e => { e.stopPropagation(); scrollCsToTop() },
+            'aria-label': 'Back to top',
+          }, [
+            h('svg', {
+              xmlns: 'http://www.w3.org/2000/svg',
+              width: '20', height: '20', viewBox: '0 0 24 24',
+              fill: 'none', stroke: 'currentColor',
+              'stroke-width': '2.5', 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+            }, [h('polyline', { points: '18 15 12 9 6 15' })]),
+          ]),
         ]),
       ]) : null,
     ])
