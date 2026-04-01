@@ -12,7 +12,7 @@ const path = require('path')
 
 const CLIENT_ID     = '211462'
 const CLIENT_SECRET = '9edb117e27e74ae910a07088505543030dd3bd67'
-const REFRESH_TOKEN = 'a7f4b1e5543922af3246227aa105b3deacf491d4'
+const REFRESH_TOKEN = '62b8228854ea4573297b0404008d9dfae93ee002'
 
 async function main() {
   // 1. Get a fresh access token
@@ -27,8 +27,13 @@ async function main() {
       grant_type: 'refresh_token',
     }),
   })
-  if (!tokenRes.ok) throw new Error(`Token refresh failed: ${tokenRes.status}`)
-  const { access_token } = await tokenRes.json()
+  const tokenData = await tokenRes.json()
+  if (!tokenRes.ok) {
+    console.error('Token refresh response:', JSON.stringify(tokenData, null, 2))
+    throw new Error(`Token refresh failed: ${tokenRes.status}`)
+  }
+  const { access_token } = tokenData
+  console.log('Got access token:', access_token ? 'yes' : 'EMPTY')
 
   // 2. Fetch latest activity
   console.log('Fetching latest activity...')
@@ -36,7 +41,11 @@ async function main() {
     'https://www.strava.com/api/v3/athlete/activities?per_page=1',
     { headers: { Authorization: `Bearer ${access_token}` } }
   )
-  if (!listRes.ok) throw new Error(`Activities fetch failed: ${listRes.status}`)
+  if (!listRes.ok) {
+    const errBody = await listRes.text()
+    console.error('Activities response:', errBody)
+    throw new Error(`Activities fetch failed: ${listRes.status}`)
+  }
   const [latest] = await listRes.json()
   if (!latest) throw new Error('No activities found')
 
