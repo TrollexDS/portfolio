@@ -89,7 +89,7 @@ export default defineComponent({
             h('button', {
               class: ['tldr-pill', !tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
               onClick: () => { tldr.value = false },
-            }, 'Full'),
+            }, 'Detailed'),
             h('button', {
               class: ['tldr-pill', tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
               onClick: () => { tldr.value = true },
