@@ -3063,7 +3063,7 @@ strong, b {
 
   /* ── Case study back-to-top — clear mobile browser nav bar ── */
   .cs-back-to-top {
-    bottom: 80px;
+    bottom: 48px;
   }
 
   /* ── Disable scroll-reveal on demo video only (IO unreliable in overlay on mobile) ── */
