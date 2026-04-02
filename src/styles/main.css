@@ -3051,6 +3051,16 @@ strong, b {
     max-height: 448px;
   }
 
+  /* ── Marquee — full opacity, no hover, smaller for faster load ── */
+  .cs-marquee-img {
+    opacity: 1;
+    transition: none;
+    height: 100px;
+  }
+  .cs-marquee-img:hover {
+    opacity: 1;
+  }
+
   /* ── Case study back-to-top — clear mobile browser nav bar ── */
   .cs-back-to-top {
     bottom: 80px;
