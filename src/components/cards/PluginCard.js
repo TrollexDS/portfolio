@@ -412,9 +412,11 @@ export default defineComponent({
             loop: true,
             muted: true,
             playsinline: true,
+            preload: 'auto',
             disablePictureInPicture: true,
             controlsList: 'nodownload nofullscreen noremoteplayback',
             style: 'pointer-events: none;',
+            onLoadeddata: (e) => { e.target.play().catch(() => {}) },
           }),
 
           h('div', { class: 'cs-body cs-body--continued' }, [

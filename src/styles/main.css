@@ -983,6 +983,7 @@ strong, b {
 .cs-demo-video {
   display: block;
   width: 680px;
+  aspect-ratio: 3024 / 1822;
   border-radius: 20px;
   margin-top: 32px;
 }

@@ -188,6 +188,8 @@ export default defineComponent({
             loop: true,
             muted: true,
             playsinline: true,
+            preload: 'auto',
+            onLoadeddata: (e) => { e.target.play().catch(() => {}) },
           }),
           h('p', { class: 'cs-antonym-hint' }, 'Automated responsive and light and dark mode'),
 
