@@ -408,6 +408,7 @@ export default defineComponent({
           h('video', {
             class: 'cs-demo-video',
             src: 'src/assets/videos/rayo-plugin-demo.mp4',
+            poster: 'src/assets/images/rayo/plugin/rayo-plugin-demo-poster.jpg',
             autoplay: true,
             loop: true,
             muted: true,
@@ -416,7 +417,7 @@ export default defineComponent({
             disablePictureInPicture: true,
             controlsList: 'nodownload nofullscreen noremoteplayback',
             style: 'pointer-events: none;',
-            onLoadeddata: (e) => { e.target.play().catch(() => {}) },
+            onLoadeddata: (e) => { e.target.muted = true; e.target.play().catch(() => {}) },
           }),
 
           h('div', { class: 'cs-body cs-body--continued' }, [

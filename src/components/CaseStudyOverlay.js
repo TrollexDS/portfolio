@@ -94,16 +94,20 @@ export default defineComponent({
         imgObserver.observe(el)
       })
 
-      // Safety net: force-load any videos still waiting after 2s
-      // (covers edge cases where the observer doesn't fire)
+      // Safety net: force-play ALL videos after 1s
+      // (IO unreliable inside scroll containers on mobile)
       setTimeout(() => {
-        container.querySelectorAll('video[data-src]').forEach(v => {
-          v.src = v.dataset.src
-          v.removeAttribute('data-src')
+        container.querySelectorAll('video').forEach(v => {
+          // Swap data-src if still present
+          if (v.dataset.src) {
+            v.src = v.dataset.src
+            v.removeAttribute('data-src')
+          }
+          v.muted = true                       // ensure muted (autoplay policy)
           v.play().catch(() => {})
           v.classList.add('cs-img-visible')
         })
-      }, 2000)
+      }, 1000)
     }
 
     function teardownImageObserver() {

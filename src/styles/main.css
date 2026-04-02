@@ -3051,6 +3051,11 @@ strong, b {
     max-height: 448px;
   }
 
+  /* ── Case study back-to-top — clear mobile browser nav bar ── */
+  .cs-back-to-top {
+    bottom: 80px;
+  }
+
   /* ── Disable scroll-reveal on demo video only (IO unreliable in overlay on mobile) ── */
   .cs-expanded-content .cs-demo-video {
     opacity: 1 !important;
