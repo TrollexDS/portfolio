@@ -3355,8 +3355,6 @@ strong, b {
   .cs-antonym-section { max-width: calc(100vw - 48px); }
   .cs-versions-section { max-width: calc(100vw - 48px); }
 
-  /* Disable hover-dependent hints */
-  .cs-hint { display: none; }
 
 
   /* ── Duolingo: scale down streak on mobile ── */

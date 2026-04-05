@@ -666,7 +666,7 @@ export default defineComponent({
         cardClass: 'schedule-card',
         videoSrc: VIDEO_SRC,
         videoClass: 'schedule-video',
-        tooltip: 'Challenging the brief: from\nstation pages to schedule 📻',
+        tooltip: 'Utilising research to kill a feature\nbefore we build the wrong thing ↩️',
         heroSize: 448,
       }, {
         content: () => [
@@ -860,7 +860,7 @@ export default defineComponent({
 
           // ── Schedule antonym annotation widget ──
           h(ScheduleAntonym),
-          h(InteractiveTag, { hint: 'Hover cards to highlight features' }),
+          schCanHover.value ? h(InteractiveTag, { hint: 'Hover cards to highlight features' }) : null,
 
           h('div', { class: 'cs-body cs-body--continued' }, [
             full(

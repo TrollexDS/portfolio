@@ -336,7 +336,7 @@ export default defineComponent({
 
           // ── Antonym section (above Problem) ──
           h(AntonymSection),
-          h(InteractiveTag, { hint: 'Hover on the cards to learn more' }),
+          canHover.value ? h(InteractiveTag, { hint: 'Hover on the cards to learn more' }) : null,
 
           // ── Bottom body: problem, solution ──
           h('div', { class: 'cs-body cs-body--continued' }, [
