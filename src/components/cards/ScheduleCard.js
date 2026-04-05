@@ -654,7 +654,15 @@ const ProtoPhone = defineComponent({
 export default defineComponent({
   name: 'ScheduleCard',
   setup() {
-    const tldr = ref(false)
+    const tldr   = ref(false)
+    const isDark = ref(document.documentElement.dataset.theme === 'dark')
+
+    // Watch for theme changes (toggled by BulbCard)
+    const themeObserver = new MutationObserver(() => {
+      isDark.value = document.documentElement.dataset.theme === 'dark'
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    onUnmounted(() => themeObserver.disconnect())
 
     const full = (...nodes) =>
       h('div', {
@@ -947,12 +955,14 @@ export default defineComponent({
             ),
           ]),
 
-          // Placeholder: uncomment when images are ready
-          // h('img', { class: 'cs-cover-img', src: IMG_SHIPPED_1, alt: 'Shipped schedule feature in the Rayo app' }),
-          // h('p', { class: 'cs-hint' }, 'Schedule in context - where listeners already are'),
-
-          // h('img', { class: 'cs-cover-img', src: IMG_SHIPPED_2, alt: 'Catchup flow from schedule' }),
-          // h('p', { class: 'cs-hint' }, 'Catchup flow directly from the schedule'),
+          h('img', {
+            class: 'cs-cover-img cs-cover-img--full',
+            src: isDark.value
+              ? 'src/assets/images/rayo/schedule/schedule-mockups-dark.png'
+              : 'src/assets/images/rayo/schedule/schedule-mockups.png',
+            alt: 'Schedule feature mockups',
+            style: { marginBottom: '-64px', marginTop: '-16px' },
+          }),
 
           // ══════════════════════════════════════════════
           // ── What I took away ──

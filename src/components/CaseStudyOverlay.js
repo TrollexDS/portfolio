@@ -37,6 +37,7 @@ export default defineComponent({
     const settled   = ref(false)
     const closing   = ref(false)
     const flyActive  = ref(false)
+    const flyFading  = ref(false)   // true while flying video is crossfading out
     const heroReady  = ref(false)
     const wasOpen    = ref(false)
     const flyStyle  = ref({})
@@ -211,16 +212,26 @@ export default defineComponent({
           }
 
           // Hand off to static hero video once flight completes AND hero is ready
+          // Uses a crossfade to avoid a flash when switching from flying to static video
           clearTimeout(flyTimer)
           flyTimer = setTimeout(() => {
+            const doHandoff = () => {
+              flyFading.value = true          // hero starts fading in (fly stays opaque)
+              // Wait for hero to fully paint and transition in, then snap-remove fly
+              requestAnimationFrame(() => requestAnimationFrame(() => {
+                setTimeout(() => {
+                  flyActive.value = false
+                  flyFading.value = false
+                }, 250)  // matches hero transition duration + margin
+              }))
+            }
             if (heroReady.value) {
-              flyActive.value = false
+              doHandoff()
             } else {
-              // Poll until the hero video has decoded enough to display
               const poll = setInterval(() => {
                 if (heroReady.value) {
                   clearInterval(poll)
-                  flyActive.value = false
+                  doHandoff()
                 }
               }, 50)
             }
@@ -271,6 +282,7 @@ export default defineComponent({
         settled.value   = false
         closing.value   = false
         flyActive.value = false
+        flyFading.value = false
         startRect  = null
         videoStart = null
         document.documentElement.style.overflow = ''
@@ -355,9 +367,10 @@ export default defineComponent({
           // ── Header bar (exit button only) ──
           h('div', { class: 'cs-header' }, [
             h('button', {
-              class:        'cs-header-close',
-              onClick:      e => { e.stopPropagation(); close() },
-              'aria-label': 'Close case study',
+              class:           'cs-header-close',
+              onClick:         e => { e.stopPropagation(); close() },
+              'aria-label':    'Close case study',
+              'data-tooltip':  'Press Esc to exit fullscreen',
             }, [
               h('img', { src: ICON_SHRINK, alt: 'Close', width: 20, height: 20 }),
             ]),
@@ -377,9 +390,10 @@ export default defineComponent({
                 playsinline: true,
                 onLoadeddata: () => { heroReady.value = true },
                 style: {
-                  width:  props.heroSize + 'px',
-                  height: props.heroSize + 'px',
-                  opacity: flyActive.value ? 0 : 1,
+                  width:      props.heroSize + 'px',
+                  height:     props.heroSize + 'px',
+                  opacity:    flyActive.value && !flyFading.value ? 0 : 1,
+                  transition: 'opacity 0.2s ease',
                 },
               }),
 
