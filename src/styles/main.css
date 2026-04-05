@@ -3418,6 +3418,6 @@ strong, b {
   /* ── Quote expanded cards: tighter horizontal padding on mobile ── */
   .ux-quote-expanded-inner,
   .ds-quote-expanded-inner {
-    padding: 32px 24px !important;
+    padding: 32px 28px !important;
   }
 }
