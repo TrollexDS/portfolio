@@ -17,7 +17,8 @@ export default defineComponent({
   name: 'DSQuoteCard',
 
   setup() {
-    const cardEl  = ref(null)
+    const cardEl   = ref(null)
+    const innerEl  = ref(null)
     const expanded = ref(false)
     const settled  = ref(false)
     const closing  = ref(false)
@@ -68,6 +69,7 @@ export default defineComponent({
       document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow            = 'hidden'
       await nextTick()
+      if (innerEl.value) innerEl.value.scrollTop = 0
       requestAnimationFrame(() => {
         requestAnimationFrame(() => { settled.value = true })
       })
@@ -136,7 +138,7 @@ export default defineComponent({
             'aria-label': 'Close',
           }, [h('img', { src: ICON_SHRINK, alt: 'Close', width: 20, height: 20 })]),
 
-          h('div', { class: 'about-expanded-inner ds-quote-expanded-inner' }, [
+          h('div', { ref: innerEl, class: 'about-expanded-inner ds-quote-expanded-inner' }, [
             h('div', { class: 'about-expanded-content' }, [
 
               h('img', { class: 'ds-quote-expanded-icon', src: QUOTE_ICON, alt: '' }),
