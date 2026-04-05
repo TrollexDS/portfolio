@@ -11,18 +11,27 @@ const P = 'cc' // CSS class prefix
 
 /* ─── Local asset paths ── */
 const ASSETS = {
-  contentRail: '/src/assets/images/rayo/plugin/content-rail.png',
+  contentRail: 'src/assets/images/rayo/plugin/content-rail.png',
   fallbackBg:  'https://www.figma.com/api/mcp/asset/1187763d-e800-412f-b8a8-22e5035f2ef5',
 }
 
-const BG_PATH = '/src/assets/images/rayo/plugin/component-bg'
-const GRADIENT_OPTIONS = ['Aqua', 'Yellow', 'Orange', 'Red', 'Primary']
-const POSITION_OPTIONS = ['75%', '85%', '100%']
+const BG_PATH = 'src/assets/images/rayo/plugin/component-bg'
+const GRADIENT_OPTIONS = [
+  { value: 'aqua', label: 'Aqua' },
+  { value: 'yellow', label: 'Yellow' },
+  { value: 'orange', label: 'Orange' },
+  { value: 'red', label: 'Red' },
+  { value: 'primary', label: 'Primary' },
+]
+const POSITION_OPTIONS = [
+  { value: '75', label: '75%' },
+  { value: '85', label: '85%' },
+  { value: '100', label: '100%' },
+]
 const CARD_SIZES = { small: { w: 375, h: 375 }, medium: { w: 834, h: 375 } }
 
 function bgImageSrc(colour, position) {
-  const raw = `${BG_PATH}/Aqua=${colour}, Position=${position}.png`
-  return encodeURI(raw)
+  return `${BG_PATH}/${colour}-${position}.png`
 }
 
 /* ─── Sub-renderers ─────────────────────────────────────────── */
@@ -58,8 +67,8 @@ export default defineComponent({
   setup() {
     const image    = ref('Default')
     const device   = ref('small')
-    const gradient = ref('Aqua')
-    const position = ref('75%')
+    const gradient = ref('aqua')
+    const position = ref('75')
 
     const bgImagePath = computed(() => bgImageSrc(gradient.value, position.value))
 
@@ -104,9 +113,10 @@ export default defineComponent({
 
                 /* Gradient / Fallback background */
                 image.value === 'Default'
-                  ? h('div', { class: P+'-card-bg' }, [
-                      h('img', { src: bgImagePath.value }),
-                    ])
+                  ? h('div', {
+                      class: P+'-card-bg',
+                      style: { backgroundImage: `url('${bgImagePath.value}')` },
+                    })
                   : h('div', { class: P+'-fallback-bg' }, [
                       h('img', { src: ASSETS.fallbackBg }),
                     ]),
@@ -147,7 +157,7 @@ export default defineComponent({
                 h('span', { style: 'font-weight:400;color:#999;font-size:11px;' }, '(nested)'),
               ]),
             ]),
-            renderPanelRow(gradient.value, renderSelect(gradient, GRADIENT_OPTIONS)),
+            renderPanelRow(gradient.value.charAt(0).toUpperCase() + gradient.value.slice(1), renderSelect(gradient, GRADIENT_OPTIONS)),
             renderPanelRow('Position', renderSelect(position, POSITION_OPTIONS)),
           ]),
         ]),
