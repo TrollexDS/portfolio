@@ -1733,13 +1733,8 @@ strong, b {
   left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
-}
-.cc-card-bg img {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  pointer-events: none;
+  background-size: cover;
+  background-position: center;
 }
 .cc-fallback-bg {
   position: absolute;
