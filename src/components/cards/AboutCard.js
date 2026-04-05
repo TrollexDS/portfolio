@@ -84,6 +84,10 @@ export default defineComponent({
     let avatarTimer = null
     let rippleId    = 0
 
+    function onKeyDown(e) {
+      if (e.key === 'Escape') close()
+    }
+
     function spawnExpandedRipple(e) {
       const rect = e.currentTarget.getBoundingClientRect()
       const x = e.clientX - rect.left
@@ -156,6 +160,7 @@ export default defineComponent({
       wasOpen.value   = true
       document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow = 'hidden'
+      window.addEventListener('keydown', onKeyDown)
 
       await nextTick()
 
@@ -216,6 +221,7 @@ export default defineComponent({
 
       closing.value = true
       clearTimeout(closeTimer)
+      window.removeEventListener('keydown', onKeyDown)
       closeTimer = setTimeout(() => {
         expanded.value  = false
         settled.value   = false
@@ -286,9 +292,10 @@ export default defineComponent({
           onClick: spawnExpandedRipple,
         }, [
           h('button', {
-            class:        'about-shrink-btn',
-            onClick:      e => { e.stopPropagation(); close() },
-            'aria-label': 'Close',
+            class:          'about-shrink-btn',
+            onClick:        e => { e.stopPropagation(); close() },
+            'aria-label':   'Close',
+            'data-tooltip': 'Press Esc to exit',
           }, [h('img', { src: ICON_SHRINK, alt: 'Close', width: 20, height: 20 })]),
 
           h('div', { class: 'about-expanded-inner' }, [

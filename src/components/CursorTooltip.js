@@ -84,8 +84,12 @@ export default defineComponent({
       hide()
     }
 
-    // Skip entirely on touch / mobile devices (no tooltip needed)
-    const isTouch = 'ontouchstart' in window
+    // Skip entirely on touch / mobile devices, or when reduced motion is preferred
+    const prefersReducedMotion = typeof matchMedia !== 'undefined'
+      && matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    const isTouch = prefersReducedMotion
+      || 'ontouchstart' in window
       || navigator.maxTouchPoints > 0
       || (typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches)
       || window.innerWidth <= 768

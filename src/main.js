@@ -3,7 +3,19 @@ import App from './App.js'
 
 // ── Smooth scroll ─────────────────────────────────────────────────────────────
 // Intercepts wheel events and lerps the scroll position for an inertia feel.
+// Falls back to native smooth scrolling when reduced motion is preferred
+// (e.g. OS low-power mode, accessibility setting) to avoid dropped-frame jank.
 ;(function initSmoothScroll() {
+  const prefersReducedMotion =
+    typeof matchMedia !== 'undefined' &&
+    matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (prefersReducedMotion) {
+    // Use native smooth scrolling — no rAF loop, no wheel hijack
+    document.documentElement.style.scrollBehavior = 'smooth'
+    return
+  }
+
   const LERP    = 0.09   // lower = slower / more buttery
   const SPEED   = 1.0    // wheel delta multiplier
 

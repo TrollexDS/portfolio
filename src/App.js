@@ -104,6 +104,9 @@ export default defineComponent({
 
       if (!movers.length) return
 
+      // Promote to GPU layers only for the duration of the animation
+      movers.forEach(el => { el.style.willChange = 'transform' })
+
       // Force reflow so the snap is committed before we animate
       movers[0].getBoundingClientRect()
 
@@ -118,6 +121,7 @@ export default defineComponent({
           const cleanup = () => {
             el.style.transition = ''
             el.style.transform  = ''
+            el.style.willChange = ''
             el.removeEventListener('transitionend', cleanup)
           }
           el.addEventListener('transitionend', cleanup, { once: false })

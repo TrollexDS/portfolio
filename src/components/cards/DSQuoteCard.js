@@ -28,6 +28,8 @@ export default defineComponent({
     let closeTimer = null
     let rippleId   = 0
 
+    function onKeydown(e) { if (e.key === 'Escape') close() }
+
     function spawnRipple(e) {
       const rect = e.currentTarget.getBoundingClientRect()
       const id   = rippleId++
@@ -68,6 +70,7 @@ export default defineComponent({
       closing.value  = false
       document.documentElement.style.overflow = 'hidden'
       document.body.style.overflow            = 'hidden'
+      document.addEventListener('keydown', onKeydown)
       await nextTick()
       if (innerEl.value) innerEl.value.scrollTop = 0
       requestAnimationFrame(() => {
@@ -86,6 +89,7 @@ export default defineComponent({
         startRect      = null
         document.documentElement.style.overflow = ''
         document.body.style.overflow            = ''
+        document.removeEventListener('keydown', onKeydown)
       }, ANIM_MS + 20)
     }
 
@@ -133,9 +137,10 @@ export default defineComponent({
           onClick: spawnRipple,
         }, [
           h('button', {
-            class:        'about-shrink-btn',
-            onClick:      e => { e.stopPropagation(); close() },
-            'aria-label': 'Close',
+            class:          'about-shrink-btn',
+            onClick:        e => { e.stopPropagation(); close() },
+            'aria-label':   'Close',
+            'data-tooltip': 'Press Esc to exit',
           }, [h('img', { src: ICON_SHRINK, alt: 'Close', width: 20, height: 20 })]),
 
           h('div', { ref: innerEl, class: 'about-expanded-inner ds-quote-expanded-inner' }, [
