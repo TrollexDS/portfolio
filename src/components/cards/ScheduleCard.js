@@ -696,7 +696,7 @@ export default defineComponent({
               'How user research redirected a major feature toward what listeners actually needed - a schedule-first approach to catchup radio.'),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
-            h('p', { class: 'cs-body-text' }, 'Product Designer - prototyping, user testing, interaction design'),
+            h('p', { class: 'cs-body-text' }, 'Product Design'),
 
             h('h2', { class: 'cs-section-title' }, 'Impact'),
 
@@ -961,14 +961,23 @@ export default defineComponent({
 
             h('h2', { class: 'cs-section-title' }, 'What I took away'),
 
-            h('p', { class: 'cs-body-text' },
-              'The biggest lesson from this project was about the value of pausing before you build. The original brief was well-intentioned and logically sound - but it was based on an assumption about what users wanted, not evidence. By investing in research upfront, we avoided shipping a feature that would have been technically correct but practically unused.'),
+            h('p', { class: 'cs-body-text' }, [
+              'The biggest lesson from this project was about ',
+              h('strong', null, 'the value of pausing'),
+              ' before you build. The original brief was well-intentioned and logically sound - but it was based on an assumption about what users wanted, not evidence. By investing in research upfront, we avoided shipping a feature that would have been technically correct but practically unused.',
+            ]),
 
-            h('p', { class: 'cs-body-text' },
-              'I also learned something specific about radio listeners that I hadn\u2019t expected: they don\u2019t think about radio the way they think about podcasts or streaming. There\u2019s no concept of \u201Cepisodes\u201D or \u201Cbrowsing.\u201D Radio is live, and when it\u2019s not live, it\u2019s catch-up - anchored to a time they missed. Designing for that mental model, rather than imposing a content-library pattern, was the difference between a feature that tested as \u201Cperfect\u201D and one that confused people.'),
+            h('p', { class: 'cs-body-text' }, [
+              'I also learned something specific about radio listeners that I hadn\u2019t expected: they don\u2019t think about radio the way they think about podcasts or streaming. There\u2019s no concept of \u201Cepisodes\u201D or \u201Cbrowsing.\u201D Radio is live, and when it\u2019s not live, it\u2019s catch-up - anchored to a time they missed. Designing for that ',
+              h('strong', null, 'mental model'),
+              ', rather than imposing a content-library pattern, was the difference between a feature that tested as \u201Cperfect\u201D and one that confused people.',
+            ]),
 
-            h('p', { class: 'cs-body-text' },
-              'The schedule is now live, and we\u2019re tracking engagement and average time spent listening to measure its impact. But regardless of the numbers, the outcome I\u2019m most proud of is the process - a design team that used research to ask the right questions, challenge assumptions constructively, and ship something that genuinely matches how people listen to radio.'),
+            h('p', { class: 'cs-body-text' }, [
+              'The schedule is now live, and we\u2019re tracking engagement and average time spent listening to measure its impact. But regardless of the numbers, the outcome I\u2019m most proud of is the process - a design team that used research to ask the right questions, ',
+              h('strong', null, 'challenge assumptions constructively'),
+              ', and ship something that genuinely matches how people listen to radio.',
+            ]),
           ]),
         ],
       })
