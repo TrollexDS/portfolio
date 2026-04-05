@@ -21,7 +21,8 @@ const POSITION_OPTIONS = ['75%', '85%', '100%']
 const CARD_SIZES = { small: { w: 375, h: 375 }, medium: { w: 834, h: 375 } }
 
 function bgImageSrc(colour, position) {
-  return `${BG_PATH}/Aqua=${colour}, Position=${position}.png`
+  const raw = `${BG_PATH}/Aqua=${colour}, Position=${position}.png`
+  return encodeURI(raw)
 }
 
 /* ─── Sub-renderers ─────────────────────────────────────────── */
