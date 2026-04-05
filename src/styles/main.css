@@ -958,6 +958,15 @@ strong, b {
 .cs-body-list {
   padding-left: 24px;
   margin: -12px 0 24px 0;
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-body);
+  transition: color 0.5s ease;
+}
+.cs-body-list li {
+  margin: 0 0 6px 0;
 }
 .cs-body-list .cs-body-text {
   margin: 0 0 6px 0;
@@ -1098,6 +1107,221 @@ strong, b {
   width: 680px;
   border-radius: 20px;
   margin-top: 32px;
+}
+
+.cs-cover-img--full {
+  width: calc(100% - 48px);
+  max-width: 100%;
+  padding: 0 24px;
+  box-sizing: content-box;
+}
+
+/* ── Zoomable image viewer ──────────────────────────────────── */
+
+.cs-zoom-viewer {
+  position: relative;
+  width: 680px;
+  height: 448px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--color-surface-card);
+}
+
+.cs-zoom-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* IE/Edge */
+}
+
+.cs-zoom-scroll::-webkit-scrollbar {
+  display: none;                    /* Chrome/Safari */
+}
+
+.cs-zoom-img {
+  display: block;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.10));
+  transition: width 0.3s ease, margin 0.3s ease;
+}
+
+.cs-zoom-controls {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.cs-zoom-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-surface-nav-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-text-primary);
+  font-size: 18px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cs-zoom-btn:hover {
+  background: var(--color-surface-card);
+  transform: scale(1.06);
+}
+
+.cs-zoom-btn:active {
+  transform: scale(0.95);
+}
+
+.cs-zoom-btn--disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Miro-style board viewer ────────────────────────────────── */
+
+.cs-miro-viewer {
+  position: relative;
+  width: 680px;
+  height: 448px;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    linear-gradient(to right,  rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-color: #e8e8e8;
+}
+
+[data-theme="dark"] .cs-miro-viewer {
+  background:
+    linear-gradient(to right,  rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-color: #1e1e1e;
+}
+
+.cs-miro-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cs-miro-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cs-miro-wrapper {
+  display: inline-block;
+}
+
+.cs-miro-canvas {
+  position: relative;
+  width: 2340px;
+  height: 2290px;
+  transform-origin: 0 0;
+}
+
+.cs-miro-board {
+  display: block;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Prototype phone containers ─────────────────────────────── */
+
+.cs-proto-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.cs-proto-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cs-proto-col .cs-hint {
+  margin-top: 8px;
+}
+
+.cs-proto-phone {
+  position: relative;
+  width: 200px;
+  height: 433px;               /* 812 * (200/375) ≈ 433 */
+  border-radius: 20px;
+  overflow: hidden;
+  background: #000;
+  border: 3px solid #000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.30);
+}
+
+/* Header — fixed at top, fades in on scroll */
+.cs-proto-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.cs-proto-header--visible {
+  opacity: 1;
+}
+
+/* Bottom nav — fixed at bottom */
+.cs-proto-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cs-proto-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: #fff;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cs-proto-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cs-proto-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Leave space for the fixed bottom nav (94px at 375w → scales with width) */
+  padding-bottom: 25%;
 }
 
 /* ── Colour Variables widget (Rayo DS case study) ──────────── */
@@ -1346,7 +1570,7 @@ strong, b {
 
 /* ── Collection Card widget (Rayo DS case study) ───────────── */
 
-.cs-antonym-hint:has(.cc-interactive-tag) {
+.cs-hint:has(.cc-interactive-tag) {
   display: flex;
   align-items: center;
 }
@@ -1679,29 +1903,22 @@ strong, b {
 /* ── Version history section ─────────────────────────────────── */
 
 .cs-versions-section {
-  position: relative;
-  /* width & height set by JS inline style for responsive scaling */
-  background: var(--color-surface-card-white);
-  border-radius: 32px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
   flex-shrink: 0;
   margin-top: 48px;
-  overflow: hidden;
-  transition: background 0.5s ease;
 }
 
-/* Wrapper handles sizing transitions so the <img> stays on CPU rendering path */
 .cs-version-wrap {
-  position: absolute;
-  border-radius: 4px;
-  overflow: hidden;
+  flex: 1 1 0;
   opacity: 0;
   transform: translateX(-32px);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  transition: left   0.68s cubic-bezier(0.4, 0, 0.2, 1),
-              top    0.68s cubic-bezier(0.4, 0, 0.2, 1),
-              width  0.68s cubic-bezier(0.4, 0, 0.2, 1),
-              height 0.68s cubic-bezier(0.4, 0, 0.2, 1);
-  cursor: default;
+  text-align: center;
+}
+
+.cs-version-wrap .cs-version-img {
+  border-radius: 4px;
 }
 
 .cs-version-wrap--visible {
@@ -1710,8 +1927,7 @@ strong, b {
 
 .cs-version-img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
   pointer-events: none;
 }
@@ -1871,6 +2087,15 @@ strong, b {
   transform: translateY(0);
 }
 
+/* Disable scroll-reveal on zoomable/miro viewers — they manage their own opacity/transform */
+.cs-expanded-content .cs-zoom-viewer.cs-cover-img,
+.cs-expanded-content .cs-miro-viewer.cs-cover-img,
+.cs-expanded-content .cs-proto-row.cs-cover-img {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
 /* ── Alexa Review Cards ─────────────────────────────────────── */
 
 .cs-review-marquee {
@@ -1993,7 +2218,7 @@ strong, b {
 
 /* ── Antonym Section ─────────────────────────────────────────── */
 
-.cs-antonym-hint {
+.cs-hint {
   font-family: 'Syne', sans-serif;
   font-size: 16px;
   font-weight: 400;
@@ -2053,10 +2278,23 @@ strong, b {
 .cs-antonym-screenshot-wrap {
   position: absolute;
   /* left, top, width, height set by JS inline style for responsive scaling */
-  border-radius: 7px;
+  border-radius: 20px;
   overflow: hidden;
   z-index: 1;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Invisible hover zones layered over the screenshot */
+.cs-antonym-zone {
+  z-index: 2;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.cs-antonym-zone:hover,
+.cs-antonym-zone--active {
+  background: rgba(0, 0, 0, 0.06);
 }
 
 .cs-antonym-screenshot {
@@ -2453,12 +2691,12 @@ strong, b {
 
 
 /* Project cards (dark) */
-.plugin-card, .alexa-card {
+.plugin-card, .alexa-card, .schedule-card {
   background: var(--color-surface-card-dark);
   border-radius: 32px;
   border: none;
 }
-.alexa-card { background: var(--color-surface-card-darkest); }
+.alexa-card, .schedule-card { background: var(--color-surface-card-darkest); }
 
 /* Alexa card video background */
 .alexa-card {
@@ -3084,6 +3322,25 @@ strong, b {
     max-width: 680px;
   }
 
+  .cs-zoom-viewer,
+  .cs-miro-viewer {
+    width: calc(100vw - 48px) !important;
+    max-width: 680px;
+    height: 320px;
+  }
+
+  .cs-proto-row {
+    gap: 8px;
+  }
+
+  .cs-proto-phone {
+    width: calc((100vw - 48px - 16px) / 3);
+    max-width: 200px;
+    height: auto;
+    aspect-ratio: 375 / 812;
+    border-radius: 14px;
+  }
+
   .ba-wrap {
     width: calc(100vw - 48px);
     max-width: calc(100vw - 48px);
@@ -3099,10 +3356,8 @@ strong, b {
   .cs-versions-section { max-width: calc(100vw - 48px); }
 
   /* Disable hover-dependent hints */
-  .cs-antonym-hint { display: none; }
+  .cs-hint { display: none; }
 
-  /* Disable version wrap hover transitions on mobile */
-  .cs-version-wrap { transition: none; }
 
   /* ── Duolingo: scale down streak on mobile ── */
   .duolingo-streak { top: 20px; }
