@@ -191,7 +191,7 @@ export default defineComponent({
             preload: 'auto',
             onLoadeddata: (e) => { e.target.play().catch(() => {}) },
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Automated responsive and light and dark mode'),
+          h('p', { class: 'cs-hint' }, 'Automated responsive and light and dark mode'),
 
           // ── Components refactor section ──
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -207,7 +207,7 @@ export default defineComponent({
             src: 'src/assets/images/rayo/design-system/component-optimisation-old.png',
             alt: 'Component optimisation — before refactor',
           }),
-          h('p', { class: 'cs-antonym-hint' }, '[BEFORE] On-demand card component'),
+          h('p', { class: 'cs-hint' }, '[BEFORE] On-demand card component'),
 
           full(
             h('div', { class: 'cs-body cs-body--continued' }, [
@@ -221,7 +221,7 @@ export default defineComponent({
             src: 'src/assets/images/rayo/design-system/component-refactor-gradients.png',
             alt: 'New gradient background component',
           }),
-          h('p', { class: 'cs-antonym-hint' }, '[NEW] Gradient background component'),
+          h('p', { class: 'cs-hint' }, '[NEW] Gradient background component'),
 
           full(
             h('div', { class: 'cs-body cs-body--continued' }, [
@@ -246,7 +246,7 @@ export default defineComponent({
             src: 'src/assets/images/rayo/design-system/component-examples.png',
             alt: 'Component examples across breakpoints',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Responsive component structure'),
+          h('p', { class: 'cs-hint' }, 'Responsive component structure'),
 
           // ── System Architecture section ──
           h('div', { class: 'cs-body cs-body--continued' }, [

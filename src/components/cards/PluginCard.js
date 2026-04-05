@@ -129,65 +129,19 @@ const AntonymSection = defineComponent({
   },
 })
 
-// Figma: bg-white, 32px radius, images absolutely positioned within ~680px container
-// V1: left 58, w 100 | V2–V5: left 182/298/414/530, w 92 | all: top 52, h 175
 const V_IMGS = [
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V1.png', left: 58, width: 100 },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V2.png', left: 182, width: 92 },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V3.png', left: 298, width: 92 },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V4.png', left: 414, width: 92 },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V5.png', left: 530, width: 92 },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V1.png?v=2', hint: 'POC' },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V2.png', hint: 'Included podcast' },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V3.png', hint: 'Expanded Regions' },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V4.png', hint: 'Added episodes' },
+  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V5.png', hint: 'Developed guidelines' },
 ]
-
-const CONTAINER_H  = 419
-const BASE_IMG_H   = 175
-const HOV_IMG_H    = Math.round(BASE_IMG_H * 2)      // 350
-const BASE_TOP     = Math.round((CONTAINER_H - BASE_IMG_H) / 2)  // 122
-const HOV_TOP      = Math.round((CONTAINER_H - HOV_IMG_H)  / 2)  //  96
-const RIPPLE_MS    = 55   // delay increment per distance step
-
-function getWrapStyle(img, i, hovIdx) {
-  const s = csScale.value
-
-  let left   = img.left
-  let top    = BASE_TOP
-  let width  = img.width
-  let height = BASE_IMG_H
-  let delay  = 0
-
-  if (hovIdx !== null && canHover.value) {
-    const hovW  = V_IMGS[hovIdx].width
-    const shift = Math.round(hovW * 0.5)
-    delay = Math.abs(i - hovIdx) * RIPPLE_MS
-
-    if (i === hovIdx) {
-      width  = Math.round(img.width * 2)
-      height = HOV_IMG_H
-      top    = HOV_TOP
-      left   = img.left - Math.round((width - img.width) / 2)
-    } else if (i < hovIdx) {
-      left = img.left - shift
-    } else {
-      left = img.left + shift
-    }
-  }
-
-  return {
-    left:            Math.round(left   * s) + 'px',
-    top:             Math.round(top    * s) + 'px',
-    width:           Math.round(width  * s) + 'px',
-    height:          Math.round(height * s) + 'px',
-    transitionDelay: delay  + 'ms',
-    '--i':           i,
-  }
-}
 
 const VersionSection = defineComponent({
   name: 'VersionSection',
   setup() {
     const sectionEl = ref(null)
     const triggered = ref(false)
-    const hovered   = ref(null)
 
     onMounted(() => {
       const el = sectionEl.value
@@ -204,33 +158,26 @@ const VersionSection = defineComponent({
       observer.observe(el)
     })
 
-    return () => {
-      const s = csScale.value
-      const hover = canHover.value
-
-      return h('div', {
+    return () =>
+      h('div', {
         ref: sectionEl,
         class: 'cs-versions-section',
-        style: { width: csW.value + 'px', height: Math.round(CONTAINER_H * s) + 'px' },
+        style: { width: Math.round(csW.value * 1.5) + 'px' },
       },
       V_IMGS.map((img, i) =>
         h('div', {
           key: i,
           class: ['cs-version-wrap', triggered.value ? 'cs-version-wrap--visible' : ''].join(' ').trim(),
-          style: getWrapStyle(img, i, hovered.value),
-          ...(hover ? {
-            onMouseenter: () => { hovered.value = i },
-            onMouseleave: () => { hovered.value = null },
-          } : {}),
+          style: { '--i': i },
         }, [
           h('img', {
             class: 'cs-version-img',
             src: img.src,
             alt: `Rayo Plugin V${i + 1}`,
           }),
+          h('p', { class: 'cs-hint' }, img.hint),
         ])
       ))
-    }
   },
 })
 
@@ -433,7 +380,6 @@ export default defineComponent({
 
           // ── Version history ──
           h(VersionSection),
-          h(InteractiveTag, { hint: 'Version history from left to right' }),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
             h('h2', { class: 'cs-section-title' }, 'User Guidance & Error Handling'),

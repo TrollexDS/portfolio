@@ -145,7 +145,7 @@ export default defineComponent({
             src: IMG_SKILL,
             alt: 'Rayo skill homepage on an Alexa device with a screen',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Rayo skill homepage on an Alexa device with a screen'),
+          h('p', { class: 'cs-hint' }, 'Rayo skill homepage on an Alexa device with a screen'),
 
           // ══════════════════════════════════════════════
           // ── Challenges ──
@@ -173,7 +173,7 @@ export default defineComponent({
 
           // ── Review cards marquee ──
           h(ReviewMarquee),
-          h('p', { class: 'cs-antonym-hint' }, '1 star reviews regarding account linking issues'),
+          h('p', { class: 'cs-hint' }, '1 star reviews regarding account linking issues'),
 
           // ══════════════════════════════════════════════
           // ── The Audit ──
@@ -194,7 +194,7 @@ export default defineComponent({
             src: IMG_JOURNEY_MAP,
             alt: 'Journey mapping on a Miro board',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Journey mapping on a Miro board'),
+          h('p', { class: 'cs-hint' }, 'Journey mapping on a Miro board'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
             full(
@@ -211,7 +211,7 @@ export default defineComponent({
             src: IMG_INTERACTION,
             alt: 'Interaction model documentation',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Interaction model documentation'),
+          h('p', { class: 'cs-hint' }, 'Interaction model documentation'),
 
           // ══════════════════════════════════════════════
           // ── Restructured Journeys ──
@@ -232,7 +232,7 @@ export default defineComponent({
             src: IMG_VOICEFLOW,
             alt: 'Open Rayo user flow mapped in Voiceflow',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Open Rayo user flow mapped in Voiceflow'),
+          h('p', { class: 'cs-hint' }, 'Open Rayo user flow mapped in Voiceflow'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
@@ -249,7 +249,7 @@ export default defineComponent({
             h('img', { class: 'cs-account-link-img cs-account-link-img--2', src: IMG_ACCOUNT_LINK_2, alt: 'Confirm access to your account' }),
             h('img', { class: 'cs-account-link-img cs-account-link-img--3', src: IMG_ACCOUNT_LINK_3, alt: 'Rayo has been successfully linked' }),
           ]),
-          h('p', { class: 'cs-antonym-hint' }, 'Account linking flow: sign in, confirm, success'),
+          h('p', { class: 'cs-hint' }, 'Account linking flow: sign in, confirm, success'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
@@ -265,7 +265,7 @@ export default defineComponent({
             src: IMG_ACCOUNT_LINKING,
             alt: 'Account linking screen on Echo Show',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Account linking screen on Echo Show'),
+          h('p', { class: 'cs-hint' }, 'Account linking screen on Echo Show'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
@@ -281,7 +281,7 @@ export default defineComponent({
             src: IMG_SUPPORT,
             alt: 'Rayo Alexa help centre support page',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Rayo Alexa help centre support page'),
+          h('p', { class: 'cs-hint' }, 'Rayo Alexa help centre support page'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
@@ -297,7 +297,7 @@ export default defineComponent({
             src: IMG_CONTINUE,
             alt: 'Continue listening feature on Alexa Echo Show',
           }),
-          h('p', { class: 'cs-antonym-hint' }, 'Continue listening feature on Alexa Echo Show'),
+          h('p', { class: 'cs-hint' }, 'Continue listening feature on Alexa Echo Show'),
 
           // ══════════════════════════════════════════════
           // ── What's next ──
