@@ -145,19 +145,19 @@ export default defineComponent({
 
             h('h2', { class: 'cs-section-title' }, 'Challenges'),
 
-            h('h3', { class: 'cs-subsection-title' }, '1️⃣ First designer in a team that never had one'),
+            h('h3', { class: 'cs-subsection-title' }, 'First designer in a team that never had one'),
             h('p', { class: 'cs-body-text' },
               'No documented flows, no mapped journeys. Everything about how the skill worked lived inside the PO and lead developer\u2019s heads.'),
 
-            h('h3', { class: 'cs-subsection-title' }, '🔗 Account linking was the core problem'),
+            h('h3', { class: 'cs-subsection-title' }, 'Account linking was the core problem'),
             h('p', { class: 'cs-body-text' },
               'Premium users heard ads and lost access to paid stations despite paying. The business had no way to attribute listening data to individual users.'),
 
-            h('h3', { class: 'cs-subsection-title' }, '💥 A broken experience built on patches'),
+            h('h3', { class: 'cs-subsection-title' }, 'A broken experience built on patches'),
             h('p', { class: 'cs-body-text' },
               '4+ different linking paths with no consistent logic between them. Silent failures, dead ends, and a trail of negative Alexa store reviews.'),
 
-            h('h3', { class: 'cs-subsection-title' }, '🗺️ No one had ever stepped back to see the full picture'),
+            h('h3', { class: 'cs-subsection-title' }, 'No one had ever stepped back to see the full picture'),
             h('p', { class: 'cs-body-text' },
               'Fixes had been stacked on fixes with no one stepping back to map the full picture. That was my starting point.'),
           ]),
