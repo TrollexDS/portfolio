@@ -2821,7 +2821,6 @@ strong, b {
 
 /* Simplestream DS card — image-based case study */
 .ss-ds-card {
-  background: #6464FF;
   padding: 0 !important;
   overflow: hidden;
 }
@@ -2841,7 +2840,6 @@ strong, b {
 
 /* Hero wrap — purple bg + rounded corners to match homepage card */
 .ss-ds-hero-wrap {
-  background: #6464FF;
   border-radius: 32px;
   overflow: hidden;
   margin-top: 40px;

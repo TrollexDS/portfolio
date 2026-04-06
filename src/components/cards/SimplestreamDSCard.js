@@ -2,7 +2,7 @@ import { defineComponent, h, ref } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import InteractiveTag from '../InteractiveTag.js'
 
-const IMAGE_SRC       = 'src/assets/images/general/project-card-1.png'
+const IMAGE_SRC       = 'src/assets/images/simplestream/ss-ds-card.png'
 const LOGO_SRC        = './src/assets/images/general/SS-clients-logo.png'
 const IMG_COVER       = 'src/assets/images/simplestream/ss--ds-cover.png'
 const IMG_COMPONENTS  = 'src/assets/images/simplestream/ss-ds-components.png'
