@@ -1,5 +1,6 @@
 import { defineComponent, h, ref, nextTick, onUnmounted, watch, onMounted } from 'vue'
 import { ICON_SHRINK, ICON_FULL_SCREEN } from '../assets/icons/icons.js'
+import { useRipple } from '../composables/useRipple.js'
 
 const ANIM_MS = 700
 const EASE = 'cubic-bezier(0.34, 1.1, 0.64, 1)'
@@ -44,13 +45,12 @@ export default defineComponent({
     const heroReady  = ref(false)
     const wasOpen    = ref(false)
     const flyStyle  = ref({})
-    const ripples   = ref([])
+    const { spawnRipple, renderRipples } = useRipple()
 
     let startRect  = null   // collapsed card bounding rect
     let videoStart = null   // collapsed video bounding rect
     let closeTimer = null
     let flyTimer   = null
-    let rippleId   = 0
     let imgObserver = null
 
     // ── Back-to-top inside case study ──
@@ -125,14 +125,9 @@ export default defineComponent({
     onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 
     // ── Ripple on expanded card click (skip interactive widgets) ──
-    function spawnRipple(e) {
+    function onExpandedClick(e) {
       if (e.target.closest('.cc-outer') || e.target.closest('.cv-outer') || e.target.closest('.tldr-bar')) return
-      const rect = e.currentTarget.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      const id = rippleId++
-      ripples.value.push({ id, x, y })
-      setTimeout(() => { ripples.value = ripples.value.filter(r => r.id !== id) }, 520)
+      spawnRipple(e)
     }
 
     // ── Where the video lands in the expanded view ──
@@ -384,7 +379,7 @@ export default defineComponent({
             closing.value ? 'cs-expanded--closing' : '',
           ].filter(Boolean).join(' '),
           style: expandedStyle(),
-          onClick: spawnRipple,
+          onClick: onExpandedClick,
         }, [
 
           // ── Header bar (exit button only) ──
@@ -453,13 +448,7 @@ export default defineComponent({
           ]),
 
           // Ripples
-          ...ripples.value.map(r =>
-            h('div', {
-              key:   r.id,
-              class: 'card-ripple',
-              style: { left: r.x + 'px', top: r.y + 'px', width: '20px', height: '20px', marginLeft: '-10px', marginTop: '-10px' },
-            })
-          ),
+          ...renderRipples(),
 
           // Back-to-top button (inside expanded card)
           h('button', {

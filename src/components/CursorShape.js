@@ -91,6 +91,7 @@ export default defineComponent({
     let animTo   = 0
     let animStart = null
     let rafId    = null
+    let isNavPill = false
 
     // Direct DOM refs (bypass Vue reactivity for 60 fps perf)
     let svgEl  = null

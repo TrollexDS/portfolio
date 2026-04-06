@@ -1,5 +1,6 @@
 import { defineComponent, h, ref, nextTick } from 'vue'
 import { ICON_SHRINK, ICON_EXPAND } from '../../assets/icons/icons.js'
+import { useRipple } from '../../composables/useRipple.js'
 
 const AVATAR  = 'src/assets/images/general/alex-avatar.png'
 const GRID_W     = 1203  // 4 × 285px + 3 × 21px gaps
@@ -76,25 +77,15 @@ export default defineComponent({
     const wasOpen   = ref(false)    // prevents card-enter animation replaying
     const flyActive       = ref(false)   // is the flying avatar visible?
     const flyStyle        = ref({})      // its inline style
-    const expandedRipples = ref([])
+    const { spawnRipple: spawnExpandedRipple, renderRipples } = useRipple()
 
     let startRect   = null
     let avatarStart = null      // collapsed avatar rect
     let closeTimer  = null
     let avatarTimer = null
-    let rippleId    = 0
 
     function onKeyDown(e) {
       if (e.key === 'Escape') close()
-    }
-
-    function spawnExpandedRipple(e) {
-      const rect = e.currentTarget.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-      const id = rippleId++
-      expandedRipples.value.push({ id, x, y })
-      setTimeout(() => { expandedRipples.value = expandedRipples.value.filter(r => r.id !== id) }, 520)
     }
 
     // Where the avatar lands inside the expanded card
@@ -320,13 +311,7 @@ export default defineComponent({
           ]),
 
           // Ripples
-          ...expandedRipples.value.map(r =>
-            h('div', {
-              key:   r.id,
-              class: 'card-ripple',
-              style: { left: r.x + 'px', top: r.y + 'px', width: '20px', height: '20px', marginLeft: '-10px', marginTop: '-10px' },
-            })
-          ),
+          ...renderRipples(),
         ]),
 
       ]) : null,

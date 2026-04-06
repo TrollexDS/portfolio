@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, onMounted } from 'vue'
+import { useRipple } from '../../composables/useRipple.js'
 
 const NUM_RAYS   = 12
 const RAY_DELAYS = [0, 0.72, 0.28, 1.05, 0.51, 0.18, 0.88, 0.42, 0.63, 0.95, 0.35, 0.77]
@@ -11,10 +12,9 @@ export default defineComponent({
 
   setup() {
     const isDark   = ref(document.documentElement.dataset.theme === 'dark')
-    const ripples  = ref([])
+    const { spawnRipple, renderRipples } = useRipple()
     const lottieEl = ref(null)
     let lottieAnim = null
-    let nextId     = 0
 
     onMounted(() => {
       if (!window.lottie || !lottieEl.value) return
@@ -39,15 +39,7 @@ export default defineComponent({
         lottieAnim.goToAndPlay(isDark.value ? 0 : 14, true)
       }
 
-      // Ripple from click position
-      const rect = e.currentTarget.getBoundingClientRect()
-      const x = (e.clientX ?? rect.left + rect.width  / 2) - rect.left
-      const y = (e.clientY ?? rect.top  + rect.height / 2) - rect.top
-      const id = nextId++
-      ripples.value.push({ id, x, y })
-      setTimeout(() => {
-        ripples.value = ripples.value.filter(r => r.id !== id)
-      }, 520)
+      spawnRipple(e)
     }
 
     return () => {
@@ -95,20 +87,7 @@ export default defineComponent({
         ]),
 
         // ── Ripples ───────────────────────────────────────
-        ...ripples.value.map(r =>
-          h('div', {
-            key:   r.id,
-            class: 'card-ripple',
-            style: {
-              left:       r.x + 'px',
-              top:        r.y + 'px',
-              width:      '20px',
-              height:     '20px',
-              marginLeft: '-10px',
-              marginTop:  '-10px',
-            },
-          })
-        ),
+        ...renderRipples(),
       ])
     }
   },

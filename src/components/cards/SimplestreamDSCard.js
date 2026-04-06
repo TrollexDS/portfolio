@@ -1,5 +1,6 @@
 import { defineComponent, h, ref } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
+import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 
 const IMAGE_SRC       = 'src/assets/images/simplestream/ss-ds-card.png'
@@ -58,17 +59,7 @@ export default defineComponent({
         content: () => [
 
           // ── TL;DR toggle ──
-          h('div', { class: 'tldr-bar' }, [
-            h('div', { class: 'tldr-indicator', style: { left: tldr.value ? 'calc(50%)' : '4px' } }),
-            h('button', {
-              class: ['tldr-pill', !tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = false },
-            }, 'Detailed'),
-            h('button', {
-              class: ['tldr-pill', tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = true },
-            }, 'TL;DR'),
-          ]),
+          h(TldrToggle, { modelValue: tldr.value, 'onUpdate:modelValue': v => { tldr.value = v } }),
 
           // ── Top body: title, intro, role, impact ──
           h('div', { class: 'cs-body' }, [
@@ -76,12 +67,10 @@ export default defineComponent({
             h('h1', { class: 'cs-title' },
               'Brand Switching in Seconds: Scaling a White-Label Design System'),
 
-            full(
               h('p', { class: 'cs-body-text' },
                 'Simplestream is a B2B OTT service provider - we design and build streaming apps across mobile, tablet, web, and TV for clients around the world. As one of two designers, I was responsible for maintaining a white-label design system that powered 50+ client brands, each with their own look and feel across 100+ screens.'),
               h('p', { class: 'cs-body-text' },
                 'The challenge wasn\u2019t just designing at scale - it was making it possible for a tiny team to move fast without breaking things.'),
-            ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
             h('p', { class: 'cs-body-text' }, 'Product Designer'),
@@ -119,10 +108,8 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Problem'),
             h('p', { class: 'cs-body-text' },
               'We relied on a third-party Figma plugin to swap brand themes across our design files. On paper, it solved the right problem. In practice, it took 5\u201310 minutes to process 100+ screens \u2014 frequently freezing Figma, producing broken tokens, and requiring manual checks to fix what it missed.'),
-            full(
               h('p', { class: 'cs-body-text' },
                 'For a two-person team managing 50+ clients, every failed swap meant lost time we couldn\u2019t afford. It slowed onboarding, ate into design time, and eroded trust in the system itself.'),
-            ),
           ]),
 
           // ── Cover image after Problem ──

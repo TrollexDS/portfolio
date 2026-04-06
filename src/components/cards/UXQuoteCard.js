@@ -1,93 +1,16 @@
-import { defineComponent, h, ref, nextTick } from 'vue'
+import { defineComponent, h } from 'vue'
 import { ICON_EXPAND, ICON_SHRINK } from '../../assets/icons/icons.js'
+import { useExpandOverlay } from '../../composables/useExpandOverlay.js'
+import { useRipple } from '../../composables/useRipple.js'
 
 const QUOTE_ICON = 'src/assets/images/general/quote-icon.svg'
-
-const ANIM_MS = 700
-const EASE    = 'cubic-bezier(0.34, 1.1, 0.64, 1)'
-const MAX_W   = 560
-const MAX_H   = 660
-
 
 export default defineComponent({
   name: 'UXQuoteCard',
 
   setup() {
-    const cardEl   = ref(null)
-    const innerEl  = ref(null)
-    const expanded = ref(false)
-    const settled  = ref(false)
-    const closing  = ref(false)
-    const ripples  = ref([])
-
-    let startRect  = null
-    let closeTimer = null
-    let rippleId   = 0
-
-    function onKeydown(e) { if (e.key === 'Escape') close() }
-
-    function spawnRipple(e) {
-      const rect = e.currentTarget.getBoundingClientRect()
-      const id   = rippleId++
-      ripples.value.push({ id, x: e.clientX - rect.left, y: e.clientY - rect.top })
-      setTimeout(() => { ripples.value = ripples.value.filter(r => r.id !== id) }, 520)
-    }
-
-    function expandedStyle() {
-      if (!startRect) return {}
-      const vpW     = window.innerWidth
-      const vpH     = window.innerHeight
-      const targetW = Math.min(MAX_W, vpW - 48)
-      const targetH = Math.min(MAX_H, vpH * 0.85)
-      const targetL = (vpW - targetW) / 2
-      const targetT = (vpH - targetH) / 2
-
-      if (!settled.value || closing.value) {
-        return {
-          left:   startRect.left   + 'px',
-          top:    startRect.top    + 'px',
-          width:  startRect.width  + 'px',
-          height: startRect.height + 'px',
-        }
-      }
-      return {
-        left:   Math.max(24, targetL) + 'px',
-        top:    Math.max(24, targetT) + 'px',
-        width:  targetW + 'px',
-        height: targetH + 'px',
-      }
-    }
-
-    async function open() {
-      if (expanded.value) return
-      startRect      = cardEl.value.getBoundingClientRect()
-      expanded.value = true
-      settled.value  = false
-      closing.value  = false
-      document.documentElement.style.overflow = 'hidden'
-      document.body.style.overflow            = 'hidden'
-      document.addEventListener('keydown', onKeydown)
-      await nextTick()
-      if (innerEl.value) innerEl.value.scrollTop = 0
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => { settled.value = true })
-      })
-    }
-
-    function close() {
-      if (closing.value) return
-      closing.value = true
-      clearTimeout(closeTimer)
-      closeTimer = setTimeout(() => {
-        expanded.value = false
-        settled.value  = false
-        closing.value  = false
-        startRect      = null
-        document.documentElement.style.overflow = ''
-        document.body.style.overflow            = ''
-        document.removeEventListener('keydown', onKeydown)
-      }, ANIM_MS + 20)
-    }
+    const { cardEl, innerEl, expanded, settled, closing, expandedStyle, open, close } = useExpandOverlay()
+    const { spawnRipple, renderRipples } = useRipple()
 
     return () => h('div', { class: 'ux-quote-card-wrapper' }, [
 
@@ -160,13 +83,7 @@ export default defineComponent({
           ]),
 
           // Ripples
-          ...ripples.value.map(r =>
-            h('div', {
-              key:   r.id,
-              class: 'card-ripple',
-              style: { left: r.x + 'px', top: r.y + 'px', width: '20px', height: '20px', marginLeft: '-10px', marginTop: '-10px' },
-            })
-          ),
+          ...renderRipples(),
         ]),
 
       ]) : null,

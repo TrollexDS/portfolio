@@ -1,5 +1,6 @@
 import { defineComponent, h, ref } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
+import TldrToggle from '../TldrToggle.js'
 import ColourVariables from './ColourVariables.js'
 import CollectionCard from './CollectionCard.js'
 
@@ -84,17 +85,7 @@ export default defineComponent({
         content: () => [
 
           // ── TL;DR toggle ──
-          h('div', { class: 'tldr-bar' }, [
-            h('div', { class: 'tldr-indicator', style: { left: tldr.value ? 'calc(50%)' : '4px' } }),
-            h('button', {
-              class: ['tldr-pill', !tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = false },
-            }, 'Detailed'),
-            h('button', {
-              class: ['tldr-pill', tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = true },
-            }, 'TL;DR'),
-          ]),
+          h(TldrToggle, { modelValue: tldr.value, 'onUpdate:modelValue': v => { tldr.value = v } }),
 
           // ── Top body: title, intro, role, impact ──
           h('div', { class: 'cs-body' }, [

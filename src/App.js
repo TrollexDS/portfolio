@@ -121,7 +121,7 @@ export default defineComponent({
             el.style.willChange = ''
             el.removeEventListener('transitionend', cleanup)
           }
-          el.addEventListener('transitionend', cleanup, { once: false })
+          el.addEventListener('transitionend', cleanup, { once: true })
         })
       })
     }

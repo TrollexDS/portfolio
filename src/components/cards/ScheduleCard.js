@@ -1,6 +1,8 @@
 import { defineComponent, h, ref, computed, onMounted, onUnmounted } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
+import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
+import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
 
 const VIDEO_SRC = 'src/assets/videos/rayo-schedule.mp4'
 
@@ -23,14 +25,6 @@ const IMG_STATION_HOME       = 'src/assets/images/rayo/schedule/station-page-hom
 const IMG_STATION_TRACKLIST  = 'src/assets/images/rayo/schedule/station-page-tracklist.png'
 const IMG_STATION_SHOWS      = 'src/assets/images/rayo/schedule/station-page-shows.png'
 const IMG_SCHEDULE_PAGE  = 'src/assets/images/rayo/schedule/schedule-page.png'
-
-// ── Responsive scale (shared with antonym widget) ──
-const SCH_BASE = 680
-const schW     = ref(Math.min(SCH_BASE, window.innerWidth - 48))
-const schScale = computed(() => schW.value / SCH_BASE)
-const schCanHover = computed(() => schW.value >= SCH_BASE)
-function _schResize() { schW.value = Math.min(SCH_BASE, window.innerWidth - 48) }
-window.addEventListener('resize', _schResize)
 
 // ── Schedule antonym annotation cards ──
 // Positions at 680px design width. Phone screenshot centred at 225×488.
@@ -61,6 +55,7 @@ const SCH_ZONES = [
 const ScheduleAntonym = defineComponent({
   name: 'ScheduleAntonym',
   setup() {
+    const { containerW: schW, scale: schScale, canHover: schCanHover } = useResponsiveScale(680)
     const active = ref(null)
 
     return () => {
@@ -654,6 +649,7 @@ const ProtoPhone = defineComponent({
 export default defineComponent({
   name: 'ScheduleCard',
   setup() {
+    const { canHover: schCanHover } = useResponsiveScale(680)
     const tldr   = ref(false)
     const isDark = ref(document.documentElement.dataset.theme === 'dark')
 
@@ -680,17 +676,7 @@ export default defineComponent({
         content: () => [
 
           // ── TL;DR toggle ──
-          h('div', { class: 'tldr-bar' }, [
-            h('div', { class: 'tldr-indicator', style: { left: tldr.value ? 'calc(50%)' : '4px' } }),
-            h('button', {
-              class: ['tldr-pill', !tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = false },
-            }, 'Detailed'),
-            h('button', {
-              class: ['tldr-pill', tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = true },
-            }, 'TL;DR'),
-          ]),
+          h(TldrToggle, { modelValue: tldr.value, 'onUpdate:modelValue': v => { tldr.value = v } }),
 
           // ══════════════════════════════════════════════
           // ── Title, intro, role, impact ──
@@ -847,7 +833,7 @@ export default defineComponent({
           ]),
 
           // ── Prototype phone containers ──
-          h(InteractiveTag, { hint: 'Scrollable prototypes' }),
+          h(InteractiveTag, { hint: 'Radio page prototypes' }),
           h('div', { class: 'cs-proto-row cs-cover-img' }, [
             [IMG_RADIO_A, 'Option 1', 'Radio page prototype A'],
             [IMG_RADIO_B, 'Option 2', 'Radio page prototype B'],
@@ -878,7 +864,7 @@ export default defineComponent({
           ]),
 
           // ── Station page prototypes ──
-          h(InteractiveTag, { hint: 'Scrollable prototypes' }),
+          h(InteractiveTag, { hint: 'Station page prototypes' }),
           h('div', { class: 'cs-proto-row cs-cover-img' }, [
             [IMG_STATION_HOME,      'Home',      'Station page home'],
             [IMG_STATION_TRACKLIST, 'Tracklist', 'Station page tracklist'],
@@ -900,9 +886,9 @@ export default defineComponent({
           h('img', {
             class: 'cs-cover-img cs-cover-img--full',
             src: 'src/assets/images/rayo/schedule/schedule-page-affinity-map.jpg',
-            alt: 'Affinity map from user testing sessions',
+            alt: 'User testing synthesis affinity map',
           }),
-          h('p', { class: 'cs-hint' }, 'Affinity map from user testing sessions'),
+          h('p', { class: 'cs-hint' }, 'User testing synthesis affinity map'),
 
           // ══════════════════════════════════════════════
           // ── Changing direction ──

@@ -1,14 +1,8 @@
 import { defineComponent, h, ref, computed, onMounted, onUnmounted } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
+import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
-
-/* ── Shared responsive scale (680 = Figma design width) ────────── */
-const CS_BASE = 680
-const csW     = ref(Math.min(CS_BASE, window.innerWidth - 48))
-const csScale = computed(() => csW.value / CS_BASE)
-const canHover = computed(() => csW.value >= CS_BASE)
-function _onResize() { csW.value = Math.min(CS_BASE, window.innerWidth - 48) }
-window.addEventListener('resize', _onResize)
+import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
 
 const VIDEO_SRC = 'src/assets/videos/rayo-plugin-clip.mp4'
 const SCREENSHOT         = 'src/assets/images/rayo/plugin/rayo-plugin-screenshot.png'
@@ -37,6 +31,7 @@ const MOBILE_CARDS = [CARDS[2], CARDS[0], CARDS[1], CARDS[3], CARDS[4]]
 const AntonymSection = defineComponent({
   name: 'AntonymSection',
   setup() {
+    const { containerW: csW, scale: csScale, canHover } = useResponsiveScale(680)
     const active = ref(null)
 
     return () => {
@@ -140,6 +135,7 @@ const V_IMGS = [
 const VersionSection = defineComponent({
   name: 'VersionSection',
   setup() {
+    const { containerW: csW } = useResponsiveScale(680)
     const sectionEl = ref(null)
     const triggered = ref(false)
 
@@ -271,6 +267,7 @@ const MarqueeSection = defineComponent({
 export default defineComponent({
   name: 'PluginCard',
   setup() {
+    const { canHover } = useResponsiveScale(680)
     const tldr = ref(false)
 
     const full = (...nodes) =>
@@ -289,17 +286,7 @@ export default defineComponent({
         content: () => [
 
           // ── TL;DR toggle ──
-          h('div', { class: 'tldr-bar' }, [
-            h('div', { class: 'tldr-indicator', style: { left: tldr.value ? 'calc(50% - 2px)' : '4px' } }),
-            h('button', {
-              class: ['tldr-pill', !tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = false },
-            }, 'Detailed'),
-            h('button', {
-              class: ['tldr-pill', tldr.value ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-              onClick: () => { tldr.value = true },
-            }, 'TL;DR'),
-          ]),
+          h(TldrToggle, { modelValue: tldr.value, 'onUpdate:modelValue': v => { tldr.value = v } }),
 
           // ── Top body: title, intro, role, impact ──
           h('div', { class: 'cs-body' }, [
