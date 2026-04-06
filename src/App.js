@@ -6,6 +6,7 @@ import GmailCard      from './components/cards/GmailCard.js'
 import LinkedInCard   from './components/cards/LinkedInCard.js'
 import BulbCard       from './components/cards/BulbCard.js'
 import ProjectCard    from './components/cards/ProjectCard.js'
+import SimplestreamDSCard from './components/cards/SimplestreamDSCard.js'
 import RayoDSCard     from './components/cards/RayoDSCard.js'
 import PluginCard     from './components/cards/PluginCard.js'
 import AlexaCard      from './components/cards/AlexaCard.js'
@@ -39,11 +40,7 @@ const CARD_ENTRIES = [
   { key: 'uxquote', comp: UXQuoteCard },
   { key: 'alexa',      comp: AlexaCard },
   { key: 'schedule',   comp: ScheduleCard },
-  {
-    key: 'project',
-    comp: ProjectCard,
-    props: { classes: 'project-card-1', href: '#', imgSrc: './src/assets/images/general/project-card-1.png', tooltip: 'White-label streaming product 📺\nMulti-brand Design System' },
-  },
+  { key: 'ssds',      comp: SimplestreamDSCard },
   { key: 'clawinvest', comp: ClawInvestCard },
   { key: 'strava',     comp: StravaCard },
 ]

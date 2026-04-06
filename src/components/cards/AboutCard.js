@@ -237,12 +237,16 @@ export default defineComponent({
     return () => h('div', { class: 'about-card-wrapper' }, [
 
       // ── Flying avatar (position:fixed, above everything) ──
-      flyActive.value ? h('img', {
+      h('img', {
         class: 'about-avatar-fly',
         src:   AVATAR,
         alt:   '',
-        style: flyStyle.value,
-      }) : null,
+        style: {
+          ...flyStyle.value,
+          opacity: flyActive.value ? 1 : 0,
+          pointerEvents: 'none',
+        },
+      }),
 
       // ── Collapsed card ────────────────────────────────────
       h('div', {

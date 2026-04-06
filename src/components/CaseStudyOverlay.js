@@ -24,9 +24,12 @@ export default defineComponent({
 
   props: {
     cardClass:  { type: String, default: '' },
-    videoSrc:   { type: String, required: true },
+    videoSrc:   { type: String, default: '' },
     videoClass: { type: String, default: '' },
-    tooltip:    { type: String, default: '' },
+    imageSrc:      { type: String, default: '' },
+    imageClass:    { type: String, default: '' },
+    heroWrapClass: { type: String, default: '' },
+    tooltip:       { type: String, default: '' },
     heroSize:   { type: Number, default: 448 },
   },
 
@@ -294,16 +297,26 @@ export default defineComponent({
     // ── Render ──
     return () => h('div', { class: 'cs-card-wrapper' }, [
 
-      // ── Flying video (position:fixed, above everything) ──
-      flyActive.value ? h('video', {
-        class: 'cs-video-fly',
-        src:      props.videoSrc,
-        autoplay: true,
-        loop:     true,
-        muted:    true,
-        playsinline: true,
-        style: flyStyle.value,
-      }) : null,
+      // ── Flying media (position:fixed, above everything) ──
+      flyActive.value
+        ? (props.imageSrc
+            ? h('img', {
+                class: 'cs-video-fly',
+                src:   props.imageSrc,
+                alt:   '',
+                style: { ...flyStyle.value, objectFit: 'cover' },
+              })
+            : h('video', {
+                class: 'cs-video-fly',
+                src:      props.videoSrc,
+                autoplay: true,
+                loop:     true,
+                muted:    true,
+                playsinline: true,
+                style: flyStyle.value,
+              })
+          )
+        : null,
 
       // ── Collapsed card ──
       h('div', {
@@ -323,20 +336,30 @@ export default defineComponent({
           onClick: e => { e.preventDefault(); open() },
         }, [h('img', { src: ICON_FULL_SCREEN, alt: 'Open case study' })]),
 
-        h('video', {
-          ref:      videoEl,
-          'data-src': props.videoSrc,
-          class:    props.videoClass,
-          loop:     true,
-          muted:    true,
-          preload:  'none',
-          playsinline:          true,
-          disablePictureInPicture: true,
-          controlsList: 'nodownload nofullscreen noremoteplayback',
-          style: flyActive.value
-            ? 'pointer-events: none; opacity: 0;'
-            : 'pointer-events: none;',
-        }),
+        props.imageSrc
+          ? h('img', {
+              ref:   videoEl,
+              src:   props.imageSrc,
+              class: props.imageClass || props.videoClass,
+              alt:   '',
+              style: flyActive.value
+                ? 'pointer-events: none; opacity: 0;'
+                : 'pointer-events: none;',
+            })
+          : h('video', {
+              ref:      videoEl,
+              'data-src': props.videoSrc,
+              class:    props.videoClass,
+              loop:     true,
+              muted:    true,
+              preload:  'none',
+              playsinline:          true,
+              disablePictureInPicture: true,
+              controlsList: 'nodownload nofullscreen noremoteplayback',
+              style: flyActive.value
+                ? 'pointer-events: none; opacity: 0;'
+                : 'pointer-events: none;',
+            }),
 
         // Optional collapsed overlay content
         slots.default?.(),
@@ -380,22 +403,49 @@ export default defineComponent({
           h('div', { ref: scrollHost, class: 'cs-expanded-inner', onScroll: onCsScroll }, [
             h('div', { ref: contentEl, class: 'cs-expanded-content' }, [
 
-              // Hero video (static, replaces flying video after animation)
-              h('video', {
-                class:    'cs-hero-video',
-                src:      props.videoSrc,
-                autoplay: true,
-                loop:     true,
-                muted:    true,
-                playsinline: true,
-                onLoadeddata: () => { heroReady.value = true },
-                style: {
-                  width:      props.heroSize + 'px',
-                  height:     props.heroSize + 'px',
-                  opacity:    flyActive.value && !flyFading.value ? 0 : 1,
-                  transition: 'opacity 0.2s ease',
-                },
-              }),
+              // Hero media (static, replaces flying media after animation)
+              props.imageSrc
+                ? h('div', {
+                    class: ['cs-hero-wrap', props.heroWrapClass].filter(Boolean).join(' '),
+                    style: {
+                      width:    props.heroSize + 'px',
+                      height:   props.heroSize + 'px',
+                      position: 'relative',
+                      marginLeft:  'auto',
+                      marginRight: 'auto',
+                    },
+                  }, [
+                    h('img', {
+                      class:  'cs-hero-video',
+                      src:    props.imageSrc,
+                      alt:    '',
+                      onLoad: () => { heroReady.value = true },
+                      style: {
+                        width:      '100%',
+                        height:     '100%',
+                        objectFit:  'cover',
+                        opacity:    flyActive.value && !flyFading.value ? 0 : 1,
+                        transition: 'opacity 0.2s ease',
+                      },
+                    }),
+                    // Optional overlay content on top of hero (e.g. logo rail)
+                    slots.heroOverlay?.(),
+                  ])
+                : h('video', {
+                    class:    'cs-hero-video',
+                    src:      props.videoSrc,
+                    autoplay: true,
+                    loop:     true,
+                    muted:    true,
+                    playsinline: true,
+                    onLoadeddata: () => { heroReady.value = true },
+                    style: {
+                      width:      props.heroSize + 'px',
+                      height:     props.heroSize + 'px',
+                      opacity:    flyActive.value && !flyFading.value ? 0 : 1,
+                      transition: 'opacity 0.2s ease',
+                    },
+                  }),
 
               // Case study sections (passed via slot)
               slots.content?.(),
