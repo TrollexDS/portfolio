@@ -21,8 +21,8 @@ const _desktopSafari = !_iOS
   && /Safari/.test(_ua) && !/Chrome/.test(_ua) && !/Firefox/.test(_ua)
 const LACKS_VP9_ALPHA = _iOS || _desktopSafari
 
-// Ease-out cubic: fast start, decelerates at the end
-function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3) }
+// Ease-out quint: punchy fast start, long gentle deceleration
+function easeOutQuint(t) { return 1 - Math.pow(1 - t, 5) }
 
 export default defineComponent({
   name: 'DuolingoCard',
@@ -40,7 +40,7 @@ export default defineComponent({
         function tick(now) {
           const elapsed  = now - start
           const progress = Math.min(elapsed / duration, 1)
-          displayed.value = Math.round(easeOutCubic(progress) * target)
+          displayed.value = Math.round(easeOutQuint(progress) * target)
           if (progress < 1) requestAnimationFrame(tick)
         }
 
