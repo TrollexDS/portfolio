@@ -7,6 +7,7 @@ const APP_ICON     = 'src/assets/logos/duolingo.svg'
 const AVATAR_WEBM  = 'src/assets/videos/duolingo-avatar.webm'
 const AVATAR_PNG   = 'src/assets/images/duolingo/duolingo-avatar-fallback.png'
 const PROFILE      = 'https://www.duolingo.com/profile/TrollexHK'
+const STREAK_API   = 'https://duolingo-streak.alexchiu.workers.dev'
 
 // WebKit can play VP9/WebM since Safari 16.4 but can't decode the VP9
 // alpha plane — video plays with a black background instead of transparent.
@@ -26,15 +27,13 @@ function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3) }
 export default defineComponent({
   name: 'DuolingoCard',
   props: {
-    streak: { type: Number, default: 817 },
+    streak: { type: Number, default: 820 },
   },
   setup(props) {
     const displayed = ref(0)
 
-    onMounted(() => {
-      const target   = props.streak
+    function animateTo(target) {
       const duration = 1800 // ms
-
       setTimeout(() => {
         const start = performance.now()
 
@@ -47,6 +46,18 @@ export default defineComponent({
 
         requestAnimationFrame(tick)
       }, 500)
+    }
+
+    onMounted(async () => {
+      let streak = props.streak // fallback
+
+      try {
+        const res  = await fetch(STREAK_API)
+        const data = await res.json()
+        if (data.streak != null) streak = data.streak
+      } catch { /* use fallback */ }
+
+      animateTo(streak)
     })
 
     return () =>
