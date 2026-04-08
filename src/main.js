@@ -53,9 +53,12 @@ import App from './App.js'
     if (!rafId) rafId = requestAnimationFrame(tick)
   }, { passive: false })
 
-  // Keep current in sync if scroll happens another way (keyboard, etc.)
+  // Keep current & target in sync if scroll happens another way (back-to-top, keyboard, etc.)
   window.addEventListener('scroll', () => {
-    if (!rafId) current = window.scrollY
+    if (!rafId) {
+      current = window.scrollY
+      target  = window.scrollY
+    }
   }, { passive: true })
 })()
 
