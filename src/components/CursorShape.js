@@ -49,7 +49,7 @@ const BEAM_OFFSET  = [-1.2, -9]
 const ARROW_STROKE = 2
 const BEAM_STROKE  = 1.2
 const DURATION     = 200  // ms
-const LERP_POS     = 0.10 // matches the ring lag
+const LERP_POS     = 0.18 // responsive but still smooth
 
 /* ── Helpers ────────────────────────────────────────────── */
 function easeInOut(t) {
