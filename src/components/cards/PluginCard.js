@@ -294,8 +294,10 @@ export default defineComponent({
             h('h1', { class: 'cs-title' },
               'Streamlining the Design Process & Improving Efficiency at Scale'),
 
-            h('p', { class: 'cs-body-text' },
-              'Rayo Thumbnails is a Figma plugin that connects directly to Bauer\'s Listen API, instantly applying live assets and metadata to selected layers. It empowers designers to move faster. From early concepts to production-ready designs—without manual asset handling.'),
+            full(
+              h('p', { class: 'cs-body-text' },
+                'Rayo Thumbnails is a Figma plugin that connects directly to Bauer\'s Listen API, instantly applying live assets and metadata to selected layers. It empowers designers to move faster. From early concepts to production-ready designs—without manual asset handling.'),
+            ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
             h('p', { class: 'cs-body-text' }, 'Design and development'),

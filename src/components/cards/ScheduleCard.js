@@ -686,8 +686,10 @@ export default defineComponent({
             h('h1', { class: 'cs-title' },
               'Challenging the Brief: From Station Pages to Schedule'),
 
-            h('p', { class: 'cs-body-text' },
-              'How user research redirected a major feature toward what listeners actually needed - a schedule-first approach to catchup radio.'),
+            full(
+              h('p', { class: 'cs-body-text' },
+                'How user research redirected a major feature toward what listeners actually needed - a schedule-first approach to catchup radio.'),
+            ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
             h('p', { class: 'cs-body-text' }, 'Product Design'),

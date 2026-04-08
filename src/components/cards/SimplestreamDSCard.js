@@ -67,10 +67,12 @@ export default defineComponent({
             h('h1', { class: 'cs-title' },
               'Brand Switching in Seconds: Scaling a White-Label Design System'),
 
+            full(
               h('p', { class: 'cs-body-text' },
                 'Simplestream is a B2B OTT service provider - we design and build streaming apps across mobile, tablet, web, and TV for clients around the world. As one of two designers, I was responsible for maintaining a white-label design system that powered 50+ client brands, each with their own look and feel across 100+ screens.'),
               h('p', { class: 'cs-body-text' },
                 'The challenge wasn\u2019t just designing at scale - it was making it possible for a tiny team to move fast without breaking things.'),
+            ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
             h('p', { class: 'cs-body-text' }, 'Product Designer'),
