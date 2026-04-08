@@ -52,10 +52,21 @@ export default defineComponent({
     let closeTimer = null
     let flyTimer   = null
     let imgObserver = null
+    let savedScrollY = 0
 
     // ── Back-to-top inside case study ──
     const scrollHost = ref(null)   // .cs-expanded-inner
     const bttVisible = ref(false)
+
+    // Lock inner scroll while fly animation is active
+    function lockInnerScroll() {
+      const el = scrollHost.value
+      if (el) el.style.overflowY = 'hidden'
+    }
+    function unlockInnerScroll() {
+      const el = scrollHost.value
+      if (el) el.style.overflowY = ''
+    }
 
     function onCsScroll(e) {
       bttVisible.value = e.target.scrollTop > window.innerHeight * 0.5
@@ -185,11 +196,15 @@ export default defineComponent({
       settled.value   = false
       closing.value   = false
       wasOpen.value   = true
-      document.documentElement.style.overflow = 'hidden'
+      savedScrollY = window.scrollY
+      document.body.style.position = 'fixed'
+      document.body.style.top = `-${savedScrollY}px`
+      document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
       document.addEventListener('keydown', onKeydown)
 
       await nextTick()
+      lockInnerScroll()
 
       // Let the start-state paint, then trigger FLIP
       requestAnimationFrame(() => {
@@ -220,6 +235,7 @@ export default defineComponent({
                 setTimeout(() => {
                   flyActive.value = false
                   flyFading.value = false
+                  unlockInnerScroll()
                 }, 250)  // matches hero transition duration + margin
               }))
             }
@@ -283,8 +299,11 @@ export default defineComponent({
         flyFading.value = false
         startRect  = null
         videoStart = null
-        document.documentElement.style.overflow = ''
+        document.body.style.position = ''
+        document.body.style.top = ''
+        document.body.style.width = ''
         document.body.style.overflow = ''
+        window.scrollTo(0, savedScrollY)
         document.removeEventListener('keydown', onKeydown)
       }, ANIM_MS + 20)
     }
