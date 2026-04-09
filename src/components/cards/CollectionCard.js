@@ -154,7 +154,7 @@ export default defineComponent({
               h('span', { class: P+'-section-caret' }),
               h('span', null, [
                 'Card gradient bg ',
-                h('span', { style: 'font-weight:400;color:#999;font-size:11px;' }, '(nested)'),
+                h('span', { style: 'font-weight:var(--weight-regular);color:var(--color-panel-text-subtle);font-size:var(--text-xs);' }, '(nested)'),
               ]),
             ]),
             renderPanelRow(gradient.value.charAt(0).toUpperCase() + gradient.value.slice(1), renderSelect(gradient, GRADIENT_OPTIONS)),

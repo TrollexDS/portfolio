@@ -68,12 +68,33 @@ export default defineComponent({
       if (el) el.style.overflowY = ''
     }
 
+    let csScrolling = false
+
     function onCsScroll(e) {
+      if (csScrolling) return
       bttVisible.value = e.target.scrollTop > window.innerHeight * 0.5
     }
 
     function scrollCsToTop() {
-      if (scrollHost.value) scrollHost.value.scrollTo({ top: 0, behavior: 'smooth' })
+      const el = scrollHost.value
+      if (!el) return
+      const start = el.scrollTop
+      if (start === 0) return
+      csScrolling = true
+      const startTime = performance.now()
+      const duration = 500
+      function step(now) {
+        const progress = Math.min((now - startTime) / duration, 1)
+        const ease = 1 - Math.pow(1 - progress, 3)
+        el.scrollTo(0, start * (1 - ease))
+        if (progress < 1) {
+          requestAnimationFrame(step)
+        } else {
+          csScrolling = false
+          bttVisible.value = false
+        }
+      }
+      requestAnimationFrame(step)
     }
 
     // ── Scroll-triggered fade-slide-up for static images ──

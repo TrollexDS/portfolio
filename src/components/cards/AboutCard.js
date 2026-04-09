@@ -7,7 +7,7 @@ const GRID_W     = 1203  // 4 × 285px + 3 × 21px gaps
 const ABOUT_MAX_W = 800   // max width for the expanded about card
 const ANIM_MS = 700   // must match CSS transition duration
 
-const GRADIENT = 'linear-gradient(135deg, #008B8B 0%, #7c5cfc 100%)'
+const GRADIENT = 'var(--gradient-brand)'
 
 function richText(segments) {
   return segments.map(seg => {
@@ -38,14 +38,14 @@ const BIO = [
     { text: ' and ' },
     { text: 'design system', gradient: true },
     { text: '. Currently working as a Senior Product Designer at ' },
-    { text: 'Bauer Media Group', bold: true, color: '#5000AB', href: 'https://www.bauermedia.co.uk' },
+    { text: 'Bauer Media Group', bold: true, color: 'var(--color-brand-bauer)', href: 'https://www.bauermedia.co.uk' },
     { text: ' in London.' },
   ],
   [
     { text: 'I graduated from ' },
-    { text: 'Goldsmiths', bold: true, color: '#c4922a', href: 'https://www.gold.ac.uk' },
+    { text: 'Goldsmiths', bold: true, color: 'var(--color-brand-goldsmiths)', href: 'https://www.gold.ac.uk' },
     { text: " with a Fine Art degree, which trained me to think critically and question everything. Although I always had an interest in technology, I only discovered UX by stumbling on a YouTube channel " },
-    { text: 'The Futur', bold: true, color: '#0066ff', href: 'https://www.youtube.com/channel/UC-b3c7kxa5vU-bnmaROgvog' },
+    { text: 'The Futur', bold: true, color: 'var(--color-brand-futur)', href: 'https://www.youtube.com/channel/UC-b3c7kxa5vU-bnmaROgvog' },
     { text: '. It clicked immediately.' },
   ],
   [
@@ -53,7 +53,7 @@ const BIO = [
   ],
   [
     { text: 'I taught a few UX courses at ' },
-    { text: 'BrainStation', bold: true, color: '#005ae3', href: 'https://brainstation.io' },
+    { text: 'BrainStation', bold: true, color: 'var(--color-brand-brainstation)', href: 'https://brainstation.io' },
     { text: ', which I loved, but stepped back to focus on other priorities. Working with my team on complex design challenges is what energises me most right now.' },
   ],
   [

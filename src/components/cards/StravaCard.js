@@ -101,8 +101,9 @@ export default defineComponent({
           { subdomains: 'abcd', maxZoom: 19 }
         ).addTo(leafletMap)
 
+        const stravaColor = getComputedStyle(document.documentElement).getPropertyValue('--color-brand-strava').trim() || '#fc4c02'
         const route = L.polyline(coords, {
-          color:   '#FC4C02',   // Strava orange
+          color:   stravaColor,   // Strava orange — read from design token
           weight:  3,
           opacity: 1,
         }).addTo(leafletMap)
