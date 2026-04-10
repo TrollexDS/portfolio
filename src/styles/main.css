@@ -225,21 +225,6 @@ strong, b {
   color: var(--color-primary);
 }
 
-.nav-resume {
-  margin-left: auto;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-family: var(--font-family-primary);
-  font-weight: var(--weight-medium);
-  font-size: var(--nav-pill-size);
-  text-transform: uppercase;
-  color: var(--color-text-primary);
-  text-decoration: none;
-  letter-spacing: var(--tracking-wide);
-}
-
-.nav-resume img { width: 16px; height: 16px; }
 
 /* ── Mobile-only page logo (above the grid) ── */
 .mobile-page-logo {

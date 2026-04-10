@@ -3,3 +3,6 @@
 
 # Large source video files (converted to mp4)
 src/assets/videos/*.mov
+
+*storybook.log
+storybook-static

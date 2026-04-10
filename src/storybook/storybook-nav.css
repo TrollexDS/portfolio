@@ -1,0 +1,106 @@
+/*
+ * Scoped NavBar styles for Storybook
+ * Extracted from main.css — excludes cursor:none and adjusts fixed positioning
+ */
+
+.nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 20px 48px;
+  transform: translateY(0);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav--hidden {
+  transform: translateY(-110%);
+}
+
+.nav-logo {
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+}
+
+.nav-pills {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--color-surface-nav-blur, rgba(249,249,249,0.5));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px;
+  border-radius: 100px;
+  transition: background 0.5s ease;
+}
+
+/* Hover ghost pill */
+.nav-pill-hover-ghost {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 100px;
+  background: var(--color-surface-nav, #ffffff);
+  opacity: 0;
+  pointer-events: none;
+  transition: left 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              width 0.25s cubic-bezier(0.25, 1, 0.5, 1),
+              opacity 0.18s ease;
+  box-shadow: 0 0 12px var(--color-shadow-nav, rgba(0,0,0,0.06));
+  filter: opacity(0.35);
+}
+
+/* Sliding pill indicator */
+.nav-pill-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  border-radius: 100px;
+  background: var(--color-surface-nav, #ffffff);
+  box-shadow: 0 0 40px var(--color-shadow-nav, rgba(0,0,0,0.06));
+  pointer-events: none;
+  will-change: left, width, transform;
+  transform-origin: center center;
+}
+
+.nav-pill-indicator--ready {
+  transition: left 0.62s cubic-bezier(0.34, 1.56, 0.64, 1),
+              width 0.62s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.48s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-pill-indicator--liquid {
+  transition: left 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-pill {
+  position: relative;
+  z-index: 1;
+  padding: 8px 16px;
+  border-radius: 100px;
+  font-family: var(--font-family-primary, 'Syne', sans-serif);
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--color-text-primary, #2c2c2c);
+  text-decoration: none;
+  transition: color 0.2s;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Storybook: keep cursor visible */
+  cursor: pointer;
+}
+
+.nav-pill.active {
+  color: var(--color-text-primary, #2c2c2c);
+}
+
+.nav-pill:not(.active):hover {
+  color: var(--color-primary, #008B8B);
+}

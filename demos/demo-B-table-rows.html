@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Demo B — Table Rows</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@400;500;600;700&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; background: #faf9f7; color: #2c2c2c; padding: 48px; }
+
+  h1 { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 700; margin-bottom: 6px; }
+  .subtitle { font-size: 14px; color: #888; margin-bottom: 40px; }
+  h2 {
+    font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em;
+    color: #008B8B; margin-bottom: 12px; margin-top: 36px;
+  }
+  h2:first-of-type { margin-top: 0; }
+
+  .table {
+    width: 100%;
+    max-width: 860px;
+    border-collapse: collapse;
+    margin-bottom: 32px;
+  }
+  .table th {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #aaa;
+    text-align: left;
+    padding: 0 16px 8px;
+    border-bottom: 2px solid #e8e6e2;
+  }
+  .table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    vertical-align: middle;
+    font-size: 13px;
+  }
+  .table tr:hover { background: rgba(0,139,139,0.03); }
+
+  .swatch-cell { display: flex; align-items: center; gap: 12px; }
+  .swatch {
+    width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .swatch.checker {
+    background-image:
+      linear-gradient(45deg, #ddd 25%, transparent 25%),
+      linear-gradient(-45deg, #ddd 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #ddd 75%),
+      linear-gradient(-45deg, transparent 75%, #ddd 75%);
+    background-size: 8px 8px;
+    background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .swatch.checker .fill { position: absolute; inset: 0; border-radius: 10px; }
+
+  .token-name { font-weight: 600; font-size: 13px; }
+  .token-var { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: #888; }
+  .token-value { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: #aaa; }
+  .token-usage { font-size: 11px; color: #999; font-style: italic; }
+
+  .copy-btn {
+    background: none; border: 1px solid #e0e0e0; border-radius: 6px;
+    padding: 3px 8px; font-size: 10px; color: #888; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { border-color: #008B8B; color: #008B8B; }
+
+  /* Typography */
+  .type-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .type-left {
+    width: 160px;
+    flex-shrink: 0;
+  }
+  .type-left .name { font-size: 13px; font-weight: 600; color: #2c2c2c; }
+  .type-left .details { font-size: 10px; color: #aaa; margin-top: 4px; line-height: 1.5; }
+  .type-sample { flex: 1; }
+  .type-right {
+    flex-shrink: 0;
+    display: flex;
+    gap: 6px;
+  }
+  .tag {
+    font-size: 10px; font-weight: 500; padding: 3px 8px;
+    border-radius: 20px; background: #f0ede8; color: #666;
+  }
+</style>
+</head>
+<body>
+
+<h1>Design Tokens</h1>
+<p class="subtitle">Structured table — token name, variable, value, and usage. Dense and reference-friendly.</p>
+
+<h2>Neutral</h2>
+<table class="table">
+  <thead><tr><th>Swatch</th><th>Token</th><th>Value</th><th>Usage</th><th></th></tr></thead>
+  <tbody id="neutral"></tbody>
+</table>
+
+<h2>Accent</h2>
+<table class="table">
+  <thead><tr><th>Swatch</th><th>Token</th><th>Value</th><th>Usage</th><th></th></tr></thead>
+  <tbody id="accent"></tbody>
+</table>
+
+<h2>Alpha</h2>
+<table class="table">
+  <thead><tr><th>Swatch</th><th>Token</th><th>Value</th><th>Usage</th><th></th></tr></thead>
+  <tbody id="alpha"></tbody>
+</table>
+
+<h2>Brand</h2>
+<table class="table">
+  <thead><tr><th>Swatch</th><th>Token</th><th>Value</th><th>Usage</th><th></th></tr></thead>
+  <tbody id="brand"></tbody>
+</table>
+
+<div style="margin-top: 64px;">
+  <h1 style="margin-bottom: 6px;">Typography</h1>
+  <p class="subtitle">Each style shown in context with its metadata.</p>
+  <div id="type" style="max-width: 860px;"></div>
+</div>
+
+<script>
+const data = {
+  neutral: [
+    ['Neutral 0', '--color-primitive-neutral-0', '#ffffff', 'Pure white'],
+    ['Neutral 50', '--color-primitive-neutral-50', '#faf9f7', 'Cards, nav bg'],
+    ['Neutral 100', '--color-primitive-neutral-100', '#f0f0f0', 'Skeleton shimmer'],
+    ['Neutral 300', '--color-primitive-neutral-300', '#aaaaaa', 'Text subtle'],
+    ['Neutral 500', '--color-primitive-neutral-500', '#555555', 'Checkerboard'],
+    ['Neutral 750', '--color-primitive-neutral-750', '#2c2c2c', 'Primary text'],
+    ['Neutral 1000', '--color-primitive-neutral-1000', '#000000', 'Pure black'],
+  ],
+  accent: [
+    ['Teal 500', '--color-primitive-teal-500', '#008B8B', 'Primary brand'],
+    ['Purple 400', '--color-primitive-purple-400', '#9b87f5', 'Schedule gradient start'],
+    ['Purple 500', '--color-primitive-purple-500', '#6464FF', 'Project card'],
+    ['Blue 400', '--color-primitive-blue-400', '#38b3e8', 'Duolingo gradient'],
+    ['Orange 500', '--color-primitive-orange-500', '#fc4c02', 'Strava brand'],
+  ],
+  alpha: [
+    ['Black 4%', '--color-primitive-alpha-black-4', 'rgba(0,0,0,0.04)', 'Subtle shadow'],
+    ['Black 10%', '--color-primitive-alpha-black-10', 'rgba(0,0,0,0.10)', 'Card shadow'],
+    ['Black 30%', '--color-primitive-alpha-black-30', 'rgba(0,0,0,0.30)', 'Overlay'],
+    ['White 50%', '--color-primitive-alpha-white-50', 'rgba(255,255,255,0.50)', 'Highlight'],
+  ],
+  brand: [
+    ['LinkedIn', '--color-primitive-linkedin', '#0a66c2', 'LinkedIn card'],
+    ['Bauer', '--color-primitive-bauer', '#5000AB', 'Bauer Media'],
+    ['Goldsmiths', '--color-primitive-goldsmiths', '#c4922a', 'Goldsmiths Uni'],
+    ['BrainStation', '--color-primitive-brainstation', '#005ae3', 'BrainStation'],
+  ],
+};
+
+function isAlpha(v) { return v.includes('rgba'); }
+
+Object.entries(data).forEach(([group, items]) => {
+  const tbody = document.getElementById(group);
+  items.forEach(([name, varName, value, usage]) => {
+    const tr = document.createElement('tr');
+    const alpha = isAlpha(value);
+    tr.innerHTML = `
+      <td>
+        <div class="swatch-cell">
+          <div class="swatch ${alpha ? 'checker' : ''}" ${!alpha ? `style="background:${value}"` : ''}>
+            ${alpha ? `<div class="fill" style="background:${value}"></div>` : ''}
+          </div>
+        </div>
+      </td>
+      <td>
+        <div class="token-name">${name}</div>
+        <div class="token-var">${varName}</div>
+      </td>
+      <td><span class="token-value">${value}</span></td>
+      <td><span class="token-usage">${usage}</span></td>
+      <td><button class="copy-btn" onclick="navigator.clipboard.writeText('var(${varName})');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1000)">Copy</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+});
+
+const types = [
+  { name: 'CS / Title', family: 'Syne', weight: 700, size: '32px', lh: '48px', sample: 'Station & Presenter Pages', tags: ['Syne', '700', '32/48'] },
+  { name: 'CS / Body', family: 'Syne', weight: 400, size: '18px', lh: '27px', sample: 'The quick brown fox jumps over the lazy dog', tags: ['Syne', '400', '18/27'] },
+  { name: 'Quote / Card', family: 'Syne', weight: 500, size: '20px', lh: '31px', sample: '"Design is not just what it looks like and feels like"', tags: ['Syne', '500', '20/31'] },
+  { name: 'Nav / Pill', family: 'Syne', weight: 500, size: '16px', lh: 'normal', sample: 'Work    About    Resume', tags: ['Syne', '500', '16'] },
+  { name: 'Label / Principle', family: 'Syne', weight: 600, size: '11px', lh: 'normal', sample: 'MY DESIGN PRINCIPLE', tags: ['Syne', '600', '11', 'uppercase'], ls: '0.12em', tt: 'uppercase' },
+  { name: 'Data / Streak', family: 'Fredoka', weight: 600, size: '48px', lh: '48px', sample: '820', tags: ['Fredoka', '600', '48/48'] },
+];
+
+const typeContainer = document.getElementById('type');
+types.forEach(t => {
+  const card = document.createElement('div');
+  card.className = 'type-card';
+  card.innerHTML = `
+    <div class="type-left">
+      <div class="name">${t.name}</div>
+      <div class="details">${t.family} · ${t.weight}<br>${t.size} / ${t.lh}</div>
+    </div>
+    <div class="type-sample" style="font-family:'${t.family}',sans-serif;font-weight:${t.weight};font-size:${t.size};line-height:${t.lh};letter-spacing:${t.ls||'normal'};text-transform:${t.tt||'none'}">${t.sample}</div>
+    <div class="type-right">${t.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}</div>
+  `;
+  typeContainer.appendChild(card);
+});
+</script>
+</body>
+</html>
