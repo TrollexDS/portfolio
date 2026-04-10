@@ -2,15 +2,16 @@
 
 /** @type { import('@storybook/vue3-vite').StorybookConfig } */
 const config = {
-  "stories": [
+  stories: [
     "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
   ],
-"addons": [
+  addons: [
     "@chromatic-com/storybook",
     "@storybook/addon-docs",
     "@storybook/addon-onboarding",
     "@storybook/addon-designs"
   ],
-  "framework": "@storybook/vue3-vite"
+  framework: "@storybook/vue3-vite",
+  staticDirs: [".."],
 };
 export default config;
