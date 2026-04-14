@@ -3394,6 +3394,14 @@ strong, b {
     max-height: 448px;
   }
 
+  /* ── Agentic DS hero wrap — match shrunk hero size ── */
+  .ads-hero-wrap {
+    width:  calc(100vw - 48px) !important;
+    height: calc(100vw - 48px) !important;
+    max-width: 448px;
+    max-height: 448px;
+  }
+
   /* ── Marquee — full opacity, no hover, smaller for faster load ── */
   .cs-marquee-img {
     opacity: 1;
@@ -4160,7 +4168,7 @@ strong, b {
 }
 
 .ads-result-number {
-  font-family: var(--font-family-display);
+  font-family: var(--font-family-heading);
   font-size: var(--text-8xl);
   font-weight: var(--weight-semibold);
   background: var(--gradient-brand);
