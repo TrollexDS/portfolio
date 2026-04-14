@@ -71,9 +71,9 @@ export default defineComponent({
           hx, hy, x: hx, y: hy,
           // Ambient drift: each element has a unique phase + speed
           phase: Math.random() * Math.PI * 2,
-          speed: 0.3 + Math.random() * 0.5,
-          ampX: 4 + Math.random() * 8,
-          ampY: 3 + Math.random() * 6,
+          speed: 0.45 + Math.random() * 0.7,
+          ampX: 8 + Math.random() * 14,
+          ampY: 6 + Math.random() * 11,
           kind:  el.kind,
           label: el.label || '',
           hex:   el.hex || '',
@@ -186,7 +186,7 @@ export default defineComponent({
       if (!canvas) return
       const ctx = canvas.getContext('2d')
       ctx.clearRect(0, 0, W, H)
-      time += 0.008
+      time += 0.012
 
       shapes.forEach(s => {
         // Gentle ambient drift
