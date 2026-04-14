@@ -78,7 +78,7 @@ export const AllIcons = {
             }),
           ]),
           h('span', {
-            style: { fontFamily: "'Syne', sans-serif", fontSize: '11px', opacity: 0.5 },
+            style: { fontFamily: "'Syne', sans-serif", fontSize: '11px', opacity: 0.5, color: 'var(--color-text-primary, #2c2c2c)' },
           }, icon.name),
         ])
       )),
@@ -104,7 +104,7 @@ export const ActionIcon = {
           h('img', {
             src: expandSvg,
             alt: 'Expand',
-            style: { width: '20px', height: '20px' },
+            style: { width: '20px', height: '20px', filter: 'var(--filter-action-icon, none)' },
           }),
         ]),
         h('div', {
@@ -122,7 +122,7 @@ export const ActionIcon = {
           h('img', {
             src: externalLinkSvg,
             alt: 'External Link',
-            style: { width: '20px', height: '20px' },
+            style: { width: '20px', height: '20px', filter: 'var(--filter-action-icon, none)' },
           }),
         ]),
       ]),

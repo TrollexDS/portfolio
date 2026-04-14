@@ -35,6 +35,7 @@ export const Default = {
             fontSize: '14px',
             opacity: 0.3,
             marginTop: '40px',
+            color: 'var(--color-text-primary, #2c2c2c)',
           },
         }, 'Click pills to see the liquid-glass sliding animation.'),
       ]),

@@ -5,55 +5,64 @@ export default {
 }
 
 /* ══════════════════════════════════════════════
-   Shared styles (matching Tokens.stories)
+   Shared styles — theme-aware via CSS variables
    ══════════════════════════════════════════════ */
 
 const S = {
   page: {
     padding: '32px',
     maxWidth: '920px',
-    fontFamily: 'Inter, -apple-system, sans-serif',
+    fontFamily: 'var(--font-family-system, Inter, -apple-system, sans-serif)',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease',
   },
   title: {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "var(--font-family-primary, 'Syne', sans-serif)",
     fontSize: '28px',
     fontWeight: 700,
     marginBottom: '6px',
-    color: '#2c2c2c',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease',
   },
   subtitle: {
     fontSize: '14px',
-    color: '#888',
+    color: 'var(--color-text-subtle, #888)',
     marginBottom: '40px',
     lineHeight: '1.5',
+    transition: 'color 0.5s ease',
   },
   card: {
-    background: '#fff',
+    background: 'var(--color-surface-card, #fff)',
     borderRadius: '16px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+    border: '1px solid var(--color-border-card, rgba(0,0,0,0.08))',
+    boxShadow: '0 1px 3px var(--color-shadow-card-rest, rgba(0,0,0,0.06))',
     overflow: 'hidden',
     marginBottom: '24px',
+    transition: 'background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease',
   },
   cardHeader: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '16px 20px',
-    borderBottom: '1px solid #f0f0f0',
+    borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.08))',
+    transition: 'border-color 0.5s ease',
   },
   cardTitle: {
     fontSize: '13px',
     fontWeight: 600,
     textTransform: 'uppercase',
     letterSpacing: '0.06em',
-    color: '#008B8B',
+    color: 'var(--color-primary, #008B8B)',
+    transition: 'color 0.5s ease',
   },
   count: {
     fontSize: '11px',
-    color: '#aaa',
-    background: '#f5f5f5',
+    color: 'var(--color-text-subtle, #aaa)',
+    background: 'var(--color-surface-card-white, #f5f5f5)',
     padding: '2px 10px',
     borderRadius: '20px',
+    transition: 'color 0.5s ease, background 0.5s ease',
   },
   tag: {
     display: 'inline-block',
@@ -61,9 +70,10 @@ const S = {
     fontWeight: 500,
     padding: '2px 8px',
     borderRadius: '20px',
-    background: '#f5f5f5',
-    color: '#666',
+    background: 'var(--color-surface-card-white, #f5f5f5)',
+    color: 'var(--color-text-subtle, #666)',
     marginRight: '4px',
+    transition: 'color 0.5s ease, background 0.5s ease',
   },
 }
 
@@ -79,7 +89,8 @@ function TypeRow(item) {
     lineHeight: item.lineHeight || 'normal',
     letterSpacing: item.letterSpacing || 'normal',
     textTransform: item.textTransform || 'none',
-    color: '#2c2c2c',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease',
   }
 
   return h('div', {
@@ -88,8 +99,8 @@ function TypeRow(item) {
       alignItems: 'baseline',
       gap: '24px',
       padding: '18px 20px',
-      borderBottom: '1px solid rgba(0,0,0,0.04)',
-      transition: 'background 0.15s',
+      borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.04))',
+      transition: 'background 0.15s, border-color 0.5s ease',
     },
     onMouseenter: (e) => { e.currentTarget.style.background = 'rgba(0,139,139,0.03)' },
     onMouseleave: (e) => { e.currentTarget.style.background = 'transparent' },
@@ -97,7 +108,13 @@ function TypeRow(item) {
     /* Left: meta */
     h('div', { style: { width: '160px', flexShrink: 0 } }, [
       h('div', {
-        style: { fontSize: '13px', fontWeight: 600, color: '#2c2c2c', marginBottom: '6px' },
+        style: {
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'var(--color-text-primary, #2c2c2c)',
+          marginBottom: '6px',
+          transition: 'color 0.5s ease',
+        },
       }, item.name),
       h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '3px' } }, [
         h('span', { style: S.tag }, item.familyLabel || 'Syne'),
@@ -130,15 +147,27 @@ function FamilyRow(item) {
       alignItems: 'center',
       gap: '24px',
       padding: '20px',
-      borderBottom: '1px solid rgba(0,0,0,0.04)',
+      borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.04))',
+      transition: 'border-color 0.5s ease',
     },
   }, [
     h('div', { style: { width: '160px', flexShrink: 0 } }, [
       h('div', {
-        style: { fontSize: '13px', fontWeight: 600, color: '#2c2c2c', marginBottom: '2px' },
+        style: {
+          fontSize: '13px',
+          fontWeight: 600,
+          color: 'var(--color-text-primary, #2c2c2c)',
+          marginBottom: '2px',
+          transition: 'color 0.5s ease',
+        },
       }, item.name),
       h('div', {
-        style: { fontSize: '11px', fontFamily: "'SF Mono', 'Fira Code', monospace", color: '#aaa' },
+        style: {
+          fontSize: '11px',
+          fontFamily: "var(--font-family-mono, 'SF Mono', 'Fira Code', monospace)",
+          color: 'var(--color-text-subtle, #aaa)',
+          transition: 'color 0.5s ease',
+        },
       }, item.var),
     ]),
     h('div', {
@@ -146,8 +175,9 @@ function FamilyRow(item) {
         fontFamily: item.var,
         fontSize: '32px',
         fontWeight: 400,
-        color: '#2c2c2c',
+        color: 'var(--color-text-primary, #2c2c2c)',
         flex: 1,
+        transition: 'color 0.5s ease',
       },
     }, 'AaBbCc 0123456789'),
   ])

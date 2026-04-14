@@ -1,4 +1,4 @@
-import { h } from 'vue'
+import { h, ref, onMounted, onUnmounted } from 'vue'
 
 export default {
   title: 'Design Tokens/Colours',
@@ -14,52 +14,63 @@ export default {
    Shared styles
    ══════════════════════════════════════════════ */
 
+const T = 'transition: color 0.5s ease, background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease;'
+
 const S = {
   page: {
     padding: '32px',
     maxWidth: '920px',
-    fontFamily: 'Inter, -apple-system, sans-serif',
+    fontFamily: 'var(--font-family-system, Inter, -apple-system, sans-serif)',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease',
   },
   title: {
-    fontFamily: "'Syne', sans-serif",
+    fontFamily: "var(--font-family-primary, 'Syne', sans-serif)",
     fontSize: '28px',
     fontWeight: 700,
     marginBottom: '6px',
-    color: '#2c2c2c',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease',
   },
   subtitle: {
     fontSize: '14px',
-    color: '#888',
+    color: 'var(--color-text-subtle, #888)',
     marginBottom: '40px',
     lineHeight: '1.5',
+    transition: 'color 0.5s ease',
   },
   card: {
-    background: '#fff',
+    background: 'var(--color-surface-card, #fff)',
     borderRadius: '16px',
-    boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+    border: '1px solid var(--color-border-card, rgba(0,0,0,0.08))',
+    boxShadow: '0 1px 3px var(--color-shadow-card-rest, rgba(0,0,0,0.06))',
     overflow: 'hidden',
     marginBottom: '24px',
+    transition: 'background 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease',
   },
   cardHeader: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '16px 20px',
-    borderBottom: '1px solid #f0f0f0',
+    borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.08))',
+    transition: 'border-color 0.5s ease',
   },
   cardTitle: {
     fontSize: '13px',
     fontWeight: 600,
     textTransform: 'uppercase',
     letterSpacing: '0.06em',
-    color: '#008B8B',
+    color: 'var(--color-primary, #008B8B)',
+    transition: 'color 0.5s ease',
   },
   count: {
     fontSize: '11px',
-    color: '#aaa',
-    background: '#f5f5f5',
+    color: 'var(--color-text-subtle, #aaa)',
+    background: 'var(--color-surface-card-white, #f5f5f5)',
     padding: '2px 10px',
     borderRadius: '20px',
+    transition: 'color 0.5s ease, background 0.5s ease',
   },
   table: {
     width: '100%',
@@ -70,23 +81,27 @@ const S = {
     fontWeight: 600,
     textTransform: 'uppercase',
     letterSpacing: '0.06em',
-    color: '#aaa',
+    color: 'var(--color-text-subtle, #aaa)',
     textAlign: 'left',
     padding: '10px 20px',
-    borderBottom: '1px solid #f0f0f0',
+    borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.08))',
+    transition: 'color 0.5s ease, border-color 0.5s ease',
   },
   td: {
     padding: '12px 20px',
-    borderBottom: '1px solid rgba(0,0,0,0.03)',
+    borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.04))',
     verticalAlign: 'middle',
     fontSize: '13px',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease, border-color 0.5s ease',
   },
   swatch: (color, isAlpha) => ({
     width: '36px',
     height: '36px',
     borderRadius: '10px',
     flexShrink: '0',
-    border: '1px solid rgba(0,0,0,0.06)',
+    border: '1px solid var(--color-border-card, rgba(0,0,0,0.06))',
+    transition: 'border-color 0.5s ease',
     ...(isAlpha
       ? {
           backgroundImage:
@@ -104,28 +119,32 @@ const S = {
   tokenName: {
     fontSize: '13px',
     fontWeight: 600,
-    color: '#2c2c2c',
+    color: 'var(--color-text-primary, #2c2c2c)',
+    transition: 'color 0.5s ease',
   },
   tokenVar: {
     fontSize: '11px',
-    fontFamily: "'SF Mono', 'Fira Code', monospace",
-    color: '#888',
+    fontFamily: "var(--font-family-mono, 'SF Mono', 'Fira Code', monospace)",
+    color: 'var(--color-text-subtle, #888)',
     marginTop: '1px',
+    transition: 'color 0.5s ease',
   },
   tokenValue: {
     fontSize: '11px',
-    fontFamily: "'SF Mono', 'Fira Code', monospace",
-    color: '#aaa',
+    fontFamily: "var(--font-family-mono, 'SF Mono', 'Fira Code', monospace)",
+    color: 'var(--color-text-subtle, #aaa)',
+    transition: 'color 0.5s ease',
   },
   copyBtn: {
     background: 'none',
-    border: '1px solid #e0e0e0',
+    border: '1px solid var(--color-border-card, rgba(0,0,0,0.08))',
     borderRadius: '6px',
     padding: '3px 10px',
     fontSize: '10px',
-    color: '#888',
+    color: 'var(--color-text-subtle, #888)',
     cursor: 'pointer',
-    fontFamily: 'Inter, sans-serif',
+    fontFamily: 'var(--font-family-system, Inter, sans-serif)',
+    transition: 'color 0.3s ease, border-color 0.3s ease',
   },
 }
 
@@ -175,12 +194,13 @@ function handleCopy(e, varName) {
   const btn = e.target
   const original = btn.textContent
   btn.textContent = 'Copied!'
-  btn.style.borderColor = '#008B8B'
-  btn.style.color = '#008B8B'
+  const primary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#008B8B'
+  btn.style.borderColor = primary
+  btn.style.color = primary
   setTimeout(() => {
     btn.textContent = original
-    btn.style.borderColor = '#e0e0e0'
-    btn.style.color = '#888'
+    btn.style.borderColor = ''
+    btn.style.color = ''
   }, 1200)
 }
 
@@ -225,8 +245,12 @@ function TokenRow(token) {
       h('button', {
         style: S.copyBtn,
         onClick: (e) => handleCopy(e, token.name),
-        onMouseenter: (e) => { e.target.style.borderColor = '#008B8B'; e.target.style.color = '#008B8B' },
-        onMouseleave: (e) => { e.target.style.borderColor = '#e0e0e0'; e.target.style.color = '#888' },
+        onMouseenter: (e) => {
+          const primary = getComputedStyle(document.documentElement).getPropertyValue('--color-primary').trim() || '#008B8B'
+          e.target.style.borderColor = primary
+          e.target.style.color = primary
+        },
+        onMouseleave: (e) => { e.target.style.borderColor = ''; e.target.style.color = '' },
       }, 'Copy'),
     ]),
   ])
@@ -257,45 +281,79 @@ function TokenCard(title, tokens) {
    Stories
    ══════════════════════════════════════════════ */
 
-export const SemanticColours = {
-  render: () => {
-    const groups = [
-      { title: 'Primary', prefix: '--color-primary' },
-      { title: 'Surface', prefix: '--color-surface' },
-      { title: 'Text', prefix: '--color-text' },
-      { title: 'Border', prefix: '--color-border' },
-      { title: 'Shadow', prefix: '--color-shadow' },
-    ]
+/* ── Theme-aware wrapper that re-renders when data-theme changes ── */
+function useThemeReactive() {
+  const tick = ref(0)
+  let observer = null
 
-    return h('div', { style: S.page }, [
-      h('h1', { style: S.title }, 'Semantic Colours'),
-      h('p', { style: S.subtitle }, 'Intent-based aliases — these are what components consume. Toggle the background to see dark mode values.'),
-      ...groups.map(g => TokenCard(g.title, getTokens(g.prefix))),
-    ])
-  },
+  onMounted(() => {
+    observer = new MutationObserver(() => { tick.value++ })
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme'],
+    })
+  })
+
+  onUnmounted(() => { if (observer) observer.disconnect() })
+
+  return tick
+}
+
+export const SemanticColours = {
+  render: () => ({
+    setup() {
+      const tick = useThemeReactive()
+
+      return () => {
+        // Force re-read when tick changes
+        void tick.value
+
+        const groups = [
+          { title: 'Primary', prefix: '--color-primary' },
+          { title: 'Surface', prefix: '--color-surface' },
+          { title: 'Text', prefix: '--color-text' },
+          { title: 'Border', prefix: '--color-border' },
+          { title: 'Shadow', prefix: '--color-shadow' },
+        ]
+
+        return h('div', { style: S.page }, [
+          h('h1', { style: S.title }, 'Semantic Colours'),
+          h('p', { style: S.subtitle }, 'Intent-based aliases — these are what components consume. Toggle the background to see dark mode values.'),
+          ...groups.map(g => TokenCard(g.title, getTokens(g.prefix))),
+        ])
+      }
+    },
+  }),
 }
 
 export const Primitives = {
-  render: () => {
-    /* Group primitives by hue family */
-    const allTokens = getTokens('--color-primitive')
-    const groups = {}
-    const order = []
+  render: () => ({
+    setup() {
+      const tick = useThemeReactive()
 
-    allTokens.forEach(t => {
-      const parts = t.name.replace('--color-primitive-', '').split('-')
-      const family = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
-      if (!groups[family]) {
-        groups[family] = []
-        order.push(family)
+      return () => {
+        void tick.value
+
+        const allTokens = getTokens('--color-primitive')
+        const groups = {}
+        const order = []
+
+        allTokens.forEach(t => {
+          const parts = t.name.replace('--color-primitive-', '').split('-')
+          const family = parts[0].charAt(0).toUpperCase() + parts[0].slice(1)
+          if (!groups[family]) {
+            groups[family] = []
+            order.push(family)
+          }
+          groups[family].push(t)
+        })
+
+        return h('div', { style: S.page }, [
+          h('h1', { style: S.title }, 'Colour Primitives'),
+          h('p', { style: S.subtitle }, 'Raw values named by hue and scale. Do not use directly in components — use semantic tokens instead.'),
+          ...order.map(family => TokenCard(family, groups[family])),
+        ])
       }
-      groups[family].push(t)
-    })
-
-    return h('div', { style: S.page }, [
-      h('h1', { style: S.title }, 'Colour Primitives'),
-      h('p', { style: S.subtitle }, 'Raw values named by hue and scale. Do not use directly in components — use semantic tokens instead.'),
-      ...order.map(family => TokenCard(family, groups[family])),
-    ])
-  },
+    },
+  }),
 }

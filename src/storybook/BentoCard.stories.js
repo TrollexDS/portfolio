@@ -30,6 +30,7 @@ const labelStyle = {
   marginTop: '8px',
   display: 'block',
   textAlign: 'center',
+  color: 'var(--color-text-primary, #2c2c2c)',
 }
 
 const placeholderStyle = (text, light) => ({
@@ -41,7 +42,7 @@ const placeholderStyle = (text, light) => ({
   fontFamily: "'Syne', sans-serif",
   fontSize: '14px',
   opacity: 0.4,
-  ...(light ? { color: 'rgba(255,255,255,0.4)' } : {}),
+  color: light ? 'rgba(255,255,255,0.4)' : 'var(--color-text-primary, #2c2c2c)',
 })
 
 export const Default = {

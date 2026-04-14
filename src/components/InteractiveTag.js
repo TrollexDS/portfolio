@@ -17,10 +17,13 @@ export default defineComponent({
   name: 'InteractiveTag',
   props: {
     hint: { type: String, default: '' },
+    centered: { type: Boolean, default: false },
   },
   setup(props) {
     return () =>
-      h('p', { class: 'cs-hint' }, [
+      h('p', {
+        class: ['cs-hint', props.centered ? 'cs-hint--centered' : ''].filter(Boolean).join(' '),
+      }, [
         h('span', { class: 'cc-interactive-tag' }, 'Interactive'),
         props.hint,
       ])

@@ -73,6 +73,7 @@
 
   /* Orange */
   --color-primitive-orange-500:     #fc4c02;   /* Strava brand colour          */
+  --color-primitive-orange-claude:  #D97757;   /* Claude brand colour          */
   --color-primitive-orange-alexa:   #FF5400;   /* Alexa review star colour     */
   --color-primitive-orange-duo-t:   #FF9404;   /* Duolingo streak top          */
   --color-primitive-orange-duo-b:   #FF7545;   /* Duolingo streak bottom       */
@@ -226,9 +227,6 @@
 
   /* Background */
   --color-bg-body:            var(--color-primitive-warm-100);
-  --color-bg-gradient-start:  var(--color-primitive-green-100);
-  --color-bg-gradient-mid:    var(--color-primitive-purple-100);
-  --color-bg-gradient-end:    var(--color-primitive-pink-100);
 
   /* Border */
   --color-border-card:             var(--color-primitive-alpha-black-8);
@@ -237,26 +235,23 @@
   --color-surface-card:            var(--color-primitive-neutral-50);
   --color-surface-card-white:      var(--color-primitive-neutral-0);
   --color-surface-card-dark:       var(--color-primitive-neutral-1000);
+  --color-surface-claude:          var(--color-primitive-orange-claude);  /* Claude brand card bg */
   --color-surface-nav:             var(--color-primitive-neutral-50);
   --color-surface-nav-blur:        var(--color-primitive-alpha-neutral50-50);
   --color-surface-action-icon:     var(--color-primitive-neutral-50);
   --filter-action-icon:            none;
   --filter-checkmark:              brightness(0) invert(1);
-  --color-surface-bulb-on:         var(--color-primitive-warm-50);
-  --color-surface-badge:           var(--color-primitive-alpha-white-90);
   --color-surface-skeleton-base:   var(--color-primitive-neutral-100);
   --color-surface-skeleton-shine:  var(--color-primitive-neutral-150);
-  --color-surface-ceiling-mount:   var(--color-primitive-neutral-200);
 
   /* Text */
   --color-text-primary:       var(--color-primitive-neutral-750);
-  --color-text-body:          var(--color-primitive-neutral-950);
+  --color-text-body:          var(--color-text-primary);           /* consolidated — was neutral-950 */
   --color-text-subtle:        var(--color-primitive-neutral-300);
   --color-text-on-dark:       var(--color-primitive-alpha-white-80);
   --color-text-on-primary:    var(--color-primitive-neutral-0);  /* white text on teal/gradient bg */
   --color-text-muted:         var(--color-primitive-alpha-neutral900-30);
   --color-text-muted-dark:    var(--color-primitive-alpha-white-40);
-  --color-text-muted-purple:  var(--color-primitive-alpha-white-50);
 
   /* Card surface treatment — grain + inset glow */
   --color-card-inset-top:          var(--color-primitive-alpha-white-90);   /* bright lip at top edge */
@@ -276,13 +271,6 @@
 
   /* Overlay */
   --color-backdrop:           var(--color-primitive-alpha-black-30);
-  --color-overlay-map:        var(--color-primitive-alpha-black-40);
-  --color-overlay-light:      var(--color-primitive-alpha-white-15);
-  --color-overlay-purple:     var(--color-primitive-alpha-purple-30);
-
-  /* Brand — Duolingo */
-  --color-brand-duolingo-top:    var(--color-primitive-blue-400);
-  --color-brand-duolingo-bottom: var(--color-primitive-blue-200);
 
   /* Brand — Strava */
   --color-brand-strava:          var(--color-primitive-orange-500);
@@ -335,6 +323,9 @@
      Scoped to the Figma-style editor widgets
      (cv-* colour variables, cc-* collection card)
   ─────────────────────────────────────────── */
+
+  /* Figma layers panel background */
+  --color-figma-bg:                var(--color-primitive-neutral-750);
 
   /* Widget — Dark (Figma variables panel) */
   --color-widget-bg:               var(--color-primitive-neutral-880);
@@ -497,9 +488,6 @@
 
   /* Background */
   --color-bg-body:                 var(--color-primitive-indigo-950);
-  --color-bg-gradient-start:       var(--color-primitive-indigo-950);
-  --color-bg-gradient-mid:         var(--color-primitive-indigo-930);
-  --color-bg-gradient-end:         var(--color-primitive-indigo-930);
 
   /* Surface */
   --color-surface-card:            var(--color-primitive-indigo-800);
@@ -510,19 +498,15 @@
   --color-surface-action-icon:     var(--color-primitive-indigo-750);
   --filter-action-icon:            brightness(0) invert(1);
   --filter-checkmark:              none;
-  --color-surface-bulb-on:         var(--color-primitive-indigo-800);
-  --color-surface-badge:           var(--color-primitive-alpha-indigo-badge-92);
   --color-surface-skeleton-base:   var(--color-primitive-indigo-800);
   --color-surface-skeleton-shine:  var(--color-primitive-indigo-700);
-  --color-surface-ceiling-mount:   var(--color-primitive-indigo-600);
 
   /* Text */
   --color-text-primary:            var(--color-primitive-indigo-100);
-  --color-text-body:               var(--color-primitive-indigo-200);
+  --color-text-body:               var(--color-text-primary);        /* consolidated — was indigo-200 */
   --color-text-subtle:             var(--color-primitive-indigo-400);
   --color-text-muted:              var(--color-primitive-alpha-indigo-text-30);
   --color-text-muted-dark:         var(--color-primitive-alpha-white-40);
-  --color-text-muted-purple:       var(--color-primitive-alpha-white-50);
 
   /* Shadow */
   --color-shadow-card-rest:        var(--color-primitive-alpha-black-20);
@@ -535,13 +519,6 @@
 
   /* Overlay */
   --color-backdrop:                var(--color-primitive-alpha-black-50);
-  --color-overlay-map:             var(--color-primitive-alpha-black-50);
-  --color-overlay-light:           var(--color-primitive-alpha-white-6);
-  --color-overlay-purple:          var(--color-primitive-alpha-purple-20);
-
-  /* Brand — Duolingo (dark mode variant) */
-  --color-brand-duolingo-top:      var(--color-primitive-blue-duo-dark-top);
-  --color-brand-duolingo-bottom:   var(--color-primitive-blue-duo-dark-bottom);
 
   /* Widget — Miro board dark variant */
   --color-miro-bg:                 var(--color-primitive-neutral-880);

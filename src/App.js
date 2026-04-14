@@ -14,6 +14,8 @@ import ScheduleCard   from './components/cards/ScheduleCard.js'
 import DuolingoCard   from './components/cards/DuolingoCard.js'
 import StravaCard     from './components/cards/StravaCard.js'
 import ClawInvestCard from './components/cards/ClawInvestCard.js'
+import AgenticDSCard  from './components/cards/AgenticDSCard.js'
+import LayDownPluginCard from './components/cards/LayDownPluginCard.js'
 import QuoteCard      from './components/cards/QuoteCard.js'
 import UXQuoteCard   from './components/cards/UXQuoteCard.js'
 import DSQuoteCard   from './components/cards/DSQuoteCard.js'
@@ -43,6 +45,8 @@ const CARD_ENTRIES = [
   { key: 'ssds',      comp: SimplestreamDSCard },
   { key: 'clawinvest', comp: ClawInvestCard },
   { key: 'strava',     comp: StravaCard },
+  { key: 'agenticds', comp: AgenticDSCard },
+  { key: 'laydown',   comp: LayDownPluginCard },
 ]
 
 

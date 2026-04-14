@@ -10,17 +10,23 @@ const preview = {
       },
     },
     backgrounds: {
-      default: 'Light',
-      values: [
-        { name: 'Light', value: '#f5f5f5' },
-        { name: 'Dark', value: '#1a1a2e' },
-      ],
+      default: 'light',
+      options: {
+        light: { name: 'Light', value: '#f5f5f5' },
+        dark:  { name: 'Dark',  value: '#1a1a2e' },
+      },
     },
   },
   decorators: [
     (story, context) => {
-      const bg = context.globals?.backgrounds?.value
-      const isDark = bg === '#1a1a2e'
+      /* Storybook 10 stores the selected background key in
+         globals.backgrounds as a string (e.g. "dark") or
+         an object { value: "dark" }.                        */
+      const raw = context.globals?.backgrounds
+      const key = typeof raw === 'string' ? raw : raw?.value
+
+      const isDark = key === 'dark'
+
       if (isDark) {
         document.documentElement.setAttribute('data-theme', 'dark')
       } else {

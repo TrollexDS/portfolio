@@ -263,12 +263,18 @@ export default defineComponent({
             if (heroReady.value) {
               doHandoff()
             } else {
+              let handedOff = false
               const poll = setInterval(() => {
                 if (heroReady.value) {
                   clearInterval(poll)
-                  doHandoff()
+                  if (!handedOff) { handedOff = true; doHandoff() }
                 }
               }, 50)
+              // Safety: unlock scroll even if hero media never loads
+              setTimeout(() => {
+                clearInterval(poll)
+                if (!handedOff) { handedOff = true; doHandoff() }
+              }, 500)
             }
           }, ANIM_MS + 150)
         })
@@ -334,22 +340,35 @@ export default defineComponent({
 
       // ── Flying media (position:fixed, above everything) ──
       flyActive.value
-        ? (props.imageSrc
-            ? h('img', {
+        ? (slots.flyContent
+            // If a flyContent slot is provided, wrap image + slot content in a div
+            ? h('div', {
                 class: 'cs-video-fly',
-                src:   props.imageSrc,
-                alt:   '',
-                style: { ...flyStyle.value, objectFit: 'cover' },
-              })
-            : h('video', {
-                class: 'cs-video-fly',
-                src:      props.videoSrc,
-                autoplay: true,
-                loop:     true,
-                muted:    true,
-                playsinline: true,
-                style: flyStyle.value,
-              })
+                style: { ...flyStyle.value, overflow: 'hidden' },
+              }, [
+                h('img', {
+                  src: props.imageSrc,
+                  alt: '',
+                  style: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' },
+                }),
+                slots.flyContent(),
+              ])
+            : props.imageSrc
+              ? h('img', {
+                  class: 'cs-video-fly',
+                  src:   props.imageSrc,
+                  alt:   '',
+                  style: { ...flyStyle.value, objectFit: 'cover' },
+                })
+              : h('video', {
+                  class: 'cs-video-fly',
+                  src:      props.videoSrc,
+                  autoplay: true,
+                  loop:     true,
+                  muted:    true,
+                  playsinline: true,
+                  style: flyStyle.value,
+                })
           )
         : null,
 
