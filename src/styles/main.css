@@ -2734,6 +2734,8 @@ strong, b {
   height: 100%;
   object-fit: cover;
   display: block;
+  transform: scale(1.05);
+  transform-origin: center;
 }
 
 .plugin-card .action-icon {
