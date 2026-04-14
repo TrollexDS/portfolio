@@ -2775,20 +2775,38 @@ strong, b {
   /* Fade out edges for a polished look */
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
   mask-image:         linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  /* Safari fix: isolate the mask into its own compositing layer so it
+     doesn't get dropped when the animated child triggers a layer change */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .pc1-track {
   display: flex;
-  width: max-content;
+  /* Safari fix: promote to GPU layer before animation starts so the
+     translateX range is calculated correctly from the first frame */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
   animation: pc1-scroll 40s linear infinite;
+  -webkit-animation: pc1-scroll 40s linear infinite;
 }
 
 .pc1-track img {
+  /* Explicit pixel dimensions derived from natural size (1624×40) at
+     display height 32px: width = 1624 × (32/40) = 1299px.
+     Safari fix: without explicit width, the browser doesn't know the
+     track's total width before images load, so translateX(-50%) is
+     calculated from ~0px and the marquee barely moves on cold load. */
   height: 32px;
-  width: auto;
+  width: 1299px;
   flex-shrink: 0;
-  /* Add breathing room between the two copies */
   padding-right: 64px;
+}
+
+@-webkit-keyframes pc1-scroll {
+  from { -webkit-transform: translateX(0); }
+  to   { -webkit-transform: translateX(-50%); }
 }
 
 @keyframes pc1-scroll {
