@@ -301,9 +301,9 @@ export default defineComponent({
             h('h1', { class: 'cs-title' }, 'I didn\u2019t use AI to build a design system. I built a design system that AI can use.'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'Most AI-assisted design system work follows the same pattern: a designer prompts an AI to scaffold components, generate tokens, or write documentation. The AI builds things for you. But the output is static \u2014 once generated, the system can\u2019t maintain itself.'),
+              h('p', { class: 'cs-body-text' }, 'Most AI-assisted design system work follows the same pattern: a designer prompts an AI to scaffold components, generate tokens, or write documentation. The AI builds things for you. But the output is static - once generated, the system can\u2019t maintain itself.'),
 
-              h('p', { class: 'cs-body-text' }, 'This experiment asks a different question: what if the design system was structured so an AI agent could operate within it autonomously \u2014 auditing tokens, catching drift between Figma and code, consolidating redundancy, and keeping both sides in sync?'),
+              h('p', { class: 'cs-body-text' }, 'This experiment asks a different question: what if the design system was structured so an AI agent could operate within it autonomously - auditing tokens, catching drift between Figma and code, consolidating redundancy, and keeping both sides in sync?'),
             ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
@@ -319,9 +319,9 @@ export default defineComponent({
             full(
               h('h2', { class: 'cs-section-title' }, 'The hypothesis'),
 
-              h('p', { class: 'cs-body-text' }, 'Vallaure\u2019s framework for agentic design systems identifies six structural requirements: a variables architecture, property alignment, complete state design, slots, auto-layout with semantic naming, and Code Connect. The core insight is that a design system is no longer documentation for developers \u2014 it\u2019s instructions for a machine.'),
+              h('p', { class: 'cs-body-text' }, 'Vallaure\u2019s framework for agentic design systems identifies six structural requirements: a variables architecture, property alignment, complete state design, slots, auto-layout with semantic naming, and Code Connect. The core insight is that a design system is no longer documentation for developers - it\u2019s instructions for a machine.'),
 
-              h('p', { class: 'cs-body-text' }, 'I wanted to test this with a real system. Not a demo with two buttons and a colour palette, but the actual design system powering this portfolio \u2014 with 468 tokens, 23 components, dark mode theming, and two canonical Figma files that needed to stay in sync with the codebase.'),
+              h('p', { class: 'cs-body-text' }, 'I wanted to test this with a real system. Not a demo with two buttons and a colour palette, but the actual design system powering this portfolio - with 468 tokens, 23 components, dark mode theming, and two canonical Figma files that needed to stay in sync with the codebase.'),
 
               h('p', { class: 'cs-body-text' }, 'The hypothesis: if the token architecture is semantically layered, the component descriptions are machine-readable, and the Figma structure mirrors the code structure, then an agent should be able to perform design system maintenance tasks that currently require a human designer.'),
             ),
@@ -333,16 +333,16 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Token architecture'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'The foundation is a three-layer token system. Primitive tokens hold raw values \u2014 hex colours, pixel sizes, font stacks. Semantic tokens alias primitives by intent: --color-text-primary, --color-surface-card. Component tokens scope to specific UI patterns like the Figma-style widget chrome or Storybook panel.'),
+              h('p', { class: 'cs-body-text' }, 'The foundation is a three-layer token system. Primitive tokens hold raw values - hex colours, pixel sizes, font stacks. Semantic tokens alias primitives by intent: --color-text-primary, --color-surface-card. Component tokens scope to specific UI patterns like the Figma-style widget chrome or Storybook panel.'),
 
-              h('p', { class: 'cs-body-text' }, 'This layering is what makes the system machine-readable. When an agent encounters --color-text-primary, it doesn\u2019t need to understand colour theory \u2014 it just needs to follow the chain: semantic \u2192 primitive \u2192 raw value. Dark mode works the same way: the semantic layer swaps which primitives it points to, and every component updates automatically.'),
+              h('p', { class: 'cs-body-text' }, 'This layering is what makes the system machine-readable. When an agent encounters --color-text-primary, it doesn\u2019t need to understand colour theory - it just needs to follow the chain: semantic \u2192 primitive \u2192 raw value. Dark mode works the same way: the semantic layer swaps which primitives it points to, and every component updates automatically.'),
             ),
 
             h(TokenLayerDemo),
             h(InteractiveTag, { hint: 'Explore the three token layers', centered: true }),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'Every token in code has a corresponding entry in the Figma Design Tokens file. The primitives are documented as raw swatches. The semantic aliases show which primitive they reference with an arrow notation (\u2192 Neutral/750). This means an agent reading the Figma file via MCP gets the same information as an agent reading tokens.css \u2014 the mapping is explicit, not implicit.'),
+              h('p', { class: 'cs-body-text' }, 'Every token in code has a corresponding entry in the Figma Design Tokens file. The primitives are documented as raw swatches. The semantic aliases show which primitive they reference with an arrow notation (\u2192 Neutral/750). This means an agent reading the Figma file via MCP gets the same information as an agent reading tokens.css - the mapping is explicit, not implicit.'),
             ),
           ]),
 
@@ -356,7 +356,7 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Dark mode as proof'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'Dark mode isn\u2019t just a feature \u2014 it\u2019s the simplest proof that the token architecture works. If every component references semantic tokens, and the semantic layer swaps its primitive bindings under [data-theme="dark"], then dark mode is automatic. No component needs to know it\u2019s in dark mode.'),
+              h('p', { class: 'cs-body-text' }, 'Dark mode isn\u2019t just a feature - it\u2019s the simplest proof that the token architecture works. If every component references semantic tokens, and the semantic layer swaps its primitive bindings under [data-theme="dark"], then dark mode is automatic. No component needs to know it\u2019s in dark mode.'),
 
               h('p', { class: 'cs-body-text' }, 'This was validated in Storybook 10, where a background toggle sets the data-theme attribute and every component responds through CSS custom properties. The agent was able to identify components that weren\u2019t responding (BentoCard labels and Icon names had hardcoded text colours) and fix them by adding var(--color-text-primary) references.'),
             ),
@@ -373,7 +373,7 @@ export default defineComponent({
             full(
               h('p', { class: 'cs-body-text' }, 'The Figma MCP reads component descriptions and passes them to the agent as context. This is the bridge between design and code. Each of the 23 components has a description that documents: what it renders, which tokens it uses, what props it accepts, what states it has, and how it behaves on interaction.'),
 
-              h('p', { class: 'cs-body-text' }, 'These descriptions aren\u2019t written for humans browsing Figma \u2014 they\u2019re written for an agent that needs to decide which component to use, what tokens to reference, and how the component will behave. It\u2019s the difference between \u201cA card component\u201d and \u201cBase card wrapper. Uses --color-surface-card background, --color-border-card border, --color-shadow-card-* elevation. Click spawns a ripple at --color-card-ripple. Accepts dark boolean prop for --color-surface-card-dark variant.\u201d'),
+              h('p', { class: 'cs-body-text' }, 'These descriptions aren\u2019t written for humans browsing Figma - they\u2019re written for an agent that needs to decide which component to use, what tokens to reference, and how the component will behave. It\u2019s the difference between \u201cA card component\u201d and \u201cBase card wrapper. Uses --color-surface-card background, --color-border-card border, --color-shadow-card-* elevation. Click spawns a ripple at --color-card-ripple. Accepts dark boolean prop for --color-surface-card-dark variant.\u201d'),
             ),
           ]),
 
@@ -386,14 +386,14 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Agent workflows'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'With the system structured, I tested four autonomous agent workflows \u2014 tasks a human designer would normally do manually. Each one succeeded because the agent could read the token architecture, cross-reference Figma and code, and make decisions based on semantic naming.'),
+              h('p', { class: 'cs-body-text' }, 'With the system structured, I tested four autonomous agent workflows - tasks a human designer would normally do manually. Each one succeeded because the agent could read the token architecture, cross-reference Figma and code, and make decisions based on semantic naming.'),
             ),
 
             h(AgentWorkflowDemo),
             h(InteractiveTag, { hint: 'Click each workflow to see the full loop', centered: true }),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'The critical insight from these workflows: the agent wasn\u2019t following a script. For the drift audit, it decided to grep every token against every component, identified which ones were unused, cross-referenced the Figma file, and produced a Figma cleanup checklist \u2014 all from a single prompt asking it to \u201ccheck if code and Figma are in sync.\u201d The system\u2019s structure gave the agent enough context to make judgment calls.'),
+              h('p', { class: 'cs-body-text' }, 'The critical insight from these workflows: the agent wasn\u2019t following a script. For the drift audit, it decided to grep every token against every component, identified which ones were unused, cross-referenced the Figma file, and produced a Figma cleanup checklist - all from a single prompt asking it to \u201ccheck if code and Figma are in sync.\u201d The system\u2019s structure gave the agent enough context to make judgment calls.'),
             ),
           ]),
 
@@ -406,9 +406,9 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Figma as source of truth'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'The system uses two canonical Figma files. The Design Tokens file holds every variable, text style, and colour swatch \u2014 organised into Primitive and Semantic sections that mirror the CSS custom property structure. The Design System file holds all 23 components organised in Figma sections, each with descriptions the MCP can read.'),
+              h('p', { class: 'cs-body-text' }, 'The system uses two canonical Figma files. The Design Tokens file holds every variable, text style, and colour swatch - organised into Primitive and Semantic sections that mirror the CSS custom property structure. The Design System file holds all 23 components organised in Figma sections, each with descriptions the MCP can read.'),
 
-              h('p', { class: 'cs-body-text' }, 'This separation matters for agents. When the agent needs to audit token coverage, it reads the Tokens file. When it needs to understand a component\u2019s API, it reads the Design System file. The agent knows which file to query because the architecture is explicit \u2014 not a single monolithic file where everything is mixed together.'),
+              h('p', { class: 'cs-body-text' }, 'This separation matters for agents. When the agent needs to audit token coverage, it reads the Tokens file. When it needs to understand a component\u2019s API, it reads the Design System file. The agent knows which file to query because the architecture is explicit - not a single monolithic file where everything is mixed together.'),
             ),
           ]),
 
@@ -448,12 +448,12 @@ export default defineComponent({
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              'The limitation I hit was Code Connect \u2014 Figma\u2019s official mapping between components and code files requires an Organisation plan. But the ', h('strong', null, 'component descriptions'), ' effectively serve the same purpose for an agent: they document the file path, props, tokens, and behaviour. The system works without the enterprise tooling.',
+              'The limitation I hit was Code Connect - Figma\u2019s official mapping between components and code files requires an Organisation plan. But the ', h('strong', null, 'component descriptions'), ' effectively serve the same purpose for an agent: they document the file path, props, tokens, and behaviour. The system works without the enterprise tooling.',
             ]),
 
             full(
               h('p', { class: 'cs-body-text' }, [
-                'The risk Vallaure warns about is real: fast generic systems produce forgettable output. An agent assembling from a poorly crafted design system will produce bland interfaces. But an agent operating within a system that has visual intentionality \u2014 deliberate colour choices, considered typography scales, opinionated spacing \u2014 produces output that looks designed. The craft isn\u2019t in the assembly. It\u2019s in the ', h('strong', null, 'vocabulary the agent assembles from'), '.',
+                'The risk Vallaure warns about is real: fast generic systems produce forgettable output. An agent assembling from a poorly crafted design system will produce bland interfaces. But an agent operating within a system that has visual intentionality - deliberate colour choices, considered typography scales, opinionated spacing - produces output that looks designed. The craft isn\u2019t in the assembly. It\u2019s in the ', h('strong', null, 'vocabulary the agent assembles from'), '.',
               ]),
 
               h('p', { class: 'cs-closing' }, 'The design system is no longer just documentation for developers. It\u2019s instructions for a machine. And the designer\u2019s job is to make those instructions worth following.'),
