@@ -227,11 +227,12 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'agenticds',
         cardClass: 'agentic-ds-card',
         imageSrc: HERO_SRC,
         imageClass: 'ads-hero-img',
         heroWrapClass: 'ads-hero-wrap',
-        tooltip: 'Building a design system\nthat AI can operate within',
+        tooltip: 'Building a design system\nthat AI can operate within 🤖',
         heroSize: 448,
       }, {
         // ── Collapsed card face: canvas bg + logos + pixel title ──

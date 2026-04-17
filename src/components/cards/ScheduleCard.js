@@ -667,6 +667,7 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'schedule',
         cardClass: 'schedule-card',
         videoSrc: VIDEO_SRC,
         videoClass: 'schedule-video',

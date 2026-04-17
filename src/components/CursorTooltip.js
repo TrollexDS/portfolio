@@ -1,7 +1,7 @@
 import { defineComponent, h, ref, onMounted, onUnmounted } from 'vue'
 
 const CHAR_DELAY_MS = 18   // ms between each typed character
-const LERP_FACTOR   = 0.18 // lower = more lag (0.08–0.15 feels natural)
+const LERP_FACTOR   = 0.07 // lower = more lag (0.08–0.15 feels natural)
 
 export default defineComponent({
   name: 'CursorTooltip',

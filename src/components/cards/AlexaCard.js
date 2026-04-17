@@ -84,6 +84,7 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'alexa',
         cardClass: 'alexa-card',
         videoSrc: VIDEO_SRC,
         videoClass: 'alexa-video',

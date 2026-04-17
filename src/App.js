@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, nextTick } from 'vue'
+import { defineComponent, h, ref, nextTick, onMounted, onUnmounted } from 'vue'
 import NavBar         from './components/NavBar.js'
 import BentoCard      from './components/BentoCard.js'
 import AboutCard      from './components/cards/AboutCard.js'
@@ -57,6 +57,23 @@ export default defineComponent({
     // Keep isMobile in sync with viewport width
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
     mql.addEventListener('change', (e) => { isMobile.value = e.matches })
+
+    // ── Deep-link: open a case study card from URL hash ──
+    function openCardFromHash() {
+      const hash = window.location.hash.slice(1)
+      if (!hash) return
+      // Small delay to ensure cards are mounted and listening
+      setTimeout(() => {
+        window.dispatchEvent(new CustomEvent('cs:open', { detail: hash }))
+      }, 300)
+    }
+    onMounted(() => {
+      openCardFromHash()
+      window.addEventListener('hashchange', openCardFromHash)
+    })
+    onUnmounted(() => {
+      window.removeEventListener('hashchange', openCardFromHash)
+    })
 
     // Direct DOM refs for each grid-slot wrapper (keyed by card key).
     // Stored outside Vue reactivity for 60 fps FLIP perf.

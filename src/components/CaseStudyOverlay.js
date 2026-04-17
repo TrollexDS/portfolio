@@ -25,6 +25,7 @@ export default defineComponent({
 
   props: {
     cardClass:  { type: String, default: '' },
+    cardKey:    { type: String, default: '' },
     videoSrc:   { type: String, default: '' },
     videoClass: { type: String, default: '' },
     imageSrc:      { type: String, default: '' },
@@ -156,6 +157,18 @@ export default defineComponent({
     function onKeydown(e) { if (e.key === 'Escape') close() }
     onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 
+    // ── Deep-link hash support ──
+    // Listen for a custom event dispatched by App.js when the hash matches this card
+    function onHashOpen(e) {
+      if (e.detail === props.cardKey) open()
+    }
+    onMounted(() => {
+      window.addEventListener('cs:open', onHashOpen)
+    })
+    onUnmounted(() => {
+      window.removeEventListener('cs:open', onHashOpen)
+    })
+
     // ── Ripple on expanded card click (skip interactive widgets) ──
     function onExpandedClick(e) {
       if (e.target.closest('.cc-outer') || e.target.closest('.cv-outer') || e.target.closest('.tldr-bar')) return
@@ -218,6 +231,7 @@ export default defineComponent({
       closing.value   = false
       wasOpen.value   = true
       savedScrollY = window.scrollY
+      if (props.cardKey) history.replaceState(null, '', '#' + props.cardKey)
       document.body.style.position = 'fixed'
       document.body.style.top = `-${savedScrollY}px`
       document.body.style.width = '100%'
@@ -332,6 +346,9 @@ export default defineComponent({
         document.body.style.overflow = ''
         window.scrollTo(0, savedScrollY)
         document.removeEventListener('keydown', onKeydown)
+        if (props.cardKey && window.location.hash === '#' + props.cardKey) {
+          history.replaceState(null, '', window.location.pathname + window.location.search)
+        }
       }, ANIM_MS + 20)
     }
 

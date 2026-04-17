@@ -9,15 +9,30 @@ const ANIM_MS = 700   // must match CSS transition duration
 
 const GRADIENT = 'var(--gradient-brand)'
 
-function richText(segments) {
+// Static preview images — keyed by href
+const LINK_PREVIEWS = {
+  'https://www.bauermedia.co.uk':                                '/src/assets/previews/bauer.png',
+  'https://www.gold.ac.uk':                                     '/src/assets/previews/goldsmiths.png',
+  'https://www.youtube.com/channel/UC-b3c7kxa5vU-bnmaROgvog':  '/src/assets/previews/the-futur.png',
+  'https://brainstation.io':                                    '/src/assets/previews/brainstation.png',
+}
+
+function richText(segments, onPreview) {
   return segments.map(seg => {
     if (seg.href) {
+      const previewSrc = LINK_PREVIEWS[seg.href]
+      const handlers = (onPreview && previewSrc) ? {
+        onMouseenter: e => onPreview(e, previewSrc, true),
+        onMousemove:  e => onPreview(e, previewSrc, true),
+        onMouseleave: e => onPreview(e, previewSrc, false),
+      } : {}
       return h('a', {
         href:   seg.href,
         target: '_blank',
         rel:    'noopener noreferrer',
         class:  'bio-link',
         style:  seg.color ? `color:${seg.color};font-weight:${seg.bold ? 700 : 400}` : `font-weight:${seg.bold ? 700 : 400}`,
+        ...handlers,
       }, seg.text)
     }
     if (seg.gradient) {
@@ -78,6 +93,62 @@ export default defineComponent({
     const flyActive       = ref(false)   // is the flying avatar visible?
     const flyStyle        = ref({})      // its inline style
     const { spawnRipple: spawnExpandedRipple, renderRipples } = useRipple()
+
+    // ── Link preview (iOS-style peek) ──
+    const preview = ref({ visible: false, x: 0, y: 0, src: '' })
+    let previewTimer = null
+    const PREVIEW_OFFSET = 24  // same offset as cursor tooltip
+    const PREVIEW_W = 320      // must match CSS width
+    const PREVIEW_H = 200      // approx height (320 × 10/16)
+    const PREVIEW_LERP = 0.07  // lazy smooth — lower = more lag
+
+    // Raw target coords (updated instantly on mousemove)
+    let previewMouseX = 0
+    let previewMouseY = 0
+    // Smoothed display coords (lerped toward target)
+    let previewSmoothX = 0
+    let previewSmoothY = 0
+    let previewRafId = null
+
+    function lerpVal(a, b, t) { return a + (b - a) * t }
+
+    function previewAnimLoop() {
+      previewSmoothX = lerpVal(previewSmoothX, previewMouseX, PREVIEW_LERP)
+      previewSmoothY = lerpVal(previewSmoothY, previewMouseY, PREVIEW_LERP)
+      preview.value = {
+        ...preview.value,
+        x: previewSmoothX,
+        y: previewSmoothY,
+      }
+      previewRafId = requestAnimationFrame(previewAnimLoop)
+    }
+
+    function onPreview(e, src, show) {
+      clearTimeout(previewTimer)
+      if (show) {
+        const rawX = e.clientX + PREVIEW_OFFSET
+        const rawY = e.clientY + PREVIEW_OFFSET
+        const clampedX = Math.min(rawX, window.innerWidth  - PREVIEW_W - 12)
+        const clampedY = Math.min(rawY, window.innerHeight - PREVIEW_H - 12)
+        previewMouseX = clampedX
+        previewMouseY = clampedY
+
+        if (!preview.value.visible) {
+          // Seed smooth position so there's no jump from (0,0)
+          previewSmoothX = clampedX
+          previewSmoothY = clampedY
+          preview.value = { visible: true, x: clampedX, y: clampedY, src }
+          // Start lerp loop
+          cancelAnimationFrame(previewRafId)
+          previewRafId = requestAnimationFrame(previewAnimLoop)
+        }
+      } else {
+        previewTimer = setTimeout(() => {
+          preview.value = { ...preview.value, visible: false }
+          cancelAnimationFrame(previewRafId)
+        }, 80)
+      }
+    }
 
     let startRect   = null
     let avatarStart = null      // collapsed avatar rect
@@ -305,13 +376,28 @@ export default defineComponent({
               }),
 
               h('div', { class: 'about-expanded-bio' },
-                BIO.map(para => h('p', richText(para)))
+                BIO.map(para => h('p', richText(para, onPreview)))
               ),
             ]),
           ]),
 
           // Ripples
           ...renderRipples(),
+
+          // ── Link preview popup (iOS-style peek) ──
+          h('div', {
+            class: ['bio-link-preview', preview.value.visible ? 'bio-link-preview--visible' : ''].join(' '),
+            style: {
+              left: preview.value.x + 'px',
+              top:  preview.value.y + 'px',
+            },
+          }, [
+            preview.value.src ? h('img', {
+              class: 'bio-link-preview-img',
+              src:   preview.value.src,
+              alt:   'Page preview',
+            }) : null,
+          ]),
         ]),
 
       ]) : null,

@@ -277,6 +277,7 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'plugin',
         cardClass: 'plugin-card',
         videoSrc: VIDEO_SRC,
         videoClass: 'plugin-video',

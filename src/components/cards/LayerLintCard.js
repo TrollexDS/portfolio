@@ -478,6 +478,7 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'layerlint',
         cardClass: 'll-card',
         imageSrc: HERO_SRC,
         imageClass: 'll-hero-img',
@@ -648,7 +649,13 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'The other side of the agentic equation'),
             full(
               h('p', { class: 'cs-body-text' }, [
-                'In the Agentic Design System case study, I structured a design system so AI agents could operate within it - auditing tokens, catching drift, keeping Figma and code in sync. That work assumed the Figma files were already well-structured. Layer Lint tackles the prerequisite: making sure the raw design files are readable by machines in the first place.',
+                'In the ',
+                h('a', {
+                  href: '#agenticds',
+                  class: 'cs-link',
+                  target: '_blank',
+                }, 'Agentic Design System'),
+                ' case study, I structured a design system so AI agents could operate within it - auditing tokens, catching drift, keeping Figma and code in sync. That work assumed the Figma files were already well-structured. Layer Lint tackles the prerequisite: making sure the raw design files are readable by machines in the first place.',
               ]),
 
               h('p', { class: 'cs-body-text' },
@@ -670,7 +677,7 @@ export default defineComponent({
               h('p', { class: 'cs-body-text' }, [
                 'Layer Lint came out of preparing our production Figma files at work for an agentic design system. As I started cleaning up, I discovered just how many dead layers and default names had accumulated. Hidden groups, unnamed rectangles, orphaned vectors everywhere. Renaming them one by one was ',
                 h('strong', null, 'time-consuming and mentally draining'),
-                '. I needed a way to semi-automate the process, so I built one. What started as solving my own frustration became something broader: as AI agents become a bigger part of the design-to-code pipeline, the quality of what they build depends on the quality of what they read. Clean layers aren\u2019t housekeeping \u2014 they\u2019re infrastructure.',
+                '. I needed a way to semi-automate the process, so I built one. What started as solving my own frustration became something broader: as AI agents become a bigger part of the design-to-code pipeline, the quality of what they build depends on the quality of what they read. Clean layers aren\u2019t housekeeping - they\u2019re infrastructure.',
               ]),
             ),
           ]),

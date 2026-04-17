@@ -76,6 +76,7 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'ds',
         cardClass: 'ds-card',
         videoSrc: VIDEO_SRC,
         videoClass: 'ds-video',

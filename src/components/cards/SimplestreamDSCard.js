@@ -26,6 +26,7 @@ export default defineComponent({
 
     return () =>
       h(CaseStudyOverlay, {
+        cardKey: 'ssds',
         cardClass: 'ss-ds-card',
         imageSrc: IMAGE_SRC,
         imageClass: 'ss-ds-image',
