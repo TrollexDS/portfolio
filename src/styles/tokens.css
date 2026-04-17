@@ -523,4 +523,7 @@
   /* Widget — Miro board dark variant */
   --color-miro-bg:                 var(--color-primitive-neutral-880);
   --color-miro-grid:               var(--color-primitive-alpha-white-6);
+
+  /* Brand — About card links (dark overrides) */
+  --color-brand-bauer:             #C28FFF;
 }
