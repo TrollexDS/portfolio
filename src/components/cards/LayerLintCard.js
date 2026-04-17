@@ -651,9 +651,10 @@ export default defineComponent({
               h('p', { class: 'cs-body-text' }, [
                 'In the ',
                 h('a', {
-                  href: '#agenticds',
                   class: 'cs-link',
-                  target: '_blank',
+                  role: 'link',
+                  tabindex: '0',
+                  onClick: () => { window.open('#agenticds', '_blank') },
                 }, 'Agentic Design System'),
                 ' case study, I structured a design system so AI agents could operate within it - auditing tokens, catching drift, keeping Figma and code in sync. That work assumed the Figma files were already well-structured. Layer Lint tackles the prerequisite: making sure the raw design files are readable by machines in the first place.',
               ]),

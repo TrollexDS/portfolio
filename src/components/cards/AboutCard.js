@@ -94,6 +94,12 @@ export default defineComponent({
     const flyStyle        = ref({})      // its inline style
     const { spawnRipple: spawnExpandedRipple, renderRipples } = useRipple()
 
+    // ── Touch / mobile detection (skip link previews) ──
+    const isTouch = 'ontouchstart' in window
+      || navigator.maxTouchPoints > 0
+      || (typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches)
+      || window.innerWidth <= 768
+
     // ── Link preview (iOS-style peek) ──
     const preview = ref({ visible: false, x: 0, y: 0, src: '' })
     let previewTimer = null
@@ -376,7 +382,7 @@ export default defineComponent({
               }),
 
               h('div', { class: 'about-expanded-bio' },
-                BIO.map(para => h('p', richText(para, onPreview)))
+                BIO.map(para => h('p', richText(para, isTouch ? null : onPreview)))
               ),
             ]),
           ]),

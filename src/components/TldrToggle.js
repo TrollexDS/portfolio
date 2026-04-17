@@ -23,7 +23,7 @@ export default defineComponent({
       h('div', { class: 'tldr-bar' }, [
         h('div', {
           class: 'tldr-indicator',
-          style: { left: props.modelValue ? 'calc(50% - 2px)' : '4px' },
+          style: { transform: props.modelValue ? 'translateX(calc(100% + 4px))' : 'translateX(0)' },
         }),
         h('button', {
           class: ['tldr-pill', !props.modelValue ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
