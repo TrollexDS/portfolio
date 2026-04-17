@@ -648,9 +648,7 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'The other side of the agentic equation'),
             full(
               h('p', { class: 'cs-body-text' }, [
-                'In the ',
-                h('strong', null, 'Agentic Design System'),
-                ' case study, I structured a design system so AI agents could operate within it - auditing tokens, catching drift, keeping Figma and code in sync. That work assumed the Figma files were already well-structured. Layer Lint tackles the prerequisite: making sure the raw design files are readable by machines in the first place.',
+                'In the Agentic Design System case study, I structured a design system so AI agents could operate within it - auditing tokens, catching drift, keeping Figma and code in sync. That work assumed the Figma files were already well-structured. Layer Lint tackles the prerequisite: making sure the raw design files are readable by machines in the first place.',
               ]),
 
               h('p', { class: 'cs-body-text' },
