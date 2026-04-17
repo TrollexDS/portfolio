@@ -34,7 +34,7 @@ export const LAYOUTS = {
     plugin:     { col: '3 / 5', row: '2 / 4'  },
     ds:         { col: '1 / 3', row: '3 / 5'  },
     agenticds:  { col: '3',     row: '4 / 6'  },
-    laydown:    { col: '4',     row: '4 / 6'  },
+    layerlint:    { col: '4',     row: '4 / 6'  },
     dsquote:    { col: '1 / 3', row: '5'      },
     alexa:      { col: '1 / 3', row: '6 / 8'  },
     uxquote:    { col: '3 / 5', row: '6'      },
@@ -67,7 +67,7 @@ export const LAYOUTS = {
     plugin:     { col: '3 / 5', row: '3 / 5',  dim: true },
     ds:         { col: '1 / 3', row: '4 / 6',  dim: true },
     agenticds:  { col: '3',     row: '5 / 7',  dim: true },
-    laydown:    { col: '4',     row: '5 / 7',  dim: true },
+    layerlint:    { col: '4',     row: '5 / 7',  dim: true },
     schedule:   { col: '1 / 3', row: '6 / 8',  dim: true },
     alexa:      { col: '3 / 5', row: '7 / 9',  dim: true },
     ssds:       { col: '1 / 3', row: '8 / 10', dim: true },
@@ -85,13 +85,13 @@ export const LAYOUTS = {
   // Row 7:   Bulb(c1) Duolingo(c2)  DSQuote  │
   // Row 8:   UXQuote(c1-2)  ClawInvest  Strava┘
   // Row 1-2: RayoDS(c1-2)  Plugin(c3-4)
-  // Row 3-4: Agentic(c1) Lay.Down(c2)  Schedule(c3-4)
+  // Row 3-4: Agentic(c1) LayerLint(c2)  Schedule(c3-4)
   // Row 5-6: Alexa(c1-2)  SS-DS(c3-4)
   Work: {
     ds:         { col: '1 / 3', row: '1 / 3'  },
     plugin:     { col: '3 / 5', row: '1 / 3'  },
     agenticds:  { col: '1',     row: '3 / 5'  },
-    laydown:    { col: '2',     row: '3 / 5'  },
+    layerlint:    { col: '2',     row: '3 / 5'  },
     schedule:   { col: '3 / 5', row: '3 / 5'  },
     alexa:      { col: '1 / 3', row: '5 / 7'  },
     ssds:       { col: '3 / 5', row: '5 / 7'  },
@@ -126,7 +126,7 @@ export const LAYOUTS = {
     ds:         { col: '1 / 3', row: '3 / 5',  dim: true },
     plugin:     { col: '3 / 5', row: '3 / 5',  dim: true },
     agenticds:  { col: '3',     row: '5 / 7',  dim: true },
-    laydown:    { col: '4',     row: '5 / 7',  dim: true },
+    layerlint:    { col: '4',     row: '5 / 7',  dim: true },
     dsquote:    { col: '1 / 3', row: '5',      dim: true },
     uxquote:    { col: '1 / 3', row: '6',      dim: true },
     schedule:   { col: '1 / 3', row: '7 / 9',  dim: true },
@@ -152,7 +152,7 @@ export const MOBILE_LAYOUTS = {
     ds:         { col: '1 / 3', row: '5 / 7'  },
     dsquote:    { col: '1 / 3', row: '7'      },
     agenticds:  { col: '1',     row: '8 / 10' },
-    laydown:    { col: '2',     row: '8 / 10' },
+    layerlint:    { col: '2',     row: '8 / 10' },
     uxquote:    { col: '1 / 3', row: '10'     },
     alexa:      { col: '1 / 3', row: '11 / 13'},
     schedule:   { col: '1 / 3', row: '13 / 15'},
@@ -173,7 +173,7 @@ export const MOBILE_LAYOUTS = {
     plugin:     { col: '1 / 3', row: '5 / 7',  dim: true },
     ds:         { col: '1 / 3', row: '7 / 9',  dim: true },
     agenticds:  { col: '1',     row: '9 / 11', dim: true },
-    laydown:    { col: '2',     row: '9 / 11', dim: true },
+    layerlint:    { col: '2',     row: '9 / 11', dim: true },
     alexa:      { col: '1 / 3', row: '11 / 13',dim: true },
     schedule:   { col: '1 / 3', row: '13 / 15',dim: true },
     ssds:       { col: '1 / 3', row: '15 / 17',dim: true },
@@ -184,12 +184,12 @@ export const MOBILE_LAYOUTS = {
   },
 
   // ── WORK (mobile) ───────────────────────────────────────────────────────
-  // RayoDS, RayoPlugin, Agentic+Lay.Down, Schedule, Alexa, SS-DS
+  // RayoDS, RayoPlugin, Agentic+LayerLint, Schedule, Alexa, SS-DS
   Work: {
     ds:         { col: '1 / 3', row: '1 / 3'  },
     plugin:     { col: '1 / 3', row: '3 / 5'  },
     agenticds:  { col: '1',     row: '5 / 7'  },
-    laydown:    { col: '2',     row: '5 / 7'  },
+    layerlint:    { col: '2',     row: '5 / 7'  },
     schedule:   { col: '1 / 3', row: '7 / 9'  },
     alexa:      { col: '1 / 3', row: '9 / 11' },
     ssds:       { col: '1 / 3', row: '11 / 13'},
@@ -216,7 +216,7 @@ export const MOBILE_LAYOUTS = {
     plugin:     { col: '1 / 3', row: '5 / 7',  dim: true },
     ds:         { col: '1 / 3', row: '7 / 9',  dim: true },
     agenticds:  { col: '1',     row: '9 / 11', dim: true },
-    laydown:    { col: '2',     row: '9 / 11', dim: true },
+    layerlint:    { col: '2',     row: '9 / 11', dim: true },
     dsquote:    { col: '1 / 3', row: '11',     dim: true },
     uxquote:    { col: '1 / 3', row: '12',     dim: true },
     alexa:      { col: '1 / 3', row: '13 / 15',dim: true },

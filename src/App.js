@@ -14,7 +14,7 @@ import DuolingoCard   from './components/cards/DuolingoCard.js'
 import StravaCard     from './components/cards/StravaCard.js'
 import ClawInvestCard from './components/cards/ClawInvestCard.js'
 import AgenticDSCard  from './components/cards/AgenticDSCard.js'
-import LayDownPluginCard from './components/cards/LayDownPluginCard.js'
+import LayerLintCard from './components/cards/LayerLintCard.js'
 import UXQuoteCard   from './components/cards/UXQuoteCard.js'
 import DSQuoteCard   from './components/cards/DSQuoteCard.js'
 import CursorTooltip  from './components/CursorTooltip.js'
@@ -44,7 +44,7 @@ const CARD_ENTRIES = [
   { key: 'clawinvest', comp: ClawInvestCard },
   { key: 'strava',     comp: StravaCard },
   { key: 'agenticds', comp: AgenticDSCard },
-  { key: 'laydown',   comp: LayDownPluginCard },
+  { key: 'layerlint', comp: LayerLintCard },
 ]
 
 

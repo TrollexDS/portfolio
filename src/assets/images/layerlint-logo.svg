@@ -1,0 +1,10 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flat Layer Stack — Namely Layers plugin icon -->
+  <!-- Top bar (active/named layer) -->
+  <rect x="20" y="28" width="88" height="20" rx="6" fill="#0d9488"/>
+  <rect x="32" y="35" width="32" height="6" rx="3" fill="white"/>
+  <!-- Middle bar -->
+  <rect x="20" y="56" width="88" height="20" rx="6" fill="#0d9488" opacity="0.5"/>
+  <!-- Bottom bar -->
+  <rect x="20" y="84" width="88" height="20" rx="6" fill="#0d9488" opacity="0.22"/>
+</svg>
