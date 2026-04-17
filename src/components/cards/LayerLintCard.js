@@ -668,12 +668,6 @@ export default defineComponent({
               '. Not only for humans to navigate visually. But for every machine that reads the file: AI coding agents, design-to-code tools, accessibility audits, automated testing. A layer called "user-avatar" is a contract. A layer called "Ellipse 9" is a guessing game.',
             ]),
 
-            h('p', { class: 'cs-body-text' }, [
-              'Building the plugin also reinforced a design principle: ',
-              h('strong', null, 'review before apply'),
-              '. AI suggestions are good starting points, not final answers. The side-by-side review flow - where every name is editable and skippable - keeps the designer in control. The AI does the tedious work of reading context and proposing names. The designer does the judgment work of accepting or refining them.',
-            ]),
-
             full(
               h('p', { class: 'cs-body-text' }, [
                 'Layer Lint came out of preparing our production Figma files at work for an agentic design system. As I started cleaning up, I discovered just how many dead layers and default names had accumulated. Hidden groups, unnamed rectangles, orphaned vectors everywhere. Renaming them one by one was ',
