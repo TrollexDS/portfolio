@@ -524,7 +524,7 @@ export default defineComponent({
 
             full(
               h('p', { class: 'cs-body-text' },
-                'Every time an AI coding agent reads a Figma file, it encounters your layer names. "Rectangle 47" tells it nothing. "product-card" tells it everything. The gap between those two names is the gap between an agent that guesses and one that builds exactly what you designed.'),
+                'Every time an AI coding agent reads a Figma file, it encounters your layer names. "Rectangle 47" tells it nothing. "product-card" gives it meaningful context. The gap between those two names is the gap between an agent that guesses and one that builds closer to what you designed.'),
 
               h('p', { class: 'cs-body-text' },
                 'Layer Lint is a Figma plugin I built to close that gap between design files and AI agents. It scans your files for hidden and empty layers cluttering the panel, then uses Claude to batch-rename auto-generated names into semantic, developer-friendly ones - optimised for both AI agents and the humans who review their output.'),
@@ -546,7 +546,7 @@ export default defineComponent({
             h('h3', { class: 'cs-subsection-title' }, '🧹 One-Click Layer Cleanup'),
             full(
               h('p', { class: 'cs-body-text' },
-                'Scans the current page and flags every hidden subtree and invisible shape - the forgotten artifacts that accumulate in any working Figma file. Select all or pick individually, then remove them in a single action. Ctrl+Z to undo if needed.'),
+                'Scans the current page and flags every hidden subtree and invisible shape - the forgotten artifacts that accumulate in any working Figma file. Select all or pick individually, then remove them in a single action.'),
             ),
 
             h('h3', { class: 'cs-subsection-title' }, '🤖 AI-Powered Semantic Renaming'),
@@ -584,29 +584,17 @@ export default defineComponent({
           h(InteractiveTag, { hint: 'Toggle between the raw and cleaned layer panel' }),
 
           // ═══════════════════════════════════════════
-          // SOLUTION — ARCHITECTURE
+          // SOLUTION — CLEANUP
           // ═══════════════════════════════════════════
           h('div', { class: 'cs-body cs-body--continued' }, [
 
-            h('h2', { class: 'cs-section-title' }, 'Two-context architecture'),
-            full(
-              h('p', { class: 'cs-body-text' },
-                'Figma plugins run in two isolated contexts: a sandbox with Figma API access but no DOM or network, and a UI iframe with DOM and fetch but no Figma API. They communicate via typed postMessage. Layer Lint uses this split deliberately - all node traversal and mutations happen in the sandbox, all Anthropic API calls happen in the UI iframe, and the message contracts are defined as TypeScript discriminated unions so both sides stay in sync.'),
-
-              h('p', { class: 'cs-body-text' },
-                'This separation also means the API key never touches the Figma sandbox. It\u2019s stored in the client via figma.clientStorage and only used by the iframe to make authenticated requests. The plugin is fully BYOK (bring your own key) - usage is billed directly to the designer\u2019s own Anthropic account.'),
-            ),
-
-            // ═══════════════════════════════════════════
-            // SOLUTION — CLEANUP
-            // ═══════════════════════════════════════════
             h('h2', { class: 'cs-section-title' }, 'Cleanup: finding what\u2019s invisible'),
             full(
               h('p', { class: 'cs-body-text' },
                 'The cleanup scan walks the page tree and flags two types of node: hidden subtrees (where only the root needs removing) and leaf shapes with no visible fill, stroke, or effect - visually indistinguishable from hidden layers but technically still "visible" in Figma\u2019s model. Mixed fills are treated as intentional. The scan never enters component instances.'),
 
               h('p', { class: 'cs-body-text' },
-                'Results appear as a checklist with each layer\u2019s name, type, and reason (hidden or empty). Clicking a row zooms to the node on the canvas. Select all or cherry-pick, then remove. Every removal is undoable via Figma\u2019s native undo stack.'),
+                'Results appear as a checklist with each layer\u2019s name, type, and reason (hidden or empty). Clicking a row zooms to the node on the canvas. Select all or cherry-pick, then remove.'),
             ),
           ]),
 
@@ -621,7 +609,7 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Rename: giving layers meaning'),
             full(
               h('p', { class: 'cs-body-text' },
-                'The rename flow collects context for each candidate layer: its type, dimensions, parent path, up to 10 children, layout direction, fill classification, and - for text nodes - the first 200 characters of content. For visually complex nodes (vectors, images) above a minimum size, it also exports a 1x PNG so Claude can see what the layer actually looks like.'),
+                'The rename flow collects context for each candidate layer: its type, dimensions, parent path, up to 10 children, layout direction, fill classification, and for text nodes (the first 200 characters of content.) For visually complex nodes (vectors, images) above a minimum size, it also exports a 1x PNG so Claude can see what the layer actually looks like.'),
 
               h('p', { class: 'cs-body-text' },
                 'Candidates are batched to stay within API limits - 50 text-only layers per request, 10 visual layers. Claude is instructed via a constrained tool-use pattern: it must call a submit_names tool with exactly one kebab-case name per layer ID. The plugin deduplicates sibling names automatically (appending -2, -3 if needed) and sanitises every response to enforce the naming convention.'),
@@ -642,7 +630,7 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Model selection and cost transparency'),
             full(
               h('p', { class: 'cs-body-text' },
-                'The settings panel lets designers choose between Haiku (fast and cheap - the default), Sonnet (balanced), or Opus (highest quality). Haiku handles most files well; Sonnet or Opus are worth switching to for dense layouts or when Haiku is overloaded. The plugin tracks input and output token usage per session and displays it after each rename run, so designers always know what a batch cost.'),
+                'The settings panel lets designers choose between Haiku (fast and cheap - the default), Sonnet (balanced), or Opus (highest quality). Haiku handles most files well. Sonnet or Opus are worth switching to for dense layouts or when Haiku is overloaded. The plugin tracks input and output token usage per session and displays it after each rename run, so designers always know what a batch cost.'),
 
               h('p', { class: 'cs-body-text' },
                 'Transient errors (rate limits, overload, server errors) are retried automatically with exponential backoff - up to three attempts with clear status messages between each retry so the designer knows the plugin isn\u2019t stuck.'),
@@ -677,7 +665,7 @@ export default defineComponent({
             h('p', { class: 'cs-body-text' }, [
               'The biggest insight was that ',
               h('strong', null, 'layer names are an interface'),
-              '. Not for humans - designers navigate visually. But for every machine that reads the file: AI coding agents, design-to-code tools, accessibility audits, automated testing. A layer called "user-avatar" is a contract. A layer called "Ellipse 9" is a guessing game.',
+              '. Not only for humans to navigate visually. But for every machine that reads the file: AI coding agents, design-to-code tools, accessibility audits, automated testing. A layer called "user-avatar" is a contract. A layer called "Ellipse 9" is a guessing game.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
@@ -688,9 +676,9 @@ export default defineComponent({
 
             full(
               h('p', { class: 'cs-body-text' }, [
-                'Layer Lint started as a side project to solve my own frustration with messy Figma files. It became something broader: ',
-                h('strong', null, 'a tool for making design files legible to the machines that increasingly read them'),
-                '. As AI agents become a bigger part of the design-to-code pipeline, the quality of what they build will depend on the quality of what they read. Clean layers aren\u2019t housekeeping. They\u2019re infrastructure.',
+                'Layer Lint came out of preparing our production Figma files at work for an agentic design system. As I started cleaning up, I discovered just how many dead layers and default names had accumulated. Hidden groups, unnamed rectangles, orphaned vectors everywhere. Renaming them one by one was ',
+                h('strong', null, 'time-consuming and mentally draining'),
+                '. I needed a way to semi-automate the process, so I built one. What started as solving my own frustration became something broader: as AI agents become a bigger part of the design-to-code pipeline, the quality of what they build depends on the quality of what they read. Clean layers aren\u2019t housekeeping \u2014 they\u2019re infrastructure.',
               ]),
             ),
           ]),
