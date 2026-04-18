@@ -83,12 +83,6 @@ export default defineComponent({
       const start = el.scrollTop
       if (start === 0) return
 
-      if (!isLazy.value) {
-        el.scrollTo(0, 0)
-        bttVisible.value = false
-        return
-      }
-
       csScrolling = true
       const startTime = performance.now()
       const duration = 500
