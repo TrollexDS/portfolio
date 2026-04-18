@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, nextTick, onMounted, onUnmounted } from 'vue'
+import { isLazy }     from './lazyMode.js'
 import NavBar         from './components/NavBar.js'
 import BentoCard      from './components/BentoCard.js'
 import AboutCard      from './components/cards/AboutCard.js'
@@ -89,7 +90,7 @@ export default defineComponent({
       if (newFilter === activeFilter.value) return
 
       // Scroll to top on every filter switch
-      window.scrollTo({ top: 0, behavior: 'smooth' })
+      window.scrollTo({ top: 0, behavior: isLazy.value ? 'smooth' : 'instant' })
 
       // ── F: snapshot current rects ──
       const prevRects = {}

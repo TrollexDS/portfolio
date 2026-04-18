@@ -14,6 +14,7 @@ export default defineComponent({
     function scrollToTop() {
       const start = window.scrollY
       if (start === 0) return
+
       scrolling = true
       const startTime = performance.now()
       const duration = 500

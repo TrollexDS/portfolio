@@ -226,6 +226,59 @@ strong, b {
 }
 
 
+/* ── Lazy-mode toggle ── */
+.lazy-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border: none;
+  border-radius: 100px;
+  background: var(--color-surface-nav-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-text-primary);
+  cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s ease,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lazy-toggle__icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.lazy-toggle__label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  transition: opacity 0.15s ease;
+}
+
+.lazy-toggle:hover {
+  background: var(--color-surface-nav);
+  box-shadow: 0 0 20px var(--color-shadow-nav);
+}
+
+/* Press-down — matches bento-card :active feel */
+.lazy-toggle:active {
+  transform: scale(0.92);
+}
+
+/* Crossfade label during icon morph */
+.lazy-toggle__label--fading {
+  opacity: 0 !important;
+  transition: opacity 0.08s ease !important;
+}
+
 /* ── Mobile-only page logo (above the grid) ── */
 .mobile-page-logo {
   display: none; /* hidden on desktop */

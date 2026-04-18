@@ -1,6 +1,7 @@
 import { defineComponent, h, ref, nextTick } from 'vue'
 import { ICON_SHRINK, ICON_EXPAND } from '../../assets/icons/icons.js'
 import { useRipple } from '../../composables/useRipple.js'
+import { isLazy } from '../../lazyMode.js'
 
 const AVATAR  = 'src/assets/images/general/alex-avatar.png'
 const GRID_W     = 1203  // 4 × 285px + 3 × 21px gaps
@@ -119,8 +120,9 @@ export default defineComponent({
     function lerpVal(a, b, t) { return a + (b - a) * t }
 
     function previewAnimLoop() {
-      previewSmoothX = lerpVal(previewSmoothX, previewMouseX, PREVIEW_LERP)
-      previewSmoothY = lerpVal(previewSmoothY, previewMouseY, PREVIEW_LERP)
+      const pl = isLazy.value ? PREVIEW_LERP : 1
+      previewSmoothX = lerpVal(previewSmoothX, previewMouseX, pl)
+      previewSmoothY = lerpVal(previewSmoothY, previewMouseY, pl)
       preview.value = {
         ...preview.value,
         x: previewSmoothX,

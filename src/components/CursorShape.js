@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, onMounted, onUnmounted } from 'vue'
+import { isLazy } from '../lazyMode.js'
 
 const TEXT_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, span, a, li, label, td, th, blockquote'
 
@@ -49,7 +50,7 @@ const BEAM_OFFSET  = [-1.2, -9]
 const ARROW_STROKE = 2
 const BEAM_STROKE  = 1.2
 const DURATION     = 200  // ms
-const LERP_POS     = 0.18 // responsive but still smooth
+const LERP_POS     = 0.15 // responsive but still smooth (overridden to 1.0 when lazy off)
 
 /* ── Helpers ────────────────────────────────────────────── */
 function easeInOut(t) {
@@ -116,8 +117,9 @@ export default defineComponent({
 
     function tick(now) {
       // Smooth cursor position
-      sx.value = lerp(sx.value, rawX, LERP_POS)
-      sy.value = lerp(sy.value, rawY, LERP_POS)
+      const lp = isLazy.value ? LERP_POS : 1
+      sx.value = lerp(sx.value, rawX, lp)
+      sy.value = lerp(sy.value, rawY, lp)
 
       // Detect text under cursor every frame — handles case study opening,
       // scrolling content, and any situation where mousemove doesn't fire

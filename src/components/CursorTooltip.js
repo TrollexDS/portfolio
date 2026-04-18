@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, onMounted, onUnmounted } from 'vue'
+import { isLazy } from '../lazyMode.js'
 
 const CHAR_DELAY_MS = 18   // ms between each typed character
 const LERP_FACTOR   = 0.07 // lower = more lag (0.08–0.15 feels natural)
@@ -29,8 +30,9 @@ export default defineComponent({
     function lerp(a, b, t) { return a + (b - a) * t }
 
     function animLoop() {
-      smoothX = lerp(smoothX, mouseX, LERP_FACTOR)
-      smoothY = lerp(smoothY, mouseY, LERP_FACTOR)
+      const lf = isLazy.value ? LERP_FACTOR : 1
+      smoothX = lerp(smoothX, mouseX, lf)
+      smoothY = lerp(smoothY, mouseY, lf)
       x.value = smoothX
       y.value = smoothY
       rafId = requestAnimationFrame(animLoop)

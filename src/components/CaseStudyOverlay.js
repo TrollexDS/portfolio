@@ -1,6 +1,7 @@
 import { defineComponent, h, ref, nextTick, onUnmounted, watch, onMounted } from 'vue'
 import { ICON_SHRINK, ICON_FULL_SCREEN } from '../assets/icons/icons.js'
 import { useRipple } from '../composables/useRipple.js'
+import { isLazy } from '../lazyMode.js'
 
 const ANIM_MS = 700
 const EASE = 'cubic-bezier(0.34, 1.1, 0.64, 1)'
@@ -81,6 +82,13 @@ export default defineComponent({
       if (!el) return
       const start = el.scrollTop
       if (start === 0) return
+
+      if (!isLazy.value) {
+        el.scrollTo(0, 0)
+        bttVisible.value = false
+        return
+      }
+
       csScrolling = true
       const startTime = performance.now()
       const duration = 500
