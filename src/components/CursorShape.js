@@ -50,7 +50,7 @@ const BEAM_OFFSET  = [-1.2, -9]
 const ARROW_STROKE = 2
 const BEAM_STROKE  = 1.2
 const DURATION     = 200  // ms
-const LERP_POS     = 0.15 // responsive but still smooth (overridden to 1.0 when lazy off)
+const LERP_POS     = 0.25 // responsive but still smooth (overridden to 1.0 when lazy off)
 
 /* ── Helpers ────────────────────────────────────────────── */
 function easeInOut(t) {
