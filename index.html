@@ -48,6 +48,18 @@
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="src/styles/main.css">
 
+  <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
+  <style>.seo-fallback { display: none; }</style>
+  <noscript>
+    <style>
+      .seo-fallback { display: block !important; }
+      /* Restore the native cursor when the custom CursorShape component can't run.
+         Must use * to override main.css's `*, *::before, *::after { cursor: none !important }` rule. */
+      *, *::before, *::after { cursor: auto !important; }
+      a, a *, button, button * { cursor: pointer !important; }
+    </style>
+  </noscript>
+
   <!-- RSS feed auto-discovery (leave commented until rss.xml exists)
   <link rel="alternate" type="application/rss+xml" title="Alex Chiu — case studies" href="/rss.xml">
   -->
@@ -172,7 +184,64 @@
   </script>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <!--
+      No-JS / pre-hydration fallback.
+      Vue replaces this content on mount, so JS users effectively never see it.
+      Serves as indexable content for search engines, LLM retrieval bots, and
+      any user whose JavaScript fails to load.
+    -->
+    <main class="seo-fallback" style="max-width:720px;margin:0 auto;padding:48px 24px;font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;color:#1a1a1a;">
+      <header>
+        <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Alex Chiu — Senior Product Designer</h1>
+        <p>Portfolio of Alex Chiu, a Senior Product Designer based in London. Currently at Bauer Media Group, contributing to Rayo. Focus areas: design systems, agentic AI workflows, and user research that reshapes product direction.</p>
+        <p>Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a> · <a href="https://www.linkedin.com/in/alexmchiu/">LinkedIn</a></p>
+      </header>
+
+      <section>
+        <h2 style="font-family:'Syne',sans-serif;margin-top:40px;">Case studies</h2>
+
+        <article id="agenticds" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#agenticds">I didn't use AI to build a design system. I built a design system that AI can use.</a></h3>
+          <p style="margin-top:4px;">A design system structured for AI agents — 468 tokens, four autonomous workflows, and Figma MCP integration.</p>
+        </article>
+
+        <article id="ds" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#ds">Refactoring the Rayo Design System for Scalability &amp; Consistency</a></h3>
+          <p style="margin-top:4px;">Restructuring the Rayo design system to scale across brands with consistent tokens, components, and patterns.</p>
+        </article>
+
+        <article id="ssds" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#ssds">Brand Switching in Seconds: Scaling a White-Label Design System</a></h3>
+          <p style="margin-top:4px;">Building a white-label design system at Simplestream that enables brand switching in seconds.</p>
+        </article>
+
+        <article id="plugin" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#plugin">Streamlining the Design Process &amp; Improving Efficiency at Scale</a></h3>
+          <p style="margin-top:4px;">Custom Figma plugins that streamlined design workflows and improved team efficiency at scale.</p>
+        </article>
+
+        <article id="alexa" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#alexa">Bringing Design to a Team That Had Never Had a Designer</a></h3>
+          <p style="margin-top:4px;">Introducing design practice to Alexa — a team that had shipped without a dedicated designer.</p>
+        </article>
+
+        <article id="schedule" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#schedule">Challenging the Brief: From Station Pages to Schedule</a></h3>
+          <p style="margin-top:4px;">Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.</p>
+        </article>
+
+        <article id="layerlint" style="margin-bottom:24px;">
+          <h3 style="margin-bottom:4px;"><a href="/#layerlint">Your layers are the prompt. Make sure they're worth reading.</a></h3>
+          <p style="margin-top:4px;">Layer Lint — a Figma plugin that lints layer naming so AI design tools receive cleaner prompts.</p>
+        </article>
+      </section>
+
+      <noscript>
+        <p style="margin-top:32px;padding:12px 16px;background:#f5f0e8;border-radius:8px;"><strong>Note:</strong> this portfolio is best viewed with JavaScript enabled for the full interactive experience.</p>
+      </noscript>
+    </main>
+  </div>
   <!-- Vue 3 via CDN (ES module build) -->
   <script type="importmap">
     {
