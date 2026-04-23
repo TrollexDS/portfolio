@@ -12,6 +12,10 @@ const config = {
     "@storybook/addon-designs"
   ],
   framework: "@storybook/vue3-vite",
-  staticDirs: [{ from: "../src/assets", to: "/src/assets" }],
+  staticDirs: [
+    { from: "../src/assets/icons", to: "/src/assets/icons" },
+    { from: "../src/assets/images", to: "/src/assets/images" },
+    { from: "../src/assets/logos", to: "/src/assets/logos" },
+  ],
 };
 export default config;
