@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    Resolve every relative asset (src/main.js, src/styles/main.css, images
+    referenced by card components) against the site root, not this sub-path.
+  -->
+  <base href="/">
+  <title>I didn&#39;t use AI to build a design system. I built a design system that AI can use. — Alex Chiu</title>
+
+  <!-- Primary meta -->
+  <meta name="description" content="A design system restructured so AI agents can consume it — 468 tokens, four autonomous workflows, and Figma MCP integration.">
+  <meta name="author" content="Alex Chiu">
+  <meta name="google-site-verification" content="9zQw4UHcwYqwT2q0UXKJDQRxTjX3MGDeeQ41pkwCxrM">
+  <link rel="canonical" href="https://mchiu.co.uk/case-studies/agentic-design-system/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alex Chiu — Portfolio">
+  <meta property="og:title" content="I didn&#39;t use AI to build a design system. I built a design system that AI can use.">
+  <meta property="og:description" content="A design system restructured so AI agents can consume it — 468 tokens, four autonomous workflows, and Figma MCP integration.">
+  <meta property="og:url" content="https://mchiu.co.uk/case-studies/agentic-design-system/">
+  <meta property="og:image" content="https://mchiu.co.uk/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="I didn&#39;t use AI to build a design system. I built a design system that AI can use.">
+  <meta property="og:locale" content="en_GB">
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="I didn&#39;t use AI to build a design system. I built a design system that AI can use.">
+  <meta name="twitter:description" content="A design system restructured so AI agents can consume it — 468 tokens, four autonomous workflows, and Figma MCP integration.">
+  <meta name="twitter:image" content="https://mchiu.co.uk/og-image.png">
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5TGGHPNWL1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5TGGHPNWL1');
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+
+  <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
+  <style>.seo-fallback { display: none; }</style>
+  <noscript>
+    <style>
+      .seo-fallback { display: block !important; }
+      *, *::before, *::after { cursor: auto !important; }
+      a, a *, button, button * { cursor: pointer !important; }
+    </style>
+  </noscript>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://mchiu.co.uk/case-studies/agentic-design-system/",
+      "headline": "I didn't use AI to build a design system. I built a design system that AI can use.",
+      "name": "I didn't use AI to build a design system. I built a design system that AI can use.",
+      "url": "https://mchiu.co.uk/case-studies/agentic-design-system/",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://mchiu.co.uk/case-studies/agentic-design-system/"
+      },
+      "about": "A design system structured for AI agents — 468 tokens, four autonomous workflows, and Figma MCP integration.",
+      "description": "A design system restructured so AI agents can consume it — 468 tokens, four autonomous workflows, and Figma MCP integration.",
+      "image": "https://mchiu.co.uk/og-image.png",
+      "genre": "Case study",
+      "inLanguage": "en-GB",
+      "datePublished": "2026-04-14",
+      "dateModified": "2026-04-17",
+      "author": {
+        "@type": "Person",
+        "@id": "https://mchiu.co.uk/#alex",
+        "name": "Alex Chiu",
+        "url": "https://mchiu.co.uk/",
+        "jobTitle": "Senior Product Designer"
+      },
+      "publisher": {
+        "@id": "https://mchiu.co.uk/#alex"
+      },
+      "isPartOf": {
+        "@id": "https://mchiu.co.uk/#site"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://mchiu.co.uk/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Case studies",
+          "item": "https://mchiu.co.uk/#case-studies"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "I didn't use AI to build a design system. I built a design system that AI can use.",
+          "item": "https://mchiu.co.uk/case-studies/agentic-design-system/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <div id="app" data-case-study="agenticds">
+    <!--
+      No-JS / pre-hydration fallback. Vue replaces this on mount, so JS users
+      never see it. Serves as indexable content for search and LLM crawlers.
+
+      When case-studies.config.js provides a `content` field, we drop it in
+      verbatim (it's pre-authored HTML). Otherwise we fall back to the short
+      summary — used for case studies that haven't been expanded yet.
+    -->
+    <main class="seo-fallback" style="max-width:720px;margin:0 auto;padding:48px 24px;font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;color:#1a1a1a;">
+      <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
+      <article>
+        <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">I didn&#39;t use AI to build a design system. I built a design system that AI can use.</h1>
+        <p><em>Stack: Vue 3, CSS Custom Properties, Figma, Storybook 10, Figma MCP.</em></p>
+
+<p>Most AI-assisted design system work follows the same pattern: a designer prompts an AI to scaffold components, generate tokens, or write documentation. The AI builds things for you. But the output is static — once generated, the system can't maintain itself.</p>
+
+<p>This experiment asks a different question: what if the design system was structured so an AI agent could operate within it autonomously — auditing tokens, catching drift between Figma and code, consolidating redundancy, and keeping both sides in sync?</p>
+
+<h2>My role</h2>
+<p>As Design System Champion at Bauer Media Group, I'm always looking for ways to make our system more maintainable. Rather than experimenting directly in a production codebase, I used my portfolio's design system as a proving ground — a real system with real complexity, where I could validate the approach before bringing it into my workflow at work.</p>
+
+<h2>The hypothesis</h2>
+<p>Vallaure's framework for agentic design systems identifies six structural requirements: a variables architecture, property alignment, complete state design, slots, auto-layout with semantic naming, and Code Connect. The core insight is that a design system is no longer documentation for developers — it's instructions for a machine.</p>
+<p>I wanted to test this with a real system. Not a demo with two buttons and a colour palette, but the actual design system powering this portfolio — with 468 tokens, 23 components, dark mode theming, and two canonical Figma files that needed to stay in sync with the codebase.</p>
+<p>The hypothesis: if the token architecture is semantically layered, the component descriptions are machine-readable, and the Figma structure mirrors the code structure, then an agent should be able to perform design system maintenance tasks that currently require a human designer.</p>
+
+<h2>Token architecture</h2>
+<p>The foundation is a three-layer token system. Primitive tokens hold raw values — hex colours, pixel sizes, font stacks. Semantic tokens alias primitives by intent: <code>--color-text-primary</code>, <code>--color-surface-card</code>. Component tokens scope to specific UI patterns like the Figma-style widget chrome or Storybook panel.</p>
+<p>This layering is what makes the system machine-readable. When an agent encounters <code>--color-text-primary</code>, it doesn't need to understand colour theory — it just needs to follow the chain: semantic → primitive → raw value. Dark mode works the same way: the semantic layer swaps which primitives it points to, and every component updates automatically.</p>
+
+<dl>
+  <dt><strong>Primitive</strong></dt>
+  <dd>Raw values named by hue + scale. Never used directly in components. Example tokens: <code>--color-primitive-teal-500</code>, <code>--color-primitive-purple-600</code>, <code>--color-primitive-neutral-750</code>, <code>--color-primitive-neutral-50</code>, <code>--color-primitive-indigo-100</code>, <code>--color-primitive-indigo-800</code>.</dd>
+  <dt><strong>Semantic</strong></dt>
+  <dd>Intent-based aliases. Components reference these — they swap in dark mode. Example tokens: <code>--color-text-primary</code> (→ Neutral/750 light, → Indigo/100 dark), <code>--color-surface-card</code> (→ Neutral/50 light, → Indigo/800 dark), <code>--color-primary</code> (→ Teal/500), <code>--gradient-brand</code> (Teal/500 → Purple/600).</dd>
+  <dt><strong>Component</strong></dt>
+  <dd>Scoped to specific UI patterns like widgets and panels. Example tokens: <code>--color-widget-bg</code>, <code>--color-widget-accent</code>, <code>--color-panel-bg</code>, <code>--color-panel-focus</code>.</dd>
+</dl>
+
+<p>Every token in code has a corresponding entry in the Figma Design Tokens file. The primitives are documented as raw swatches. The semantic aliases show which primitive they reference with an arrow notation (→ Neutral/750). This means an agent reading the Figma file via MCP gets the same information as an agent reading <code>tokens.css</code> — the mapping is explicit, not implicit.</p>
+
+<h2>Dark mode as proof</h2>
+<p>Dark mode isn't just a feature — it's the simplest proof that the token architecture works. If every component references semantic tokens, and the semantic layer swaps its primitive bindings under <code>[data-theme="dark"]</code>, then dark mode is automatic. No component needs to know it's in dark mode.</p>
+<p>This was validated in Storybook 10, where a background toggle sets the data-theme attribute and every component responds through CSS custom properties. The agent was able to identify components that weren't responding (BentoCard labels and Icon names had hardcoded text colours) and fix them by adding <code>var(--color-text-primary)</code> references.</p>
+
+<h2>Component descriptions</h2>
+<p>The Figma MCP reads component descriptions and passes them to the agent as context. This is the bridge between design and code. Each of the 23 components has a description that documents: what it renders, which tokens it uses, what props it accepts, what states it has, and how it behaves on interaction.</p>
+<p>These descriptions aren't written for humans browsing Figma — they're written for an agent that needs to decide which component to use, what tokens to reference, and how the component will behave. It's the difference between "A card component" and "Base card wrapper. Uses <code>--color-surface-card</code> background, <code>--color-border-card</code> border, <code>--color-shadow-card-*</code> elevation. Click spawns a ripple at <code>--color-card-ripple</code>. Accepts dark boolean prop for <code>--color-surface-card-dark</code> variant."</p>
+
+<h2>Agent workflows</h2>
+<p>With the system structured, I tested four autonomous agent workflows — tasks a human designer would normally do manually. Each one succeeded because the agent could read the token architecture, cross-reference Figma and code, and make decisions based on semantic naming.</p>
+
+<dl>
+  <dt><strong>Drift audit</strong></dt>
+  <dd><em>Input:</em> Agent scans every CSS token against Figma variables. <em>Finding:</em> Found 35 semantic tokens in code missing from Figma. <em>Outcome:</em> Synced — all tokens now in both files.</dd>
+  <dt><strong>Token consolidation</strong></dt>
+  <dd><em>Input:</em> Text/Primary (#2c2c2c) vs Text/Body (#181818) — two near-black text tokens. <em>Finding:</em> Agent identified they served the same purpose. <em>Outcome:</em> Text/Body aliased to Text/Primary in both code and Figma.</dd>
+  <dt><strong>Unused token cleanup</strong></dt>
+  <dd><em>Input:</em> Agent grepped all 468 tokens against every component file. <em>Finding:</em> Found 9 dead tokens: Surface/Bulb On, Surface/Ceiling Mount, Gradient Start/Mid/End, plus 4 overlay tokens. <em>Outcome:</em> Removed from <code>tokens.css</code> — Figma checklist generated.</dd>
+  <dt><strong>Font mismatch</strong></dt>
+  <dd><em>Input:</em> Agent inspected Data/Streak text style via Figma MCP. <em>Finding:</em> Flagged — using Inter instead of Fredoka for streak counter. <em>Outcome:</em> Corrected in Figma to match code's <code>--font-family-display</code>.</dd>
+</dl>
+
+<p>The critical insight from these workflows: the agent wasn't following a script. For the drift audit, it decided to grep every token against every component, identified which ones were unused, cross-referenced the Figma file, and produced a Figma cleanup checklist — all from a single prompt asking it to "check if code and Figma are in sync." The system's structure gave the agent enough context to make judgment calls.</p>
+
+<h2>Figma as source of truth</h2>
+<p>The system uses two canonical Figma files. The Design Tokens file holds every variable, text style, and colour swatch — organised into Primitive and Semantic sections that mirror the CSS custom property structure. The Design System file holds all 23 components organised in Figma sections, each with descriptions the MCP can read.</p>
+<p>This separation matters for agents. When the agent needs to audit token coverage, it reads the Tokens file. When it needs to understand a component's API, it reads the Design System file. The agent knows which file to query because the architecture is explicit — not a single monolithic file where everything is mixed together.</p>
+
+<h2>Results</h2>
+<ul>
+  <li><strong>468</strong> — tokens synced between code and Figma</li>
+  <li><strong>23</strong> — components with machine-readable descriptions</li>
+  <li><strong>9</strong> — unused tokens found and removed by agent</li>
+  <li><strong>4</strong> — autonomous agent workflows validated</li>
+</ul>
+
+<h2>What I learned</h2>
+<p>The biggest lesson: <strong>quality becomes measurable</strong>. When every token has a semantic name, every component has a description, and every Figma variable maps to a CSS custom property, an agent can audit the entire system and tell you exactly where the gaps are. "Design system health" stops being a feeling and starts being a number.</p>
+<p>The limitation I hit was Code Connect — Figma's official mapping between components and code files requires an Organisation plan. But the <strong>component descriptions</strong> effectively serve the same purpose for an agent: they document the file path, props, tokens, and behaviour. The system works without the enterprise tooling.</p>
+<p>The risk Vallaure warns about is real: fast generic systems produce forgettable output. An agent assembling from a poorly crafted design system will produce bland interfaces. But an agent operating within a system that has visual intentionality — deliberate colour choices, considered typography scales, opinionated spacing — produces output that looks designed. The craft isn't in the assembly. It's in the <strong>vocabulary the agent assembles from</strong>.</p>
+<p>The design system is no longer just documentation for developers. It's instructions for a machine. And the designer's job is to make those instructions worth following.</p>
+        <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
+      </article>
+      <noscript>
+        <p style="margin-top:32px;padding:12px 16px;background:#f5f0e8;border-radius:8px;"><strong>Note:</strong> this case study is best viewed with JavaScript enabled for the full interactive experience.</p>
+      </noscript>
+    </main>
+  </div>
+
+  <!--
+    Vue 3 via CDN (ES module build).
+    `integrity` on the import map is the newer Import Map Integrity spec
+    (Chrome 127+, ignored silently in Safari/Firefox — safe to include).
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.esm-browser.prod.min.js"
+      },
+      "integrity": {
+        "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.esm-browser.prod.min.js": "sha384-WehEzmhr8LLx5jGT+36WEUtwMYcCu/8qIdnEWQgSV4m4N+nwjHqk0nqeDogd8v7V"
+      }
+    }
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"
+    integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script type="module" src="src/main.js?v=7b88b13"></script>
+
+  <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
+  <script>
+    (function () {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return
+          const video = entry.target
+          const src = video.dataset.src
+          if (!src) return
+          video.src = src
+          video.removeAttribute('data-src')
+          video.play().catch(() => {})
+          io.unobserve(video)
+        })
+      }, { rootMargin: '200px' })
+
+      const mo = new MutationObserver(() => {
+        document.querySelectorAll('video[data-src]').forEach(v => io.observe(v))
+      })
+      mo.observe(document.getElementById('app'), { childList: true, subtree: true })
+    })()
+  </script>
+</body>
+</html>

@@ -7,6 +7,20 @@ const ANIM_MS = 700
 const EASE = 'cubic-bezier(0.34, 1.1, 0.64, 1)'
 const FLY_TRANSITION = `left ${ANIM_MS}ms ${EASE}, top ${ANIM_MS}ms ${EASE}, width ${ANIM_MS}ms ${EASE}, height ${ANIM_MS}ms ${EASE}, border-radius ${ANIM_MS}ms ${EASE}`
 
+// Card-key → canonical URL slug. Mirrors scripts/case-studies.config.js.
+// Used to (a) push the per-case-study path into history on open, and
+// (b) detect when a popstate has navigated *away* from this card so the
+// overlay can close itself.
+const CARD_KEY_TO_SLUG = {
+  agenticds: 'agentic-design-system',
+  ds:        'rayo-design-system',
+  ssds:      'simplestream-design-system',
+  plugin:    'figma-plugin-rayo-thumbnails',
+  alexa:     'rayo-in-alexa',
+  schedule:  'rayo-schedule',
+  layerlint: 'figma-plugin-layer-lint',
+}
+
 /**
  * CaseStudyOverlay — shared expand-to-fullscreen component for case study cards.
  *
@@ -159,16 +173,28 @@ export default defineComponent({
     function onKeydown(e) { if (e.key === 'Escape') close() }
     onUnmounted(() => document.removeEventListener('keydown', onKeydown))
 
-    // ── Deep-link hash support ──
-    // Listen for a custom event dispatched by App.js when the hash matches this card
+    // ── Deep-link + URL sync ──
+    // App.js dispatches 'cs:open' with a cardKey when the current URL resolves
+    // to a case study (either /case-studies/<slug>/ or legacy /#<cardKey>).
     function onHashOpen(e) {
       if (e.detail === props.cardKey) open()
     }
+    // Close the overlay if the browser navigates to a URL that no longer
+    // points at this card — covers the back button after opening, and any
+    // other history nav while the overlay is up.
+    function onPopState() {
+      if (!expanded.value) return
+      const slug = CARD_KEY_TO_SLUG[props.cardKey]
+      const onMyPath = slug && window.location.pathname === `/case-studies/${slug}/`
+      if (!onMyPath) close({ skipUrlUpdate: true })
+    }
     onMounted(() => {
       window.addEventListener('cs:open', onHashOpen)
+      window.addEventListener('popstate', onPopState)
     })
     onUnmounted(() => {
       window.removeEventListener('cs:open', onHashOpen)
+      window.removeEventListener('popstate', onPopState)
     })
 
     // ── Ripple on expanded card click (skip interactive widgets) ──
@@ -233,7 +259,17 @@ export default defineComponent({
       closing.value   = false
       wasOpen.value   = true
       savedScrollY = window.scrollY
-      if (props.cardKey) history.replaceState(null, '', '#' + props.cardKey)
+      // Push the canonical case-study URL so the address bar, history, and
+      // sharing all reflect the open overlay. Skip the push when we're
+      // already on that URL (direct landing, or re-opening via popstate)
+      // to avoid duplicate history entries.
+      const slug = CARD_KEY_TO_SLUG[props.cardKey]
+      if (slug) {
+        const target = `/case-studies/${slug}/`
+        if (window.location.pathname !== target) {
+          history.pushState(null, '', target)
+        }
+      }
       document.body.style.position = 'fixed'
       document.body.style.top = `-${savedScrollY}px`
       document.body.style.width = '100%'
@@ -298,7 +334,10 @@ export default defineComponent({
     }
 
     // ── Close ──
-    function close() {
+    // opts.skipUrlUpdate: skip the history.pushState back to '/'. Used when
+    // close() is called from a popstate handler (the browser already moved
+    // the URL; pushing again would corrupt history).
+    function close(opts = {}) {
       if (closing.value) return
 
       const useFly = !flyActive.value
@@ -348,8 +387,18 @@ export default defineComponent({
         document.body.style.overflow = ''
         window.scrollTo(0, savedScrollY)
         document.removeEventListener('keydown', onKeydown)
-        if (props.cardKey && window.location.hash === '#' + props.cardKey) {
-          history.replaceState(null, '', window.location.pathname + window.location.search)
+        // Return the URL to the site root when the overlay closes. Skip
+        // when close() was triggered by popstate (browser already moved
+        // the URL). Also clear any legacy /#<cardKey> hash that might
+        // still be present from old bookmarks.
+        if (!opts.skipUrlUpdate) {
+          const slug = CARD_KEY_TO_SLUG[props.cardKey]
+          const onMyPath = slug && window.location.pathname === `/case-studies/${slug}/`
+          if (onMyPath) {
+            history.pushState(null, '', '/')
+          } else if (props.cardKey && window.location.hash === '#' + props.cardKey) {
+            history.replaceState(null, '', window.location.pathname + window.location.search)
+          }
         }
       }, ANIM_MS + 20)
     }

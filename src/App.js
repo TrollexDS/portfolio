@@ -59,21 +59,64 @@ export default defineComponent({
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
     mql.addEventListener('change', (e) => { isMobile.value = e.matches })
 
-    // ── Deep-link: open a case study card from URL hash ──
-    function openCardFromHash() {
+    // ── Deep-link: open a case study card from URL (path or hash) ──
+    // Supported forms:
+    //   /case-studies/<slug>/         → canonical per-case-study URL
+    //   /#<cardKey>                   → legacy hash form (kept for back-compat)
+    //   #app data-case-study="<key>"  → inline hint set by generated sub-pages,
+    //                                   used as a fallback when the slug→key
+    //                                   lookup doesn't recognise the path
+    //
+    // Slugs must mirror scripts/case-studies.config.js. Duplicated here rather
+    // than imported so the config doesn't have to ship as an ES module; the
+    // list is tiny and rarely changes.
+    const SLUG_TO_CARD_KEY = {
+      'agentic-design-system':        'agenticds',
+      'rayo-design-system':           'ds',
+      'simplestream-design-system':   'ssds',
+      'figma-plugin-rayo-thumbnails': 'plugin',
+      'rayo-in-alexa':                'alexa',
+      'rayo-schedule':                'schedule',
+      'figma-plugin-layer-lint':      'layerlint',
+    }
+
+    function resolveCardKey() {
+      // 1. Path-based routing: /case-studies/<slug>/
+      const pathMatch = window.location.pathname.match(/\/case-studies\/([^/]+)\/?$/)
+      if (pathMatch) {
+        const fromSlug = SLUG_TO_CARD_KEY[pathMatch[1]]
+        if (fromSlug) return fromSlug
+        // Fall through to the inline hint in #app[data-case-study]; this keeps
+        // the page working if a new slug is added in config but the lookup
+        // table here hasn't been updated yet.
+        const appEl = document.getElementById('app')
+        const hint = appEl && appEl.dataset && appEl.dataset.caseStudy
+        if (hint) return hint
+      }
+
+      // 2. Legacy hash form: /#<cardKey>
       const hash = window.location.hash.slice(1)
-      if (!hash) return
+      if (hash) return hash
+
+      return null
+    }
+
+    function openCardFromUrl() {
+      const cardKey = resolveCardKey()
+      if (!cardKey) return
       // Small delay to ensure cards are mounted and listening
       setTimeout(() => {
-        window.dispatchEvent(new CustomEvent('cs:open', { detail: hash }))
+        window.dispatchEvent(new CustomEvent('cs:open', { detail: cardKey }))
       }, 300)
     }
     onMounted(() => {
-      openCardFromHash()
-      window.addEventListener('hashchange', openCardFromHash)
+      openCardFromUrl()
+      window.addEventListener('hashchange', openCardFromUrl)
+      window.addEventListener('popstate', openCardFromUrl)
     })
     onUnmounted(() => {
-      window.removeEventListener('hashchange', openCardFromHash)
+      window.removeEventListener('hashchange', openCardFromUrl)
+      window.removeEventListener('popstate', openCardFromUrl)
     })
 
     // Direct DOM refs for each grid-slot wrapper (keyed by card key).
