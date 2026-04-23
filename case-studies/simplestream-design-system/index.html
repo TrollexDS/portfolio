@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+  <link rel="stylesheet" href="src/styles/main.css?v=31d6739">
 
   <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
   <style>.seo-fallback { display: none; }</style>
@@ -141,7 +141,47 @@
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
       <article>
         <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Brand Switching in Seconds: Scaling a White-Label Design System</h1>
-        <p>Simplestream ships streaming apps for dozens of media brands. The design system had to let a single codebase re-skin itself — typography, colour, motion, tone — in seconds. This case study covers the token model, the theming pipeline, and the design-to-engineering handoff that made brand switching genuinely instant.</p>
+        <p>Simplestream is a B2B OTT service provider - we design and build streaming apps across mobile, tablet, web, and TV for clients around the world. As one of two designers, I was responsible for maintaining a white-label design system that powered 50+ client brands, each with their own look and feel across 100+ screens.</p>
+<p>The challenge wasn't just designing at scale - it was making it possible for a tiny team to move fast without breaking things.</p>
+
+<h2>My role</h2>
+<p>Product Designer</p>
+
+<h2>Impact</h2>
+
+<h3>From Minutes to Seconds</h3>
+<p>Reduced brand-switching time from 5-10 minutes down to seconds by replacing a third-party plugin with Figma's native Swap Library feature - eliminating freezes, glitches, and manual error-checking entirely.</p>
+
+<h3>Zero Glitches, Zero Manual Fixes</h3>
+<p>The old plugin frequently caused Figma to freeze or produce errors on large files, requiring time-consuming manual checks. The new approach is completely reliable - no crashes, no broken tokens, no cleanup.</p>
+
+<h3>Restructured Design Files</h3>
+<p>Defined a new token naming structure and renamed every colour token, font style, and layer across the entire system to make it compatible with Figma's Swap Library feature.</p>
+
+<h2>Problem</h2>
+<p>We relied on a third-party Figma plugin to swap brand themes across our design files. On paper, it solved the right problem. In practice, it took 5–10 minutes to process 100+ screens — frequently freezing Figma, producing broken tokens, and requiring manual checks to fix what it missed.</p>
+<p>For a two-person team managing 50+ clients, every failed swap meant lost time we couldn't afford. It slowed onboarding, ate into design time, and eroded trust in the system itself.</p>
+
+<h2>Turning Point</h2>
+<p>When Figma released the Swap Library feature, I saw an opportunity to solve this properly - not with another workaround, but by rethinking how our system was structured.</p>
+<p>Swap Library allows you to swap an entire linked library for another in one action - natively, without plugins. But it wasn't a drop-in fix. For it to work, every token and layer in the system needed to follow a specific naming structure. The existing system wasn't set up for this. Rather than patching the old workflow, I committed to restructuring the entire design system from the ground up.</p>
+
+<h2>Defining a New Token Structure</h2>
+<p>I defined a new naming structure and went through every token in the system - renaming each one so that libraries could be swapped cleanly. This wasn't just a find-and-replace job; it meant rethinking how our tokens were organised to be compatible with Figma's Swap Library feature.</p>
+
+<h2>Colour Tokens</h2>
+<p>Our colour token template contains a wide range of component-specific colour tokens, giving clients greater flexibility to customise the look and feel of their apps. In order for these tokens to be compatible with the Swap Library feature, I defined a new structure and renamed every token to follow a consistent convention that Figma could map between libraries.</p>
+
+<h2>Typography</h2>
+<p>Font styles are fixed in size and weight to ensure text remains visible and the app stays accessible. However, we give clients the flexibility to choose a single typeface to be used consistently across all their apps. This maps cleanly to the library swap - the typeface changes, but the scale stays locked.</p>
+
+<h2>The New Onboarding Workflow</h2>
+<p>Every time we onboard a new client, we duplicate our templates and set up a custom theme. By swapping the design library, we can instantly apply the client's unique look and feel. What used to take minutes of anxious waiting and manual fixing now happens in seconds.</p>
+
+<h2>Outcome</h2>
+<p>The refactored design system <strong>eliminated freezes, glitches, and errors entirely</strong>. Brand switching went from 5-10 minutes of anxious waiting and manual cleanup to seconds. The swap just works, every time.</p>
+<p>A team of 2 designers can now confidently <strong>manage 50+ client brands</strong> across 100+ screens each - a workload that would typically demand a much larger team. The design system became something we could trust, not work around.</p>
+<p>This wasn't a flashy redesign - it was the kind of foundational work that makes everything else possible. By investing the time to restructure our system properly, we gave ourselves the <strong>ability to scale</strong> without scaling the team.</p>
         <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
       </article>
       <noscript>
@@ -170,7 +210,7 @@
     integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
-  <script type="module" src="src/main.js?v=7b88b13"></script>
+  <script type="module" src="src/main.js?v=31d6739"></script>
 
   <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
   <script>

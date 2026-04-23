@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+  <link rel="stylesheet" href="src/styles/main.css?v=31d6739">
 
   <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
   <style>.seo-fallback { display: none; }</style>
@@ -141,7 +141,61 @@
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
       <article>
         <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Challenging the Brief: From Station Pages to Schedule</h1>
-        <p>The brief asked for standalone station pages. User research said something else: listeners wanted the next thing on, not a profile page. This case study walks through the workshop, tree testing, and final pivot — from dedicated station pages to a schedule-led discovery model embedded in existing journeys.</p>
+        <p>How user research redirected a major feature toward what listeners actually needed - a schedule-first approach to catchup radio.</p>
+
+<h2>My role</h2>
+<p>Product Design</p>
+
+<h2>Impact</h2>
+
+<h3>Redirected the project scope</h3>
+<p>User testing evidence led the team to pivot from a station page to a schedule-first catchup experience, avoiding development of a feature users wouldn't navigate to.</p>
+
+<h3>Designed and shipped the schedule feature</h3>
+<p>The schedule shipped across the Rayo app, giving listeners a direct path to find catchup shows - the core need that research uncovered.</p>
+
+<h3>Uncovered a fundamental listening insight</h3>
+<p>Users navigate radio by date and time, not by episode. This insight reshaped product strategy and informed how catchup content is structured across the app.</p>
+
+<h2>Problem</h2>
+<p>The product team wanted to build dedicated station pages in the Rayo app - a hub for each radio brand with schedules, presenter info, social links, and featured content. On paper, it made sense. But no one had asked whether users actually wanted a station page, or whether it would solve their real problem: finding something to listen to when their favourite show has already aired.</p>
+
+<h2>The starting point</h2>
+<p>The brief was ambitious. Station pages, presenter pages, hero content, social links, contact forms - a feature set that would touch every corner of the app. The goal was to improve engagement and increase average time spent listening by giving each radio station a proper home in the app.</p>
+<p>Our lead UX researcher had already been raising questions about whether this was the right direction. A co-creation workshop the previous year had surfaced an important stat: live radio accounted for 97.9% of all listening on the platform. If almost all listening was live, what problem was a content-heavy station page actually solving?</p>
+<p>Rather than diving into wireframes, we decided to build understanding first.</p>
+
+<h2>Building the evidence</h2>
+<p>Over several weeks, the design team worked through a series of research and discovery activities, each adding a layer of understanding.</p>
+<p>We ran a design workshop to define what a station page could be. We mapped out user personas - from devoted station fans to casual rainbow listeners - and created content tiers (Gold, Silver, Bronze) based on how much content each station could realistically support. But even here, the team raised concerns: if V1 was too far from the vision, we'd set a poor direction that would be expensive to correct.</p>
+<p>We dug into the information architecture, running tree tests to see how users expected to navigate station content. We mapped user journeys for three core scenarios - finding a specific show, checking an upcoming schedule, and discovering new content. The third journey, discovery, was flagged as too ambiguous to even map properly. That was a signal.</p>
+<p>We also uncovered technical and structural constraints - schedule data only went 30 days back and 7 days forward, brand-station hierarchies were complex, and content teams hadn't been consulted on editorial needs. These weren't blockers, but they shaped what was realistic for a V1.</p>
+<p>Throughout all of this, a question kept surfacing in our discussions: what value does a full station page provide versus just building the schedule?</p>
+
+<h2>What users actually told us</h2>
+<p>I built prototypes of the station page and schedule, and ran testing sessions with real listeners. This is where everything clicked.</p>
+<p>The schedule page was the standout. Multiple participants described it as "perfect" - easy to navigate, clear information, exactly what they needed. When I asked how they'd find a show they'd missed, they went straight to the schedule. They thought in terms of "I missed the breakfast show this morning" - a specific day and time - not "I want to listen to episode 47."</p>
+<p>The station page itself didn't land. Users found the navigation between a Radio Page and a Station Page confusing and suggested combining them. The For You Page was too long, with entry points to schedules buried under irrelevant content. Terminology was another friction point - "on-demand" and "episodes" didn't match how people thought about radio. They called it "catch-up."</p>
+<p>One phrase from testing stuck with me. A participant said what they really wanted was to "pick the phone up, hit play, and put the phone down." That was it. Minimal friction to live radio, and a clear path to catch-up when they'd missed something. A station page with social links, presenter bios, and featured content was solving a problem they didn't have.</p>
+
+<h2>Changing direction</h2>
+<p>Together with our UX research team, we presented the findings to the product team, and I supported the case with the prototypes and testing evidence. The recommendation was clear: don't build a standalone station page. Instead, take the components that tested well - primarily schedule, and integrate them into the journeys users were already on.</p>
+<p>This wasn't about saying no to the brief. It was about solving the right problem. Users didn't need a destination page for a radio station. They needed:</p>
+<ul>
+  <li>Quick access to live radio</li>
+  <li>A schedule-based path to catchup content</li>
+  <li>Consistent language and interaction patterns - "catchup" not "episodes."</li>
+</ul>
+<p>The new direction was to distribute station page components - schedule access, presenter information, now-playing context - into the maxi player and the For You Page, rather than isolating them behind a dedicated page users would never navigate to.</p>
+
+<h2>What we shipped</h2>
+<p>The schedule feature shipped as part of the Rayo app. Instead of a station page you'd have to find, schedule access lives where listeners already are - surfaced in context, within the flows they naturally use.</p>
+<p>Listeners can see what's on now, browse upcoming shows, and tap into catchup content from the schedule directly. The experience uses language that matches how people actually talk about radio - "catch-up" instead of "on-demand," shows identified by time and date rather than episode numbers. It's a small shift that removes a real point of confusion.</p>
+
+<h2>What I took away</h2>
+<p>The biggest lesson from this project was about <strong>the value of pausing</strong> before you build. The original brief was well-intentioned and logically sound - but it was based on an assumption about what users wanted, not evidence. By investing in research upfront, we avoided shipping a feature that would have been technically correct but practically unused.</p>
+<p>I also learned something specific about radio listeners that I hadn't expected: they don't think about radio the way they think about podcasts or streaming. There's no concept of "episodes" or "browsing." Radio is live, and when it's not live, it's catch-up - anchored to a time they missed. Designing for that <strong>mental model</strong>, rather than imposing a content-library pattern, was the difference between a feature that tested as "perfect" and one that confused people.</p>
+<p>The schedule is now live, and we're tracking engagement and average time spent listening to measure its impact. But regardless of the numbers, the outcome I'm most proud of is the process - a design team that used research to ask the right questions, <strong>challenge assumptions constructively</strong>, and ship something that genuinely matches how people listen to radio.</p>
         <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
       </article>
       <noscript>
@@ -170,7 +224,7 @@
     integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
-  <script type="module" src="src/main.js?v=7b88b13"></script>
+  <script type="module" src="src/main.js?v=31d6739"></script>
 
   <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
   <script>

@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+  <link rel="stylesheet" href="src/styles/main.css?v=31d6739">
 
   <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
   <style>.seo-fallback { display: none; }</style>
@@ -141,7 +141,48 @@
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
       <article>
         <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Your layers are the prompt. Make sure they&#39;re worth reading.</h1>
-        <p>AI design tools read your layer names as prompt. Messy layers give messy output. Layer Lint is a Figma plugin that flags unnamed frames, default names (Rectangle 42), and inconsistent casing — so the prompt your AI sees is actually worth reading.</p>
+        <p>Every time an AI coding agent reads a Figma file, it encounters your layer names. "Rectangle 47" tells it nothing. "product-card" gives it meaningful context. The gap between those two names is the gap between an agent that guesses and one that builds closer to what you designed.</p>
+<p>Layer Lint is a Figma plugin I built to close that gap between design files and AI agents. It scans your files for hidden and empty layers cluttering the panel, then uses Claude to batch-rename auto-generated names into semantic, developer-friendly ones - optimised for both AI agents and the humans who review their output.</p>
+<p>It has already been published and currently waiting for Figma's approval.</p>
+
+<h2>My role</h2>
+<p>Side project - design & development</p>
+
+<h2>Impact</h2>
+
+<h3>One-Click Layer Cleanup</h3>
+<p>Scans the current page and flags every hidden subtree and invisible shape - the forgotten artifacts that accumulate in any working Figma file. Select all or pick individually, then remove them in a single action.</p>
+
+<h3>AI-Powered Semantic Renaming</h3>
+<p>Claude reads each layer's type, text content, layout direction, children, and - for visually complex nodes - an exported PNG. It proposes kebab-case names that describe purpose, not appearance. Every suggestion is reviewable: edit, accept, or skip individually before applying.</p>
+
+<h3>Instance-Safe by Design</h3>
+<p>The plugin never walks into or modifies content inside component instances. Instance contents belong to their main component - renaming them locally would create overrides that break on the next component update. Layer Lint respects that boundary automatically.</p>
+
+<h2>Problem</h2>
+<p>Figma auto-generates layer names like "Rectangle 47", "Frame 3", and "Group 12". For a designer working visually, these names are harmless - you can see what each layer is on the canvas. But for anything reading the file programmatically - an AI coding agent, a design-to-code tool, a developer in Dev Mode - those names are noise. They carry zero semantic information.</p>
+<p>On top of that, working Figma files accumulate hidden layers, empty shapes, and forgotten artifacts. These don't affect the visual output, but they bloat the layer panel, slow down file loading, and confuse any tool or agent trying to parse the file's structure. The problem compounds at scale: the more complex the file, the harder it is to maintain manually.</p>
+
+<h2>Cleanup: finding what's invisible</h2>
+<p>The cleanup scan walks the page tree and flags two types of node: hidden subtrees (where only the root needs removing) and leaf shapes with no visible fill, stroke, or effect - visually indistinguishable from hidden layers but technically still "visible" in Figma's model. Mixed fills are treated as intentional. The scan never enters component instances.</p>
+<p>Results appear as a checklist with each layer's name, type, and reason (hidden or empty). Clicking a row zooms to the node on the canvas. Select all or cherry-pick, then remove.</p>
+
+<h2>Rename: giving layers meaning</h2>
+<p>The rename flow collects context for each candidate layer: its type, dimensions, parent path, up to 10 children, layout direction, fill classification, and for text nodes (the first 200 characters of content.) For visually complex nodes (vectors, images) above a minimum size, it also exports a 1x PNG so Claude can see what the layer actually looks like.</p>
+<p>Candidates are batched to stay within API limits - 50 text-only layers per request, 10 visual layers. Claude is instructed via a constrained tool-use pattern: it must call a <code>submit_names</code> tool with exactly one kebab-case name per layer ID. The plugin deduplicates sibling names automatically (appending -2, -3 if needed) and sanitises every response to enforce the naming convention.</p>
+<p>Two scope modes let the designer choose: rename only default-named layers (the "Rectangle 47" pattern) or all layers including manually named ones. The results appear in a side-by-side list where every proposal is editable before applying.</p>
+
+<h2>Model selection and cost transparency</h2>
+<p>The settings panel lets designers choose between Haiku (fast and cheap - the default), Sonnet (balanced), or Opus (highest quality). Haiku handles most files well. Sonnet or Opus are worth switching to for dense layouts or when Haiku is overloaded. The plugin tracks input and output token usage per session and displays it after each rename run, so designers always know what a batch cost.</p>
+<p>Transient errors (rate limits, overload, server errors) are retried automatically with exponential backoff - up to three attempts with clear status messages between each retry so the designer knows the plugin isn't stuck.</p>
+
+<h2>The other side of the agentic equation</h2>
+<p>In the <a href="/case-studies/agentic-design-system/">Agentic Design System case study</a>, I structured a design system so AI agents could operate within it - auditing tokens, catching drift, keeping Figma and code in sync. That work assumed the Figma files were already well-structured. Layer Lint tackles the prerequisite: making sure the raw design files are readable by machines in the first place.</p>
+<p>Together they form two halves of the same thesis. A semantically named layer tree means an AI agent reading the file via Figma MCP gets meaningful context instead of "Frame 3 contains Rectangle 47". And a well-structured design system means the agent knows what those layers should be called, what tokens they should reference, and how they relate to code. Layer Lint is the cleanup. The agentic DS is the vocabulary.</p>
+
+<h2>What I took away</h2>
+<p>The biggest insight was that <strong>layer names are an interface</strong>. Not only for humans to navigate visually. But for every machine that reads the file: AI coding agents, design-to-code tools, accessibility audits, automated testing. A layer called "user-avatar" is a contract. A layer called "Ellipse 9" is a guessing game.</p>
+<p>Layer Lint came out of preparing our production Figma files at work for an agentic design system. As I started cleaning up, I discovered just how many dead layers and default names had accumulated. Hidden groups, unnamed rectangles, orphaned vectors everywhere. Renaming them one by one was <strong>time-consuming and mentally draining</strong>. I needed a way to semi-automate the process, so I built one. What started as solving my own frustration became something broader: as AI agents become a bigger part of the design-to-code pipeline, the quality of what they build depends on the quality of what they read. Clean layers aren't housekeeping - they're infrastructure.</p>
         <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
       </article>
       <noscript>
@@ -170,7 +211,7 @@
     integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
-  <script type="module" src="src/main.js?v=7b88b13"></script>
+  <script type="module" src="src/main.js?v=31d6739"></script>
 
   <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
   <script>

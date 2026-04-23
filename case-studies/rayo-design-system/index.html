@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+  <link rel="stylesheet" href="src/styles/main.css?v=31d6739">
 
   <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
   <style>.seo-fallback { display: none; }</style>
@@ -141,7 +141,58 @@
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
       <article>
         <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Refactoring the Rayo Design System for Scalability &amp; Consistency</h1>
-        <p>Rayo covers multiple radio brands under one app. The original design system buckled under brand-level variation. This case study walks through the refactor: token architecture, component reuse across brands, and the governance model that keeps contributors aligned without slowing them down.</p>
+        <p>A comprehensive overhaul of the Rayo Design System, restructuring components, tokens, and documentation to support rapid multi-brand scaling while maintaining visual consistency across all products.</p>
+
+<h2>My role</h2>
+<p>Design system lead</p>
+
+<h2>Impact</h2>
+
+<h3>Simplified Component Architecture</h3>
+<p>Reduced the overall complexity of the system by minimising the number of variants and introducing nested components. This created a more modular and flexible structure, making components easier to maintain, scale, and reuse without duplication.</p>
+
+<h3>Improved Design–Engineering Alignment</h3>
+<p>Streamlined the handoff process by introducing clear documentation, structured usage notes, and leveraging Figma's Dev Mode. This ensured design intent was communicated more effectively, reducing back-and-forth and increasing implementation accuracy.</p>
+
+<h3>Reliable Theming with Colour Variables</h3>
+<p>Eliminated light and dark mode inconsistencies by implementing Figma colour variables. This removed manual overrides and significantly reduced the risk of human error, ensuring themes remain consistent and scalable across the system.</p>
+
+<h3>Accessible & Easy to Adopt</h3>
+<p>Lowered the barrier to entry for new designers by simplifying the system and improving guidance. Even new joiners can quickly understand and use the design system with confidence, without feeling overwhelmed by complexity.</p>
+
+<h2>Problem</h2>
+<p>Designers often felt overwhelmed navigating the design system due to the high volume of components and lack of clear structure. Nested instances were frequently overlooked when not visible within master components, leading to duplicated components and inconsistencies.</p>
+<p>In addition, an outdated colour token system required manual switching between light and dark modes. This increased the number of unnecessary variants and introduced a higher risk of human error in production-ready designs.</p>
+
+<h2>Colour variables</h2>
+<p>Following Figma's variable framework, I collaborated with another designer to establish a scalable colour system. We defined primitive variables based on the brand style guide, and mapped them into semantic tokens for both light and dark modes. This removed the need for manual theme switching and created a more consistent and maintainable foundation for theming.</p>
+
+<h2>Spacing & Responsiveness</h2>
+<p>Working closely with the team, we standardised spacing and radius values to improve visual consistency across components. I also introduced breakpoints as variables, enabling responsive behaviour within components and automating layout adjustments across different screen sizes.</p>
+
+<h2>Components refactor</h2>
+<p>The collection card component was a key focus of the refactor. Previously, it contained 48 variants that largely duplicated the same structure, differing only in background styles and spacing adjustments for tablet layouts.</p>
+<p>Instead of encoding these differences as variants, I extracted background styles into a separate, reusable background component. This allowed backgrounds to be applied as nested instances, exposed through a simple dropdown selection, making them easier to manage and update.</p>
+<p>As a result, the number of variants was reduced from 48 to just 4, while maintaining the same level of flexibility. This approach also scaled across other components with similar background requirements, significantly reducing duplication and improving overall system efficiency.</p>
+
+<h2>One Component, Multiple Contexts</h2>
+<p>As part of the design system optimisation, we leveraged auto layout wherever possible. Since most components share the same structure across mobile and tablet (differing primarily in width), this approach allowed us to use a single variant across breakpoints. By simply adjusting width within designs, components can responsively adapt without the need for separate variants, reducing duplication and improving consistency.</p>
+
+<h2>Intuitive System Architecture</h2>
+<p>The existing file structure could no longer support the growing complexity of the design system. Components were spread across multiple pages with unclear grouping logic, making them difficult to locate and navigate.</p>
+<p>To address this, I redesigned the system architecture with clarity and usability in mind. This ensures even new or less experienced designers can navigate it with ease. Each component now has its own dedicated page, structured into three clear sections:</p>
+<ul>
+  <li>Overview for context and usage guidance</li>
+  <li>Component for the master variants</li>
+  <li>Examples to showcase real use cases and expose nested configurations</li>
+</ul>
+<p>The example section also allows designers to quickly copy and paste production-ready instances directly into their work, streamlining adoption and reducing setup time.</p>
+
+<h2>Outcome</h2>
+<p>The refactoring of the Rayo Design System transformed it into a scalable, intuitive, and production-ready foundation for the team. Component variants were reduced by over 90% in key areas, <strong>significantly lowering complexity</strong> while maintaining full flexibility through modular and nested approaches.</p>
+<p>By introducing colour variables and responsive foundations, manual theming and layout adjustments were largely eliminated, <strong>reducing errors and ensuring consistency</strong> across light and dark modes. Designers can now build responsive layouts using a single component across breakpoints, instead of managing multiple variants.</p>
+<p>The redesigned system architecture and improved documentation also reduced onboarding friction, <strong>enabling new designers to confidently adopt the system faster</strong>. In parallel, clearer specifications and Dev Mode usage improved design–engineering alignment, resulting in smoother handoffs and more accurate implementation.</p>
+<p>Overall, the system reduced duplication, minimised human error, and accelerated design workflows, allowing the team to deliver high-quality, consistent designs more efficiently at scale.</p>
         <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
       </article>
       <noscript>
@@ -170,7 +221,7 @@
     integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
-  <script type="module" src="src/main.js?v=7b88b13"></script>
+  <script type="module" src="src/main.js?v=31d6739"></script>
 
   <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
   <script>

@@ -52,7 +52,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+  <link rel="stylesheet" href="src/styles/main.css?v=31d6739">
 
   <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
   <style>.seo-fallback { display: none; }</style>
@@ -141,7 +141,67 @@
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
       <article>
         <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Bringing Design to a Team That Had Never Had a Designer</h1>
-        <p>The Alexa team at Bauer had shipped features for years without a dedicated designer. This case study is about the first six months: earning trust, introducing design practice without creating bureaucracy, and the product improvements that came from treating voice as a first-class surface.</p>
+        <p>The Alexa team had shipped without a designer for years. I came in to make sense of what existed, remap the user journeys in Voiceflow, and design a cohesive experience across voice and screen.</p>
+
+<h2>My role</h2>
+<p>Sole designer</p>
+
+<h2>Impact</h2>
+
+<h3>Fewer support tickets, clearer experience</h3>
+<p>By consolidating account linking into a single reliable path, support tickets related to linking dropped. The six separate help articles were replaced with streamlined guidance that matched the actual user experience, reducing both user frustration and the maintenance burden on the team.</p>
+
+<h3>A design foundation the team kept using</h3>
+<p>The Voiceflow production file became the team's ongoing source of truth - the first time the Alexa skill's logic was fully documented and visible in one place. More importantly, the way the team worked changed. Design became part of the process: the team started involving design earlier in decision-making, and became open to running user research as a regular practice rather than shipping based on assumptions alone.</p>
+
+<h3>Design beyond the skill</h3>
+<p>The work extended beyond the product itself. I collaborated with the customer service team to overhaul the Alexa help centre, rewriting the key support articles on account linking, ads, and premium station access to match the new simplified flows. By aligning the support content with the redesigned experience, users who did need help found guidance that actually reflected what they'd see on screen - closing the gap between the product and the resources meant to support it.</p>
+
+<h2>Challenges</h2>
+
+<h3>First designer in a team that never had one</h3>
+<p>No documented flows, no mapped journeys. Everything about how the skill worked lived inside the PO and lead developer's heads.</p>
+
+<h3>Account linking was the core problem</h3>
+<p>Premium users heard ads and lost access to paid stations despite paying. The business had no way to attribute listening data to individual users.</p>
+
+<h3>A broken experience built on patches</h3>
+<p>4+ different linking paths with no consistent logic between them. Silent failures, dead ends, and a trail of negative Alexa store reviews.</p>
+
+<h3>No one had ever stepped back to see the full picture</h3>
+<p>Fixes had been stacked on fixes with no one stepping back to map the full picture. That was my starting point.</p>
+
+<h2>The Audit</h2>
+
+<h3>Mapping every journey from scratch</h3>
+<p>My first step was to experience the product exactly as a new user would. I unboxed both an Echo Dot and an Echo Show, set them up from scratch, and documented every step from first power-on through account linking. Without any briefing from the team, I tested how far a first-time user could get by speaking naturally to the device.</p>
+
+<p>What became clear very quickly was that the Rayo skill, like most custom Alexa skills, wasn't conversational at all. It was built with a binary, chatbot-like logic: say the exact right words or nothing happens. There were only two command structures that actually worked, and users had to know them word for word: "Open [skill name]" followed by a separate action, or the one-shot "Ask [skill name] to [do something]." Anything outside these patterns failed silently.</p>
+
+<p>I pulled apart the skill's interaction model - a JSON file containing every intent, utterance, and synonym the skill could recognise. I catalogued all available content and mapped which synonyms had been added for requesting specific shows, revealing gaps and inconsistencies in how the skill interpreted user requests.</p>
+
+<h2>Restructured Journeys</h2>
+
+<h3>Building a single source of truth in Voiceflow</h3>
+<p>With no documentation and no design files, my first goal was to create one. I rebuilt every existing intent in Voiceflow - think of intents as the voice equivalent of features in a mobile app. Each one was built to closely mirror the actual Alexa skill, accounting for different conditions, synonym variations, and error states. This production file became the team's single source of truth: the first time anyone could see the entire skill's logic in one place.</p>
+
+<h3>Unifying account linking into one reliable path</h3>
+<p>The original skill had so many linking methods that the support page alone contained six separate articles explaining them - a maintenance burden for developers and a source of confusion for users. In reality, only one method was bug-free: linking via the Alexa app. I designed every journey to converge on this single path. No matter where the user starts - iOS or Android, legacy brand apps or the new Rayo app, scanning a QR code or initiating the link through voice - they're all deeplinked into the Alexa app to complete account linking. One consistent, reliable flow instead of six fragmented ones.</p>
+
+<h3>Introducing in-situ help</h3>
+<p>Many users were still struggling with account linking even when the flow worked correctly. I introduced an in-situ help feature: contextual guidance delivered through both on-screen support content on the Echo Show and voice prompts from Alexa. Rather than sending users away to a support page, help now meets them where they are, at the moment they need it.</p>
+
+<h3>Improving the help centre</h3>
+<p>I also worked with the customer service team to overhaul the Alexa help centre articles. The existing support pages reflected the old fragmented experience - six separate articles for account linking alone. I helped consolidate and rewrite the key articles covering account linking, ads on Alexa, and premium station access, making sure the guidance matched the simplified flows and gave users a clear path to resolution.</p>
+
+<h3>Continue listening as a reason to link</h3>
+<p>We reframed account linking as something worth doing by tying it to a tangible benefit. The new "Continue Listening" feature lets users resume content from where they left off - when they play something they've previously started, Alexa prompts them to pick up where they stopped. In the next phase, we plan to take this further: Alexa will proactively suggest unfinished content when you launch the Rayo skill or arrive home, creating a more personalised, anticipatory experience.</p>
+
+<h2>What's next</h2>
+<p>Development on the Rayo Alexa skill is currently paused while the team waits for the release of Alexa+, Amazon's next-generation AI-powered assistant. The groundwork I laid - the mapped journeys, the Voiceflow prototypes, the simplified account linking architecture - gives the team a design foundation to build on when development resumes, whether that's adapting to Alexa+'s new conversational capabilities or picking up the personalised Continue Listening experience we'd planned.</p>
+
+<h2>Experience it yourself</h2>
+<p>Everything you've just read about is live. If you have an Alexa, just say "Alexa, open Rayo" and try it for yourself.</p>
         <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
       </article>
       <noscript>
@@ -170,7 +230,7 @@
     integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
     crossorigin="anonymous"
     referrerpolicy="no-referrer"></script>
-  <script type="module" src="src/main.js?v=7b88b13"></script>
+  <script type="module" src="src/main.js?v=31d6739"></script>
 
   <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
   <script>
