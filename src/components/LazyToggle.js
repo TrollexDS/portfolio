@@ -96,16 +96,16 @@ export default defineComponent({
       setTimeout(() => { labelFading.value = false }, 100)
     }
 
-    const title = () => isLazy.value
-      ? 'Turn off smooth effects'
-      : 'Turn on smooth effects'
+    const tooltip = () => isLazy.value
+      ? 'Toggle snappy scrolling effects'
+      : 'Toggle smooth scrolling effects'
 
     return () =>
       h('button', {
         class: ['lazy-toggle', isLazy.value ? 'lazy-toggle--on' : 'lazy-toggle--off'],
         onPointerup: onRelease,
-        title: title(),
-        'aria-label': title(),
+        'data-tooltip': tooltip(),
+        'aria-label': tooltip(),
       }, [
         // Morphing icon
         h('svg', {
@@ -124,7 +124,7 @@ export default defineComponent({
         // Label with crossfade
         h('span', {
           class: ['lazy-toggle__label', labelFading.value ? 'lazy-toggle__label--fading' : ''],
-        }, isLazy.value ? 'Smooth' : 'Snappy'),
+        }, isLazy.value ? 'Smooth scroll' : 'Instant scroll'),
       ])
   },
 })

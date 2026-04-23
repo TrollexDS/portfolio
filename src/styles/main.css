@@ -3374,6 +3374,11 @@ strong, b {
     display: none;
   }
 
+  /* Hide lazy-mode toggle on mobile */
+  .lazy-toggle {
+    display: none;
+  }
+
   /* Mobile page logo — centred above the grid */
   .mobile-page-logo {
     display: block;
