@@ -129,3 +129,84 @@ export const States = {
       ]),
   }),
 }
+
+export const MobileGrid = {
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    chromatic: { viewports: [375] },
+  },
+  render: () => ({
+    components: { BentoCard },
+    setup: () => () =>
+      h('div', {
+        style: {
+          padding: '24px',
+          background: 'var(--color-bg-body, #f0ede8)',
+          width: '375px',
+        },
+      }, [
+        h('p', {
+          style: {
+            fontFamily: "'Syne', sans-serif",
+            fontSize: '13px',
+            opacity: 0.4,
+            marginBottom: '16px',
+            color: 'var(--color-text-primary, #2c2c2c)',
+          },
+        }, 'Mobile 2-column grid — fluid cards with 18px gap'),
+        h('div', {
+          style: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '18px',
+          },
+        }, [
+          /* 4 fluid cards */
+          ...[1, 2, 3, 4].map(i =>
+            h(BentoCard, {
+              dark: i === 2,
+              tooltip: i === 2 ? 'View case study' : 'Click to expand',
+            }, {
+              default: () => h('div', {
+                style: {
+                  ...placeholderStyle(`Card ${i}`, i === 2),
+                  aspectRatio: '1 / 1',
+                },
+              }, `Card ${i}`),
+            })
+          ),
+        ]),
+      ]),
+  }),
+}
+
+export const ActionLabelVariant = {
+  render: () => ({
+    components: { BentoCard },
+    setup: () => () =>
+      h('div', { style: { padding: '48px', background: 'var(--color-bg-body, #f0ede8)', display: 'flex', gap: '24px' } }, [
+        /* Standard icon action */
+        h('div', {}, [
+          h(BentoCard, {
+            dark: false,
+            tooltip: 'Click to expand',
+          }, {
+            default: () => h('div', { style: placeholderStyle('Icon action') }, 'Icon action'),
+          }),
+          h('span', { style: labelStyle }, 'Icon (default)'),
+        ]),
+
+        /* Text label action */
+        h('div', {}, [
+          h(BentoCard, {
+            dark: true,
+            actionLabel: 'Coming soon',
+            tooltip: 'Currently in development',
+          }, {
+            default: () => h('div', { style: placeholderStyle('Label action', true) }, 'Label action'),
+          }),
+          h('span', { style: labelStyle }, 'Text label'),
+        ]),
+      ]),
+  }),
+}

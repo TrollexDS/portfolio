@@ -126,3 +126,21 @@
 @keyframes card-ripple {
   to { transform: scale(4); opacity: 0; }
 }
+
+/* Action icon — text label variant */
+.action-icon--label {
+  width: auto;
+  padding: 0 14px;
+  border-radius: 100px;
+  text-decoration: none;
+}
+
+.action-icon__text {
+  font-family: var(--font-family-primary, 'Syne', sans-serif);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-primary, #2c2c2c);
+  white-space: nowrap;
+  line-height: 40px;
+  text-decoration: none;
+}

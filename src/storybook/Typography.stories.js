@@ -258,6 +258,91 @@ export const TypeScale = {
   },
 }
 
+export const TypeScaleMobile = {
+  parameters: {
+    viewport: { defaultViewport: 'mobile' },
+    chromatic: { viewports: [375] },
+  },
+  render: () => {
+    const categories = [
+      {
+        title: 'Case Study',
+        styles: [
+          { name: 'CS / Title', weight: 700, size: '32px', lineHeight: '48px', sampleText: 'Station & Presenter Pages' },
+          { name: 'CS / Body', weight: 400, size: '18px', lineHeight: '27px' },
+        ],
+      },
+      {
+        title: 'Navigation & Actions',
+        styles: [
+          { name: 'Nav / Pill', weight: 500, size: '16px', sampleText: 'Work' },
+          { name: 'Action / Default', weight: 500, size: '15px', sampleText: 'View case study' },
+        ],
+      },
+      {
+        title: 'Labels',
+        styles: [
+          { name: 'Label / Principle', weight: 600, size: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', sampleText: 'MY DESIGN PRINCIPLE' },
+          { name: 'Label / Tag', weight: 600, size: '12px', letterSpacing: '0.02em', textTransform: 'uppercase', sampleText: 'INTERACTIVE' },
+        ],
+      },
+    ]
+
+    /* Mobile: stacked layout instead of side-by-side */
+    function MobileTypeRow(item) {
+      const sampleStyle = {
+        fontFamily: item.family || "var(--font-family-primary, 'Syne', sans-serif)",
+        fontWeight: item.weight || 400,
+        fontSize: item.size,
+        lineHeight: item.lineHeight || 'normal',
+        letterSpacing: item.letterSpacing || 'normal',
+        textTransform: item.textTransform || 'none',
+        color: 'var(--color-text-primary, #2c2c2c)',
+        transition: 'color 0.5s ease',
+        marginTop: '8px',
+      }
+
+      return h('div', {
+        style: {
+          padding: '14px 16px',
+          borderBottom: '1px solid var(--color-border-card, rgba(0,0,0,0.04))',
+        },
+      }, [
+        h('div', {
+          style: {
+            fontSize: '12px',
+            fontWeight: 600,
+            color: 'var(--color-text-primary, #2c2c2c)',
+            marginBottom: '4px',
+          },
+        }, item.name),
+        h('div', { style: { display: 'flex', flexWrap: 'wrap', gap: '3px', marginBottom: '6px' } }, [
+          h('span', { style: S.tag }, item.familyLabel || 'Syne'),
+          h('span', { style: S.tag }, String(item.weight || 400)),
+          h('span', { style: S.tag }, `${item.size}`),
+        ]),
+        h('div', { style: sampleStyle },
+          item.sampleText || 'The quick brown fox jumps over the lazy dog'
+        ),
+      ])
+    }
+
+    return h('div', { style: { ...S.page, padding: '20px', maxWidth: '375px' } }, [
+      h('h1', { style: { ...S.title, fontSize: '22px' } }, 'Typography — Mobile'),
+      h('p', { style: S.subtitle }, 'Stacked layout for narrow viewports.'),
+      ...categories.map(cat =>
+        h('div', { style: S.card }, [
+          h('div', { style: S.cardHeader }, [
+            h('span', { style: S.cardTitle }, cat.title),
+            h('span', { style: S.count }, `${cat.styles.length} styles`),
+          ]),
+          ...cat.styles.map(s => MobileTypeRow(s)),
+        ])
+      ),
+    ])
+  },
+}
+
 export const FontFamilies = {
   render: () => {
     const families = [
