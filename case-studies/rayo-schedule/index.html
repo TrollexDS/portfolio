@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+    Resolve every relative asset (src/main.js, src/styles/main.css, images
+    referenced by card components) against the site root, not this sub-path.
+  -->
+  <base href="/">
+  <title>Challenging the Brief: From Station Pages to Schedule — Alex Chiu</title>
+
+  <!-- Primary meta -->
+  <meta name="description" content="Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.">
+  <meta name="author" content="Alex Chiu">
+  <meta name="google-site-verification" content="9zQw4UHcwYqwT2q0UXKJDQRxTjX3MGDeeQ41pkwCxrM">
+  <link rel="canonical" href="https://mchiu.co.uk/case-studies/rayo-schedule/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alex Chiu — Portfolio">
+  <meta property="og:title" content="Challenging the Brief: From Station Pages to Schedule">
+  <meta property="og:description" content="Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.">
+  <meta property="og:url" content="https://mchiu.co.uk/case-studies/rayo-schedule/">
+  <meta property="og:image" content="https://mchiu.co.uk/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Challenging the Brief: From Station Pages to Schedule">
+  <meta property="og:locale" content="en_GB">
+
+  <!-- Twitter/X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Challenging the Brief: From Station Pages to Schedule">
+  <meta name="twitter:description" content="Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.">
+  <meta name="twitter:image" content="https://mchiu.co.uk/og-image.png">
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-5TGGHPNWL1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-5TGGHPNWL1');
+  </script>
+
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png">
+  <link rel="shortcut icon" href="/favicon.ico">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fredoka:wght@600&family=Inter:wght@400&family=Tiny5&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="src/styles/main.css?v=7b88b13">
+
+  <!-- SEO fallback: hidden by default (JS users never see it), shown via <noscript> when JS is off -->
+  <style>.seo-fallback { display: none; }</style>
+  <noscript>
+    <style>
+      .seo-fallback { display: block !important; }
+      *, *::before, *::after { cursor: auto !important; }
+      a, a *, button, button * { cursor: pointer !important; }
+    </style>
+  </noscript>
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://mchiu.co.uk/case-studies/rayo-schedule/",
+      "headline": "Challenging the Brief: From Station Pages to Schedule",
+      "name": "Challenging the Brief: From Station Pages to Schedule",
+      "url": "https://mchiu.co.uk/case-studies/rayo-schedule/",
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://mchiu.co.uk/case-studies/rayo-schedule/"
+      },
+      "about": "Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.",
+      "description": "Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.",
+      "image": "https://mchiu.co.uk/og-image.png",
+      "genre": "Case study",
+      "inLanguage": "en-GB",
+      "datePublished": "2026-04-01",
+      "dateModified": "2026-04-17",
+      "author": {
+        "@type": "Person",
+        "@id": "https://mchiu.co.uk/#alex",
+        "name": "Alex Chiu",
+        "url": "https://mchiu.co.uk/",
+        "jobTitle": "Senior Product Designer"
+      },
+      "publisher": {
+        "@id": "https://mchiu.co.uk/#alex"
+      },
+      "isPartOf": {
+        "@id": "https://mchiu.co.uk/#site"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://mchiu.co.uk/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Case studies",
+          "item": "https://mchiu.co.uk/#case-studies"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Challenging the Brief: From Station Pages to Schedule",
+          "item": "https://mchiu.co.uk/case-studies/rayo-schedule/"
+        }
+      ]
+    }
+  ]
+}
+  </script>
+</head>
+<body>
+  <div id="app" data-case-study="schedule">
+    <!--
+      No-JS / pre-hydration fallback. Vue replaces this on mount, so JS users
+      never see it. Serves as indexable content for search and LLM crawlers.
+
+      When case-studies.config.js provides a `content` field, we drop it in
+      verbatim (it's pre-authored HTML). Otherwise we fall back to the short
+      summary — used for case studies that haven't been expanded yet.
+    -->
+    <main class="seo-fallback" style="max-width:720px;margin:0 auto;padding:48px 24px;font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;color:#1a1a1a;">
+      <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
+      <article>
+        <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">Challenging the Brief: From Station Pages to Schedule</h1>
+        <p>The brief asked for standalone station pages. User research said something else: listeners wanted the next thing on, not a profile page. This case study walks through the workshop, tree testing, and final pivot — from dedicated station pages to a schedule-led discovery model embedded in existing journeys.</p>
+        <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
+      </article>
+      <noscript>
+        <p style="margin-top:32px;padding:12px 16px;background:#f5f0e8;border-radius:8px;"><strong>Note:</strong> this case study is best viewed with JavaScript enabled for the full interactive experience.</p>
+      </noscript>
+    </main>
+  </div>
+
+  <!--
+    Vue 3 via CDN (ES module build).
+    `integrity` on the import map is the newer Import Map Integrity spec
+    (Chrome 127+, ignored silently in Safari/Firefox — safe to include).
+  -->
+  <script type="importmap">
+    {
+      "imports": {
+        "vue": "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.esm-browser.prod.min.js"
+      },
+      "integrity": {
+        "https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.21/vue.esm-browser.prod.min.js": "sha384-WehEzmhr8LLx5jGT+36WEUtwMYcCu/8qIdnEWQgSV4m4N+nwjHqk0nqeDogd8v7V"
+      }
+    }
+  </script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"
+    integrity="sha384-J8C0MvgX4WP58J4N2W99vCKd2J6z99ynOJ5bEfE6jeP7kVTW1drYtv/jzrxM5jbm"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"></script>
+  <script type="module" src="src/main.js?v=7b88b13"></script>
+
+  <!-- Lazy-load videos: loads and autoplays when scrolled into view -->
+  <script>
+    (function () {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return
+          const video = entry.target
+          const src = video.dataset.src
+          if (!src) return
+          video.src = src
+          video.removeAttribute('data-src')
+          video.play().catch(() => {})
+          io.unobserve(video)
+        })
+      }, { rootMargin: '200px' })
+
+      const mo = new MutationObserver(() => {
+        document.querySelectorAll('video[data-src]').forEach(v => io.observe(v))
+      })
+      mo.observe(document.getElementById('app'), { childList: true, subtree: true })
+    })()
+  </script>
+</body>
+</html>

@@ -14,13 +14,13 @@ He contributes to Rayo at Bauer Media Group rather than leading its design, and 
 
 ## Case studies
 
-- [I didn't use AI to build a design system. I built a design system that AI can use.](https://mchiu.co.uk/#agenticds): A design system structured for AI agents — 468 tokens, four autonomous workflows, Figma MCP integration.
-- [Refactoring the Rayo Design System for Scalability & Consistency](https://mchiu.co.uk/#ds): Restructuring Rayo's design system to scale across brands with consistent tokens, components, and patterns.
-- [Brand Switching in Seconds: Scaling a White-Label Design System](https://mchiu.co.uk/#ssds): Building a white-label design system at Simplestream that enables brand switching in seconds.
-- [Streamlining the Design Process & Improving Efficiency at Scale](https://mchiu.co.uk/#plugin): Custom Figma plugins that streamlined design workflows at scale.
-- [Bringing Design to a Team That Had Never Had a Designer](https://mchiu.co.uk/#alexa): Introducing design practice to Alexa — a team that had shipped without a dedicated designer.
-- [Challenging the Brief: From Station Pages to Schedule](https://mchiu.co.uk/#schedule): Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.
-- [Your layers are the prompt. Make sure they're worth reading.](https://mchiu.co.uk/#layerlint): Layer Lint — a Figma plugin that lints layer naming so AI design tools receive cleaner prompts.
+- [I didn't use AI to build a design system. I built a design system that AI can use.](https://mchiu.co.uk/case-studies/agentic-design-system/): A design system structured for AI agents — 468 tokens, four autonomous workflows, Figma MCP integration.
+- [Refactoring the Rayo Design System for Scalability & Consistency](https://mchiu.co.uk/case-studies/rayo-design-system/): Restructuring Rayo's design system to scale across brands with consistent tokens, components, and patterns.
+- [Brand Switching in Seconds: Scaling a White-Label Design System](https://mchiu.co.uk/case-studies/simplestream-design-system/): Building a white-label design system at Simplestream that enables brand switching in seconds.
+- [Streamlining the Design Process & Improving Efficiency at Scale](https://mchiu.co.uk/case-studies/figma-plugin-rayo-thumbnails/): Custom Figma plugins that streamlined design workflows at scale.
+- [Bringing Design to a Team That Had Never Had a Designer](https://mchiu.co.uk/case-studies/rayo-in-alexa/): Introducing design practice to Alexa — a team that had shipped without a dedicated designer.
+- [Challenging the Brief: From Station Pages to Schedule](https://mchiu.co.uk/case-studies/rayo-schedule/): Pushing back on the original brief for standalone station pages in favour of schedule-led discovery, grounded in user research.
+- [Your layers are the prompt. Make sure they're worth reading.](https://mchiu.co.uk/case-studies/figma-plugin-layer-lint/): Layer Lint — a Figma plugin that lints layer naming so AI design tools receive cleaner prompts.
 
 ## Expertise
 
