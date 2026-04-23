@@ -3,7 +3,7 @@ import { ICON_EXPAND, ICON_SHRINK } from '../../assets/icons/icons.js'
 import { useExpandOverlay } from '../../composables/useExpandOverlay.js'
 import { useRipple } from '../../composables/useRipple.js'
 
-const QUOTE_ICON = 'src/assets/images/general/quote-icon.svg'
+const QUOTE_ICON = '/src/assets/images/general/quote-icon.svg'
 
 export default defineComponent({
   name: 'UXQuoteCard',

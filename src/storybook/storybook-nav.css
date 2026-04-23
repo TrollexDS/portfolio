@@ -104,3 +104,45 @@
 .nav-pill:not(.active):hover {
   color: var(--color-primary, #008B8B);
 }
+
+/* ── Lazy toggle ── */
+.lazy-toggle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-text-primary, #2c2c2c);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, color 0.5s ease;
+}
+
+.lazy-toggle__icon {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.lazy-toggle__label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  transition: opacity 0.15s ease;
+}
+
+.lazy-toggle:hover {
+  background: var(--color-surface-nav, #ffffff);
+  box-shadow: 0 0 20px var(--color-shadow-nav, rgba(0,0,0,0.06));
+}
+
+.lazy-toggle:active {
+  transform: scale(0.92);
+}
+
+.lazy-toggle__label--fading {
+  opacity: 0 !important;
+  transition: opacity 0.08s ease !important;
+}

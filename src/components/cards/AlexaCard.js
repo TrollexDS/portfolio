@@ -2,19 +2,19 @@ import { defineComponent, h, ref } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import TldrToggle from '../TldrToggle.js'
 
-const VIDEO_SRC = 'src/assets/videos/rayo-alexa.mp4'
+const VIDEO_SRC = '/src/assets/videos/rayo-alexa.mp4'
 
 // ── Image assets ──
-const IMG_SKILL           = 'src/assets/images/rayo/alexa/rayo-alexa-skill.png'
-const IMG_JOURNEY_MAP     = 'src/assets/images/rayo/alexa/user-journey-mapping.png'
-const IMG_INTERACTION     = 'src/assets/images/rayo/alexa/interaction-model-documentation.png'
-const IMG_VOICEFLOW       = 'src/assets/images/rayo/alexa/voiceflow-open-rayo.png'
-const IMG_ACCOUNT_LINKING = 'src/assets/images/rayo/alexa/account-linking-screen.png'
-const IMG_ACCOUNT_LINK_1  = 'src/assets/images/rayo/alexa/rayo-account-link-1.png'
-const IMG_ACCOUNT_LINK_2  = 'src/assets/images/rayo/alexa/rayo-account-link-2.png'
-const IMG_ACCOUNT_LINK_3  = 'src/assets/images/rayo/alexa/rayo-account-link-3.png'
-const IMG_SUPPORT         = 'src/assets/images/rayo/alexa/support-page.png'
-const IMG_CONTINUE        = 'src/assets/images/rayo/alexa/alexa-rayo-continue-listening.png'
+const IMG_SKILL           = '/src/assets/images/rayo/alexa/rayo-alexa-skill.png'
+const IMG_JOURNEY_MAP     = '/src/assets/images/rayo/alexa/user-journey-mapping.png'
+const IMG_INTERACTION     = '/src/assets/images/rayo/alexa/interaction-model-documentation.png'
+const IMG_VOICEFLOW       = '/src/assets/images/rayo/alexa/voiceflow-open-rayo.png'
+const IMG_ACCOUNT_LINKING = '/src/assets/images/rayo/alexa/account-linking-screen.png'
+const IMG_ACCOUNT_LINK_1  = '/src/assets/images/rayo/alexa/rayo-account-link-1.png'
+const IMG_ACCOUNT_LINK_2  = '/src/assets/images/rayo/alexa/rayo-account-link-2.png'
+const IMG_ACCOUNT_LINK_3  = '/src/assets/images/rayo/alexa/rayo-account-link-3.png'
+const IMG_SUPPORT         = '/src/assets/images/rayo/alexa/support-page.png'
+const IMG_CONTINUE        = '/src/assets/images/rayo/alexa/alexa-rayo-continue-listening.png'
 
 // ── Review card data ──
 const REVIEWS = [

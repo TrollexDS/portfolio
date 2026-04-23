@@ -4,27 +4,27 @@ import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
 
-const VIDEO_SRC = 'src/assets/videos/rayo-schedule.mp4'
+const VIDEO_SRC = '/src/assets/videos/rayo-schedule.mp4'
 
 // ── Image assets ──
-const IMG_MOCKUP         = 'src/assets/images/rayo/schedule/schedule-iphone-mockup.png'
-const IMG_STATION_EPIC   = 'src/assets/images/rayo/schedule/station-page-epic.png'
-const IMG_IA_EXPLORATIONS = 'src/assets/images/rayo/schedule/IA-Explorations.jpg'
-const IMG_TREE_TEST_IA   = 'src/assets/images/rayo/schedule/tree-test-IA.jpg'
-const IMG_JOURNEY_MAP    = 'src/assets/images/rayo/schedule/user-journey-mapping.jpg'
-const IMG_BOARD_KNOW     = 'src/assets/images/rayo/schedule/workshop-what-we-know.png'
-const IMG_BOARD_HUB      = 'src/assets/images/rayo/schedule/workshop-station-hub.jpg'
-const IMG_BOARD_NEEDS    = 'src/assets/images/rayo/schedule/user story.jpg'
-const IMG_RADIO_A        = 'src/assets/images/rayo/schedule/radio-page-a.png'
-const IMG_RADIO_B        = 'src/assets/images/rayo/schedule/radio-page-b.png'
-const IMG_RADIO_C        = 'src/assets/images/rayo/schedule/radio-page-c.png'
-const IMG_PROTO_HEADER       = 'src/assets/images/rayo/schedule/prototype-header.png'
-const IMG_PROTO_HEADER_MAGIC = 'src/assets/images/rayo/schedule/prototype-header-magic.png'
-const IMG_PROTO_NAV          = 'src/assets/images/rayo/schedule/prototype-nav.png'
-const IMG_STATION_HOME       = 'src/assets/images/rayo/schedule/station-page-home.png'
-const IMG_STATION_TRACKLIST  = 'src/assets/images/rayo/schedule/station-page-tracklist.png'
-const IMG_STATION_SHOWS      = 'src/assets/images/rayo/schedule/station-page-shows.png'
-const IMG_SCHEDULE_PAGE  = 'src/assets/images/rayo/schedule/schedule-page.png'
+const IMG_MOCKUP         = '/src/assets/images/rayo/schedule/schedule-iphone-mockup.png'
+const IMG_STATION_EPIC   = '/src/assets/images/rayo/schedule/station-page-epic.png'
+const IMG_IA_EXPLORATIONS = '/src/assets/images/rayo/schedule/IA-Explorations.jpg'
+const IMG_TREE_TEST_IA   = '/src/assets/images/rayo/schedule/tree-test-IA.jpg'
+const IMG_JOURNEY_MAP    = '/src/assets/images/rayo/schedule/user-journey-mapping.jpg'
+const IMG_BOARD_KNOW     = '/src/assets/images/rayo/schedule/workshop-what-we-know.png'
+const IMG_BOARD_HUB      = '/src/assets/images/rayo/schedule/workshop-station-hub.jpg'
+const IMG_BOARD_NEEDS    = '/src/assets/images/rayo/schedule/user story.jpg'
+const IMG_RADIO_A        = '/src/assets/images/rayo/schedule/radio-page-a.png'
+const IMG_RADIO_B        = '/src/assets/images/rayo/schedule/radio-page-b.png'
+const IMG_RADIO_C        = '/src/assets/images/rayo/schedule/radio-page-c.png'
+const IMG_PROTO_HEADER       = '/src/assets/images/rayo/schedule/prototype-header.png'
+const IMG_PROTO_HEADER_MAGIC = '/src/assets/images/rayo/schedule/prototype-header-magic.png'
+const IMG_PROTO_NAV          = '/src/assets/images/rayo/schedule/prototype-nav.png'
+const IMG_STATION_HOME       = '/src/assets/images/rayo/schedule/station-page-home.png'
+const IMG_STATION_TRACKLIST  = '/src/assets/images/rayo/schedule/station-page-tracklist.png'
+const IMG_STATION_SHOWS      = '/src/assets/images/rayo/schedule/station-page-shows.png'
+const IMG_SCHEDULE_PAGE  = '/src/assets/images/rayo/schedule/schedule-page.png'
 
 // ── Schedule antonym annotation cards ──
 // Positions at 680px design width. Phone screenshot centred at 225×488.
@@ -635,16 +635,16 @@ const ProtoPhone = defineComponent({
 })
 
 // ── Placeholders — uncomment when images are ready ──
-// const IMG_BRIEF          = 'src/assets/images/rayo/schedule/brief-overview.png'
-// const IMG_WORKSHOP       = 'src/assets/images/rayo/schedule/workshop-miro.png'
-// const IMG_PERSONAS       = 'src/assets/images/rayo/schedule/user-personas.png'
-// const IMG_JOURNEY_MAP    = 'src/assets/images/rayo/schedule/journey-map.png'
-// const IMG_TREE_TEST      = 'src/assets/images/rayo/schedule/tree-test.png'
-// const IMG_TESTING        = 'src/assets/images/rayo/schedule/user-testing.png'
-// const IMG_SCHEDULE_PROTO = 'src/assets/images/rayo/schedule/schedule-prototype.png'
-// const IMG_SCOPE_COMPARE  = 'src/assets/images/rayo/schedule/scope-comparison.png'
-// const IMG_SHIPPED_1      = 'src/assets/images/rayo/schedule/shipped-schedule.png'
-// const IMG_SHIPPED_2      = 'src/assets/images/rayo/schedule/shipped-catchup.png'
+// const IMG_BRIEF          = '/src/assets/images/rayo/schedule/brief-overview.png'
+// const IMG_WORKSHOP       = '/src/assets/images/rayo/schedule/workshop-miro.png'
+// const IMG_PERSONAS       = '/src/assets/images/rayo/schedule/user-personas.png'
+// const IMG_JOURNEY_MAP    = '/src/assets/images/rayo/schedule/journey-map.png'
+// const IMG_TREE_TEST      = '/src/assets/images/rayo/schedule/tree-test.png'
+// const IMG_TESTING        = '/src/assets/images/rayo/schedule/user-testing.png'
+// const IMG_SCHEDULE_PROTO = '/src/assets/images/rayo/schedule/schedule-prototype.png'
+// const IMG_SCOPE_COMPARE  = '/src/assets/images/rayo/schedule/scope-comparison.png'
+// const IMG_SHIPPED_1      = '/src/assets/images/rayo/schedule/shipped-schedule.png'
+// const IMG_SHIPPED_2      = '/src/assets/images/rayo/schedule/shipped-catchup.png'
 
 export default defineComponent({
   name: 'ScheduleCard',
@@ -888,7 +888,7 @@ export default defineComponent({
 
           h('img', {
             class: 'cs-cover-img cs-cover-img--full',
-            src: 'src/assets/images/rayo/schedule/schedule-page-affinity-map.jpg',
+            src: '/src/assets/images/rayo/schedule/schedule-page-affinity-map.jpg',
             alt: 'User testing synthesis affinity map',
           }),
           h('p', { class: 'cs-hint' }, 'User testing synthesis affinity map'),
@@ -919,7 +919,7 @@ export default defineComponent({
 
           h('img', {
             class: 'cs-cover-img',
-            src: 'src/assets/images/rayo/schedule/schedule-wireframe.png',
+            src: '/src/assets/images/rayo/schedule/schedule-wireframe.png',
             alt: 'Schedule wireframe',
           }),
           h('p', { class: 'cs-hint' }, 'Schedule wireframe'),
@@ -947,8 +947,8 @@ export default defineComponent({
           h('img', {
             class: 'cs-cover-img cs-cover-img--full',
             src: isDark.value
-              ? 'src/assets/images/rayo/schedule/schedule-mockups-dark.png'
-              : 'src/assets/images/rayo/schedule/schedule-mockups.png',
+              ? '/src/assets/images/rayo/schedule/schedule-mockups-dark.png'
+              : '/src/assets/images/rayo/schedule/schedule-mockups.png',
             alt: 'Schedule feature mockups',
             style: { marginBottom: '-64px', marginTop: '-16px' },
           }),

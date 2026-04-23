@@ -3,8 +3,8 @@ import BentoCard from '../BentoCard.js'
 import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
 const STRAVA_PROFILE = 'https://www.strava.com/athletes/101156627'
-const ACTIVITY_JSON  = 'src/assets/strava-activity.json'
-const APP_ICON       = 'src/assets/logos/strava.svg'
+const ACTIVITY_JSON  = '/src/assets/strava-activity.json'
+const APP_ICON       = '/src/assets/logos/strava.svg'
 
 // ── Google encoded-polyline decoder ──────────────────────────────────────────
 

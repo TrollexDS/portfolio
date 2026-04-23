@@ -11,11 +11,11 @@ const P = 'cc' // CSS class prefix
 
 /* ─── Local asset paths ── */
 const ASSETS = {
-  contentRail: 'src/assets/images/rayo/plugin/content-rail.png',
+  contentRail: '/src/assets/images/rayo/plugin/content-rail.png',
   fallbackBg:  'https://www.figma.com/api/mcp/asset/1187763d-e800-412f-b8a8-22e5035f2ef5',
 }
 
-const BG_PATH = 'src/assets/images/rayo/plugin/component-bg'
+const BG_PATH = '/src/assets/images/rayo/plugin/component-bg'
 const GRADIENT_OPTIONS = [
   { value: 'aqua', label: 'Aqua' },
   { value: 'yellow', label: 'Yellow' },

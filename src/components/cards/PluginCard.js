@@ -4,12 +4,12 @@ import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
 
-const VIDEO_SRC = 'src/assets/videos/rayo-plugin-clip.mp4'
-const SCREENSHOT         = 'src/assets/images/rayo/plugin/rayo-plugin-screenshot.png'
-const PODCAST_SCREENSHOT = 'src/assets/images/rayo/plugin/rayo-plugin-podcast-screenshot.png'
-const IMG_SEL_REGION = 'src/assets/images/rayo/plugin/select-a-region-hover.png'
-const IMG_FIND_ST = 'src/assets/images/rayo/plugin/find-a-station-hover.png'
-const IMG_QUICK = 'src/assets/images/rayo/plugin/quick-guide-hover.png'
+const VIDEO_SRC = '/src/assets/videos/rayo-plugin-clip.mp4'
+const SCREENSHOT         = '/src/assets/images/rayo/plugin/rayo-plugin-screenshot.png'
+const PODCAST_SCREENSHOT = '/src/assets/images/rayo/plugin/rayo-plugin-podcast-screenshot.png'
+const IMG_SEL_REGION = '/src/assets/images/rayo/plugin/select-a-region-hover.png'
+const IMG_FIND_ST = '/src/assets/images/rayo/plugin/find-a-station-hover.png'
+const IMG_QUICK = '/src/assets/images/rayo/plugin/quick-guide-hover.png'
 
 // Card positions taken directly from Figma (680px-wide container)
 const CARDS = [
@@ -125,11 +125,11 @@ const AntonymSection = defineComponent({
 })
 
 const V_IMGS = [
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V1.png?v=2', hint: 'POC' },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V2.png', hint: 'Included podcast' },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V3.png', hint: 'Expanded Regions' },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V4.png', hint: 'Added episodes' },
-  { src: 'src/assets/images/rayo/plugin/rayo-plugin-V5.png', hint: 'Developed guidelines' },
+  { src: '/src/assets/images/rayo/plugin/rayo-plugin-V1.png?v=2', hint: 'POC' },
+  { src: '/src/assets/images/rayo/plugin/rayo-plugin-V2.png', hint: 'Included podcast' },
+  { src: '/src/assets/images/rayo/plugin/rayo-plugin-V3.png', hint: 'Expanded Regions' },
+  { src: '/src/assets/images/rayo/plugin/rayo-plugin-V4.png', hint: 'Added episodes' },
+  { src: '/src/assets/images/rayo/plugin/rayo-plugin-V5.png', hint: 'Developed guidelines' },
 ]
 
 const VersionSection = defineComponent({
@@ -178,10 +178,10 @@ const VersionSection = defineComponent({
 })
 
 const ERROR_IMGS = [
-  'src/assets/images/rayo/plugin/rayo-plugin-error-station.png',
-  'src/assets/images/rayo/plugin/rayo-plugin-error-show.png',
-  'src/assets/images/rayo/plugin/rayo-plugin-error-podcast.png',
-  'src/assets/images/rayo/plugin/rayo-plugin-error-episode.png',
+  '/src/assets/images/rayo/plugin/rayo-plugin-error-station.png',
+  '/src/assets/images/rayo/plugin/rayo-plugin-error-show.png',
+  '/src/assets/images/rayo/plugin/rayo-plugin-error-podcast.png',
+  '/src/assets/images/rayo/plugin/rayo-plugin-error-episode.png',
 ]
 
 const ErrorSection = defineComponent({
@@ -221,7 +221,7 @@ const ErrorSection = defineComponent({
       // ── Static Figma toolbar ──
       h('img', {
         class: 'cs-figma-bar',
-        src: 'src/assets/images/rayo/plugin/figma-bar.png',
+        src: '/src/assets/images/rayo/plugin/figma-bar.png',
         alt: 'Figma toolbar',
       }),
     ])
@@ -230,13 +230,13 @@ const ErrorSection = defineComponent({
 
 // ── Marquee background rows ──
 const MARQUEE_ROWS = [
-  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/plugin/plugin-row/${String(i + 1).padStart(2, '0')}.png`),  dir: 'left'  },
-  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/plugin/plugin-row/${String(i + 12).padStart(2, '0')}.png`), dir: 'right' },
-  { imgs: Array.from({ length: 11 }, (_, i) => `src/assets/images/rayo/plugin/plugin-row/${String(i + 22).padStart(2, '0')}.png`), dir: 'left'  },
-  { imgs: Array.from({ length: 10 }, (_, i) => `src/assets/images/rayo/plugin/plugin-row/${String(i + 33).padStart(2, '0')}.png`), dir: 'right' },
+  { imgs: Array.from({ length: 11 }, (_, i) => `/src/assets/images/rayo/plugin/plugin-row/${String(i + 1).padStart(2, '0')}.png`),  dir: 'left'  },
+  { imgs: Array.from({ length: 10 }, (_, i) => `/src/assets/images/rayo/plugin/plugin-row/${String(i + 12).padStart(2, '0')}.png`), dir: 'right' },
+  { imgs: Array.from({ length: 11 }, (_, i) => `/src/assets/images/rayo/plugin/plugin-row/${String(i + 22).padStart(2, '0')}.png`), dir: 'left'  },
+  { imgs: Array.from({ length: 10 }, (_, i) => `/src/assets/images/rayo/plugin/plugin-row/${String(i + 33).padStart(2, '0')}.png`), dir: 'right' },
 ]
 
-const HITS_IMG = 'src/assets/images/rayo/plugin/rayo-plugin-hits.png'
+const HITS_IMG = '/src/assets/images/rayo/plugin/rayo-plugin-hits.png'
 
 const MarqueeSection = defineComponent({
   name: 'MarqueeSection',
@@ -344,8 +344,8 @@ export default defineComponent({
 
           h('video', {
             class: 'cs-demo-video',
-            src: 'src/assets/videos/rayo-plugin-demo.mp4',
-            poster: 'src/assets/images/rayo/plugin/rayo-plugin-demo-poster.jpg',
+            src: '/src/assets/videos/rayo-plugin-demo.mp4',
+            poster: '/src/assets/images/rayo/plugin/rayo-plugin-demo-poster.jpg',
             autoplay: true,
             loop: true,
             muted: true,

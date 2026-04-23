@@ -4,12 +4,12 @@ import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 
 // ── Assets ──
-const LOGO_SRC = 'src/assets/images/layerlint-logo.svg'
-const HERO_SRC = 'src/assets/images/layerlint-hero.svg'
-const IMG_CLEANUP = 'src/assets/images/layerlint/ll-cleanup.png'
-const IMG_RENAME = 'src/assets/images/layerlint/ll-rename.png'
-const IMG_SETTINGS = 'src/assets/images/layerlint/ll-settings.png'
-const IMG_COVER = 'src/assets/images/layerlint/ll-cover.png'
+const LOGO_SRC = '/src/assets/images/layerlint-logo.svg'
+const HERO_SRC = '/src/assets/images/layerlint-hero.svg'
+const IMG_CLEANUP = '/src/assets/images/layerlint/ll-cleanup.png'
+const IMG_RENAME = '/src/assets/images/layerlint/ll-rename.png'
+const IMG_SETTINGS = '/src/assets/images/layerlint/ll-settings.png'
+const IMG_COVER = '/src/assets/images/layerlint/ll-cover.png'
 
 
 /* ─────────────────────────────────────────────────────────────

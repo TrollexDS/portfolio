@@ -3,7 +3,7 @@ import { ICON_EXPAND, ICON_SHRINK } from '../../assets/icons/icons.js'
 import { useExpandOverlay } from '../../composables/useExpandOverlay.js'
 import { useRipple } from '../../composables/useRipple.js'
 
-const QUOTE_ICON = 'src/assets/images/general/quote-icon.svg'
+const QUOTE_ICON = '/src/assets/images/general/quote-icon.svg'
 
 const PARAGRAPHS = [
   ['A design system is a shared language. It helps teams move faster, stay aligned, and build with confidence, but it\'s a tool, ', { bold: 'not a rulebook' }, '. The moment a component or pattern gets in the way of a better experience, it should be challenged.'],

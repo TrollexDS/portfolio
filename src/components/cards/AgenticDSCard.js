@@ -5,22 +5,22 @@ import InteractiveTag from '../InteractiveTag.js'
 import MagneticTokensBg from '../MagneticTokensBg.js'
 
 // ── Card face logos ──
-const LOGO_STORYBOOK = 'src/assets/logos/storybook-logo.svg'
-const LOGO_CLAUDE    = 'src/assets/logos/claude-logo.svg'
-const LOGO_FIGMA     = 'src/assets/logos/figma-logo.svg'
+const LOGO_STORYBOOK = '/src/assets/logos/storybook-logo.svg'
+const LOGO_CLAUDE    = '/src/assets/logos/claude-logo.svg'
+const LOGO_FIGMA     = '/src/assets/logos/figma-logo.svg'
 
 // ── Hero placeholder (solid orange for fly animation) ──
-const HERO_SRC = 'src/assets/images/agentic-ds/agentic-ds-hero.svg'
+const HERO_SRC = '/src/assets/images/agentic-ds/agentic-ds-hero.svg'
 
 // ── Image assets (add screenshots as you take them) ──
-const IMG_TOKEN_ARCH     = 'src/assets/images/agentic-ds/token-architecture.png'
-const IMG_FIGMA_TOKENS   = 'src/assets/images/agentic-ds/figma-tokens.png'
-const IMG_STORYBOOK_DARK = 'src/assets/images/agentic-ds/storybook-dark-mode.png'
-const IMG_DRIFT_AUDIT    = 'src/assets/images/agentic-ds/drift-audit.png'
-const IMG_CONSOLIDATION  = 'src/assets/images/agentic-ds/token-consolidation.png'
-const IMG_DESCRIPTIONS   = 'src/assets/images/agentic-ds/component-descriptions.png'
-const IMG_SECTIONS_FIGMA = 'src/assets/images/agentic-ds/figma-sections.png'
-const IMG_STORYBOOK_SHOT = 'src/assets/images/agentic-ds/storybook-screenshot.png'
+const IMG_TOKEN_ARCH     = '/src/assets/images/agentic-ds/token-architecture.png'
+const IMG_FIGMA_TOKENS   = '/src/assets/images/agentic-ds/figma-tokens.png'
+const IMG_STORYBOOK_DARK = '/src/assets/images/agentic-ds/storybook-dark-mode.png'
+const IMG_DRIFT_AUDIT    = '/src/assets/images/agentic-ds/drift-audit.png'
+const IMG_CONSOLIDATION  = '/src/assets/images/agentic-ds/token-consolidation.png'
+const IMG_DESCRIPTIONS   = '/src/assets/images/agentic-ds/component-descriptions.png'
+const IMG_SECTIONS_FIGMA = '/src/assets/images/agentic-ds/figma-sections.png'
+const IMG_STORYBOOK_SHOT = '/src/assets/images/agentic-ds/storybook-screenshot.png'
 const STORYBOOK_URL      = 'https://main--69d91a00abeffaea79b942f8.chromatic.com/?path=/story/design-tokens-colours--semantic-colours'
 
 

@@ -2,8 +2,8 @@ import { defineComponent, h, ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { MOBILE_BREAKPOINT } from '../filterLayouts.js'
 import LazyToggle from './LazyToggle.js'
 
-const LOGO      = 'src/assets/logos/alex-logo.svg'
-const ARROW_OUT = 'src/assets/icons/external-link.svg'
+const LOGO      = '/src/assets/logos/alex-logo.svg'
+const ARROW_OUT = '/src/assets/icons/external-link.svg'
 
 const NAV_ITEMS = ['All', 'About', 'Work', 'Side Quests']
 
