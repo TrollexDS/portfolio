@@ -115,10 +115,19 @@
   padding: 0 14px 0 10px;
   border: none;
   border-radius: 100px;
-  background: transparent;
-  cursor: pointer;
+  background: var(--color-surface-nav-blur, rgba(249,249,249,0.5));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--color-text-primary, #2c2c2c);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, color 0.5s ease;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              padding 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.3s ease,
+              transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .lazy-toggle__icon {
