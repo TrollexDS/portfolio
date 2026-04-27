@@ -1,0 +1,41 @@
+name: Sync latest Strava ride
+
+# Runs every Sunday at 14:00 UTC — that's 3pm London time during BST,
+# 2pm during GMT. Adjust the cron below if you want a different window.
+# You can also trigger it manually any time from the Actions tab.
+on:
+  schedule:
+    - cron: '0 14 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch latest Strava activity
+        env:
+          STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
+          STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
+          STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
+        run: node scripts/fetch-strava.js
+
+      - name: Commit & push if the activity changed
+        run: |
+          if git diff --quiet src/assets/strava-activity.json; then
+            echo "No new ride — nothing to commit."
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/assets/strava-activity.json
+          git commit -m "chore(strava): sync latest ride [skip ci]"
+          git push

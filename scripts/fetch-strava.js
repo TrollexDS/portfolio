@@ -10,9 +10,20 @@
 const fs = require('fs')
 const path = require('path')
 
-const CLIENT_ID     = '211462'
-const CLIENT_SECRET = '9edb117e27e74ae910a07088505543030dd3bd67'
-const REFRESH_TOKEN = '62b8228854ea4573297b0404008d9dfae93ee002'
+// Credentials are read from env vars so they don't sit in the repo.
+// Locally:  export STRAVA_CLIENT_ID=… STRAVA_CLIENT_SECRET=… STRAVA_REFRESH_TOKEN=…
+// CI:       set as repository secrets (see .github/workflows/strava.yml)
+const CLIENT_ID     = process.env.STRAVA_CLIENT_ID
+const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET
+const REFRESH_TOKEN = process.env.STRAVA_REFRESH_TOKEN
+
+if (!CLIENT_ID || !CLIENT_SECRET || !REFRESH_TOKEN) {
+  console.error(
+    'Missing Strava credentials. Set STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET, '
+    + 'and STRAVA_REFRESH_TOKEN in your environment (or as GitHub repo secrets).'
+  )
+  process.exit(1)
+}
 
 async function main() {
   // 1. Get a fresh access token
