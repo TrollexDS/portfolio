@@ -95,9 +95,9 @@ export default defineComponent({
           keyboard:           false,
         })
 
-        // Carto Voyager — colourful base with parks, water, and place names
+        // Carto Light — clean grey base with place names baked in
         L.tileLayer(
-          'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+          'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
           { subdomains: 'abcd', maxZoom: 19 }
         ).addTo(leafletMap)
 
