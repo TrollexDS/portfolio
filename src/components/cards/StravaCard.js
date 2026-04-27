@@ -95,9 +95,9 @@ export default defineComponent({
           keyboard:           false,
         })
 
-        // Clean light-grey tiles, no labels — lets the route stand out
+        // Carto Voyager — colourful base with parks, water, and place names
         L.tileLayer(
-          'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+          'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
           { subdomains: 'abcd', maxZoom: 19 }
         ).addTo(leafletMap)
 
