@@ -4,5 +4,9 @@
 # Large source video files (converted to mp4)
 src/assets/videos/*.mov
 
+# Dependencies
+node_modules/
+
+# Storybook
 *storybook.log
 storybook-static
