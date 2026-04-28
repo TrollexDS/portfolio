@@ -64,21 +64,6 @@ export const Default = {
   }),
 }
 
-export const DarkVariant = {
-  render: () => ({
-    components: { BentoCard },
-    setup: () => () =>
-      h('div', { style: { padding: '48px', background: 'var(--color-bg-body, #f0ede8)' } }, [
-        h(BentoCard, {
-          dark: true,
-          tooltip: 'View case study',
-        }, {
-          default: () => h('div', { style: placeholderStyle('Dark Variant', true) }, 'Dark Variant'),
-        }),
-      ]),
-  }),
-}
-
 export const States = {
   render: () => ({
     setup: () => () =>
@@ -125,56 +110,6 @@ export const States = {
             h('span', { style: labelStyle }, 'Pressed'),
           ]),
 
-        ]),
-      ]),
-  }),
-}
-
-export const MobileGrid = {
-  parameters: {
-    viewport: { defaultViewport: 'mobile' },
-    chromatic: { viewports: [375] },
-  },
-  render: () => ({
-    components: { BentoCard },
-    setup: () => () =>
-      h('div', {
-        style: {
-          padding: '24px',
-          background: 'var(--color-bg-body, #f0ede8)',
-          width: '375px',
-        },
-      }, [
-        h('p', {
-          style: {
-            fontFamily: "'Syne', sans-serif",
-            fontSize: '13px',
-            opacity: 0.4,
-            marginBottom: '16px',
-            color: 'var(--color-text-primary, #2c2c2c)',
-          },
-        }, 'Mobile 2-column grid — fluid cards with 18px gap'),
-        h('div', {
-          style: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '18px',
-          },
-        }, [
-          /* 4 fluid cards */
-          ...[1, 2, 3, 4].map(i =>
-            h(BentoCard, {
-              dark: i === 2,
-              tooltip: i === 2 ? 'View case study' : 'Click to expand',
-            }, {
-              default: () => h('div', {
-                style: {
-                  ...placeholderStyle(`Card ${i}`, i === 2),
-                  aspectRatio: '1 / 1',
-                },
-              }, `Card ${i}`),
-            })
-          ),
         ]),
       ]),
   }),

@@ -42,38 +42,6 @@ export const Default = {
   }),
 }
 
-export const Mobile = {
-  parameters: {
-    viewport: { defaultViewport: 'mobile' },
-    chromatic: { viewports: [375] },
-  },
-  render: () => ({
-    components: { NavBar },
-    setup: () => () =>
-      h('div', {
-        style: {
-          background: 'var(--color-bg-body, #f0ede8)',
-          minHeight: '667px',
-          position: 'relative',
-          transition: 'background 0.5s ease',
-        },
-      }, [
-        h(NavBar),
-        h('div', { style: { paddingTop: '60px', textAlign: 'center' } }, [
-          h('p', {
-            style: {
-              fontFamily: "'Syne', sans-serif",
-              fontSize: '13px',
-              opacity: 0.3,
-              padding: '0 24px',
-              color: 'var(--color-text-primary, #2c2c2c)',
-            },
-          }, 'Mobile nav — bottom-anchored, full-width pills, no logo or toggle in bar.'),
-        ]),
-      ]),
-  }),
-}
-
 export const PillStates = {
   render: () => ({
     setup: () => () =>

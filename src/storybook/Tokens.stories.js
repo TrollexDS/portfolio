@@ -326,68 +326,6 @@ export const SemanticColours = {
   }),
 }
 
-export const SemanticColoursMobile = {
-  parameters: {
-    viewport: { defaultViewport: 'mobile' },
-    chromatic: { viewports: [375] },
-  },
-  render: () => ({
-    setup() {
-      const tick = useThemeReactive()
-
-      return () => {
-        void tick.value
-
-        const groups = [
-          { title: 'Primary', prefix: '--color-primary' },
-          { title: 'Surface', prefix: '--color-surface' },
-          { title: 'Text', prefix: '--color-text' },
-          { title: 'Border', prefix: '--color-border' },
-        ]
-
-        /* Mobile token row — compact, no copy button */
-        function MobileTokenRow(token) {
-          const alpha = isAlpha(token.value)
-          return h('tr', {
-            style: { transition: 'background 0.15s' },
-          }, [
-            h('td', { style: { ...S.td, padding: '10px 12px', width: '40px' } }, [
-              h('div', { style: { ...S.swatch(token.value, !alpha), width: '28px', height: '28px', borderRadius: '8px' } },
-                alpha ? [h('div', { style: { position: 'absolute', inset: 0, borderRadius: '8px', background: token.value } })] : []
-              ),
-            ]),
-            h('td', { style: { ...S.td, padding: '10px 8px' } }, [
-              h('div', { style: { ...S.tokenName, fontSize: '12px' } }, friendlyName(token.name)),
-              h('div', { style: { ...S.tokenVar, fontSize: '10px', wordBreak: 'break-all' } }, token.name),
-            ]),
-            h('td', { style: { ...S.td, padding: '10px 12px', textAlign: 'right' } }, [
-              h('span', { style: { ...S.tokenValue, fontSize: '10px' } }, token.value),
-            ]),
-          ])
-        }
-
-        function MobileTokenCard(title, tokens) {
-          return h('div', { style: S.card }, [
-            h('div', { style: { ...S.cardHeader, padding: '12px 16px' } }, [
-              h('span', { style: S.cardTitle }, title),
-              h('span', { style: S.count }, `${tokens.length}`),
-            ]),
-            h('table', { style: { ...S.table, fontSize: '12px' } }, [
-              h('tbody', {}, tokens.map(t => MobileTokenRow(t))),
-            ]),
-          ])
-        }
-
-        return h('div', { style: { ...S.page, padding: '20px', maxWidth: '375px' } }, [
-          h('h1', { style: { ...S.title, fontSize: '22px' } }, 'Colours — Mobile'),
-          h('p', { style: S.subtitle }, 'Compact layout — no copy button, smaller swatches.'),
-          ...groups.map(g => MobileTokenCard(g.title, getTokens(g.prefix))),
-        ])
-      }
-    },
-  }),
-}
-
 export const Primitives = {
   render: () => ({
     setup() {
