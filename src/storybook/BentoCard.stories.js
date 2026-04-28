@@ -114,34 +114,3 @@ export const States = {
       ]),
   }),
 }
-
-export const ActionLabelVariant = {
-  render: () => ({
-    components: { BentoCard },
-    setup: () => () =>
-      h('div', { style: { padding: '48px', background: 'var(--color-bg-body, #f0ede8)', display: 'flex', gap: '24px' } }, [
-        /* Standard icon action */
-        h('div', {}, [
-          h(BentoCard, {
-            dark: false,
-            tooltip: 'Click to expand',
-          }, {
-            default: () => h('div', { style: placeholderStyle('Icon action') }, 'Icon action'),
-          }),
-          h('span', { style: labelStyle }, 'Icon (default)'),
-        ]),
-
-        /* Text label action */
-        h('div', {}, [
-          h(BentoCard, {
-            dark: true,
-            actionLabel: 'Coming soon',
-            tooltip: 'Currently in development',
-          }, {
-            default: () => h('div', { style: placeholderStyle('Label action', true) }, 'Label action'),
-          }),
-          h('span', { style: labelStyle }, 'Text label'),
-        ]),
-      ]),
-  }),
-}

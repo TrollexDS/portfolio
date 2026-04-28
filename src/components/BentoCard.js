@@ -23,7 +23,6 @@ export default defineComponent({
     classes:       { type: String,  default: '' },
     href:          { type: String,  default: '#' },
     actionIconSrc: { type: String,  default: ACTION_ICON },
-    actionLabel:   { type: String,  default: '' },
     tooltip:       { type: String,  default: '' },
   },
 
@@ -40,15 +39,13 @@ export default defineComponent({
       ].filter(Boolean).join(' ')
 
       const actionIcon = h('a', {
-        class: ['action-icon', props.actionLabel ? 'action-icon--label' : ''].filter(Boolean).join(' '),
+        class: 'action-icon',
         href: props.href,
         target: props.href !== '#' ? '_blank' : null,
         rel: props.href !== '#' ? 'noopener noreferrer' : null,
         onClick: (e) => e.stopPropagation(),
       }, [
-        props.actionLabel
-          ? h('span', { class: 'action-icon__text' }, props.actionLabel)
-          : h('img', { src: props.actionIconSrc, alt: 'Open' }),
+        h('img', { src: props.actionIconSrc, alt: 'Open' }),
       ])
 
       const rootProps = {
