@@ -6,6 +6,18 @@ const STRAVA_PROFILE = 'https://www.strava.com/athletes/101156627'
 const ACTIVITY_JSON  = '/src/assets/strava-activity.json'
 const APP_ICON       = '/src/assets/logos/strava.svg'
 
+// ── Date formatter ───────────────────────────────────────────────────────────
+
+// Strava's start_date_local is an ISO string already shifted to the rider's
+// local time (still suffixed with "Z"). Formatting in UTC gives us a stable
+// "26 Apr" regardless of the viewer's own timezone.
+function formatRideDate(iso) {
+  if (!iso) return null
+  const d = new Date(iso)
+  if (isNaN(d)) return null
+  return new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' }).format(d)
+}
+
 // ── Google encoded-polyline decoder ──────────────────────────────────────────
 
 function decodePolyline(str) {
@@ -74,6 +86,7 @@ export default defineComponent({
           name:      activity.name,
           distance:  (activity.distance / 1000).toFixed(1) + ' km',
           elevation: Math.round(activity.total_elevation_gain) + ' m ↑',
+          date:      formatRideDate(activity.start_date_local),
         }
 
         const encoded = activity.polyline
@@ -124,7 +137,11 @@ export default defineComponent({
       if (leafletMap) { leafletMap.remove(); leafletMap = null }
     })
 
-    return () => h(BentoCard, { classes: 'strava-card', href: STRAVA_PROFILE, actionIconSrc: ICON_EXTERNAL_LINK, tooltip: 'My last riding route 🚴\nConnect with me on Strava' }, {
+    return () => {
+      const datePart = rideInfo.value?.date ? ` (${rideInfo.value.date})` : ''
+      const tooltip  = `My latest ride${datePart} 🚴\nConnect with me on Strava`
+
+      return h(BentoCard, { classes: 'strava-card', href: STRAVA_PROFILE, actionIconSrc: ICON_EXTERNAL_LINK, tooltip }, {
       default: () => [
 
         // ── Map canvas ──────────────────────────────────────
@@ -145,5 +162,6 @@ export default defineComponent({
         ]),
       ],
     })
+    }
   },
 })

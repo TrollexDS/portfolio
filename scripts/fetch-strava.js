@@ -74,6 +74,7 @@ async function main() {
     distance: activity.distance,
     total_elevation_gain: activity.total_elevation_gain,
     polyline: activity.map?.polyline || activity.map?.summary_polyline,
+    start_date_local: activity.start_date_local,
     fetched_at: new Date().toISOString(),
   }
 
