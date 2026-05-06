@@ -11,3 +11,4 @@ node_modules/
 *storybook.log
 storybook-static
 reports/token-drift-audit.md
+reports/.token-drift-audit.local.md
