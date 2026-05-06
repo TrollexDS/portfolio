@@ -72,8 +72,12 @@ const TokenLayerDemo = defineComponent({
       expanded.value = expanded.value === tier ? null : tier
     }
 
+    // aria-hidden: decorative interactive demo of the token-layer system.
+    // The case-study prose elsewhere describes the three-layer architecture;
+    // this widget's expand/collapse rows would otherwise leak token names
+    // and hex values into Safari Reader Mode and screen readers.
     return () =>
-      h('div', { class: 'ads-token-demo' }, [
+      h('div', { class: 'ads-token-demo', 'aria-hidden': 'true' }, [
         ...TOKEN_LAYERS.map(layer =>
           h('div', {
             class: ['ads-token-layer', expanded.value === layer.tier ? 'ads-token-layer--open' : ''].filter(Boolean).join(' '),
@@ -156,8 +160,10 @@ const AgentWorkflowDemo = defineComponent({
     const activeIdx = ref(0)
     const wrapRef = ref(null)
 
+    // aria-hidden: decorative interactive demo of agent workflows. The four
+    // workflow examples are summarised in the surrounding case-study prose.
     return () =>
-      h('div', { class: 'ads-workflow-demo' }, [
+      h('div', { class: 'ads-workflow-demo', 'aria-hidden': 'true' }, [
         // Tab bar
         h('div', { class: 'ads-workflow-tabs' },
           AGENT_ACTIONS.map((a, i) =>

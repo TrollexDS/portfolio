@@ -21,8 +21,12 @@ export default defineComponent({
   },
   setup(props) {
     return () =>
+      // aria-hidden: this is a visual affordance pointing at an adjacent
+      // interactive widget. It's meaningless to screen readers and clutters
+      // Safari Reader Mode (where it concatenates as "InteractiveExplore…").
       h('p', {
         class: ['cs-hint', props.centered ? 'cs-hint--centered' : ''].filter(Boolean).join(' '),
+        'aria-hidden': 'true',
       }, [
         h('span', { class: 'cc-interactive-tag' }, 'Interactive'),
         props.hint,

@@ -344,9 +344,12 @@ export default defineComponent({
     })
 
     // ── render ──
+    // aria-hidden on the demo wrap: decorative interactive Variables explorer.
+    // Token names, hex values, and tab labels would otherwise leak into
+    // Reader Mode and screen readers as run-on noise alongside the prose.
     return () =>
       h('div', { class: SG+'-outer' }, [
-      h('div', { class: SG+'-wrap' }, [
+      h('div', { class: SG+'-wrap', 'aria-hidden': 'true' }, [
 
         // ── Top bar ──
         h('div', { class: SG+'-topbar' }, [

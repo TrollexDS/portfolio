@@ -100,9 +100,12 @@ export default defineComponent({
     })
 
     /* ── Render ── */
+    // aria-hidden on the demo layout: decorative Figma-style variant playground.
+    // Panel labels, variant tags, and select option values would otherwise leak
+    // into Reader Mode and screen readers as run-on text alongside the prose.
     return () =>
       h('div', { class: P+'-outer' }, [
-        h('div', { class: P+'-layout' }, [
+        h('div', { class: P+'-layout', 'aria-hidden': 'true' }, [
 
           /* ═══ Canvas (left) ═══ */
           h('div', { class: P+'-canvas', ref: canvasRef }, [

@@ -195,7 +195,10 @@ export default defineComponent({
           ]),
 
           // ── Typography image (scrollable container) ──
-          h('div', { class: 'ss-ds-scroll-container cs-cover-img' }, [
+          // aria-hidden: decorative interactive typography demo. The case-study
+          // prose covers fixed sizes/weights vs flexible typeface; the inner
+          // image's labels would otherwise leak as run-on text in Reader Mode.
+          h('div', { class: 'ss-ds-scroll-container cs-cover-img', 'aria-hidden': 'true' }, [
             h('img', {
               src: IMG_TYPOGRAPHY,
               alt: 'Typography styles and type scale',

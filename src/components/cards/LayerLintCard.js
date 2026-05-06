@@ -357,8 +357,12 @@ const FloatingLayersBg = defineComponent({
     }
 
     // ── Main render ──
+    // aria-hidden: this is a decorative animated demo of a Figma layers
+    // panel. Its row labels ("Rectangle 47", "Group 12", …) are visual
+    // chrome, not content, and were leaking into Safari Reader Mode and
+    // screen readers. The card's prose elsewhere carries the real meaning.
     return () =>
-      h('div', { class: 'll-bg-wrap', ref: wrapRef }, [
+      h('div', { class: 'll-bg-wrap', ref: wrapRef, 'aria-hidden': 'true' }, [
         h('div', {
           class: 'll-bg-track',
           style: {
@@ -449,7 +453,8 @@ const BeforeAfterToggle = defineComponent({
             onClick: () => { showAfter.value = true },
           }, 'After'),
         ]),
-        h('div', { class: 'll-panels-wrap' }, [
+        // Decorative before/after panels — hide from Reader Mode / a11y tree.
+        h('div', { class: 'll-panels-wrap', 'aria-hidden': 'true' }, [
           h('div', {
             class: ['ll-panels-track', showAfter.value ? 'll-panels-track--after' : ''].filter(Boolean).join(' '),
           }, [

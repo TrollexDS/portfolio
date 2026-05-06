@@ -62,11 +62,16 @@ const ScheduleAntonym = defineComponent({
       const s = schScale.value
       const hover = schCanHover.value
 
+      // aria-hidden: decorative interactive demo of the schedule page.
+      // Card labels and zone descriptions would otherwise leak into
+      // Reader Mode and screen readers as run-on text.
+
       // ── Mobile: flex layout ──
       if (!hover) {
         return h('div', {
           class: 'cs-antonym-section cs-antonym-section--mobile',
           style: { width: schW.value + 'px' },
+          'aria-hidden': 'true',
         }, [
           h('div', { class: 'cs-antonym-mobile-cards' },
             SCH_MOBILE_CARDS.map(card =>
@@ -91,6 +96,7 @@ const ScheduleAntonym = defineComponent({
         class: 'cs-antonym-section',
         style: { width: schW.value + 'px', height: Math.round(SCH_ANTONYM_H * s) + 'px' },
         onMouseleave: () => { active.value = null },
+        'aria-hidden': 'true',
       }, [
         h('div', {
           class: 'cs-antonym-screenshot-wrap',
@@ -506,8 +512,11 @@ const MiroBoard = defineComponent({
       if (resizeObs) resizeObs.disconnect()
     })
 
+    // aria-hidden: decorative interactive Miro-board demo. Board alt text
+    // and zoom controls would otherwise leak into Reader Mode; tabindex=-1
+    // on zoom buttons prevents ghost focus while keeping mouse behaviour.
     return () =>
-      h('div', { class: 'cs-miro-viewer cs-cover-img' }, [
+      h('div', { class: 'cs-miro-viewer cs-cover-img', 'aria-hidden': 'true' }, [
         h('div', { class: 'cs-miro-scroll' }, [
           h('div', { class: 'cs-miro-wrapper' }, [
             h('div', {
@@ -540,12 +549,14 @@ const MiroBoard = defineComponent({
             onClick: zoomIn,
             disabled: !btnState.value.canIn,
             'aria-label': 'Zoom in',
+            tabindex: '-1',
           }, '+'),
           h('button', {
             class: ['cs-zoom-btn', !btnState.value.canOut ? 'cs-zoom-btn--disabled' : ''].filter(Boolean).join(' '),
             onClick: zoomOut,
             disabled: !btnState.value.canOut,
             'aria-label': 'Zoom out',
+            tabindex: '-1',
           }, '\u2212'),
         ]),
       ])
@@ -610,8 +621,10 @@ const ProtoPhone = defineComponent({
       }
     })
 
+    // aria-hidden: decorative interactive prototype-phone demo. The case-study
+    // prose covers the meaning; header/nav image alts would otherwise leak.
     return () =>
-      h('div', { class: 'cs-proto-phone cs-proto-phone-' + props.alt.replace(/\s+/g, '-') }, [
+      h('div', { class: 'cs-proto-phone cs-proto-phone-' + props.alt.replace(/\s+/g, '-'), 'aria-hidden': 'true' }, [
         // Header — fades in on scroll
         h('img', {
           src: props.header,

@@ -38,11 +38,16 @@ const AntonymSection = defineComponent({
       const s = csScale.value
       const hover = canHover.value
 
+      // aria-hidden: decorative interactive demo of the plugin's UI cards.
+      // The case-study prose covers the meaning; card titles/descriptions
+      // would otherwise leak as run-on text into Reader Mode and screen readers.
+
       // ── Mobile: flex layout — cards left, screenshot right ──
       if (!hover) {
         return h('div', {
           class: 'cs-antonym-section cs-antonym-section--mobile',
           style: { width: csW.value + 'px' },
+          'aria-hidden': 'true',
         }, [
           h('div', { class: 'cs-antonym-mobile-cards' },
             MOBILE_CARDS.map(card =>
@@ -66,6 +71,7 @@ const AntonymSection = defineComponent({
       return h('div', {
         class: 'cs-antonym-section',
         style: { width: csW.value + 'px', height: Math.round(ANTONYM_H * s) + 'px' },
+        'aria-hidden': 'true',
       }, [
 
         h('div', {
@@ -154,11 +160,14 @@ const VersionSection = defineComponent({
       observer.observe(el)
     })
 
+    // aria-hidden: decorative version-history demo. Version hint labels
+    // would otherwise leak into Reader Mode alongside the case-study prose.
     return () =>
       h('div', {
         ref: sectionEl,
         class: 'cs-versions-section',
         style: { width: Math.round(csW.value * 1.5) + 'px' },
+        'aria-hidden': 'true',
       },
       V_IMGS.map((img, i) =>
         h('div', {
@@ -198,7 +207,10 @@ const ErrorSection = defineComponent({
     }, 2500)
     onUnmounted(() => clearInterval(timer))
 
-    return () => h('div', { class: 'cs-error-section' }, [
+    // aria-hidden: decorative rotating error-state demo. The case-study
+    // prose explains the error guidance; the rotating images are visual
+    // illustration only.
+    return () => h('div', { class: 'cs-error-section', 'aria-hidden': 'true' }, [
 
       // ── Rotating error bar — slide-up in, slide-up out ──
       h('div', { class: 'cs-error-bar' },
@@ -241,8 +253,10 @@ const HITS_IMG = '/src/assets/images/rayo/plugin/rayo-plugin-hits.png'
 const MarqueeSection = defineComponent({
   name: 'MarqueeSection',
   setup() {
+    // aria-hidden: decorative scrolling marquee of station tiles.
+    // Purely visual flourish — no meaningful content for a11y tree.
     return () =>
-      h('div', { class: 'cs-marquee-section' }, [
+      h('div', { class: 'cs-marquee-section', 'aria-hidden': 'true' }, [
         // Scrolling rows
         ...MARQUEE_ROWS.map((row, ri) =>
           h('div', {
