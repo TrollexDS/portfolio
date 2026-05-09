@@ -727,6 +727,21 @@ export default defineComponent({
               h('p', { class: 'cs-body-text' },
                 'Users navigate radio by date and time, not by episode. This insight reshaped product strategy and informed how catchup content is structured across the app.'),
             ),
+
+            h('div', { class: 'cs-stat-row' }, [
+              h('div', { class: 'cs-stat-item' }, [
+                h('p', { class: 'cs-stat-num' }, '46,500+'),
+                h('p', { class: 'cs-stat-lbl' }, 'Plays in the first full month post-launch'),
+              ]),
+              h('div', { class: 'cs-stat-item' }, [
+                h('p', { class: 'cs-stat-num' }, '+25%'),
+                h('p', { class: 'cs-stat-lbl' }, 'Month-on-month growth, June to July'),
+              ]),
+              h('div', { class: 'cs-stat-item' }, [
+                h('p', { class: 'cs-stat-num' }, '80+'),
+                h('p', { class: 'cs-stat-lbl' }, 'Station schedules generating plays across the portfolio'),
+              ]),
+            ]),
           ]),
 
           // ── Schedule iPhone mockup ──
@@ -967,6 +982,39 @@ export default defineComponent({
           }),
 
           // ══════════════════════════════════════════════
+          // ── Results ──
+          // ══════════════════════════════════════════════
+          h('div', { class: 'cs-body cs-body--continued' }, [
+
+            h('h2', { class: 'cs-section-title' }, 'Results'),
+
+            h('p', { class: 'cs-body-text' }, [
+              'The schedule went live at the end of May 2025. In the first full month post-launch, it drove ',
+              h('strong', null, '46,500+ plays'),
+              ' across iOS and Android. Every one of them directly attributable to the schedule, since those pages hadn\u2019t existed before. By July that figure had grown to ',
+              h('strong', null, '58,000+'),
+              ', a ',
+              h('strong', null, '25% month-on-month increase'),
+              ' with no dedicated marketing push.',
+            ]),
+
+            h('p', { class: 'cs-body-text' },
+              'The more telling signal came from the On Air page, a previous touchpoint where users could check what was currently playing and tap to listen. On Air page events dropped 14% on Android and 22% on iOS in the same period. The schedule does what On Air did, but better: it shows the full day, not just the current moment. Users were finding a richer path to the same intent.'),
+
+            h('p', { class: 'cs-body-text' }, [
+              'The user numbers clarified whether this was displacement or growth. Over 6,600 unique Android users and 8,100 unique iOS users reached schedule pages in June. While the On Air page lost fewer than 3,000 users across both platforms in the same period. The schedule was ',
+              h('strong', null, 'reaching far more people than it pulled away from On Air'),
+              '.',
+            ]),
+
+            h('p', { class: 'cs-body-text' }, [
+              'Station breadth was broader than expected: ',
+              h('strong', null, '80+ unique station schedules generated plays'),
+              ' across both platforms, covering the full Bauer portfolio without any targeted promotion. The feature found its audience organically.',
+            ]),
+          ]),
+
+          // ══════════════════════════════════════════════
           // ── What I took away ──
           // ══════════════════════════════════════════════
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -986,7 +1034,7 @@ export default defineComponent({
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              'The schedule is now live, and we\u2019re tracking engagement and average time spent listening to measure its impact. But regardless of the numbers, the outcome I\u2019m most proud of is the process - a design team that used research to ask the right questions, ',
+              'The early results have been encouraging \u2014 but regardless of the numbers, the outcome I\u2019m most proud of is the process: a design team that used research to ask the right questions, ',
               h('strong', null, 'challenge assumptions constructively'),
               ', and ship something that genuinely matches how people listen to radio.',
             ]),

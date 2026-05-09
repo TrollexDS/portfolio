@@ -184,7 +184,8 @@
   --text-6xl:   24px;
   --text-7xl:   32px;
   --text-8xl:   36px;
-  --text-9xl:   48px;
+  --text-9xl:   40px;
+  --text-10xl:  48px;
 
   /* Font weights */
   --weight-regular:   400;
@@ -440,7 +441,7 @@
   --principle-tracking:      var(--tracking-ultra);
 
   /* Duolingo streak */
-  --streak-size:             var(--text-9xl);     /* 48px */
+  --streak-size:             var(--text-10xl);    /* 48px */
   --streak-size-mobile:      34px;
   --streak-weight:           var(--weight-semibold);
 
