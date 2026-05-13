@@ -535,8 +535,16 @@ export default defineComponent({
               h('p', { class: 'cs-body-text' },
                 'Layer Lint is a Figma plugin I built to close that gap between design files and AI agents. It scans your files for hidden and empty layers cluttering the panel, then uses Claude to batch-rename auto-generated names into semantic, developer-friendly ones - optimised for both AI agents and the humans who review their output.'),
               
-                h('p', { class: 'cs-body-text' },
-                'It has already been published and currently waiting for Figma\u2019s approval.'),
+                h('p', { class: 'cs-body-text' }, [
+                  'It\u2019s live on the Figma Community - ',
+                  h('a', {
+                    class: 'cs-link',
+                    role: 'link',
+                    tabindex: '0',
+                    onClick: () => { window.open('https://www.figma.com/community/plugin/1626564985947649735/layer-lint', '_blank') },
+                  }, 'install Layer Lint'),
+                  '.',
+                ]),
             ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
