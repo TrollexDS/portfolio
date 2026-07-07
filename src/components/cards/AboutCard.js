@@ -52,7 +52,7 @@ const BIO = [
     { text: "My name is Alex Chiu, a designer who is obsessed with " },
     { text: 'problem solving', gradient: true },
     { text: ' and ' },
-    { text: 'design system', gradient: true },
+    { text: 'design systems', gradient: true },
     { text: '. Currently working as a Senior Product Designer at ' },
     { text: 'Bauer Media Group', bold: true, color: 'var(--color-brand-bauer)', href: 'https://www.bauermedia.co.uk' },
     { text: ' in London.' },
@@ -60,20 +60,20 @@ const BIO = [
   [
     { text: 'I graduated from ' },
     { text: 'Goldsmiths', bold: true, color: 'var(--color-brand-goldsmiths)', href: 'https://www.gold.ac.uk' },
-    { text: " with a Fine Art degree, which trained me to think critically and question everything. Although I always had an interest in technology, I only discovered UX by stumbling on a YouTube channel " },
+    { text: " with a Fine Art degree, which trained me to think critically and question everything. I'd always been interested in technology, but only discovered UX by stumbling on a YouTube channel " },
     { text: 'The Futur', bold: true, color: 'var(--color-brand-futur)', href: 'https://www.youtube.com/channel/UC-b3c7kxa5vU-bnmaROgvog' },
     { text: '. It clicked immediately.' },
   ],
   [
-    { text: "I've worked across different product roles, but my real passion is design systems. There's something satisfying about building the foundations that enable teams to move faster and build better products." },
+    { text: "I've worked across different product roles, but I keep coming back to design systems. There's something satisfying about building the foundations that let teams move faster and build better products." },
   ],
   [
     { text: 'I taught a few UX courses at ' },
     { text: 'BrainStation', bold: true, color: 'var(--color-brand-brainstation)', href: 'https://brainstation.io' },
-    { text: ', which I loved, but stepped back to focus on other priorities. Working with my team on complex design challenges is what energises me most right now.' },
+    { text: ', which I loved, but stepped back to focus on other priorities. What energises me most right now is leading our design team&#39s AI initiative at Bauer - working out where AI genuinely improves how designers work, where it doesn&#39t, and bringing the whole team along rather than racing ahead alone.' },
   ],
   [
-    { text: "I believe great design gives people a sense of control. I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. My approach: systems thinking, build the hard things upfront so they scale." },
+    { text: "I believe great design gives people a sense of control. I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. My approach: think in systems, build the hard things first so they scale." },
   ],
 ]
 
