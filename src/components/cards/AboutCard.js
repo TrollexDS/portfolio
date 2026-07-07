@@ -70,7 +70,7 @@ const BIO = [
   [
     { text: 'I taught a few UX courses at ' },
     { text: 'BrainStation', bold: true, color: 'var(--color-brand-brainstation)', href: 'https://brainstation.io' },
-    { text: ', which I loved, but stepped back to focus on other priorities. What energises me most right now is leading our design team&#39s AI initiative at Bauer - working out where AI genuinely improves how designers work, where it doesn&#39t, and bringing the whole team along rather than racing ahead alone.' },
+    { text: ', which I loved, but stepped back to focus on other priorities. What energises me most right now is leading our design team\'s AI initiative at Bauer - working out where AI genuinely improves how designers work, where it doesn\'t, and bringing the whole team along rather than racing ahead alone.' },
   ],
   [
     { text: "I believe great design gives people a sense of control. I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. My approach: think in systems, build the hard things first so they scale." },
