@@ -19,6 +19,7 @@ const CARD_KEY_TO_SLUG = {
   alexa:     'rayo-in-alexa',
   schedule:  'rayo-schedule',
   layerlint: 'figma-plugin-layer-lint',
+  designlab: 'rayo-design-lab',
 }
 
 /**
