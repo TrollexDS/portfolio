@@ -68,7 +68,7 @@ const BIO = [
     { text: ', which I loved, but stepped back to focus on other priorities. What energises me most right now is leading our design team\'s AI initiative at Bauer - working out where AI genuinely improves how designers work, where it doesn\'t, and bringing the whole team along rather than racing ahead alone.' },
   ],
   [
-    { text: "I believe great design gives people a sense of control. I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. Build the hard things first, so everything after them scales." },
+    { text: "I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. Build the hard things first, so everything after them scales." },
   ],
 ]
 
