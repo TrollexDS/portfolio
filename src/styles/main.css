@@ -226,9 +226,16 @@ strong, b {
 }
 
 
+/* ── Nav toggle group (smooth scroll + theme) ── */
+.nav-toggles {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* ── Lazy-mode toggle ── */
 .lazy-toggle {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -446,7 +453,7 @@ strong, b {
 .gmail-card         { --card-enter-delay: 0.1s; }  /* col 3    */
 .linkedin-card      { --card-enter-delay: 0.2s; }  /* col 4    */
 /* Row 2 */
-.bulb-card          { --card-enter-delay: 0.3s; }  /* col 1    */
+.strava-card        { --card-enter-delay: 0.3s; }  /* col 1    */
 .duolingo-card      { --card-enter-delay: 0.4s; }  /* col 2    */
 .plugin-card        { --card-enter-delay: 0.5s; }  /* cols 3-4 */
 /* Row 3 */
@@ -455,6 +462,7 @@ strong, b {
 .ds-quote-card       { --card-enter-delay: 0.7s; }  /* cols 3-4 */
 /* Row 5 */
 .ux-quote-card       { --card-enter-delay: 0.8s; }  /* cols 1-2 */
+.ai-quote-card       { --card-enter-delay: 0.85s; } /* cols 1-2 */
 .alexa-card         { --card-enter-delay: 0.9s; }  /* cols 3-4 */
 /* Row 6 */
 .schedule-card      { --card-enter-delay: 1.0s; }  /* cols 1-2 */
@@ -462,7 +470,6 @@ strong, b {
 .ss-ds-card         { --card-enter-delay: 1.1s; }  /* cols 3-4 */
 /* Row 8 */
 .claw-invest-card   { --card-enter-delay: 1.3s; }  /* col 1    */
-.strava-card        { --card-enter-delay: 1.4s; }  /* col 2    */
 
 /* ══════════════════════════════════════
    GRID SLOT (wrapper div per card)
@@ -2368,12 +2375,19 @@ strong, b {
 
 /* ── Antonym Section ─────────────────────────────────────────── */
 
+/* Figure captions. Every figure in an expanded case study is centred, so
+   its caption is too — and it was, but only by accident: `.cs-expanded-
+   content` is a centring flex column, so a caption that is a direct child
+   of it is a shrink-to-fit box that happens to land in the middle. That
+   stops being true the moment one sits inside a `.cs-body` column, or the
+   moment one wraps to a second line. Saying it outright covers both. */
 .cs-hint {
   font-family: var(--font-family-primary);
   font-size: var(--hint-size);
   font-weight: var(--hint-weight);
   color: var(--color-text-subtle);
   margin-top: 12px;
+  text-align: center;
   transition: color 0.5s ease;
 }
 
@@ -3130,6 +3144,17 @@ strong, b {
   overflow: hidden;
 }
 
+/* Tile canvas sits under the tiles — themed so gaps and the moment before
+   tiles land never flash white in dark mode. */
+.strava-map .leaflet-container {
+  background: var(--color-surface-map-base);
+}
+
+/* Cross-fade the basemap when the theme flips */
+.strava-map .leaflet-tile {
+  transition: opacity 0.3s ease;
+}
+
 /* Loading pulse */
 .strava-skeleton {
   position: absolute;
@@ -3320,20 +3345,22 @@ strong, b {
 }
 
 /* Quote cards */
-.ux-quote-card, .ds-quote-card {
+.ux-quote-card, .ds-quote-card, .ai-quote-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   text-align: center; padding: 32px; gap: 16px;
 }
 
 .ux-quote-card .quote-text,
-.ds-quote-card .quote-text {
+.ds-quote-card .quote-text,
+.ai-quote-card .quote-text {
   font-size: var(--quote-size); line-height: var(--quote-leading);
   color: var(--color-text-primary); transition: color 0.5s ease;
   font-weight: var(--quote-weight);
 }
 
 .ux-quote-card strong,
-.ds-quote-card strong {
+.ds-quote-card strong,
+.ai-quote-card strong {
   background: var(--gradient-brand);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -3429,8 +3456,8 @@ strong, b {
     display: none;
   }
 
-  /* Hide lazy-mode toggle on mobile */
-  .lazy-toggle {
+  /* Hide lazy-mode toggle on mobile — the theme toggle stays */
+  .lazy-toggle:not(.theme-toggle) {
     display: none;
   }
 
@@ -3484,7 +3511,6 @@ strong, b {
   .claw-invest-card,
   .gmail-card,
   .linkedin-card,
-  .bulb-card,
   .duolingo-card {
     aspect-ratio: 1 / 1;
   }
@@ -3492,7 +3518,8 @@ strong, b {
   /* Quote cards: 50% taller so text doesn't crop.
      Full-width cards (1/3), alone in their row, so growing is safe. */
   .ds-quote-card,
-  .ux-quote-card {
+  .ux-quote-card,
+  .ai-quote-card {
     min-height: calc((100vw - 66px) * 0.75);
   }
 
@@ -3507,13 +3534,13 @@ strong, b {
   .ds-quote-card      { --card-enter-delay: 0.4s;  }
   .ds-card            { --card-enter-delay: 0.5s;  }
   .ux-quote-card      { --card-enter-delay: 0.6s;  }
+  .ai-quote-card      { --card-enter-delay: 0.65s; }
   .alexa-card         { --card-enter-delay: 0.7s;  }
   .schedule-card      { --card-enter-delay: 0.8s;  }
   .ss-ds-card         { --card-enter-delay: 0.9s;  }
-  .bulb-card          { --card-enter-delay: 1.0s;  }
+  .strava-card        { --card-enter-delay: 1.0s;  }
   .duolingo-card      { --card-enter-delay: 1.1s;  }
   .claw-invest-card   { --card-enter-delay: 1.2s;  }
-  .strava-card        { --card-enter-delay: 1.3s;  }
 
   /* ── About card avatar — 1/3 of card width ── */
   .about-avatar {
@@ -3555,6 +3582,14 @@ strong, b {
 
   /* ── Layer Lint hero wrap — match shrunk hero size ── */
   .ll-hero-wrap {
+    width:  calc(100vw - 48px) !important;
+    height: calc(100vw - 48px) !important;
+    max-width: 448px;
+    max-height: 448px;
+  }
+
+  /* ── Design Lab hero wrap — match shrunk hero size ── */
+  .rdl-hero-wrap {
     width:  calc(100vw - 48px) !important;
     height: calc(100vw - 48px) !important;
     max-width: 448px;
@@ -4804,4 +4839,1515 @@ strong, b {
   .cs-meta {
     flex-direction: column;
   }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   RAYO DESIGN LAB CARD  (rdl-)
+   Case study: "Prototyping with AI, Inside Our Own Design System"
+   Card face echoes the lab's own chrome — glass panes over a wash.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Collapsed card face ─────────────────────────────────────────── */
+.rayo-design-lab-card {
+  position: relative;
+  overflow: hidden;
+  background: #16121F;
+}
+
+.rdl-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 28px;
+  pointer-events: none;
+}
+
+.rdl-card-eyebrow {
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.rdl-card-title {
+  margin: 0;
+  white-space: pre-line;
+  font-family: var(--font-family-display, var(--font-family-primary));
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  line-height: 1.02;
+  letter-spacing: var(--tracking-tight);
+  color: #FFFFFF;
+}
+
+/* Hero wrapper — same pattern as ss-ds / ads / ll. It was sharing a rule
+   with the two overlays below, which is why it had their absolute
+   positioning and none of the hero's own radius or spacing. */
+.rdl-hero-wrap {
+  border-radius: 32px;
+  overflow: hidden;
+  background: #16121F;
+  margin-top: 40px;
+}
+
+/* the wrap owns the gap now, so the image inside must not add a second */
+.rdl-hero-wrap .cs-hero-video { margin-top: 0; }
+
+.rdl-hero-overlay,
+.rdl-fly-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* so the loop is cut to the same corners as the frame around it */
+  border-radius: inherit;
+  background: #16121F;
+}
+
+.rdl-hero-img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Shared figure wrapper for the drawn diagrams ────────────────── */
+.rdl-fig {
+  /* Sits outside cs-body, so it can use the width of the overlay
+     rather than the 680px reading column. */
+  width: min(92vw, 1080px);
+  margin: 32px auto 4px;
+  padding: 28px;
+  border: 1px solid var(--color-border-card);
+  border-radius: 18px;
+  background: var(--color-surface-card);
+}
+
+.rdl-fig--cover {
+  /* A labelled schematic, not a screenshot. It has little content and
+     reads badly stretched, so it stays near the reading column width. */
+  width: min(92vw, 640px);
+  padding: 22px;
+  border-radius: 14px;
+  margin-top: 8px;
+}
+
+/* ── Cover diagram: the anatomy of one exploration ───────────────── */
+.rdl-anat { display: flex; gap: 22px; align-items: stretch; }
+.rdl-anat-col { flex: 1 1 auto; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.rdl-anat-group { display: flex; flex-direction: column; gap: 7px; }
+
+.rdl-anat-label {
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.rdl-anat-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.rdl-anat-pill {
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-card);
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+}
+
+.rdl-anat-pill--on {
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+  color: var(--color-surface-card);
+}
+
+.rdl-anat-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--color-surface-card-white);
+  border: 1px solid var(--color-border-card);
+  align-self: flex-start;
+}
+
+.rdl-anat-segopt {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+}
+
+.rdl-anat-segopt--on {
+  background: var(--color-surface-card);
+  color: var(--color-text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.rdl-anat-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 13px 15px;
+  border-radius: 10px;
+  background: var(--color-surface-card-white);
+  border: 1px solid var(--color-border-card);
+}
+
+.rdl-anat-line {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border-card);
+}
+
+.rdl-anat-line--short { width: 58%; }
+
+.rdl-anat-phone {
+  flex: 0 0 132px;
+  border: 2px dashed var(--color-border-card);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-height: 260px;
+}
+
+.rdl-anat-phone-note {
+  font-size: var(--text-2xs);
+  text-align: center;
+  color: var(--color-text-subtle);
+  line-height: 1.5;
+}
+
+/* ── Gap → token loop ────────────────────────────────────────────── */
+.rdl-loop { display: flex; align-items: stretch; gap: 12px; }
+
+.rdl-loop-node {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px;
+  border-radius: 11px;
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+}
+
+.rdl-loop-node--done {
+  border-color: var(--color-primary);
+}
+
+.rdl-loop-step {
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  color: var(--color-primary);
+  letter-spacing: var(--tracking-wide);
+}
+
+.rdl-loop-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.35;
+}
+
+.rdl-loop-body {
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  line-height: 1.55;
+}
+
+.rdl-loop-arrow {
+  align-self: center;
+  color: var(--color-text-subtle);
+  flex: 0 0 auto;
+}
+
+/* ── Bet switcher: a replica of the lab's controls rail ──────────────
+   Dark in both themes, like the code file above it — this is a piece of
+   the Design Lab quoted inside the case study, not part of the page.   */
+.rdl-lab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  margin: 24px 0 4px;
+  padding: 20px;
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 90% at 78% 8%, rgba(153, 69, 255, 0.30), transparent 62%),
+    #1A1424;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.rdl-lab-rail,
+.rdl-lab-note {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.rdl-lab-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.rdl-lab-title {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: #FFFFFF;
+}
+
+.rdl-lab-help {
+  flex: 0 0 auto;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  display: grid;
+  place-items: center;
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.rdl-lab-group {
+  display: block;
+  margin-bottom: 10px;
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rdl-lab-opts { display: flex; flex-direction: column; gap: 8px; }
+
+.rdl-lab-opt {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  color: rgba(255, 255, 255, 0.78);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.rdl-lab-opt:not(.rdl-lab-opt--on):hover { background: rgba(255, 255, 255, 0.09); color: #FFFFFF; }
+
+.rdl-lab-opt--on {
+  background: #FFFFFF;
+  border-color: #FFFFFF;
+  color: #1A1424;
+  font-weight: var(--weight-semibold);
+}
+
+/* The two branch states are outlined rather than indented — they sit in
+   the same list, but they are visibly not part of the main line. */
+.rdl-lab-opt--branch {
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.rdl-lab-foot {
+  margin: 16px 0 0;
+  font-size: var(--text-2xs);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rdl-lab-note { display: flex; flex-direction: column; gap: 12px; }
+
+.rdl-lab-note-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rdl-lab-flag {
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: var(--tracking-wide);
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rdl-lab-flag--rec {
+  background: rgba(115, 233, 179, 0.18);
+  color: #9BE7C4;
+}
+
+.rdl-lab-note-text {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+@media (max-width: 720px) {
+  .rdl-lab { grid-template-columns: 1fr; padding: 14px; }
+}
+
+/* ── Component contract, as a file in an editor ──────────────────────
+   Deliberately dark in both themes: a code window reads as code. The
+   markdown markers are left visible — this is a document sitting beside
+   the component, and it should look like one.                          */
+.rdl-file {
+  margin: 24px 0 4px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1E1B26;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.rdl-file-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: #171420;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rdl-file-dots { display: flex; gap: 7px; }
+
+.rdl-file-dots i {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.rdl-file-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rdl-file-ext {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(153, 69, 255, 0.28);
+  color: #D6BBFF;
+  font-size: 9px;
+  letter-spacing: var(--tracking-wide);
+}
+
+.rdl-file-body {
+  margin: 0;
+  padding: 16px 0 18px;
+  overflow-x: auto;
+}
+
+.rdl-file-line {
+  display: block;
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  line-height: 1.9;
+  white-space: pre;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rdl-file-num {
+  display: inline-block;
+  width: 44px;
+  padding-right: 16px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.24);
+  user-select: none;
+}
+
+.rdl-file-text--h  { color: #A8E1FF; }               /* headings */
+.rdl-file-text--li { color: rgba(255, 255, 255, 0.86); }
+.rdl-file-text--c  { color: rgba(255, 255, 255, 0.66); } /* wrapped continuation */
+
+.rdl-md-strong { color: #FFD08A; }
+.rdl-md-code   { color: #9BE7C4; }
+.rdl-md-em     { color: #C9B6FF; font-style: italic; }
+
+@media (max-width: 720px) {
+  .rdl-file-line { font-size: 10px; line-height: 1.85; }
+  .rdl-file-num  { width: 30px; padding-right: 10px; }
+}
+
+
+
+/* ── How work reaches the team ───────────────────────────────────────
+   Grouped by who does each step. The lane labels are the point: the
+   last two steps have no one standing over them.                      */
+.rdl-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.rdl-flow-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.rdl-flow-group:nth-child(1) { flex: 3 1 0; }
+.rdl-flow-group:nth-child(3) { flex: 1 1 0; }
+.rdl-flow-group:nth-child(5) { flex: 2 1 0; }
+
+.rdl-flow-lane {
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.rdl-flow-steps {
+  display: flex;
+  gap: 12px;
+  flex: 1 1 auto;
+}
+
+.rdl-flow-step {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+}
+
+.rdl-flow-num {
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  color: var(--color-primary);
+}
+
+.rdl-flow-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1.35;
+  color: var(--color-text-primary);
+}
+
+.rdl-flow-detail {
+  font-size: var(--text-2xs);
+  line-height: 1.65;
+  color: var(--color-text-subtle);
+}
+
+.rdl-flow-arrow {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-top: 22px;          /* clear the lane label above the cards */
+  font-size: var(--text-lg);
+  color: var(--color-text-subtle);
+}
+
+/* The two automatic steps read as one unit that runs on its own. */
+.rdl-flow-group:nth-child(5) .rdl-flow-step {
+  border-style: dashed;
+}
+
+@media (max-width: 900px) {
+  .rdl-flow { flex-direction: column; }
+  .rdl-flow-arrow { transform: rotate(90deg); }
+  .rdl-flow-group:nth-child(n) { flex: 1 1 auto; }
+}
+
+@media (max-width: 560px) {
+  .rdl-flow-steps { flex-direction: column; }
+}
+
+/* ── Glass specimen ──────────────────────────────────────────────────
+   A rebuild of the Design Lab's own chrome. Permanently dark, like the
+   lab: a material can only be one thing, and this one is built for a
+   dark ground.                                                        */
+.gs {
+  position: relative;
+  width: min(92vw, 1080px);
+  margin: 32px auto 4px;
+  padding: 28px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #17121F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* (1) Structure behind the glass. A blurred flat colour is still a flat
+   colour, so there has to be an edge for a pane to soften. */
+.gs-field {
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(48% 42% at 24% 26%, rgba(153, 69, 255, 0.62), transparent 68%),
+    radial-gradient(44% 46% at 80% 70%, rgba(227, 103, 192, 0.46), transparent 72%),
+    radial-gradient(38% 34% at 64% 12%, rgba(75, 240, 240, 0.20), transparent 70%);
+  animation: gs-drift 48s ease-in-out infinite alternate;
+}
+
+@keyframes gs-drift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1.05); }
+  to   { transform: translate3d(3%, 3%, 0) scale(1.12); }
+}
+
+.gs-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* (2) Lift, with saturation kept low — over-saturating the backdrop
+   turns the veil purple and it stops reading as neutral glass.
+   (3) A directional rim: bright top-left, dark bottom-right, and no
+   uniform 1px border anywhere. */
+.gs-pane {
+  position: relative;
+  isolation: isolate;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(14px) saturate(104%);
+  -webkit-backdrop-filter: blur(14px) saturate(104%);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.16),
+    inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.22),
+    0 10px 26px rgba(0, 0, 0, 0.16);
+}
+
+/* (4) The specular highlight follows the pointer, on the pane you are
+   actually pointing at. */
+.gs-pane::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(160px circle at var(--px, 50%) var(--py, 0%),
+              rgba(255, 255, 255, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gs:hover .gs-pane::after { opacity: 1; }
+
+@media (hover: none) {
+  .gs-pane::after { display: none; }
+}
+
+.gs-island {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 999px;
+}
+
+.gs-mark {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #ED4AD9, #9945FF);
+}
+
+.gs-brand {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #FFFFFF;
+}
+
+.gs-seg {
+  margin-left: auto;
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.gs-seg-opt {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Selection is one neutral material, never a colour — purple is not a
+   text or fill colour in the lab. */
+.gs-seg-opt--on {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+}
+
+.gs-row { display: flex; gap: 16px; align-items: stretch; }
+
+.gs-side {
+  flex: 0 0 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+}
+
+.gs-side-row {
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.gs-side-row--on {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  font-weight: var(--weight-semibold);
+}
+
+.gs-card {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.gs-card-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.gs-line {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+@media (max-width: 720px) {
+  .gs { padding: 16px; }
+  .gs-row { flex-direction: column; }
+  .gs-side { flex: 0 0 auto; }
+  .gs-brand { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-field { animation: none; }
+}
+
+/* ── RESTORED: placeholder for an image that isn't there yet ──────────
+   The src is removed on error, so this frame is all the browser draws. */
+.rdl-img--missing {
+  display: block;
+  width: 100%;
+  min-height: 200px;
+  border: 2px dashed var(--color-border-card);
+  border-radius: 12px;
+  background: var(--color-surface-card-white);
+  position: relative;
+  opacity: 1 !important;
+}
+
+.rdl-img--missing::after {
+  content: attr(data-missing);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-text-subtle);
+}
+
+/* ── RESTORED: narrow screens, for the drawn figures ────────────────── */
+@media (max-width: 720px) {
+  .rdl-anat { flex-direction: column; }
+  .rdl-anat-phone { flex: 0 0 auto; min-height: 120px; }
+  .rdl-loop { flex-direction: column; }
+  .rdl-loop-arrow { transform: rotate(90deg); }
+  .rdl-fig { padding: 16px; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════
+   RESTORED — AI ADOPTION PRINCIPLE CARD  (ai-quote-)
+   Mirrors the DS and UX principle cards.
+   ═══════════════════════════════════════════════════════════════════ */
+.ai-quote-card-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+.ai-quote-card-wrapper > .ai-quote-card {
+  width: 100%; height: 100%;
+}
+
+.ai-quote-card--ghost {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ai-quote-expanded-inner {
+  padding: 40px 56px !important;
+  justify-content: center;
+}
+
+.ai-quote-expanded-icon {
+  width: 36px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.ai-quote-expanded-quote {
+  font-size: var(--quote-expanded-size);
+  font-weight: var(--quote-expanded-weight);
+  line-height: var(--quote-expanded-leading);
+  text-align: center;
+}
+
+.ai-quote-expanded-quote strong {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ai-quote-expanded-body {
+  font-size: var(--quote-body-size);
+  line-height: var(--quote-body-leading);
+  color: var(--color-text-body);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.ai-quote-expanded-body p { margin: 0; }
+
+
+/* ── LabLoop: the animated card face ─────────────────────────────────
+
+   One pass of the loop the case study describes. The lab's own intro
+   builds and clears, a prompt is typed and worked on, a prototype
+   arrives, options are tried, it is shared, and it settles as a file
+   in the repo.
+
+   Sized in `cqmin` against the face itself, so the same composition
+   holds in a grid cell on the board and across the open overlay
+   without a second set of numbers.                                   */
+.rdlv {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  --rdlv-k: 0.6;               /* wordmark fit, measured in the component */
+}
+
+/* The Design Lab's own background, assembled the way the lab assembles
+   it: the canvas colour, and the gradient over it at a fifth strength —
+   `--lab-field-opacity: 0.2` in the lab's own `AppShell.css`. The image
+   at full strength is a different thing entirely, and every piece of
+   glass on this card is mixed against the dark ground, not the bloom. */
+.rdlv-wash {
+  position: absolute;
+  inset: 0;
+  background: #160E21;
+}
+
+.rdlv-wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url('/src/assets/images/rayo-design-lab/design-lab-bg-dark.webp')
+    center center / cover no-repeat;
+  opacity: 0.2;
+}
+
+
+/* ── The intro ───────────────────────────────────────────────────────
+
+   The same wordmark the lab opens with, sampled from the real display
+   face and built by a wave travelling left to right — then taken by a
+   second wave to nothing rather than back to a line.
+
+   The build is a keyframe animation because it has three states, not
+   two: collapsed on the shared midline, past its own height as the
+   sweep passes, then home. The radius animates with it — `scaleY`
+   squashes a pill's caps along with everything else, so a bar
+   collapsed to a sliver needs to ask for `50%` to still be round.
+
+   Both waves read their delay from the same per-column `--d`, which is
+   what makes them the same wave going the same way.                  */
+.rdlv-splash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(var(--rdlv-k));
+  transform-origin: 50% 50%;
+}
+
+.rdlv-word { position: relative; }
+
+.rdlv-bit {
+  position: absolute;
+  border-radius: 999px;
+  transform: scaleY(var(--e, 1));
+  animation: rdlv-build 880ms cubic-bezier(0.2, 1.12, 0.32, 1) var(--d, 0ms) backwards;
+  transition:
+    transform 380ms cubic-bezier(0.45, 0, 0.55, 1) var(--d, 0ms),
+    border-radius 380ms ease var(--d, 0ms);
+}
+
+@keyframes rdlv-build {
+  from {
+    border-radius: 50%;
+    transform: translateY(var(--dy, 0px)) scaleY(var(--c, 1));
+  }
+  45% {
+    border-radius: 999px;
+    transform: translateY(var(--dy, 0px)) scaleY(var(--p, 1));
+  }
+  /* → the element's own resting style: its place in the letterform, or
+       nothing at all if it stood in one of the word's spaces. */
+}
+
+/* The dismissing wave: the build run backwards. Same direction, same
+   per-column delay, same two end states — the bars go back down onto
+   the shared midline as circles, left to right, and the line they make
+   fades once the wave has passed the last column.
+
+   Everything after `splash` is "cleared", so the word cannot come back
+   mid-loop; it returns when the splash remounts at the top of the next
+   pass and its build animation replays. */
+.rdlv:not([data-phase='splash']) .rdlv-bit {
+  border-radius: 50%;
+  transform: translateY(var(--dy, 0px)) scaleY(var(--c, 1));
+}
+
+.rdlv-splash { transition: opacity 0.3s ease; }
+
+.rdlv:not([data-phase='splash']) .rdlv-splash {
+  opacity: 0;
+  transition-delay: 0.78s;
+}
+
+
+/* ── The prompt, with the work happening at the end of the bar ─────── */
+.rdlv-prompt {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 46%;
+  max-width: 92cqmin;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  padding: 2.4cqmin 3cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.18),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.62s cubic-bezier(0.32, 1.04, 0.35, 1);
+}
+
+/* Asked, and being answered: centred, because there is nothing else. */
+.rdlv[data-phase='prompt'] .rdlv-prompt,
+.rdlv[data-phase='loading'] .rdlv-prompt {
+  opacity: 1;
+  transform: none;
+}
+
+/* Answered: it moves up rather than leaving, because what it asked for
+   is about to appear underneath it and the two belong together.
+
+   The distance is `46% - 8%` of the frame's height, written in cqmin so
+   it stays a transform. This card is never taller than it is wide — a
+   2x2 cell on the board, a wide overlay open — so cqmin is the height in
+   both, which is what makes the two units interchangeable here. */
+.rdlv[data-phase='sent'] .rdlv-prompt,
+.rdlv[data-phase='proto'] .rdlv-prompt,
+.rdlv[data-phase='options'] .rdlv-prompt,
+.rdlv[data-phase='share'] .rdlv-prompt,
+.rdlv[data-phase='shared'] .rdlv-prompt {
+  opacity: 1;
+  transform: translateY(-38cqmin);
+}
+
+/* It leaves when the thing it produced stops being a prototype. */
+.rdlv[data-phase='fold'] .rdlv-prompt,
+.rdlv[data-phase='upload'] .rdlv-prompt,
+.rdlv[data-phase='rest'] .rdlv-prompt,
+.rdlv[data-phase='done'] .rdlv-prompt {
+  opacity: 0;
+  transform: translateY(calc(-38cqmin - 6px));
+}
+
+.rdlv-spark {
+  flex: 0 0 auto;
+  width: 2.6cqmin;
+  height: 2.6cqmin;
+  border-radius: 0.9cqmin;
+  margin-right: 2cqmin;
+  background: linear-gradient(135deg, #ED4AD9, #8132FE);
+}
+
+.rdlv-text {
+  flex: 0 1 auto;
+  font-family: var(--font-family-primary);
+  font-size: 2.5cqmin;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.rdlv-caret {
+  flex: 0 0 auto;
+  width: 1.5px;
+  height: 2.8cqmin;
+  margin-left: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  animation: rdlv-blink 1s steps(2, start) infinite;
+  transition: opacity 0.2s ease;
+}
+
+.rdlv[data-phase='loading'] .rdlv-caret,
+.rdlv:not([data-phase='prompt']) .rdlv-caret { animation: none; opacity: 0; }
+
+@keyframes rdlv-blink { 0%, 100% { opacity: 1 } 50% { opacity: 0 } }
+
+/* The loading state sits at the end of the bar rather than replacing
+   it, so the prompt you just read is still there while it works. */
+.rdlv-load {
+  flex: 0 0 auto;
+  width: 3cqmin;
+  height: 3cqmin;
+  border-radius: 50%;
+  border: 0.5cqmin solid rgba(255, 255, 255, 0.24);
+  border-top-color: #FFFFFF;
+  margin-left: auto;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.rdlv[data-phase='loading'] .rdlv-load {
+  opacity: 1;
+  animation: rdlv-spin 0.8s linear infinite;
+}
+
+@keyframes rdlv-spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+
+
+/* ── The options tried against it ───────────────────────────────────── */
+.rdlv-pills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 21%;
+  display: flex;
+  justify-content: center;
+  gap: 1.6cqmin;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.rdlv[data-phase='options'] .rdlv-pills,
+.rdlv[data-phase='share'] .rdlv-pills,
+.rdlv[data-phase='shared'] .rdlv-pills { opacity: 1; transform: none; }
+
+.rdlv-pill {
+  width: 5cqmin;
+  height: 1.3cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.rdlv-pill--on { background: #FFFFFF; width: 7cqmin; }
+
+
+/* ── The prototype, and the file it becomes ──────────────────────────
+
+   One element for both. A phone that fades out and a file that fades
+   in would be two things; resizing the one you were already looking at
+   is the claim the case study makes — the exploration IS the artefact
+   that lands in the repo.                                            */
+.rdlv-phone {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 21.8cqmin;
+  height: 46cqmin;
+  display: flex;
+  flex-direction: column;
+  padding: 2cqmin 1.6cqmin 1.6cqmin;
+  border-radius: 4cqmin;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.20),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.20),
+    0 14px 30px rgba(0, 0, 0, 0.26);
+  clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 14px)) scale(0.94);
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.34, 1.35, 0.5, 1),
+    width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.6s ease,
+    clip-path 0.6s ease,
+    background 0.5s ease 0.1s,
+    box-shadow 0.5s ease;
+}
+
+.rdlv[data-phase='proto'] .rdlv-phone,
+.rdlv[data-phase='options'] .rdlv-phone,
+.rdlv[data-phase='share'] .rdlv-phone,
+.rdlv[data-phase='shared'] .rdlv-phone,
+.rdlv[data-phase='fold'] .rdlv-phone {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* It resizes into the file about its own centre — no `top` to move, so
+   the shape changes and nothing else does. */
+.rdlv[data-phase='fold'] .rdlv-phone,
+.rdlv[data-phase='upload'] .rdlv-phone,
+.rdlv[data-phase='rest'] .rdlv-phone {
+  width: 9cqmin;
+  height: 12cqmin;
+  padding: 0;
+  border-radius: 1cqmin;
+  background: #FFFFFF;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.30);
+  clip-path: polygon(0 0, 70% 0, 100% 24%, 100% 100%, 0 100%);
+}
+
+/* Up into the cloud. It fades on the way rather than at the end, so it
+   is spent by the time it arrives instead of vanishing on contact. */
+.rdlv[data-phase='upload'] .rdlv-phone,
+.rdlv[data-phase='rest'] .rdlv-phone {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% - 25cqmin)) scale(0.5);
+  transition:
+    /* Holds most of its opacity for the first half of the trip and then
+       goes quickly, so you watch it travel and it is spent by the time
+       it reaches the outline rather than sitting on top of it. */
+    opacity 0.58s cubic-bezier(0.4, 0, 0.9, 0.5) 0.16s,
+    transform 0.86s cubic-bezier(0.36, 0, 0.2, 1);
+}
+
+/* the fold */
+.rdlv-phone::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30%;
+  height: 24%;
+  background: rgba(22, 18, 31, 0.16);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease 0.3s;
+}
+
+.rdlv[data-phase='fold'] .rdlv-phone::after,
+.rdlv[data-phase='upload'] .rdlv-phone::after,
+.rdlv[data-phase='rest'] .rdlv-phone::after { opacity: 1; }
+
+/* the screen empties as the frame closes */
+.rdlv-notch,
+.rdlv-screen,
+.rdlv-tabs { transition: opacity 0.25s ease; }
+
+.rdlv[data-phase='fold'] .rdlv-notch,
+.rdlv[data-phase='fold'] .rdlv-screen,
+.rdlv[data-phase='fold'] .rdlv-tabs,
+.rdlv[data-phase='upload'] .rdlv-notch,
+.rdlv[data-phase='upload'] .rdlv-screen,
+.rdlv[data-phase='upload'] .rdlv-tabs,
+.rdlv[data-phase='rest'] .rdlv-notch,
+.rdlv[data-phase='rest'] .rdlv-screen,
+.rdlv[data-phase='rest'] .rdlv-tabs { opacity: 0; }
+
+.rdlv-notch {
+  flex: 0 0 auto;
+  width: 30%;
+  height: 0.7cqmin;
+  margin: 0 auto 1.8cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.40);
+}
+
+.rdlv-screen {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqmin;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Each option is a different screen, so the parts arrive again when it
+   changes rather than silently swapping under the same outline. */
+.rdlv-screen > * { animation: rdlv-part 400ms cubic-bezier(0.2, 0.9, 0.3, 1) backwards; }
+.rdlv-screen > *:nth-child(1) { animation-delay: 0ms; }
+.rdlv-screen > *:nth-child(2) { animation-delay: 55ms; }
+.rdlv-screen > *:nth-child(3) { animation-delay: 110ms; }
+.rdlv-screen > *:nth-child(4) { animation-delay: 165ms; }
+.rdlv-screen > *:nth-child(5) { animation-delay: 220ms; }
+.rdlv-screen > *:nth-child(6) { animation-delay: 275ms; }
+
+@keyframes rdlv-part {
+  from { opacity: 0; transform: translateY(4px); }
+}
+
+.rdlv-title {
+  flex: 0 0 auto;
+  width: 58%;
+  height: 1.7cqmin;
+  margin-bottom: 0.6cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+/* Glass, like everything else on the screen. A brand gradient in here
+   would be the one piece of real product design in a diagram of grey
+   placeholders, and it read as the point rather than as scenery. */
+.rdlv-hero {
+  flex: 0 0 auto;
+  height: 9cqmin;
+  border-radius: 2cqmin;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+
+.rdlv-banner {
+  flex: 0 0 auto;
+  height: 5.4cqmin;
+  border-radius: 1.6cqmin;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.rdlv-tiles {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2cqmin;
+}
+
+.rdlv-tiles i {
+  height: 5cqmin;
+  border-radius: 1.4cqmin;
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.rdlv-row {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.3cqmin;
+}
+
+.rdlv-thumb {
+  flex: 0 0 auto;
+  width: 5.2cqmin;
+  height: 5.2cqmin;
+  border-radius: 1.5cqmin;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.rdlv-lines {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1cqmin;
+  min-width: 0;
+}
+
+.rdlv-l1 {
+  width: 84%;
+  height: 1.2cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.rdlv-l2 {
+  width: 52%;
+  height: 1.2cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.rdlv-toggle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.3cqmin;
+}
+
+.rdlv-tg-l {
+  width: 48%;
+  height: 1.2cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.rdlv-tg-s {
+  position: relative;
+  flex: 0 0 auto;
+  width: 6.2cqmin;
+  height: 3.4cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.30);
+}
+
+.rdlv-tg-s::after {
+  content: '';
+  position: absolute;
+  top: 0.5cqmin;
+  right: 0.5cqmin;
+  width: 2.4cqmin;
+  height: 2.4cqmin;
+  border-radius: 50%;
+  background: #FFFFFF;
+}
+
+.rdlv-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 1.6cqmin;
+}
+
+.rdlv-tabs i {
+  width: 2cqmin;
+  height: 2cqmin;
+  border-radius: 0.6cqmin;
+  background: rgba(255, 255, 255, 0.30);
+}
+
+
+/* ── Sharing it ─────────────────────────────────────────────────────
+
+   Below the frame, not on it: sharing is something you do to the
+   whole exploration, not a control inside the prototype.            */
+.rdlv-share {
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9cqmin;
+  height: 9cqmin;
+  margin-left: -4.5cqmin;
+  border-radius: 50%;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.24),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(6px) scale(0.9);
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.35, 0.5, 1),
+              background 0.3s ease;
+}
+
+.rdlv[data-phase='options'] .rdlv-share,
+.rdlv[data-phase='share'] .rdlv-share,
+.rdlv[data-phase='shared'] .rdlv-share { opacity: 1; transform: none; }
+
+/* the press */
+.rdlv[data-phase='share'] .rdlv-share {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(0.9);
+}
+
+.rdlv[data-phase='fold'] .rdlv-share,
+.rdlv[data-phase='upload'] .rdlv-share,
+.rdlv[data-phase='rest'] .rdlv-share {
+  opacity: 0;
+  transform: scale(0.86);
+}
+
+.rdlv-icon {
+  position: absolute;
+  width: 4.4cqmin;
+  height: 4.4cqmin;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+.rdlv-icon--check { opacity: 0; transform: scale(0.5); }
+
+.rdlv[data-phase='shared'] .rdlv-icon--share,
+.rdlv[data-phase='fold'] .rdlv-icon--share,
+.rdlv[data-phase='upload'] .rdlv-icon--share,
+.rdlv[data-phase='rest'] .rdlv-icon--share { opacity: 0; transform: scale(0.5); }
+
+.rdlv[data-phase='shared'] .rdlv-icon--check,
+.rdlv[data-phase='fold'] .rdlv-icon--check,
+.rdlv[data-phase='upload'] .rdlv-icon--check,
+.rdlv[data-phase='rest'] .rdlv-icon--check { opacity: 1; transform: none; }
+
+
+/* ── Where it goes ────────────────────────────────────────────────
+
+   The file does not join a diagram, it leaves: the cloud arrives above
+   it as it folds, the file rises into it, and the cloud fills once it
+   has landed. The fill IS the confirmation — nothing else says done. */
+.rdlv-cloud {
+  position: absolute;
+  left: 50%;
+  top: 26%;
+  width: 14cqmin;
+  height: 14cqmin;
+  margin-left: -7cqmin;
+  margin-top: -7cqmin;
+  opacity: 0;
+  transform: translateY(4px) scale(0.92);
+  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+.rdlv[data-phase='fold'] .rdlv-cloud,
+.rdlv[data-phase='upload'] .rdlv-cloud,
+.rdlv[data-phase='rest'] .rdlv-cloud {
+  opacity: 1;
+  transform: none;
+}
+
+/* The cloud has to be able to HIDE the file, not just sit over it —
+   otherwise the file slides across the outline and out the top, which
+   is not what going into something looks like.
+
+   A flat fill can't do it: the ground under the cloud is a gradient,
+   and it moves ~17 levels of blue across the cloud's own box, so any
+   solid colour reads as a patch. So this is the ground itself — the
+   same two layers as `.rdlv-wash`, on a box the same size and position
+   as `.rdlv`, masked down to the cloud's silhouette. It is invisible
+   against what is behind it and opaque to everything painted below. */
+.rdlv-cloud-fill {
+  position: absolute;
+  /* back out to `.rdlv`'s own origin: undo this cloud's left/top and its
+     centring margins, so the background lands exactly where the wash's
+     does and there is no seam to see. */
+  left: calc(7cqmin - 50cqw);
+  top: calc(7cqmin - 26cqh);
+  width: 100cqw;
+  height: 100cqh;
+  background: #160E21;
+  -webkit-mask-image: var(--rdlv-cloud);
+  mask-image: var(--rdlv-cloud);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: calc(50cqw - 7cqmin) calc(26cqh - 7cqmin);
+  mask-position: calc(50cqw - 7cqmin) calc(26cqh - 7cqmin);
+  -webkit-mask-size: 14cqmin 14cqmin;
+  mask-size: 14cqmin 14cqmin;
+  --rdlv-cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z'/%3E%3C/svg%3E");
+}
+
+.rdlv-cloud-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url('/src/assets/images/rayo-design-lab/design-lab-bg-dark.webp')
+    center center / cover no-repeat;
+  opacity: 0.2;
+}
+
+.rdlv-cloud-svg { position: relative; display: block; width: 100%; height: 100%; }
+
+.rdlv-cloud-p {
+  /* Not `transparent`. That is rgba(0,0,0,0), so interpolating it to
+     white runs the fill through greys and the cloud goes muddy on the
+     way in. Same colour, no alpha — only the alpha then moves. */
+  fill: rgba(255, 255, 255, 0);
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition: fill 0.5s ease, stroke 0.5s ease;
+}
+
+/* It has the file now — and it says so the moment the file reaches it,
+   not a phase later. Both the fill and the take are delayed to the
+   contact point inside `upload` rather than waiting for a phase change,
+   because the thing they are reacting to happens mid-transition and
+   there is no phase boundary there to hang them on.
+
+   0.36s is measured, not guessed: on the travel curve the file's top
+   edge crosses the cloud's drawn underside — its `getBBox`, not its box
+   — at 369ms. Short ramp too, because this is a thing reacting to being
+   touched, and anything slower reads as a mood rather than a response. */
+.rdlv[data-phase='upload'] .rdlv-cloud-p,
+.rdlv[data-phase='rest'] .rdlv-cloud-p,
+.rdlv[data-phase='done'] .rdlv-cloud-p {
+  fill: #FFFFFF;
+  stroke: #FFFFFF;
+  transition: fill 0.12s ease 0.36s, stroke 0.12s ease 0.36s;
+}
+
+/* `rest` is on this selector too, and only for that: the take finishes
+   ~120ms before that phase lands, and if a slow frame ever pushed it
+   past the boundary the rule would stop matching mid-animation and the
+   transform would snap. Matching both phases removes the coupling. */
+.rdlv[data-phase='upload'] .rdlv-cloud,
+.rdlv[data-phase='rest'] .rdlv-cloud {
+  animation: rdlv-cloud-take 520ms cubic-bezier(0.34, 1.4, 0.5, 1) 0.36s backwards;
+}
+
+@keyframes rdlv-cloud-take {
+  0%   { transform: scale(1); }
+  38%  { transform: scale(1.09); }
+  100% { transform: scale(1); }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .rdlv-wash,
+  .rdlv-caret,
+  .rdlv-load,
+  .rdlv-bit,
+  .rdlv-cloud,
+  .rdlv-screen > * { animation: none; }
+  .rdlv * { transition: none !important; }
 }

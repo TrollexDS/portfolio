@@ -1,10 +1,14 @@
 # Alex Chiu
 
-> Senior Product Designer based in London, UK. Currently at Bauer Media Group, working on Rayo (radio product). Focus areas: design systems, agentic AI workflows, and user research that reshapes product direction.
+> Senior Product Designer in London. Builds the tooling layer that makes design work machine-readable — so AI agents can act on design systems, Figma files, and specs without a human translating first.
 
-Alex Chiu is a Senior Product Designer with a track record of shipping design systems across media and streaming products. His recent work explores how design systems can be restructured to be consumed by AI agents — not just humans — and how Figma workflows can be automated end-to-end.
+Alex Chiu is a Senior Product Designer at Bauer Media Group, working on Rayo. Seven years shipping products across mobile, tablet, TV, web, voice and car, with a specialism in design systems and cross-platform consistency at scale.
 
-He contributes to Rayo at Bauer Media Group rather than leading its design, and has previously built white-label design systems at Simplestream, introduced design practice to teams that had shipped without a designer, and pushed back on product briefs when user research pointed elsewhere.
+His current work follows one thesis: AI agents can write code, but they're still bad at design work — not because the models are weak, but because design artifacts are unreadable to them. A Figma file full of "Frame 47" is noise. A component library without usage contracts means an agent picks the wrong component. A spec that lives in a designer's head never reaches the Jira ticket.
+
+He has built three tools against that problem: Layer Lint, which makes Figma layers read as instructions; an agentic design system with autonomous workflows and Figma MCP integration; and a React mirror of Rayo's iOS design system documented with machine-readable usage contracts, so agents build production-faithful prototypes rather than plausible-looking ones. He also co-leads the AI initiative for Bauer's design team.
+
+Earlier: white-label design systems at Simplestream serving 50+ brands, design practice introduced to teams that had shipped without a designer, and product briefs challenged when user research pointed elsewhere.
 
 ## Contact
 

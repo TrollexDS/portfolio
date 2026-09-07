@@ -3,6 +3,12 @@ import BentoCard from '../BentoCard.js'
 import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
 const STRAVA_PROFILE = 'https://www.strava.com/athletes/101156627'
+
+// Carto basemaps — the route itself comes from Strava, but the tiles under it
+// don't, so light/dark is our choice to make. Both are the same cartography
+// with an inverted palette, which keeps the ride shape reading identically.
+const TILES_LIGHT = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+const TILES_DARK  = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
 const ACTIVITY_JSON  = '/src/assets/strava-activity.json'
 const APP_ICON       = '/src/assets/logos/strava.svg'
 
@@ -68,7 +74,19 @@ export default defineComponent({
     const status   = ref('loading')   // 'loading' | 'ready' | 'error'
     const rideInfo = ref(null)        // { name, distance, elevation }
     const errMsg   = ref('')          // visible error for debugging
+    const isDark   = ref(document.documentElement.dataset.theme === 'dark')
     let   leafletMap = null
+    let   tileLayer  = null
+
+    // Follow the nav theme toggle — swap the basemap in place rather than
+    // rebuilding the map, so the viewport and route stay put.
+    const themeObserver = new MutationObserver(() => {
+      const next = document.documentElement.dataset.theme === 'dark'
+      if (next === isDark.value) return
+      isDark.value = next
+      if (tileLayer) tileLayer.setUrl(next ? TILES_DARK : TILES_LIGHT)
+    })
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 
     onMounted(async () => {
       try {
@@ -108,9 +126,9 @@ export default defineComponent({
           keyboard:           false,
         })
 
-        // Carto Light — clean grey base with place names baked in
-        L.tileLayer(
-          'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        // Carto Light / Dark — clean base with place names baked in
+        tileLayer = L.tileLayer(
+          isDark.value ? TILES_DARK : TILES_LIGHT,
           { subdomains: 'abcd', maxZoom: 19 }
         ).addTo(leafletMap)
 
@@ -134,14 +152,15 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
-      if (leafletMap) { leafletMap.remove(); leafletMap = null }
+      themeObserver.disconnect()
+      if (leafletMap) { leafletMap.remove(); leafletMap = null; tileLayer = null }
     })
 
     return () => {
       const datePart = rideInfo.value?.date ? ` (${rideInfo.value.date})` : ''
       const tooltip  = `My latest ride${datePart} 🚴\nConnect with me on Strava`
 
-      return h(BentoCard, { classes: 'strava-card', href: STRAVA_PROFILE, actionIconSrc: ICON_EXTERNAL_LINK, tooltip }, {
+      return h(BentoCard, { classes: ['strava-card', isDark.value ? 'strava-card--dark' : ''].filter(Boolean).join(' '), href: STRAVA_PROFILE, actionIconSrc: ICON_EXTERNAL_LINK, tooltip }, {
       default: () => [
 
         // ── Map canvas ──────────────────────────────────────

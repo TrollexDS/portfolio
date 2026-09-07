@@ -666,7 +666,7 @@ export default defineComponent({
     const tldr   = ref(false)
     const isDark = ref(document.documentElement.dataset.theme === 'dark')
 
-    // Watch for theme changes (toggled by BulbCard)
+    // Watch for theme changes (toggled by ThemeToggle in the nav)
     const themeObserver = new MutationObserver(() => {
       isDark.value = document.documentElement.dataset.theme === 'dark'
     })

@@ -49,13 +49,11 @@ function richText(segments, onPreview) {
 
 const BIO = [
   [
-    { text: "My name is Alex Chiu, a designer who is obsessed with " },
-    { text: 'problem solving', gradient: true },
-    { text: ' and ' },
-    { text: 'design systems', gradient: true },
-    { text: '. Currently working as a Senior Product Designer at ' },
+    { text: 'My name is Alex Chiu, a Senior Product Designer at ' },
     { text: 'Bauer Media Group', bold: true, color: 'var(--color-brand-bauer)', href: 'https://www.bauermedia.co.uk' },
-    { text: ' in London.' },
+    { text: ' in London. I solve problems by building systems - ' },
+    { text: "it's how I work, not what I work on", gradient: true },
+    { text: '.' },
   ],
   [
     { text: 'I graduated from ' },
@@ -65,15 +63,12 @@ const BIO = [
     { text: '. It clicked immediately.' },
   ],
   [
-    { text: "I've worked across different product roles, but I keep coming back to design systems. There's something satisfying about building the foundations that let teams move faster and build better products." },
-  ],
-  [
     { text: 'I taught a few UX courses at ' },
     { text: 'BrainStation', bold: true, color: 'var(--color-brand-brainstation)', href: 'https://brainstation.io' },
     { text: ', which I loved, but stepped back to focus on other priorities. What energises me most right now is leading our design team\'s AI initiative at Bauer - working out where AI genuinely improves how designers work, where it doesn\'t, and bringing the whole team along rather than racing ahead alone.' },
   ],
   [
-    { text: "I believe great design gives people a sense of control. I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. My approach: think in systems, build the hard things first so they scale." },
+    { text: "I believe great design gives people a sense of control. I love working within constraints (limited resources, tight timelines), because that's where real problem-solving happens. Build the hard things first, so everything after them scales." },
   ],
 ]
 

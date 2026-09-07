@@ -5,7 +5,6 @@ import BentoCard      from './components/BentoCard.js'
 import AboutCard      from './components/cards/AboutCard.js'
 import GmailCard      from './components/cards/GmailCard.js'
 import LinkedInCard   from './components/cards/LinkedInCard.js'
-import BulbCard       from './components/cards/BulbCard.js'
 import SimplestreamDSCard from './components/cards/SimplestreamDSCard.js'
 import RayoDSCard     from './components/cards/RayoDSCard.js'
 import PluginCard     from './components/cards/PluginCard.js'
@@ -13,11 +12,12 @@ import AlexaCard      from './components/cards/AlexaCard.js'
 import ScheduleCard   from './components/cards/ScheduleCard.js'
 import DuolingoCard   from './components/cards/DuolingoCard.js'
 import StravaCard     from './components/cards/StravaCard.js'
-import ClawInvestCard from './components/cards/ClawInvestCard.js'
 import AgenticDSCard  from './components/cards/AgenticDSCard.js'
 import LayerLintCard from './components/cards/LayerLintCard.js'
+import RayoDesignLabCard from './components/cards/RayoDesignLabCard.js'
 import UXQuoteCard   from './components/cards/UXQuoteCard.js'
 import DSQuoteCard   from './components/cards/DSQuoteCard.js'
+import AIQuoteCard   from './components/cards/AIQuoteCard.js'
 import CursorTooltip  from './components/CursorTooltip.js'
 import CursorShape    from './components/CursorShape.js'
 import BackToTop      from './components/BackToTop.js'
@@ -33,19 +33,19 @@ const CARD_ENTRIES = [
   { key: 'about',      comp: AboutCard },
   { key: 'gmail',      comp: GmailCard },
   { key: 'linkedin',   comp: LinkedInCard },
-  { key: 'bulb',       comp: BulbCard },
   { key: 'duolingo',   comp: DuolingoCard },
   { key: 'plugin',     comp: PluginCard },
   { key: 'ds',         comp: RayoDSCard },
   { key: 'dsquote', comp: DSQuoteCard },
   { key: 'uxquote', comp: UXQuoteCard },
+  { key: 'aiquote', comp: AIQuoteCard },
   { key: 'alexa',      comp: AlexaCard },
   { key: 'schedule',   comp: ScheduleCard },
   { key: 'ssds',      comp: SimplestreamDSCard },
-  { key: 'clawinvest', comp: ClawInvestCard },
   { key: 'strava',     comp: StravaCard },
   { key: 'agenticds', comp: AgenticDSCard },
   { key: 'layerlint', comp: LayerLintCard },
+  { key: 'designlab', comp: RayoDesignLabCard },
 ]
 
 
@@ -78,6 +78,7 @@ export default defineComponent({
       'rayo-in-alexa':                'alexa',
       'rayo-schedule':                'schedule',
       'figma-plugin-layer-lint':      'layerlint',
+      'rayo-design-lab':              'designlab',
     }
 
     function resolveCardKey() {
