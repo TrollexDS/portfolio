@@ -7,8 +7,14 @@ const STRAVA_PROFILE = 'https://www.strava.com/athletes/101156627'
 // Carto basemaps — the route itself comes from Strava, but the tiles under it
 // don't, so light/dark is our choice to make. Both are the same cartography
 // with an inverted palette, which keeps the ride shape reading identically.
-const TILES_LIGHT = 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-const TILES_DARK  = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+//
+// CARTO basemaps require an API key (free tier, 5M tiles/month). The key is
+// public by necessity — it's referer-restricted to mchiu.co.uk + localhost in
+// the CARTO dashboard. Free-tier terms require CARTO + OSM attribution to stay
+// visible, hence the credit line rendered below.
+const CARTO_KEY   = 'cb1_40eh_1_dfba5f0b13e2d39682d0e0c9'
+const TILES_LIGHT = `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`
+const TILES_DARK  = `https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`
 const ACTIVITY_JSON  = '/src/assets/strava-activity.json'
 const APP_ICON       = '/src/assets/logos/strava.svg'
 
@@ -173,6 +179,16 @@ export default defineComponent({
         status.value === 'ready' && rideInfo.value && h('div', { class: 'strava-overlay' }, [
           h('span', { class: 'strava-distance' }, rideInfo.value.distance),
           h('span', { class: 'strava-elevation' }, rideInfo.value.elevation),
+        ]),
+
+        // ── Basemap attribution (required by CARTO terms) ───
+        // Links stop propagation so they don't also trigger the card's
+        // open-Strava click.
+        h('div', { class: 'strava-attribution' }, [
+          '© ',
+          h('a', { href: 'https://www.openstreetmap.org/copyright', target: '_blank', rel: 'noopener noreferrer', onClick: e => e.stopPropagation() }, 'OpenStreetMap'),
+          ' © ',
+          h('a', { href: 'https://carto.com/attributions', target: '_blank', rel: 'noopener noreferrer', onClick: e => e.stopPropagation() }, 'CARTO'),
         ]),
 
         // ── Strava logo badge ───────────────────────────────
