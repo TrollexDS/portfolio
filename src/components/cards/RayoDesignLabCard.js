@@ -4,18 +4,22 @@ import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 
 /* ─────────────────────────────────────────────────────────────
-   Assets - three real screenshots, everything else is drawn.
+   Assets - real screenshots where the lab itself is the subject,
+   everything else is drawn.
 
    Nothing from inside a prototype's phone frame appears here except
-   IMG_HARNESS, which shows a direction that was NOT taken forward.
-   The explorations are live unpublished work.
+   IMG_HARNESS, which shows a direction that was NOT taken forward, and
+   IMG_HANDOVER, cleared by Alex (Sep 2026). IMG_PAGES is a Page: a
+   rebuild of a shipped screen, not an exploration.
    ───────────────────────────────────────────────────────────── */
 const HERO_SRC     = '/src/assets/images/rayo-design-lab/rdl-hero.svg'
 const IMG_POC      = '/src/assets/images/rayo-design-lab/rayo-design-lab-mvp.png'
-const IMG_NOW      = '/src/assets/images/rayo-design-lab/rayo-design-lab-current.png'
+const IMG_NOW      = '/src/assets/images/rayo-design-lab/rayo-design-lab-current-v2.png'
 const IMG_HARNESS  = '/src/assets/images/rayo-design-lab/rayo-design-lab-prototype-harness.png'
 const IMG_STORAGE  = '/src/assets/images/rayo-design-lab/rayo-design-lab-prototype-download-storag.png'
-const IMG_SEARCH   = '/src/assets/images/rayo-design-lab/rayo-design-lab-search.png'
+const IMG_SEARCH   = '/src/assets/images/rayo-design-lab/rayo-design-lab-search-v2.png'
+const IMG_PAGES    = '/src/assets/images/rayo-design-lab/rayo-design-lab-pages.png'
+const IMG_HANDOVER = '/src/assets/images/rayo-design-lab/rayo-design-lab-handover.png'
 
 /**
  * softImg - an <img> that degrades to a labelled placeholder instead of a
@@ -415,7 +419,7 @@ const BeforeAfterToggle = defineComponent({
           class: ['ba-img', animating.value ? enterClass.value : ''].filter(Boolean).join(' '),
           src: showNew.value ? IMG_NOW : IMG_POC,
           alt: showNew.value
-            ? 'The Design Lab today: two portals, sidebar and the component grid'
+            ? 'The Design Lab today: four portals, sidebar and the component grid'
             : 'The first build: a plain column of components',
         }),
       ]),
@@ -854,7 +858,7 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'Impact'),
 
             h('h3', { class: 'cs-subsection-title' }, '💡 New ideas land inside the product, not beside it'),
-            full(h('p', { class: 'cs-body-text' }, 'The lab knows how a screen is already built (which components it uses, what the page is already doing), so a new idea gets designed into that screen rather than generated as a fresh page of invented parts. That’s the difference between reviewing a change to the product and reviewing something that merely resembles it.')),
+            full(h('p', { class: 'cs-body-text' }, 'The lab keeps the app’s own screens as they actually are, so a new idea gets designed into the real screen rather than generated as a fresh page of invented parts. That’s the difference between reviewing a change to the product and reviewing something that merely resembles it.')),
 
             h('h3', { class: 'cs-subsection-title' }, '🗺️ A feature arrives as competing directions, not one frame'),
             full(h('p', { class: 'cs-body-text' }, 'Every exploration puts several working options side by side rather than one frame. Each option stating what it’s betting and what it costs, measured, in the frame, next to the thing it describes.')),
@@ -894,6 +898,8 @@ export default defineComponent({
               h('p', { class: 'cs-body-text' }, 'Rayo ships on iOS and Android, and the two platforms aren’t equally stuck. Android has workable routes to a browsable component gallery, iOS doesn’t. SwiftUI previews live inside Xcode, which is not a place a designer goes. I started from the iOS side, which is the half with no answer, and mirrored it in React: I extracted it from the iOS source with Claude Code: colours from the asset catalogue, spacing and radius constants, type sizes and weights, and each component’s variants, states and animation timings from its Swift file.'),
 
               h('p', { class: 'cs-body-text' }, 'It is a smaller library than a designer expects, and that is worth explaining. Engineering makes something a component when it gets reused; designers make components of almost everything, including modules assembled out of other modules. So a library mirrored from the app is structurally short - a dozen or so real primitives, and the composing happens in the prototype instead. Which turns out to be the right split: what the app guarantees lives in the library, and everything still being decided stays where it can be argued with.'),
+
+              h('p', { class: 'cs-body-text' }, 'The icons are in there too: the full set, browsable and grouped by what each one is for, including the handful the app only ships as images and so have no component at all.'),
 
               h('p', { class: 'cs-body-text' }, 'That alone would have been useful. It’s also the least interesting thing here: a library is a catalogue, so it tells you which components exist. It doesn’t tell you which of them is the wrong choice for the screen in front of you.'),
             ),
@@ -980,6 +986,36 @@ export default defineComponent({
               ]),
             ),
 
+            h('h2', { class: 'cs-section-title' }, 'Ideas need something true to start from'),
+
+            full(
+              h('p', { class: 'cs-body-text' }, 'Once the team was exploring in it, a different problem showed up. The ideas were good, but the screens they sat on drifted. Every prototype that touched an existing screen rebuilt it first, from memory or from another prototype, and every rebuild lost something. The podcast show page was rebuilt three separate times, and five prototypes ended up with a nav bar 20 points taller than the app’s, because there was no correct version anywhere to copy. An idea shown on a screen that isn’t quite the app has the same problem as AI with nothing of ours to work from: you end up arguing about the difference rather than the idea.'),
+
+              h('p', { class: 'cs-body-text' }, 'So the lab grew a second portal, Pages: the production screens rebuilt as they are, from the reference designs and the iOS source. It now covers close to every screen in the app, tab by tab, plus settings, the premium flow and login.'),
+
+              h('p', { class: 'cs-body-text' }, 'A Page plays by different rules from a prototype. It answers no question, so it has states but no options. It has to name its source, so anyone can check it against the thing it claims to be. And it isn’t allowed to improve the screen, even where the screen is wrong, because a baseline that quietly fixes things can’t tell you which parts are the product.'),
+            ),
+          ]),
+
+          softImg(IMG_PAGES, 'The For you tab rebuilt as a Page in the lab, with the Pages sidebar listing every section of the app and a state switcher beside the phone frame', 'cs-cover-img'),
+          h('p', { class: 'cs-hint' }, 'The For you tab as a Page: one truth, its states, and the rest of the app in the sidebar'),
+
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            full(
+              h('p', { class: 'cs-body-text' }, 'The Pages link up the way the app does. You can tap from the Welcome screen through login and land on For you, or from a Go Premium prompt through sign-up to the congrats screen and back to where you started. The content is Rayo’s real catalogue, so a show looks the same on every screen you find it on.'),
+
+              h('p', { class: 'cs-body-text' }, 'A prototype now starts from the Pages rather than redrawing them. The first one built this way explores five ways to hand Hits Radio app listeners over to Rayo, and it doesn’t copy the screens it touches: it uses the Pages themselves, so a fix to a Page reaches every prototype built on it. What differs between the directions is the idea, not the screen underneath it.'),
+            ),
+          ]),
+
+          softImg(IMG_HANDOVER, 'A prototype for moving Hits Radio app listeners to Rayo: option E, signed in by link, drawn over the real Welcome screen and its presenter carousel', 'cs-cover-img'),
+          h('p', { class: 'cs-hint' }, 'A new idea built on a real Page: the Welcome screen as it ships, with the sign-in on top'),
+
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            full(
+              h('p', { class: 'cs-body-text' }, 'A Page is also the strictest audit the design system gets, because it’s the only thing in the lab that isn’t allowed to design around a gap. Every missing token or component turns up in its notes.'),
+            ),
+
             h('h2', { class: 'cs-section-title' }, 'It finds what the system is missing'),
 
             full(
@@ -1003,7 +1039,9 @@ export default defineComponent({
             full(
               h('p', { class: 'cs-body-text' }, 'I should admit a bias here. I like the way Apple’s software feels - Liquid Glass, the spatial UI direction, that sense of something modern and slightly ahead of itself - and I wanted this to feel like that rather than like a documentation site. It’s where the name came from: a lab is somewhere you try things, not somewhere you file them.'),
 
-              h('p', { class: 'cs-body-text' }, 'There are two sections. Prototypes is what people open the lab for, so it’s the front door; Components sits one click away in the top bar. Moving between prototypes doesn’t send you back to an index either. You go straight from one to the next, which is what makes comparing them quick. And ⌘K searches everything at once. It runs locally, with no model behind it, and the panel says so, because a search box shaped like a prompt that could only match text would be lying about what the tool does.'),
+              h('p', { class: 'cs-body-text' }, 'Prototypes is what people open the lab for, so it’s the front door, with Pages, Components and Icons one click away in the top bar. Moving between prototypes doesn’t send you back to an index either. You go straight from one to the next, which is what makes comparing them quick. And ⌘K searches everything at once. It runs locally, with no model behind it, and the panel says so, because a search box shaped like a prompt that could only match text would be lying about what the tool does.'),
+
+              h('p', { class: 'cs-body-text' }, 'Prototypes and Pages each open on a feed of what’s changed, because a lab that changes most days is only useful if people can tell what’s new. Half of it writes itself: when the site builds, it reads its own git history and works out which prototype, page or component each change touched, so the feed says what moved rather than repeating a commit message. The other half is a written note, for the changes that deserve a headline, saying what to go and look at. Anything new since your last visit is marked.'),
             ),
 
             full(
@@ -1016,9 +1054,9 @@ export default defineComponent({
           ]),
 
           softImg(IMG_SEARCH,
-            'The lab’s command palette open over a blurred background: a search field reading “Jump to a prototype, a component, a state”, results grouped under Prototypes and Components, and a footer reading “Search is local - no model, no network”',
+            'The lab’s command palette open over a blurred background: a search field reading “Jump to a prototype, a component, a state”, results grouped under Prototypes, Pages and Icons, each Page showing its source, and a footer reading “Search is local - no model, no network”',
             'cs-cover-img'),
-          h('p', { class: 'cs-hint' }, '⌘K across prototypes and components, with the panel saying search is local'),
+          h('p', { class: 'cs-hint' }, '⌘K across prototypes, pages and icons, with the panel saying search is local'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
@@ -1048,13 +1086,13 @@ export default defineComponent({
             h('h2', { class: 'cs-section-title' }, 'What’s next'),
 
             h('p', { class: 'cs-body-text' }, [
-              h('strong', null, 'Production fidelity and handoff annotations.'),
-              ' The UI is close to the app but not pixel-perfect. Until that pass is done and the annotations exist, this is a system for exploring and deciding internally, not for handing over.',
+              h('strong', null, 'Designing with AI is a solo activity, and it shouldn’t be.'),
+              ' It’s a question design leaders raised at an AI conference I went to recently, and I agree with them. Sharing the result is solved: a prototype is a link you can send to anyone. Working on it together isn’t. The session where the options get generated happens between one designer and one agent, and the feedback happens somewhere else, in a message thread, detached from the thing it’s about. There’s nowhere to pin a comment to the exact state you disagree with, the way you would in Figma, and no way to pick up another designer’s direction and take it somewhere new. The bets and the gap lists were a first step towards the argument living inside the work. The next is making room for other people’s arguments there too, designers first, then engineering and product. That’s what I’m exploring next.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              h('strong', null, 'Android.'),
-              ' Everything in the lab mirrors the iOS Swift components, which is half the product. Feeding it the Android side would make it the whole of it.',
+              h('strong', null, 'Handoff annotations.'),
+              ' Pages closed the fidelity gap for screens that already exist. What’s still missing is annotations, so for now this is a system for exploring and deciding internally, not for handing over.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
