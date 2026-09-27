@@ -1070,6 +1070,12 @@ strong, b {
 .cs-body-list li {
   margin: 0 0 6px 0;
 }
+
+/* A list straight after a subsection heading needs its own breathing room -
+   the negative top margin above is tuned for lists that follow a paragraph. */
+.cs-subsection-title + .cs-body-list {
+  margin-top: 4px;
+}
 .cs-body-list .cs-body-text {
   margin: 0 0 6px 0;
 }
@@ -3191,6 +3197,21 @@ strong, b {
   font-weight: 500;
   color: var(--color-brand-strava);
 }
+
+/* Basemap attribution — top left, required by CARTO free-tier terms */
+.strava-attribution {
+  position: absolute;
+  top: 14px; left: 18px;
+  z-index: 2;
+  font-size: var(--text-2xs);
+  line-height: 1;
+  color: var(--color-text-subtle);
+}
+.strava-attribution a {
+  color: inherit;
+  text-decoration: none;
+}
+.strava-attribution a:hover { text-decoration: underline; }
 
 /* Strava logo badge — bottom right */
 .strava-badge {
@@ -6350,4 +6371,301 @@ strong, b {
   .rdlv-cloud,
   .rdlv-screen > * { animation: none; }
   .rdlv * { transition: none !important; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Rayo on Alexa — drawn figures
+   Diagrams from the interview deck, rebuilt in the site's own type
+   and tokens so they stay crisp, responsive and theme-aware.
+   ══════════════════════════════════════════════════════════════════ */
+
+.alx-fig {
+  /* Sits outside cs-body so it can use the overlay width, not the
+     680px reading column. */
+  width: min(92vw, 1000px);
+  margin: 36px auto 4px;
+  padding: 26px;
+  border: 1px solid var(--color-border-card);
+  border-radius: 18px;
+  background: var(--color-surface-card);
+
+  --alx-accent: var(--color-primitive-teal-500);
+  --alx-control: var(--color-primitive-orange-alexa);
+}
+
+[data-theme="dark"] .alx-fig {
+  --alx-accent: #00c9c0;
+  --alx-control: #ff7a45;
+}
+
+.alx-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+  margin-bottom: 12px;
+}
+
+.alx-card-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--text-base);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+}
+
+.alx-note {
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  color: var(--color-text-subtle);
+}
+
+/* ── Five problems, two causes ─────────────────────────────────── */
+.alx-diag {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 28px;
+  align-items: start;
+}
+
+.alx-diag-col { min-width: 0; }
+
+.alx-chip-list { display: flex; flex-direction: column; gap: 8px; }
+
+.alx-chip {
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border-card);
+  border-left: 3px solid var(--alx-accent);
+  background: var(--color-surface-card-white);
+  font-size: var(--text-sm);
+  color: var(--color-text-body);
+}
+
+.alx-chip--control { border-left-color: var(--alx-control); }
+
+.alx-cause {
+  padding: 16px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-card);
+  border-top: 3px solid var(--alx-accent);
+  background: var(--color-surface-card-white);
+}
+
+.alx-cause + .alx-cause { margin-top: 12px; }
+.alx-cause--control { border-top-color: var(--alx-control); }
+
+.alx-cause-count {
+  display: inline-block;
+  margin-bottom: 8px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-on-primary);
+  background: var(--alx-accent);
+}
+
+.alx-cause--control .alx-cause-count { background: var(--alx-control); }
+.alx-cause .alx-note { margin-top: 7px; }
+
+/* ── Seven paths into one ──────────────────────────────────────── */
+.alx-paths { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: center; }
+.alx-paths-col { min-width: 0; }
+
+.alx-route {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 13px;
+  border-radius: 9px;
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+  font-size: var(--text-sm);
+  color: var(--color-text-body);
+}
+
+.alx-route + .alx-route { margin-top: 7px; }
+.alx-route--ok { border-color: var(--alx-accent); }
+
+.alx-route-end {
+  flex: 0 0 auto;
+  font-size: var(--text-2xs);
+  color: var(--color-text-subtle);
+}
+
+.alx-route--ok .alx-route-end { color: var(--alx-accent); }
+
+.alx-steps { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+
+.alx-step {
+  padding: 7px 13px;
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+  color: var(--color-text-subtle);
+}
+
+.alx-step--own {
+  border-color: var(--alx-accent);
+  color: var(--alx-accent);
+  font-weight: var(--weight-semibold);
+}
+
+/* ── Three surfaces ────────────────────────────────────────────── */
+.alx-surfaces { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+
+.alx-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+}
+
+.alx-stage-owner {
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  border: 1px solid var(--alx-accent);
+  color: var(--alx-accent);
+}
+
+.alx-stage-owner--theirs {
+  border-color: var(--color-text-muted);
+  color: var(--color-text-subtle);
+}
+
+.alx-stage-quote {
+  font-size: var(--text-xs);
+  color: var(--color-text-body);
+  font-style: italic;
+}
+
+/* ── Four decisions ────────────────────────────────────────────── */
+.alx-table { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+
+.alx-table th {
+  text-align: left;
+  padding: 0 14px 10px 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+  border-bottom: 1px solid var(--color-border-card);
+}
+
+.alx-table td {
+  padding: 14px 14px 14px 0;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border-card);
+  color: var(--color-text-body);
+  line-height: 1.5;
+}
+
+.alx-table tr:last-child td { border-bottom: none; }
+.alx-table td:last-child, .alx-table th:last-child { padding-right: 0; }
+.alx-fork { font-weight: var(--weight-semibold); }
+.alx-options { color: var(--color-text-subtle); font-size: var(--text-xs); }
+.alx-chose { color: var(--alx-accent); font-weight: var(--weight-semibold); }
+.alx-cost { display: block; margin-top: 5px; font-size: var(--text-xs); color: var(--color-text-subtle); }
+
+/* ── Ticket change chart ───────────────────────────────────────── */
+.alx-chart { display: flex; flex-direction: column; gap: 14px; }
+
+.alx-bar-row {
+  display: grid;
+  grid-template-columns: minmax(130px, 200px) 1fr 58px;
+  align-items: center;
+  gap: 16px;
+}
+
+.alx-bar-name { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--color-text-primary); }
+.alx-bar-sub { display: block; font-weight: var(--weight-regular); font-size: var(--text-2xs); color: var(--color-text-subtle); }
+
+.alx-bar-track { display: flex; justify-content: flex-end; height: 16px; }
+
+.alx-bar {
+  height: 100%;
+  border-radius: 4px;
+  background: var(--alx-accent);
+  min-width: 4px;
+}
+
+.alx-bar--control { background: var(--alx-control); }
+
+.alx-bar-val {
+  text-align: right;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--alx-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.alx-bar-val--control { color: var(--alx-control); }
+
+@media (max-width: 768px) {
+  .alx-fig { width: calc(100vw - 48px); padding: 18px; border-radius: 14px; }
+
+  .alx-diag,
+  .alx-paths { grid-template-columns: 1fr; gap: 22px; }
+
+  .alx-surfaces { grid-template-columns: 1fr; }
+
+  .alx-bar-row { grid-template-columns: 1fr 52px; gap: 6px 12px; }
+  .alx-bar-track { grid-column: 1 / 2; }
+  .alx-bar-val { grid-row: 1; grid-column: 2; align-self: start; }
+
+  /* Decisions table restacks: one block per decision */
+  .alx-table, .alx-table tbody, .alx-table tr, .alx-table td { display: block; width: 100%; }
+  .alx-table thead { display: none; }
+  .alx-table tr { padding: 14px 0; border-bottom: 1px solid var(--color-border-card); }
+  .alx-table tr:last-child { border-bottom: none; }
+  .alx-table td { padding: 0 0 8px 0; border-bottom: none; }
+  .alx-table td:last-child { padding-bottom: 0; }
+}
+
+/* ── Rayo app smart speaker states ──
+   Transparent-background mockups, so they sit straight on the page
+   rather than inside a card. */
+.alx-phone-row {
+  width: min(92vw, 940px);
+  margin: 36px auto 4px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 22px;
+  align-items: end;
+}
+
+.alx-phone { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.alx-phone img { width: 100%; height: auto; }
+
+/* Each state has a light and a dark screenshot - show the one that matches. */
+.alx-phone .alx-shot--dark { display: none; }
+[data-theme="dark"] .alx-phone .alx-shot--light { display: none; }
+[data-theme="dark"] .alx-phone .alx-shot--dark { display: block; }
+
+.alx-phone-cap {
+  font-size: var(--text-2xs);
+  color: var(--color-text-subtle);
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .alx-phone-row {
+    width: calc(100vw - 48px);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
 }

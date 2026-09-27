@@ -299,72 +299,148 @@ const caseStudies = [
     cardKey: 'alexa',
     title: 'Bringing Design to a Team That Had Never Had a Designer',
     description:
-      'Introducing design practice to the Alexa team at Bauer — a product that had shipped without a dedicated designer.',
+      'Bringing design practice to Bauer’s Alexa skill - the diagnosis, seven linking routes made one, and an honest read of two years of support data.',
     about:
-      'Introducing design practice to Alexa — a team that had shipped without a dedicated designer.',
+      'Introducing design practice to a team that had never had a designer, on Bauer’s Alexa skill.',
     datePublished: '2026-04-01',
-    dateModified:  '2026-04-17',
+    dateModified:  '2026-09-27',
     summary:
-      "The Alexa team at Bauer had shipped features for years without a dedicated designer. This case study is about the first six months: earning trust, introducing design practice without creating bureaucracy, and the product improvements that came from treating voice as a first-class surface.",
+      "The Alexa skill at Bauer had shipped for years without a designer. This case study is the diagnosis - five reported problems that turned out to be two causes - the seven linking routes consolidated into one, and an honest read of two years of support data, including the theme that deliberately did not move.",
     content: `
-<p>The Alexa team had shipped without a designer for years. I came in to make sense of what existed, remap the user journeys in Voiceflow, and design a cohesive experience across voice and screen.</p>
+<p>Rayo is Bauer Media's audio app - live radio across the station brands, plus catch-up and podcasts, on mobile, web, car and smart speaker. Its Alexa skill had been shipping for years with no designer: no documented flows, no design files, and everything about how it worked living in the PO's and the lead developer's heads.</p>
+
+<p>After helping take the Rayo app from beta to launch, I volunteered to move to the Voice and Connected Device team as its first designer, alongside a developer and a QA who joined at the same time. What follows is the evidence I started from, the diagnosis that set the team's priority, the decisions I made and what they cost, and what two years of support data can and cannot tell you about the result.</p>
 
 <h2>My role</h2>
 <p>Sole designer</p>
 
 <h2>Impact</h2>
 
-<h3>Fewer support tickets, clearer experience</h3>
-<p>By consolidating account linking into a single reliable path, support tickets related to linking dropped. The six separate help articles were replaced with streamlined guidance that matched the actual user experience, reducing both user frustration and the maintenance burden on the team.</p>
+<h3>The biggest complaint theme fell and stayed down</h3>
+<p>Premium listeners hearing adverts was the largest ticket theme and the one most directly downstream of broken linking: 753 tickets in January 2024, 54 in January 2025, and a monthly average that went from 185 to 56 and held there for two years. Other teams were improving the premium experience over the same period, so I do not claim that fall as mine alone - what the data does and does not support is set out below.</p>
 
-<h3>A design foundation the team kept using</h3>
-<p>The Voiceflow production file became the team's ongoing source of truth - the first time the Alexa skill's logic was fully documented and visible in one place. More importantly, the way the team worked changed. Design became part of the process: the team started involving design earlier in decision-making, and became open to running user research as a regular practice rather than shipping based on assumptions alone.</p>
+<h3>Seven ways to link became one</h3>
+<p>Seven linking routes, each with its own bugs and no consistent logic between them, converged on a single path through the Alexa app using Amazon's app-to-app pattern. Six help centre articles were rebuilt around the three themes the diagnosis had identified.</p>
 
-<h3>Design beyond the skill</h3>
-<p>The work extended beyond the product itself. I collaborated with the customer service team to overhaul the Alexa help centre, rewriting the key support articles on account linking, ads, and premium station access to match the new simplified flows. By aligning the support content with the redesigned experience, users who did need help found guidance that actually reflected what they'd see on screen - closing the gap between the product and the resources meant to support it.</p>
+<h3>A source of truth the team could run</h3>
+<p>I rebuilt the skill in Voiceflow: every intent, its conditions, synonym variations and error states. Developers built new features from it and QA tested against it, so it stopped being my documentation and became the team's spec. And because the journeys were mapped in full, it runs - you can talk to it and it answers, close to the live skill.</p>
 
-<h2>Challenges</h2>
+<h2>What I inherited</h2>
+<p>Seven different ways to link a Rayo account to Alexa. Six help centre articles explaining them. Zero documented flows, and no shared source of truth for how any of it worked.</p>
 
-<h3>First designer in a team that never had one</h3>
-<p>No documented flows, no mapped journeys. Everything about how the skill worked lived inside the PO and lead developer's heads.</p>
+<h3>A product that reported success it had not achieved</h3>
+<p>The app says you are linked. Alexa confirms you are a premium member. You still hear adverts. You unlink, and nothing actually unlinks - permission is revoked but the OAuth tokens stay alive, so the state is wrong in a new way. You re-link to fix it, and it happens again.</p>
 
-<h3>Account linking was the core problem</h3>
-<p>Premium users heard ads and lost access to paid stations despite paying. The business had no way to attribute listening data to individual users.</p>
+<h3>Silent failures throughout</h3>
+<p>Nothing ever told anyone that something had gone wrong. On a screenless device there is nowhere to look and nothing to read, so a listener could not tell a broken link from a broken app from a broken subscription. Neither could customer service.</p>
 
-<h3>A broken experience built on patches</h3>
-<p>4+ different linking paths with no consistent logic between them. Silent failures, dead ends, and a trail of negative Alexa store reviews.</p>
+<h2>The audit</h2>
 
-<h3>No one had ever stepped back to see the full picture</h3>
-<p>Fixes had been stacked on fixes with no one stepping back to map the full picture. That was my starting point.</p>
+<h3>I started by failing the way a new user fails</h3>
+<p>I had never used an Alexa device. I bought an Echo Dot and an Echo Show, set them both up with no help from the team, and documented every step from first power-on through finding the skill, exploring content and playing a specific show. Before I could judge the experience I had to be able to describe it.</p>
 
-<h2>The Audit</h2>
+<h3>What the skill could actually hear</h3>
+<p>Alexa skills were not conversational at this point - this predates Alexa+. The skill only responded to word-perfect utterances built for each intent. Anything else failed, silently, on a device with nowhere to show you why.</p>
 
-<h3>Mapping every journey from scratch</h3>
-<p>My first step was to experience the product exactly as a new user would. I unboxed both an Echo Dot and an Echo Show, set them up from scratch, and documented every step from first power-on through account linking. Without any briefing from the team, I tested how far a first-time user could get by speaking naturally to the device.</p>
+<p>I asked the lead developer for the interaction model JSON and went through it with him to understand how it was structured, then pulled it apart and documented every intent, utterance and synonym in Confluence. It stopped being something only one person could answer.</p>
 
-<p>What became clear very quickly was that the Rayo skill, like most custom Alexa skills, wasn't conversational at all. It was built with a binary, chatbot-like logic: say the exact right words or nothing happens. There were only two command structures that actually worked, and users had to know them word for word: "Open [skill name]" followed by a separate action, or the one-shot "Ask [skill name] to [do something]." Anything outside these patterns failed silently.</p>
+<h2>Five problems, two causes</h2>
+<p>There was no research platform at Bauer yet - UserTesting and UserZoom only arrived after this shipped - so I went to customer service and asked what people were actually contacting us about. They pulled three months of contacts, the skill store reviews and the premium cancellation survey. Smart speaker problems were a recurring theme in support, the store listing was dominated by one star reviews, and a meaningful share of people cancelling premium said they could not use it on their device.</p>
 
-<p>I pulled apart the skill's interaction model - a JSON file containing every intent, utterance, and synonym the skill could recognise. I catalogued all available content and mapped which synonyms had been added for requesting specific shows, revealing gaps and inconsistencies in how the skill interpreted user requests.</p>
+<p>Five issues came up most: premium users hearing adverts, account linking failing, premium features not working, access to premium stations, and playback and streaming drops.</p>
 
-<h2>Restructured Journeys</h2>
+<p><strong>Four of the five were the same failure wearing different clothes: the account link was not holding.</strong> Permission, OAuth tokens and Amazon's own record could all disagree, and nothing owned the truth. If the link state is wrong server-side the premium catalogue is not returned, so hearing adverts, losing premium features and losing premium stations are not three problems sitting next to a linking problem. They are the linking problem, described by the listener in the terms they experienced it.</p>
 
-<h3>Building a single source of truth in Voiceflow</h3>
-<p>With no documentation and no design files, my first goal was to create one. I rebuilt every existing intent in Voiceflow - think of intents as the voice equivalent of features in a mobile app. Each one was built to closely mirror the actual Alexa skill, accounting for different conditions, synonym variations, and error states. This production file became the team's single source of truth: the first time anyone could see the entire skill's logic in one place.</p>
+<p>The fifth, <strong>playback and streaming drops, was a separate technical fault</strong> with nothing to do with linking. I spotted the pattern in the ticket themes; the lead developer supplied the mechanism, which was that unlinking revoked permission without ever clearing the tokens. Joint diagnosis, not a solo one.</p>
 
-<h3>Unifying account linking into one reliable path</h3>
-<p>The original skill had so many linking methods that the support page alone contained six separate articles explaining them - a maintenance burden for developers and a source of confusion for users. In reality, only one method was bug-free: linking via the Alexa app. I designed every journey to converge on this single path. No matter where the user starts - iOS or Android, legacy brand apps or the new Rayo app, scanning a QR code or initiating the link through voice - they're all deeplinked into the Alexa app to complete account linking. One consistent, reliable flow instead of six fragmented ones.</p>
+<p>I took the customer service report to our PO and made the case that account linking should be the team's first priority: four of the five biggest complaint themes traced to one cause, and it was hitting paying customers. It became the priority. That was the first time design had set the agenda on that team.</p>
 
-<h3>Introducing in-situ help</h3>
-<p>Many users were still struggling with account linking even when the flow worked correctly. I introduced an in-situ help feature: contextual guidance delivered through both on-screen support content on the Echo Show and voice prompts from Alexa. Rather than sending users away to a support page, help now meets them where they are, at the moment they need it.</p>
+<h2>Restructured journeys</h2>
 
-<h3>Improving the help centre</h3>
-<p>I also worked with the customer service team to overhaul the Alexa help centre articles. The existing support pages reflected the old fragmented experience - six separate articles for account linking alone. I helped consolidate and rewrite the key articles covering account linking, ads on Alexa, and premium station access, making sure the guidance matched the simplified flows and gave users a clear path to resolution.</p>
+<h3>A source of truth that runs</h3>
+<p>With no documentation and no design files, my first job was to make one. I rebuilt every intent in Voiceflow - intents are the voice equivalent of features - mirroring the real skill including its conditions, synonym variations and error states. Developers built new features from it and QA tested against it. Because the journeys were mapped in full it also runs: you can talk to it and it responds, close to the live skill, which is how I have used it for testing features designed since.</p>
 
-<h3>Continue listening as a reason to link</h3>
-<p>We reframed account linking as something worth doing by tying it to a tangible benefit. The new "Continue Listening" feature lets users resume content from where they left off - when they play something they've previously started, Alexa prompts them to pick up where they stopped. In the next phase, we plan to take this further: Alexa will proactively suggest unfinished content when you launch the Rayo skill or arrive home, creating a more personalised, anticipatory experience.</p>
+<h3>Seven paths into one</h3>
+<p>The root cause sat in the backend: Shepherd, our own system, could not communicate reliably with Amazon. I took the diagnosis to the backend team and asked whether the underlying problem could be fixed. They agreed with it and had no capacity - fair enough, they had just launched Rayo and were carrying the tech debt from it. So the question became what could be fixed inside my own team's control.</p>
 
-<h2>What's next</h2>
-<p>Development on the Rayo Alexa skill is currently paused while the team waits for the release of Alexa+, Amazon's next-generation AI-powered assistant. The groundwork I laid - the mapped journeys, the Voiceflow prototypes, the simplified account linking architecture - gives the team a design foundation to build on when development resumes, whether that's adapting to Alexa+'s new conversational capabilities or picking up the personalised Continue Listening experience we'd planned.</p>
+<p>That is what led to consolidating the routes rather than repairing them. The legacy brand apps had Amazon app-to-app linking built in, technically the most direct route and also the buggiest, and fixing it needed the backend work we did not have. Linking inside the Alexa app was the most stable and the simplest to explain: tap link, sign in with your Rayo account, agree, done. Rayo owns two screens inside that flow. The rest of it is Amazon's, and so is the last step of every other route - which is why adding routes only adds places to fail.</p>
+
+<h3>Four decisions, and what each one cost</h3>
+<ul>
+<li><strong>Where linking happens.</strong> Fix the buggy in-app routes, keep several routes and improve them all, or hand off to the Alexa app. I handed off. Cost: a branded handoff Rayo does not control.</li>
+<li><strong>The old invocation.</strong> "Alexa, open Planet Radio" could be retired at launch, kept temporarily, or kept indefinitely. Kept indefinitely. Cost: two invocation names to maintain. Listeners with a decade-old habit should not have to relearn it.</li>
+<li><strong>The rebrand message.</strong> "This is Rayo, the new name for Planet Radio", time-boxed to three months. Cost: every session slowed for three months, on a surface whose whole value is speed to audio.</li>
+<li><strong>Making linking worth doing.</strong> No incentive, a premium discount, gating a feature people already have, or building a new feature and gating it. Continue Listening, new and only for linked accounts. Cost: engineering time on a feature whose only job was to justify a different feature.</li>
+</ul>
+
+<p>On the last one: gating something people already have is a takeaway. It would have generated exactly the support contacts this project existed to remove, and it punishes the unlinked rather than rewarding the linked. Building something new and putting it behind the link means nobody loses anything.</p>
+
+<p>On the three months: long enough that an occasional listener heard it a few times, short enough not to slow every session indefinitely. It was a judgement call discussed with the team, not a calculation. Looking back I would let the data end it rather than the calendar - watch the split between people saying "Rayo" and people still saying "Planet Radio", and retire the message when that curve flattens.</p>
+
+<h3>The flow runs across three surfaces</h3>
+<p>What makes this different from designing a screen is that it does not live on one surface. It starts in voice, passes through Amazon's system layer, and finishes on the phone. Rayo owns neither the middle nor the end.</p>
+
+<p>Three checks have to pass before anyone can be sent anywhere, and none of them are visible to the listener: is the Alexa app installed, is this one profile or a household with several, and are notifications on, off, or never set? If the device belongs to a household the link can only go to the primary user, so there is an extra step to confirm that is what they want. And if notifications are on, Alexa says "I'll send you a link"; if they are off, it says you will find it in the Alexa app. Same flow, different words - honest about a permission Rayo does not control rather than promising something that will not arrive.</p>
+
+<p>Most of the estate has no display, so the Echo Dot path was designed as the complete journey. The Echo Show adds one option, the QR code. The screen is additive, never load-bearing.</p>
+
+<h3>Every exit teaches the way out</h3>
+<p>Good design lets someone feel in control, and on a phone that is easy: if you want to know whether you are linked, you open settings and look. On a voice device there is nothing to glance at. The only way to check is to ask, and that only works if you already know the exact words. So every exit in the flow, successful or failed, ends by teaching the utterance that checks it. If someone is stuck, the dead end should at least leave them with something they can use next time.</p>
+
+<h3>Help where the problem is</h3>
+<p>On the Echo Show, a Get help button opens the Rayo support page in Alexa's own browser, in situ rather than sending anyone away. The three articles surfaced there - linking, hearing adverts, premium stations - are the three themes from the diagnosis. I took those themes back to customer service and we rebuilt the help centre around them, so the guidance was prioritised by the same evidence as the design.</p>
+
+<h3>Continue Listening, and the half I did not ship</h3>
+<p>Everything above makes linking work. None of it makes linking worth doing. You scan a code, sign in, agree to a permission screen and land back in exactly the same experience. If you are premium there is a payoff. If you are not, it is pure cost, and the business wanted everyone linked.</p>
+
+<p>Continue Listening was my answer: ask Rayo to continue and it picks up whatever you had already started, with your listening history on the Echo Show home screen for linked users. What I originally designed was cross-device - you listen on the way home, you walk in, you ask Alexa to carry on. That is the version that makes linking worth doing, it needed backend work the team did not have, and it was scaled back to Alexa-only. What you start on the Echo, you continue on the Echo. That is what shipped.</p>
+
+<h2>Everything fell. Except the one thing I said was unrelated.</h2>
+<p>The new linking flow shipped in Q2 2024. I do not have the analytics I would want - GA4 was not implemented on the skill until October 2024, months after this shipped - so there is no clean before and after in product data. What I have is two years of customer service tickets.</p>
+
+<p>Hearing adverts as a premium user went from 753 tickets in January 2024 to 54 in January 2025, and from a monthly average of 185 to 56. It held at that level for two years with no drift back. Across all eight support categories, monthly averages, 2024 (excluding June and July) to 2025: account linking 14 to 4, down 71%; hearing adverts 185 to 56, down 70%; billing 75 to 26, down 66%; voucher 9 to 4, down 58%; general 41 to 21, down 49%; account 20 to 10, down 49%; cancel subscription 76 to 42, down 45%; streaming 22 to 22, up 2%.</p>
+
+<h3>Why I cannot hand you a clean number</h3>
+<p>Billing fell 66% and I had nothing to do with billing. 2025 was a better year across the whole premium experience and other teams were fixing things at the same time, so the fall in the linking-related categories cannot be attributed to this work alone, and I am not going to claim it.</p>
+
+<h3>What does hold</h3>
+<p>Streaming is the one theme I had diagnosed as a separate technical fault, and it is the only category that did not move. If this were simply lower ticket volume overall - fewer subscribers, a channel change, people giving up on contacting support - streaming would have fallen with everything else. It did not. So these are real category-level changes, and the prediction I made before doing the work is the one that held.</p>
+
+<h3>What this data does not say</h3>
+<ul>
+<li>Account linking tickets themselves were never the big number: 14 a month down to 4. It has the largest percentage fall on the chart and the smallest raw one. The impact shows up downstream, in the themes people actually complained about.</li>
+<li>June and July 2024 are excluded. A backend refactor logged everyone out and produced over a thousand account-linking tickets in two months. Leaving it in would make every fall look bigger than it was.</li>
+<li>These are support contacts, not behaviour. Fewer complaints is not the same as more successful links.</li>
+<li>A large spike in linking events in late 2025 was a marketing campaign, not this work.</li>
+<li>April 2025 shows a joint spike in hearing adverts and streaming, which looks like one technical incident hitting both rather than anything to do with linking.</li>
+<li>Nobody watched a real listener attempt the redesigned flow before it shipped. The evidence was behavioural and at scale, plus one first-run walkthrough by me, and by then I knew too much to be a useful test.</li>
+</ul>
+
+<h2>Two years on, the phone becomes the control surface</h2>
+<p>Back on the mobile team, I led the Rayo app side of app-to-app linking, and it has now shipped. Smart speaker settings sit with the other account-level settings: a primary link CTA, and sample utterances shown before you link - the device with a screen teaching the device without one.</p>
+
+<p>There are three states: not linked, link pending and linked. Link pending exists because the status is eventually consistent. Shepherd queries Amazon for live status, usually instantly and occasionally a few minutes behind, so rather than assert something it cannot know, the screen says so and offers a route into the Alexa app, which always shows the accurate status. Unlinking routes there too. Rayo can never own linking - whichever direction you go there is always a step under Amazon's control, and the honest design is the one that admits it.</p>
+
+<h2>What I would do differently</h2>
+
+<h3>Agree the feedback loop before the build, not after</h3>
+<p>I shipped this without a loop at either end. Nothing was watched before it went live, and nothing could be measured after it, so I had strong evidence about the problem and almost none about the solution. The fix is one thing rather than two: agree up front how the design will be validated and how it will be measured, and make the case to analytics for tracking to land as part of the build. On this project that means link completion rate, time to link, and linked versus unlinked listening hours.</p>
+
+<h3>Ship the whole incentive, or none of it</h3>
+<p>In-skill resume shipped. Phone-to-speaker resume, the part that gives a non-premium listener a reason to link at all, did not. When the cross-device version turned out to need backend work we did not have, I accepted the smaller one, and the smaller one does not do the job it was built for. The deeper version of that: "can we build all of this" and "is the half we can build still worth building" are two different questions with two different owners. Taking the answer to the first as the answer to the second is the actual mistake.</p>
+
+<h3>Smaller things I would carry forward</h3>
+<ul>
+<li>Documentation needs a named owner. The Voiceflow file was the team's source of truth, and the team was later disbanded.</li>
+<li>A written state model - what linked means and who owns it, agreed across product, backend and customer service and checked against Amazon's docs - would have surfaced the five-problems-one-cause insight on day one.</li>
+<li>The customer service report was a one-off ask. A standing monthly read would have made it a feedback loop rather than archaeology.</li>
+<li>Logging the actual fallback utterances would turn every misheard request into a synonym to add.</li>
+</ul>
+
+<h2>What I took away</h2>
+<p>Most of what made this work was not screen design. It was getting a team that had never had a designer to agree on what the flow actually was, and then keeping that agreement somewhere everyone could use it.</p>
+
+<p>The other half is the partner surface itself. You are always designing around somebody else's last step, so the real job is deciding where to spend the control you do have. Work on the skill is paused while the team waits on Alexa+, and one constraint is still open: "Rayo" is acoustically close to "radio", and Alexa cannot reliably tell them apart. That one is a conversation with Amazon, and the kind of problem you only find by reading what the system misheard.</p>
 
 <h2>Experience it yourself</h2>
 <p>Everything you've just read about is live. If you have an Alexa, just say "Alexa, open Rayo" and try it for yourself.</p>
