@@ -20,6 +20,7 @@ const IMG_STORAGE  = '/src/assets/images/rayo-design-lab/rayo-design-lab-prototy
 const IMG_SEARCH   = '/src/assets/images/rayo-design-lab/rayo-design-lab-search-v2.png'
 const IMG_PAGES    = '/src/assets/images/rayo-design-lab/rayo-design-lab-pages.png'
 const IMG_HANDOVER = '/src/assets/images/rayo-design-lab/rayo-design-lab-handover.png'
+const IMG_GUIDE    = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide.png'
 
 /**
  * softImg - an <img> that degrades to a labelled placeholder instead of a
@@ -742,20 +743,21 @@ const GlassSpecimen = defineComponent({
 })
 
 // How work gets from one designer's laptop to the whole team.
-// Grouped by who does it - the last two steps do themselves, which is
-// the part that makes it a shared tool rather than a folder of demos.
+// Grouped by who does it. No step has my name on it: review is any other
+// designer's, and the last two steps do themselves.
 const FLOW = [
   { lane: 'Any designer', steps: [
-    ['1', 'Clone it',            'GitHub Desktop, once.'],
-    ['2', 'Build the idea',      'Describe it to Claude Code; it builds in the real components.'],
-    ['3', 'Open a pull request', 'When it’s worth the rest of the team seeing.'],
+    ['1', 'Set up from the Guide', 'No Terminal or git experience needed.'],
+    ['2', 'Start a branch',        'Your own space. Nothing reaches anyone else yet.'],
+    ['3', 'Build with Claude',     'Brief it like another designer; it builds in the real components.'],
+    ['4', 'Open a pull request',   'When it’s worth the rest of the team seeing.'],
   ]},
-  { lane: 'Me, for now', steps: [
-    ['4', 'Review and merge',    'Merging is where a repo can get messy.'],
+  { lane: 'Another designer', steps: [
+    ['5', 'Review and approve',    'One approval merges an exploration. Only the foundations need mine.'],
   ]},
   { lane: 'Automatic', steps: [
-    ['5', 'It publishes itself', 'Merging to main deploys the lab.'],
-    ['6', 'Everyone has it',     'One internal link, never out of date.'],
+    ['6', 'It publishes itself',   'A build check, then merging to main deploys the lab.'],
+    ['7', 'Everyone has it',       'One internal link, never out of date.'],
   ]},
 ]
 
@@ -849,11 +851,11 @@ export default defineComponent({
             // two screens down, where it has the room to land. An intro that
             // makes the same case first only spends the good lines twice.
             full(
-              h('p', { class: 'cs-body-text' }, 'Exploring a design properly is expensive, so a feature gets one direction drawn at its happy path, and the states that actually decide it never get drawn at all. AI looked like the fix, and at first it made things worse. So I built the Rayo Design Lab, where AI builds inside our own design system, with the rules for using it written down where it can read them. What comes out is worth arguing over, and some of it we’ve taken forward.'),
+              h('p', { class: 'cs-body-text' }, 'Exploring a design properly is expensive, so a feature gets one direction drawn at its happy path, and the states that actually decide it never get drawn at all. AI looked like the fix, and at first it made things worse. So I built the Rayo Design Lab, where AI builds inside our own design system, with the rules for using it written down where it can read them. What comes out is worth arguing over, and some of it we’ve taken forward. It’s also built so the rest of the team doesn’t need me to use it.'),
             ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
-            h('p', { class: 'cs-body-text' }, 'Design and development. I built the lab and ran the sessions to onboard the design team. Work goes in by pull request, and for now I’m the one reviewing and merging (I built it, so I know where it can drift). That moves to the other senior designers as they get comfortable operating it.'),
+            h('p', { class: 'cs-body-text' }, 'Design and development. I built the lab, wrote the guide that gets the team into it, and set up how work gets reviewed. I own the foundations every prototype sits on; any designer can review and merge an exploration.'),
 
             h('h2', { class: 'cs-section-title' }, 'Impact'),
 
@@ -866,8 +868,8 @@ export default defineComponent({
             h('h3', { class: 'cs-subsection-title' }, '⚠️ States we’d have got to last'),
             full(h('p', { class: 'cs-body-text' }, 'Building this way surfaces the states nobody has got to yet. The ones that are neither an error nor progress, and so get drawn last or not at all. More than once they’ve changed the direction we took rather than just how quickly we got there.')),
 
-            h('h3', { class: 'cs-subsection-title' }, '⛹️‍♂️ A playground designers can actually work in'),
-            full(h('p', { class: 'cs-body-text' }, 'It’s meant to be somewhere you try things, and the designers do the trying. I ran the sessions that got the team cloning the repo, running it locally and building their own ideas in it. The exploration lives in the shared lab rather than on one laptop. When something is worth sharing they raise a pull request, and once it’s merged everyone has it.')),
+            h('h3', { class: 'cs-subsection-title' }, '⛹️‍♂️ A playground the whole team can get into'),
+            full(h('p', { class: 'cs-body-text' }, 'It’s meant to be somewhere you try things, and the designers do the trying. The lab carries its own guide, written for designers who have never opened Terminal, from a blank Mac to a first prototype. Any designer can approve someone else’s exploration, so an idea never waits on the person who built the tool.')),
           ]),
 
           HarnessAnatomy(),
@@ -1060,12 +1062,36 @@ export default defineComponent({
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
-            h('h2', { class: 'cs-section-title' }, 'Getting the team into it'),
+            h('h2', { class: 'cs-section-title' }, 'It shouldn’t depend on me'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'A prototyping tool one designer uses is a hobby. The work that made it a team tool was the unglamorous half. The repo is written for designers, not engineers: install Node, clone it with GitHub Desktop, run it locally, and let Claude Code handle the git commands. I ran the sessions that walked the team through all of it, so they build their own ideas rather than asking me to.'),
+              h('p', { class: 'cs-body-text' }, 'A prototyping tool one designer uses is a hobby, and one that needs its builder in the room is a bottleneck. That was the risk here. I was the only one who could set it up, get someone unstuck and merge their work, and AI that speeds up one designer while everyone else queues behind them isn’t a gain for the team. So a lot of the work since has been getting myself out of everyone’s way.'),
 
-              h('p', { class: 'cs-body-text' }, 'The pull request is the publishing step rather than a request: when something is worth the rest of the team seeing, it goes up, and once it’s merged everyone’s copy has it. I’m the one merging for now, and not because I’m checking the design. Whoever built it is better placed to judge that. It’s because merging is where a repo can get into a mess, and I’m the only designer on the team who’d be comfortable untangling it. That’s a reason to hold the door for a while, not to keep holding it.'),
+              h('p', { class: 'cs-body-text' }, 'Onboarding started as sessions I ran: install Node, clone the repo with GitHub Desktop, run it locally, let Claude Code handle git. That got people started, but a session doesn’t scale. Steps heard once are easy to lose, and the next person to join wasn’t in the room.'),
+
+              h('p', { class: 'cs-body-text' }, 'So the lab now carries its own Guide, written for someone who has never opened Terminal, used git or written a line of code. It goes from a blank Mac to a first prototype: a one-time setup, a file you double-click to open the lab, and then the whole workflow in plain words. Get the latest, start a branch, brief Claude the way you’d brief another designer, save, and share it for review.'),
+
+              h('p', { class: 'cs-body-text' }, 'The line I think does the most work is near the top: you can’t break it. Nothing on your Mac reaches the published lab until another designer has looked at it and approved it. For someone who has never used Terminal, knowing that matters more than any of the instructions.'),
+
+            ),
+          ]),
+
+          softImg(IMG_GUIDE, 'The Guide in the lab: five workflow steps across the top, a chapter explaining the published lab and your own copy, and a sidebar of chapters from How it works to Words you’ll hear', 'cs-cover-img'),
+          h('p', { class: 'cs-hint' }, 'The Guide: from a blank Mac to a first prototype, for people who have never opened Terminal'),
+
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            full(
+              h('p', { class: 'cs-body-text' }, 'The details are where people actually get stuck, so that’s where most of the writing went. The usual Node installer needs an administrator password, which not everyone has, so setup has a second route that doesn’t. The launcher catches the macOS privacy block that otherwise surfaces as a baffling EPERM error, and says exactly which setting to change. There’s a chapter for when things go wrong, and another for the words you’ll hear.'),
+
+              h('p', { class: 'cs-body-text' }, [
+                'The Guide ends with one rule for itself: if a step tripped you, it will trip the next person, and the fix belongs on the page. It’s the cold-start test again, pointed at people instead of an agent. ',
+                h('strong', null, 'A failure is a documentation bug, not the reader’s fault.'),
+              ]),
+
+              h('p', { class: 'cs-body-text' }, [
+                'Approval was the other bottleneck, because it used to be mine. Every pull request now needs one approval and a passing build, and any designer’s approval is enough to merge an exploration, because explorations should be cheap to merge. Only the foundations every prototype sits on need mine: the tokens, the components, the shared screen furniture and the rules Claude reads, because a change there quietly moves everyone else’s screens. ',
+                h('strong', null, 'I hold the parts where a mistake spreads, and nobody waits for me to try an idea.'),
+              ]),
             ),
 
             full(
@@ -1075,11 +1101,13 @@ export default defineComponent({
           ]),
 
           TeamFlow(),
-          h('p', { class: 'cs-hint' }, 'From one laptop to the whole team'),
+          h('p', { class: 'cs-hint' }, 'From a blank Mac to the whole team, with no step that waits for me'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
 
             full(
+              h('p', { class: 'cs-body-text' }, 'Where it stands: designers have set up from the Guide, and the first explorations to go through another designer’s review are what I’m watching for next.'),
+
               h('p', { class: 'cs-body-text' }, 'It doesn’t have to stay a design-team tool, and that’s the next thing I want to test. Anyone who can describe a screen can now get a real one built from the real system: an engineer sketching a feature they’ve been thinking about, a product manager putting an idea in front of people instead of describing it. The platform is open to them; whether they take it up is the interesting question.'),
             ),
 
@@ -1087,7 +1115,7 @@ export default defineComponent({
 
             h('p', { class: 'cs-body-text' }, [
               h('strong', null, 'Designing with AI is a solo activity, and it shouldn’t be.'),
-              ' It’s a question design leaders raised at an AI conference I went to recently, and I agree with them. Sharing the result is solved: a prototype is a link you can send to anyone. Working on it together isn’t. The session where the options get generated happens between one designer and one agent, and the feedback happens somewhere else, in a message thread, detached from the thing it’s about. There’s nowhere to pin a comment to the exact state you disagree with, the way you would in Figma, and no way to pick up another designer’s direction and take it somewhere new. The bets and the gap lists were a first step towards the argument living inside the work. The next is making room for other people’s arguments there too, designers first, then engineering and product. That’s what I’m exploring next.',
+              ' Setting up and reviewing no longer depend on one person, but the work in between still does. It’s a question design leaders raised at an AI conference I went to recently, and I agree with them. Sharing the result is solved: a prototype is a link you can send to anyone. Working on it together isn’t. The session where the options get generated happens between one designer and one agent, and the feedback happens somewhere else, in a message thread, detached from the thing it’s about. There’s nowhere to pin a comment to the exact state you disagree with, the way you would in Figma, and no way to pick up another designer’s direction and take it somewhere new. The bets and the gap lists were a first step towards the argument living inside the work. The next is making room for other people’s arguments there too, designers first, then engineering and product. That’s what I’m exploring next.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
@@ -1114,6 +1142,12 @@ export default defineComponent({
               'What I’d take from it is narrower than “AI makes design faster”, and more useful. ',
               h('strong', null, 'The models were never the constraint. The constraint was that they had nothing of ours to build with'),
               ' - no tokens they could reach, no components that were really ours, and no written rules about when each one is the wrong choice. Give an agent the actual system and the rules that go with it, and the work it produces is something you can decide from.',
+            ]),
+
+            h('p', { class: 'cs-body-text' }, [
+              'The second is about who it’s for. ',
+              h('strong', null, 'AI that makes one designer faster while everyone else waits for them isn’t a gain for the team.'),
+              ' Much of the work on the lab since has gone into the parts nobody sees in a demo - the Guide, the review rules, the baseline everyone builds on - so the lab works without me in the room.',
             ]),
 
             h('p', { class: 'cs-closing' }, 'It didn’t make us faster. It let us explore more of the options before we chose.'),
