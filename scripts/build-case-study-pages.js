@@ -18,8 +18,12 @@
  * component image refs) continue to resolve against the site root rather than
  * the sub-directory the page lives in.
  *
- * Usage:  node scripts/build-case-study-pages.js
- * Re-run whenever case-studies.config.js changes.
+ * The fallback body is server-rendered from each case study's Vue card
+ * (scripts/lib/render-card.mjs), so the prose is only ever written once, in
+ * the card. Edit the card, then re-run this script.
+ *
+ * Usage:  BUILD_VERSION=<sha already in the committed pages> node scripts/build-case-study-pages.js
+ * Re-run whenever a card's content or case-studies.config.js changes.
  */
 
 const fs = require('fs')
@@ -47,7 +51,7 @@ function esc(str = '') {
 }
 
 // ── Per-page HTML template ──
-function pageTemplate(cs) {
+function pageTemplate(cs, content) {
   const url = `${ORIGIN}/case-studies/${cs.slug}/`
   const ogImage = cs.ogImage || `${ORIGIN}/og-image.png`
 
@@ -170,17 +174,15 @@ ${JSON.stringify(jsonLd, null, 2)}
       No-JS / pre-hydration fallback. Vue replaces this on mount, so JS users
       never see it. Serves as indexable content for search and LLM crawlers.
 
-      When case-studies.config.js provides a \`content\` field, we drop it in
-      verbatim (it's pre-authored HTML). Otherwise we fall back to the short
-      summary — used for case studies that haven't been expanded yet.
+      Server-rendered from the case study's Vue card at build time (see
+      scripts/lib/render-card.mjs). Falls back to the short summary only if
+      the config entry has no \`card\`.
     -->
     <main class="seo-fallback" style="max-width:720px;margin:0 auto;padding:48px 24px;font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;color:#1a1a1a;">
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
       <article>
         <h1 style="font-family:'Syne',sans-serif;font-size:2rem;margin:0 0 12px;">${esc(cs.title)}</h1>
-        ${cs.content
-          ? cs.content
-          : `<p>${esc(cs.summary)}</p>`}
+        ${content || `<p>${esc(cs.summary)}</p>`}
         <p style="margin-top:24px;">Written by <a href="/">Alex Chiu</a>, Senior Product Designer in London. Contact: <a href="mailto:alex@mchiu.co.uk">alex@mchiu.co.uk</a>.</p>
       </article>
       <noscript>
@@ -238,15 +240,17 @@ ${JSON.stringify(jsonLd, null, 2)}
 `
 }
 
-function main() {
+async function main() {
   if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true })
+  const { renderCardFallback } = await import('./lib/render-card.mjs')
 
   let written = 0
   for (const cs of caseStudies) {
+    const content = cs.card ? await renderCardFallback(cs.card) : null
     const dir = path.join(OUT_DIR, cs.slug)
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
     const file = path.join(dir, 'index.html')
-    fs.writeFileSync(file, pageTemplate(cs), 'utf8')
+    fs.writeFileSync(file, pageTemplate(cs, content), 'utf8')
     console.log(`  ✓ ${path.relative(ROOT, file)}`)
     written++
   }
@@ -254,4 +258,6 @@ function main() {
   console.log(`\nWrote ${written} case study page(s) under ${path.relative(ROOT, OUT_DIR)}/`)
 }
 
-main()
+// Exit explicitly: some cards start timers during setup, which would keep
+// Node alive after rendering.
+main().then(() => process.exit(0), err => { console.error(err); process.exit(1) })

@@ -1,0 +1,208 @@
+/* ── Zoomable image viewer ──────────────────────────────────── */
+
+.cs-zoom-viewer {
+  position: relative;
+  width: 680px;
+  height: 448px;
+  overflow: hidden;
+  border-radius: 20px;
+  background: var(--color-surface-card);
+}
+
+.cs-zoom-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  scrollbar-width: none;            /* Firefox */
+  -ms-overflow-style: none;         /* IE/Edge */
+}
+
+.cs-zoom-scroll::-webkit-scrollbar {
+  display: none;                    /* Chrome/Safari */
+}
+
+.cs-zoom-img {
+  display: block;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 16px rgba(0, 0, 0, 0.10));
+  transition: width 0.3s ease, margin 0.3s ease;
+}
+
+.cs-zoom-controls {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.cs-zoom-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--color-surface-nav-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-text-primary);
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-semibold);
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease, transform 0.15s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.cs-zoom-btn:hover {
+  background: var(--color-surface-card);
+  transform: scale(1.06);
+}
+
+.cs-zoom-btn:active {
+  transform: scale(0.95);
+}
+
+.cs-zoom-btn--disabled {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Miro-style board viewer ────────────────────────────────── */
+
+.cs-miro-viewer {
+  position: relative;
+  width: 680px;
+  height: 448px;
+  overflow: hidden;
+  border-radius: 20px;
+  background:
+    linear-gradient(to right,  rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-color: var(--color-miro-bg);
+}
+
+[data-theme="dark"] .cs-miro-viewer {
+  background:
+    linear-gradient(to right,  rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-color: var(--color-miro-bg);
+}
+
+.cs-miro-scroll {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cs-miro-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cs-miro-wrapper {
+  display: inline-block;
+}
+
+.cs-miro-canvas {
+  position: relative;
+  width: 2340px;
+  height: 2290px;
+  transform-origin: 0 0;
+}
+
+.cs-miro-board {
+  display: block;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* ── Prototype phone containers ─────────────────────────────── */
+
+.cs-proto-row {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.cs-proto-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cs-proto-col .cs-hint {
+  margin-top: 8px;
+}
+
+.cs-proto-phone {
+  position: relative;
+  width: 200px;
+  height: 433px;               /* 812 * (200/375) ≈ 433 */
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--color-proto-bezel);
+  border: 3px solid var(--color-proto-bezel);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.30);
+}
+
+/* Header — fixed at top, fades in on scroll */
+.cs-proto-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.cs-proto-header--visible {
+  opacity: 1;
+}
+
+/* Bottom nav — fixed at bottom */
+.cs-proto-nav {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cs-proto-scroll {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--color-proto-screen);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cs-proto-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cs-proto-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Leave space for the fixed bottom nav (94px at 375w → scales with width) */
+  padding-bottom: 25%;
+}
+

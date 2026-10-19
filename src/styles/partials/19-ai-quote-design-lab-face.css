@@ -1,0 +1,765 @@
+/* ═══════════════════════════════════════════════════════════════════
+   RESTORED — AI ADOPTION PRINCIPLE CARD  (ai-quote-)
+   Mirrors the DS and UX principle cards.
+   ═══════════════════════════════════════════════════════════════════ */
+.ai-quote-card-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+.ai-quote-card-wrapper > .ai-quote-card {
+  width: 100%; height: 100%;
+}
+
+.ai-quote-card--ghost {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ai-quote-expanded-inner {
+  padding: 40px 56px !important;
+  justify-content: center;
+}
+
+.ai-quote-expanded-icon {
+  width: 36px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.ai-quote-expanded-quote {
+  font-size: var(--quote-expanded-size);
+  font-weight: var(--quote-expanded-weight);
+  line-height: var(--quote-expanded-leading);
+  text-align: center;
+}
+
+.ai-quote-expanded-quote strong {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ai-quote-expanded-body {
+  font-size: var(--quote-body-size);
+  line-height: var(--quote-body-leading);
+  color: var(--color-text-body);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+.ai-quote-expanded-body p { margin: 0; }
+
+
+/* ── LabLoop: the animated card face ─────────────────────────────────
+
+   One pass of the loop the case study describes. The lab's own intro
+   builds and clears, a prompt is typed and worked on, a prototype
+   arrives, options are tried, it is shared, and it settles as a file
+   in the repo.
+
+   Sized in `cqmin` against the face itself, so the same composition
+   holds in a grid cell on the board and across the open overlay
+   without a second set of numbers.                                   */
+.rdlv {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  container-type: size;
+  --rdlv-k: 0.6;               /* wordmark fit, measured in the component */
+}
+
+/* The Design Lab's own background, assembled the way the lab assembles
+   it: the canvas colour, and the gradient over it at a fifth strength —
+   `--lab-field-opacity: 0.2` in the lab's own `AppShell.css`. The image
+   at full strength is a different thing entirely, and every piece of
+   glass on this card is mixed against the dark ground, not the bloom. */
+.rdlv-wash {
+  position: absolute;
+  inset: 0;
+  background: #160E21;
+}
+
+.rdlv-wash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url('/src/assets/images/rayo-design-lab/design-lab-bg-dark.webp')
+    center center / cover no-repeat;
+  opacity: 0.2;
+}
+
+
+/* ── The intro ───────────────────────────────────────────────────────
+
+   The same wordmark the lab opens with, sampled from the real display
+   face and built by a wave travelling left to right — then taken by a
+   second wave to nothing rather than back to a line.
+
+   The build is a keyframe animation because it has three states, not
+   two: collapsed on the shared midline, past its own height as the
+   sweep passes, then home. The radius animates with it — `scaleY`
+   squashes a pill's caps along with everything else, so a bar
+   collapsed to a sliver needs to ask for `50%` to still be round.
+
+   Both waves read their delay from the same per-column `--d`, which is
+   what makes them the same wave going the same way.                  */
+.rdlv-splash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(var(--rdlv-k));
+  transform-origin: 50% 50%;
+}
+
+.rdlv-word { position: relative; }
+
+.rdlv-bit {
+  position: absolute;
+  border-radius: 999px;
+  transform: scaleY(var(--e, 1));
+  animation: rdlv-build 880ms cubic-bezier(0.2, 1.12, 0.32, 1) var(--d, 0ms) backwards;
+  transition:
+    transform 380ms cubic-bezier(0.45, 0, 0.55, 1) var(--d, 0ms),
+    border-radius 380ms ease var(--d, 0ms);
+}
+
+@keyframes rdlv-build {
+  from {
+    border-radius: 50%;
+    transform: translateY(var(--dy, 0px)) scaleY(var(--c, 1));
+  }
+  45% {
+    border-radius: 999px;
+    transform: translateY(var(--dy, 0px)) scaleY(var(--p, 1));
+  }
+  /* → the element's own resting style: its place in the letterform, or
+       nothing at all if it stood in one of the word's spaces. */
+}
+
+/* The dismissing wave: the build run backwards. Same direction, same
+   per-column delay, same two end states — the bars go back down onto
+   the shared midline as circles, left to right, and the line they make
+   fades once the wave has passed the last column.
+
+   Everything after `splash` is "cleared", so the word cannot come back
+   mid-loop; it returns when the splash remounts at the top of the next
+   pass and its build animation replays. */
+.rdlv:not([data-phase='splash']) .rdlv-bit {
+  border-radius: 50%;
+  transform: translateY(var(--dy, 0px)) scaleY(var(--c, 1));
+}
+
+.rdlv-splash { transition: opacity 0.3s ease; }
+
+.rdlv:not([data-phase='splash']) .rdlv-splash {
+  opacity: 0;
+  transition-delay: 0.78s;
+}
+
+
+/* ── The prompt, with the work happening at the end of the bar ─────── */
+.rdlv-prompt {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 46%;
+  max-width: 92cqmin;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  padding: 2.4cqmin 3cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.18),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.62s cubic-bezier(0.32, 1.04, 0.35, 1);
+}
+
+/* Asked, and being answered: centred, because there is nothing else. */
+.rdlv[data-phase='prompt'] .rdlv-prompt,
+.rdlv[data-phase='loading'] .rdlv-prompt {
+  opacity: 1;
+  transform: none;
+}
+
+/* Answered: it moves up rather than leaving, because what it asked for
+   is about to appear underneath it and the two belong together.
+
+   The distance is `46% - 8%` of the frame's height, written in cqmin so
+   it stays a transform. This card is never taller than it is wide — a
+   2x2 cell on the board, a wide overlay open — so cqmin is the height in
+   both, which is what makes the two units interchangeable here. */
+.rdlv[data-phase='sent'] .rdlv-prompt,
+.rdlv[data-phase='proto'] .rdlv-prompt,
+.rdlv[data-phase='options'] .rdlv-prompt,
+.rdlv[data-phase='share'] .rdlv-prompt,
+.rdlv[data-phase='shared'] .rdlv-prompt {
+  opacity: 1;
+  transform: translateY(-38cqmin);
+}
+
+/* It leaves when the thing it produced stops being a prototype. */
+.rdlv[data-phase='fold'] .rdlv-prompt,
+.rdlv[data-phase='upload'] .rdlv-prompt,
+.rdlv[data-phase='rest'] .rdlv-prompt,
+.rdlv[data-phase='done'] .rdlv-prompt {
+  opacity: 0;
+  transform: translateY(calc(-38cqmin - 6px));
+}
+
+.rdlv-spark {
+  flex: 0 0 auto;
+  width: 2.6cqmin;
+  height: 2.6cqmin;
+  border-radius: 0.9cqmin;
+  margin-right: 2cqmin;
+  background: linear-gradient(135deg, #ED4AD9, #8132FE);
+}
+
+.rdlv-text {
+  flex: 0 1 auto;
+  font-family: var(--font-family-primary);
+  font-size: 2.5cqmin;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.rdlv-caret {
+  flex: 0 0 auto;
+  width: 1.5px;
+  height: 2.8cqmin;
+  margin-left: 2px;
+  background: rgba(255, 255, 255, 0.85);
+  animation: rdlv-blink 1s steps(2, start) infinite;
+  transition: opacity 0.2s ease;
+}
+
+.rdlv[data-phase='loading'] .rdlv-caret,
+.rdlv:not([data-phase='prompt']) .rdlv-caret { animation: none; opacity: 0; }
+
+@keyframes rdlv-blink { 0%, 100% { opacity: 1 } 50% { opacity: 0 } }
+
+/* The loading state sits at the end of the bar rather than replacing
+   it, so the prompt you just read is still there while it works. */
+.rdlv-load {
+  flex: 0 0 auto;
+  width: 3cqmin;
+  height: 3cqmin;
+  border-radius: 50%;
+  border: 0.5cqmin solid rgba(255, 255, 255, 0.24);
+  border-top-color: #FFFFFF;
+  margin-left: auto;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.rdlv[data-phase='loading'] .rdlv-load {
+  opacity: 1;
+  animation: rdlv-spin 0.8s linear infinite;
+}
+
+@keyframes rdlv-spin { from { transform: rotate(0deg) } to { transform: rotate(360deg) } }
+
+
+/* ── The options tried against it ───────────────────────────────────── */
+.rdlv-pills {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 21%;
+  display: flex;
+  justify-content: center;
+  gap: 1.6cqmin;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.rdlv[data-phase='options'] .rdlv-pills,
+.rdlv[data-phase='share'] .rdlv-pills,
+.rdlv[data-phase='shared'] .rdlv-pills { opacity: 1; transform: none; }
+
+.rdlv-pill {
+  width: 5cqmin;
+  height: 1.3cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+  transition: background 0.3s ease, width 0.3s ease;
+}
+
+.rdlv-pill--on { background: #FFFFFF; width: 7cqmin; }
+
+
+/* ── The prototype, and the file it becomes ──────────────────────────
+
+   One element for both. A phone that fades out and a file that fades
+   in would be two things; resizing the one you were already looking at
+   is the claim the case study makes — the exploration IS the artefact
+   that lands in the repo.                                            */
+.rdlv-phone {
+  position: absolute;
+  left: 50%;
+  top: 51%;
+  width: 21.8cqmin;
+  height: 46cqmin;
+  display: flex;
+  flex-direction: column;
+  padding: 2cqmin 1.6cqmin 1.6cqmin;
+  border-radius: 4cqmin;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.20),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.20),
+    0 14px 30px rgba(0, 0, 0, 0.26);
+  clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 14px)) scale(0.94);
+  transition:
+    opacity 0.45s ease,
+    transform 0.55s cubic-bezier(0.34, 1.35, 0.5, 1),
+    width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    border-radius 0.6s ease,
+    clip-path 0.6s ease,
+    background 0.5s ease 0.1s,
+    box-shadow 0.5s ease;
+}
+
+.rdlv[data-phase='proto'] .rdlv-phone,
+.rdlv[data-phase='options'] .rdlv-phone,
+.rdlv[data-phase='share'] .rdlv-phone,
+.rdlv[data-phase='shared'] .rdlv-phone,
+.rdlv[data-phase='fold'] .rdlv-phone {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* It resizes into the file about its own centre — no `top` to move, so
+   the shape changes and nothing else does. */
+.rdlv[data-phase='fold'] .rdlv-phone,
+.rdlv[data-phase='upload'] .rdlv-phone,
+.rdlv[data-phase='rest'] .rdlv-phone {
+  width: 9cqmin;
+  height: 12cqmin;
+  padding: 0;
+  border-radius: 1cqmin;
+  background: #FFFFFF;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.30);
+  clip-path: polygon(0 0, 70% 0, 100% 24%, 100% 100%, 0 100%);
+}
+
+/* Up into the cloud. It fades on the way rather than at the end, so it
+   is spent by the time it arrives instead of vanishing on contact. */
+.rdlv[data-phase='upload'] .rdlv-phone,
+.rdlv[data-phase='rest'] .rdlv-phone {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% - 25cqmin)) scale(0.5);
+  transition:
+    /* Holds most of its opacity for the first half of the trip and then
+       goes quickly, so you watch it travel and it is spent by the time
+       it reaches the outline rather than sitting on top of it. */
+    opacity 0.58s cubic-bezier(0.4, 0, 0.9, 0.5) 0.16s,
+    transform 0.86s cubic-bezier(0.36, 0, 0.2, 1);
+}
+
+/* the fold */
+.rdlv-phone::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30%;
+  height: 24%;
+  background: rgba(22, 18, 31, 0.16);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease 0.3s;
+}
+
+.rdlv[data-phase='fold'] .rdlv-phone::after,
+.rdlv[data-phase='upload'] .rdlv-phone::after,
+.rdlv[data-phase='rest'] .rdlv-phone::after { opacity: 1; }
+
+/* the screen empties as the frame closes */
+.rdlv-notch,
+.rdlv-screen,
+.rdlv-tabs { transition: opacity 0.25s ease; }
+
+.rdlv[data-phase='fold'] .rdlv-notch,
+.rdlv[data-phase='fold'] .rdlv-screen,
+.rdlv[data-phase='fold'] .rdlv-tabs,
+.rdlv[data-phase='upload'] .rdlv-notch,
+.rdlv[data-phase='upload'] .rdlv-screen,
+.rdlv[data-phase='upload'] .rdlv-tabs,
+.rdlv[data-phase='rest'] .rdlv-notch,
+.rdlv[data-phase='rest'] .rdlv-screen,
+.rdlv[data-phase='rest'] .rdlv-tabs { opacity: 0; }
+
+.rdlv-notch {
+  flex: 0 0 auto;
+  width: 30%;
+  height: 0.7cqmin;
+  margin: 0 auto 1.8cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.40);
+}
+
+.rdlv-screen {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4cqmin;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Each option is a different screen, so the parts arrive again when it
+   changes rather than silently swapping under the same outline. */
+.rdlv-screen > * { animation: rdlv-part 400ms cubic-bezier(0.2, 0.9, 0.3, 1) backwards; }
+.rdlv-screen > *:nth-child(1) { animation-delay: 0ms; }
+.rdlv-screen > *:nth-child(2) { animation-delay: 55ms; }
+.rdlv-screen > *:nth-child(3) { animation-delay: 110ms; }
+.rdlv-screen > *:nth-child(4) { animation-delay: 165ms; }
+.rdlv-screen > *:nth-child(5) { animation-delay: 220ms; }
+.rdlv-screen > *:nth-child(6) { animation-delay: 275ms; }
+
+@keyframes rdlv-part {
+  from { opacity: 0; transform: translateY(4px); }
+}
+
+.rdlv-title {
+  flex: 0 0 auto;
+  width: 58%;
+  height: 1.7cqmin;
+  margin-bottom: 0.6cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.62);
+}
+
+/* Glass, like everything else on the screen. A brand gradient in here
+   would be the one piece of real product design in a diagram of grey
+   placeholders, and it read as the point rather than as scenery. */
+.rdlv-hero {
+  flex: 0 0 auto;
+  height: 9cqmin;
+  border-radius: 2cqmin;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+}
+
+.rdlv-banner {
+  flex: 0 0 auto;
+  height: 5.4cqmin;
+  border-radius: 1.6cqmin;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.rdlv-tiles {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2cqmin;
+}
+
+.rdlv-tiles i {
+  height: 5cqmin;
+  border-radius: 1.4cqmin;
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.rdlv-row {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1.3cqmin;
+}
+
+.rdlv-thumb {
+  flex: 0 0 auto;
+  width: 5.2cqmin;
+  height: 5.2cqmin;
+  border-radius: 1.5cqmin;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.rdlv-lines {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1cqmin;
+  min-width: 0;
+}
+
+.rdlv-l1 {
+  width: 84%;
+  height: 1.2cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.rdlv-l2 {
+  width: 52%;
+  height: 1.2cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.rdlv-toggle {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.3cqmin;
+}
+
+.rdlv-tg-l {
+  width: 48%;
+  height: 1.2cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.38);
+}
+
+.rdlv-tg-s {
+  position: relative;
+  flex: 0 0 auto;
+  width: 6.2cqmin;
+  height: 3.4cqmin;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.30);
+}
+
+.rdlv-tg-s::after {
+  content: '';
+  position: absolute;
+  top: 0.5cqmin;
+  right: 0.5cqmin;
+  width: 2.4cqmin;
+  height: 2.4cqmin;
+  border-radius: 50%;
+  background: #FFFFFF;
+}
+
+.rdlv-tabs {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding-top: 1.6cqmin;
+}
+
+.rdlv-tabs i {
+  width: 2cqmin;
+  height: 2cqmin;
+  border-radius: 0.6cqmin;
+  background: rgba(255, 255, 255, 0.30);
+}
+
+
+/* ── Sharing it ─────────────────────────────────────────────────────
+
+   Below the frame, not on it: sharing is something you do to the
+   whole exploration, not a control inside the prototype.            */
+.rdlv-share {
+  position: absolute;
+  left: 50%;
+  top: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 9cqmin;
+  height: 9cqmin;
+  margin-left: -4.5cqmin;
+  border-radius: 50%;
+  color: #FFFFFF;
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 1px 1px 0 rgba(255, 255, 255, 0.24),
+    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+  opacity: 0;
+  transform: translateY(6px) scale(0.9);
+  transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.35, 0.5, 1),
+              background 0.3s ease;
+}
+
+.rdlv[data-phase='options'] .rdlv-share,
+.rdlv[data-phase='share'] .rdlv-share,
+.rdlv[data-phase='shared'] .rdlv-share { opacity: 1; transform: none; }
+
+/* the press */
+.rdlv[data-phase='share'] .rdlv-share {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(0.9);
+}
+
+.rdlv[data-phase='fold'] .rdlv-share,
+.rdlv[data-phase='upload'] .rdlv-share,
+.rdlv[data-phase='rest'] .rdlv-share {
+  opacity: 0;
+  transform: scale(0.86);
+}
+
+.rdlv-icon {
+  position: absolute;
+  width: 4.4cqmin;
+  height: 4.4cqmin;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+.rdlv-icon--check { opacity: 0; transform: scale(0.5); }
+
+.rdlv[data-phase='shared'] .rdlv-icon--share,
+.rdlv[data-phase='fold'] .rdlv-icon--share,
+.rdlv[data-phase='upload'] .rdlv-icon--share,
+.rdlv[data-phase='rest'] .rdlv-icon--share { opacity: 0; transform: scale(0.5); }
+
+.rdlv[data-phase='shared'] .rdlv-icon--check,
+.rdlv[data-phase='fold'] .rdlv-icon--check,
+.rdlv[data-phase='upload'] .rdlv-icon--check,
+.rdlv[data-phase='rest'] .rdlv-icon--check { opacity: 1; transform: none; }
+
+
+/* ── Where it goes ────────────────────────────────────────────────
+
+   The file does not join a diagram, it leaves: the cloud arrives above
+   it as it folds, the file rises into it, and the cloud fills once it
+   has landed. The fill IS the confirmation — nothing else says done. */
+.rdlv-cloud {
+  position: absolute;
+  left: 50%;
+  top: 26%;
+  width: 14cqmin;
+  height: 14cqmin;
+  margin-left: -7cqmin;
+  margin-top: -7cqmin;
+  opacity: 0;
+  transform: translateY(4px) scale(0.92);
+  transition: opacity 0.45s ease, transform 0.5s cubic-bezier(0.34, 1.35, 0.5, 1);
+}
+
+.rdlv[data-phase='fold'] .rdlv-cloud,
+.rdlv[data-phase='upload'] .rdlv-cloud,
+.rdlv[data-phase='rest'] .rdlv-cloud {
+  opacity: 1;
+  transform: none;
+}
+
+/* The cloud has to be able to HIDE the file, not just sit over it —
+   otherwise the file slides across the outline and out the top, which
+   is not what going into something looks like.
+
+   A flat fill can't do it: the ground under the cloud is a gradient,
+   and it moves ~17 levels of blue across the cloud's own box, so any
+   solid colour reads as a patch. So this is the ground itself — the
+   same two layers as `.rdlv-wash`, on a box the same size and position
+   as `.rdlv`, masked down to the cloud's silhouette. It is invisible
+   against what is behind it and opaque to everything painted below. */
+.rdlv-cloud-fill {
+  position: absolute;
+  /* back out to `.rdlv`'s own origin: undo this cloud's left/top and its
+     centring margins, so the background lands exactly where the wash's
+     does and there is no seam to see. */
+  left: calc(7cqmin - 50cqw);
+  top: calc(7cqmin - 26cqh);
+  width: 100cqw;
+  height: 100cqh;
+  background: #160E21;
+  -webkit-mask-image: var(--rdlv-cloud);
+  mask-image: var(--rdlv-cloud);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: calc(50cqw - 7cqmin) calc(26cqh - 7cqmin);
+  mask-position: calc(50cqw - 7cqmin) calc(26cqh - 7cqmin);
+  -webkit-mask-size: 14cqmin 14cqmin;
+  mask-size: 14cqmin 14cqmin;
+  --rdlv-cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z'/%3E%3C/svg%3E");
+}
+
+.rdlv-cloud-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    url('/src/assets/images/rayo-design-lab/design-lab-bg-dark.webp')
+    center center / cover no-repeat;
+  opacity: 0.2;
+}
+
+.rdlv-cloud-svg { position: relative; display: block; width: 100%; height: 100%; }
+
+.rdlv-cloud-p {
+  /* Not `transparent`. That is rgba(0,0,0,0), so interpolating it to
+     white runs the fill through greys and the cloud goes muddy on the
+     way in. Same colour, no alpha — only the alpha then moves. */
+  fill: rgba(255, 255, 255, 0);
+  stroke: rgba(255, 255, 255, 0.72);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition: fill 0.5s ease, stroke 0.5s ease;
+}
+
+/* It has the file now — and it says so the moment the file reaches it,
+   not a phase later. Both the fill and the take are delayed to the
+   contact point inside `upload` rather than waiting for a phase change,
+   because the thing they are reacting to happens mid-transition and
+   there is no phase boundary there to hang them on.
+
+   0.36s is measured, not guessed: on the travel curve the file's top
+   edge crosses the cloud's drawn underside — its `getBBox`, not its box
+   — at 369ms. Short ramp too, because this is a thing reacting to being
+   touched, and anything slower reads as a mood rather than a response. */
+.rdlv[data-phase='upload'] .rdlv-cloud-p,
+.rdlv[data-phase='rest'] .rdlv-cloud-p,
+.rdlv[data-phase='done'] .rdlv-cloud-p {
+  fill: #FFFFFF;
+  stroke: #FFFFFF;
+  transition: fill 0.12s ease 0.36s, stroke 0.12s ease 0.36s;
+}
+
+/* `rest` is on this selector too, and only for that: the take finishes
+   ~120ms before that phase lands, and if a slow frame ever pushed it
+   past the boundary the rule would stop matching mid-animation and the
+   transform would snap. Matching both phases removes the coupling. */
+.rdlv[data-phase='upload'] .rdlv-cloud,
+.rdlv[data-phase='rest'] .rdlv-cloud {
+  animation: rdlv-cloud-take 520ms cubic-bezier(0.34, 1.4, 0.5, 1) 0.36s backwards;
+}
+
+@keyframes rdlv-cloud-take {
+  0%   { transform: scale(1); }
+  38%  { transform: scale(1.09); }
+  100% { transform: scale(1); }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  .rdlv-wash,
+  .rdlv-caret,
+  .rdlv-load,
+  .rdlv-bit,
+  .rdlv-cloud,
+  .rdlv-screen > * { animation: none; }
+  .rdlv * { transition: none !important; }
+}
+

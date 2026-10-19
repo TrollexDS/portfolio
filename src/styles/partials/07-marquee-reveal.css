@@ -1,0 +1,98 @@
+/* ── Marquee background — radio station tiles ──────────────── */
+
+.cs-marquee-section {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);   /* break out of centred content to full viewport */
+  margin-top: 64px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 24px 0;
+}
+
+.cs-marquee-track {
+  display: flex;
+  gap: 6px;
+  width: max-content;
+  animation: cs-marquee-left 40s linear infinite;
+}
+
+.cs-marquee-track--right {
+  animation-name: cs-marquee-right;
+}
+
+.cs-marquee-set {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cs-marquee-img {
+  height: 160px;
+  width: auto;
+  border-radius: 12px;
+  display: block;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity 0.25s ease;
+  cursor: default;
+}
+
+.cs-marquee-img:hover {
+  opacity: 1;
+}
+
+/* Centred hero image overlaid on the marquee */
+.cs-marquee-hero {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 80%;
+  width: auto;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.35);
+  z-index: 2;
+  pointer-events: none;
+}
+
+@keyframes cs-marquee-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes cs-marquee-right {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* ── Case Study Image Scroll Reveal ───────────────────────── */
+
+.cs-expanded-content .cs-cover-img,
+.cs-expanded-content .cs-demo-video,
+.cs-expanded-content .cs-account-link-steps,
+.cs-expanded-content .ba-wrap {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.cs-expanded-content .cs-cover-img.cs-img-visible,
+.cs-expanded-content .cs-demo-video.cs-img-visible,
+.cs-expanded-content .cs-account-link-steps.cs-img-visible,
+.cs-expanded-content .ba-wrap.cs-img-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Disable scroll-reveal on zoomable/miro viewers — they manage their own opacity/transform */
+.cs-expanded-content .cs-zoom-viewer.cs-cover-img,
+.cs-expanded-content .cs-miro-viewer.cs-cover-img,
+.cs-expanded-content .cs-proto-row.cs-cover-img {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+

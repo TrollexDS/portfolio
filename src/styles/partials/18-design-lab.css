@@ -1,0 +1,745 @@
+/* ═══════════════════════════════════════════════════════════════════
+   RAYO DESIGN LAB CARD  (rdl-)
+   Case study: "Prototyping with AI, Inside Our Own Design System"
+   Card face echoes the lab's own chrome — glass panes over a wash.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Collapsed card face ─────────────────────────────────────────── */
+.rayo-design-lab-card {
+  position: relative;
+  overflow: hidden;
+  background: #16121F;
+}
+
+.rdl-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 28px;
+  pointer-events: none;
+}
+
+.rdl-card-eyebrow {
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.rdl-card-title {
+  margin: 0;
+  white-space: pre-line;
+  font-family: var(--font-family-display, var(--font-family-primary));
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-bold);
+  line-height: 1.02;
+  letter-spacing: var(--tracking-tight);
+  color: #FFFFFF;
+}
+
+/* Hero wrapper — same pattern as ss-ds / ads / ll. It was sharing a rule
+   with the two overlays below, which is why it had their absolute
+   positioning and none of the hero's own radius or spacing. */
+.rdl-hero-wrap {
+  border-radius: 32px;
+  overflow: hidden;
+  background: #16121F;
+  margin-top: 40px;
+}
+
+/* the wrap owns the gap now, so the image inside must not add a second */
+.rdl-hero-wrap .cs-hero-video { margin-top: 0; }
+
+.rdl-hero-overlay,
+.rdl-fly-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  /* so the loop is cut to the same corners as the frame around it */
+  border-radius: inherit;
+  background: #16121F;
+}
+
+.rdl-hero-img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Shared figure wrapper for the drawn diagrams ────────────────── */
+.rdl-fig {
+  /* Sits outside cs-body, so it can use the width of the overlay
+     rather than the 680px reading column. */
+  width: min(92vw, 1080px);
+  margin: 32px auto 4px;
+  padding: 28px;
+  border: 1px solid var(--color-border-card);
+  border-radius: 18px;
+  background: var(--color-surface-card);
+}
+
+.rdl-fig--cover {
+  /* A labelled schematic, not a screenshot. It has little content and
+     reads badly stretched, so it stays near the reading column width. */
+  width: min(92vw, 640px);
+  padding: 22px;
+  border-radius: 14px;
+  margin-top: 8px;
+}
+
+/* ── Cover diagram: the anatomy of one exploration ───────────────── */
+.rdl-anat { display: flex; gap: 22px; align-items: stretch; }
+.rdl-anat-col { flex: 1 1 auto; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.rdl-anat-group { display: flex; flex-direction: column; gap: 7px; }
+
+.rdl-anat-label {
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.rdl-anat-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.rdl-anat-pill {
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--color-border-card);
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+}
+
+.rdl-anat-pill--on {
+  background: var(--color-text-primary);
+  border-color: var(--color-text-primary);
+  color: var(--color-surface-card);
+}
+
+.rdl-anat-seg {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--color-surface-card-white);
+  border: 1px solid var(--color-border-card);
+  align-self: flex-start;
+}
+
+.rdl-anat-segopt {
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+}
+
+.rdl-anat-segopt--on {
+  background: var(--color-surface-card);
+  color: var(--color-text-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+}
+
+.rdl-anat-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 13px 15px;
+  border-radius: 10px;
+  background: var(--color-surface-card-white);
+  border: 1px solid var(--color-border-card);
+}
+
+.rdl-anat-line {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--color-border-card);
+}
+
+.rdl-anat-line--short { width: 58%; }
+
+.rdl-anat-phone {
+  flex: 0 0 132px;
+  border: 2px dashed var(--color-border-card);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  min-height: 260px;
+}
+
+.rdl-anat-phone-note {
+  font-size: var(--text-2xs);
+  text-align: center;
+  color: var(--color-text-subtle);
+  line-height: 1.5;
+}
+
+/* ── Gap → token loop ────────────────────────────────────────────── */
+.rdl-loop { display: flex; align-items: stretch; gap: 12px; }
+
+.rdl-loop-node {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 16px;
+  border-radius: 11px;
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+}
+
+.rdl-loop-node--done {
+  border-color: var(--color-primary);
+}
+
+.rdl-loop-step {
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  color: var(--color-primary);
+  letter-spacing: var(--tracking-wide);
+}
+
+.rdl-loop-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-text-primary);
+  line-height: 1.35;
+}
+
+.rdl-loop-body {
+  font-size: var(--text-xs);
+  color: var(--color-text-subtle);
+  line-height: 1.55;
+}
+
+.rdl-loop-arrow {
+  align-self: center;
+  color: var(--color-text-subtle);
+  flex: 0 0 auto;
+}
+
+/* ── Bet switcher: a replica of the lab's controls rail ──────────────
+   Dark in both themes, like the code file above it — this is a piece of
+   the Design Lab quoted inside the case study, not part of the page.   */
+.rdl-lab {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 18px;
+  margin: 24px 0 4px;
+  padding: 20px;
+  border-radius: 18px;
+  background:
+    radial-gradient(120% 90% at 78% 8%, rgba(153, 69, 255, 0.30), transparent 62%),
+    #1A1424;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+}
+
+.rdl-lab-rail,
+.rdl-lab-note {
+  padding: 18px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+.rdl-lab-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.rdl-lab-title {
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: #FFFFFF;
+}
+
+.rdl-lab-help {
+  flex: 0 0 auto;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  display: grid;
+  place-items: center;
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.rdl-lab-group {
+  display: block;
+  margin-bottom: 10px;
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rdl-lab-opts { display: flex; flex-direction: column; gap: 8px; }
+
+.rdl-lab-opt {
+  width: 100%;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--text-sm);
+  text-align: left;
+  color: rgba(255, 255, 255, 0.78);
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.rdl-lab-opt:not(.rdl-lab-opt--on):hover { background: rgba(255, 255, 255, 0.09); color: #FFFFFF; }
+
+.rdl-lab-opt--on {
+  background: #FFFFFF;
+  border-color: #FFFFFF;
+  color: #1A1424;
+  font-weight: var(--weight-semibold);
+}
+
+/* The two branch states are outlined rather than indented — they sit in
+   the same list, but they are visibly not part of the main line. */
+.rdl-lab-opt--branch {
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+.rdl-lab-foot {
+  margin: 16px 0 0;
+  font-size: var(--text-2xs);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rdl-lab-note { display: flex; flex-direction: column; gap: 12px; }
+
+.rdl-lab-note-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.rdl-lab-flag {
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: var(--tracking-wide);
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rdl-lab-flag--rec {
+  background: rgba(115, 233, 179, 0.18);
+  color: #9BE7C4;
+}
+
+.rdl-lab-note-text {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+@media (max-width: 720px) {
+  .rdl-lab { grid-template-columns: 1fr; padding: 14px; }
+}
+
+/* ── Component contract, as a file in an editor ──────────────────────
+   Deliberately dark in both themes: a code window reads as code. The
+   markdown markers are left visible — this is a document sitting beside
+   the component, and it should look like one.                          */
+.rdl-file {
+  margin: 24px 0 4px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #1E1B26;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+}
+
+.rdl-file-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: #171420;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.rdl-file-dots { display: flex; gap: 7px; }
+
+.rdl-file-dots i {
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.rdl-file-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.rdl-file-ext {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(153, 69, 255, 0.28);
+  color: #D6BBFF;
+  font-size: 9px;
+  letter-spacing: var(--tracking-wide);
+}
+
+.rdl-file-body {
+  margin: 0;
+  padding: 16px 0 18px;
+  overflow-x: auto;
+}
+
+.rdl-file-line {
+  display: block;
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  line-height: 1.9;
+  white-space: pre;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.rdl-file-num {
+  display: inline-block;
+  width: 44px;
+  padding-right: 16px;
+  text-align: right;
+  color: rgba(255, 255, 255, 0.24);
+  user-select: none;
+}
+
+.rdl-file-text--h  { color: #A8E1FF; }               /* headings */
+.rdl-file-text--li { color: rgba(255, 255, 255, 0.86); }
+.rdl-file-text--c  { color: rgba(255, 255, 255, 0.66); } /* wrapped continuation */
+
+.rdl-md-strong { color: #FFD08A; }
+.rdl-md-code   { color: #9BE7C4; }
+.rdl-md-em     { color: #C9B6FF; font-style: italic; }
+
+@media (max-width: 720px) {
+  .rdl-file-line { font-size: 10px; line-height: 1.85; }
+  .rdl-file-num  { width: 30px; padding-right: 10px; }
+}
+
+
+
+/* ── How work reaches the team ───────────────────────────────────────
+   Grouped by who does each step. The lane labels are the point: the
+   last two steps have no one standing over them.                      */
+.rdl-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+}
+
+.rdl-flow-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.rdl-flow-group:nth-child(1) { flex: 3 1 0; }
+.rdl-flow-group:nth-child(3) { flex: 1 1 0; }
+.rdl-flow-group:nth-child(5) { flex: 2 1 0; }
+
+.rdl-flow-lane {
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+  color: var(--color-text-subtle);
+}
+
+.rdl-flow-steps {
+  display: flex;
+  gap: 12px;
+  flex: 1 1 auto;
+}
+
+.rdl-flow-step {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 20px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border-card);
+  background: var(--color-surface-card-white);
+}
+
+.rdl-flow-num {
+  font-family: var(--font-family-mono, monospace);
+  font-size: var(--text-2xs);
+  color: var(--color-primary);
+}
+
+.rdl-flow-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  line-height: 1.35;
+  color: var(--color-text-primary);
+}
+
+.rdl-flow-detail {
+  font-size: var(--text-2xs);
+  line-height: 1.65;
+  color: var(--color-text-subtle);
+}
+
+.rdl-flow-arrow {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-top: 22px;          /* clear the lane label above the cards */
+  font-size: var(--text-lg);
+  color: var(--color-text-subtle);
+}
+
+/* The two automatic steps read as one unit that runs on its own. */
+.rdl-flow-group:nth-child(5) .rdl-flow-step {
+  border-style: dashed;
+}
+
+@media (max-width: 900px) {
+  .rdl-flow { flex-direction: column; }
+  .rdl-flow-arrow { transform: rotate(90deg); }
+  .rdl-flow-group:nth-child(n) { flex: 1 1 auto; }
+}
+
+@media (max-width: 560px) {
+  .rdl-flow-steps { flex-direction: column; }
+}
+
+/* ── Glass specimen ──────────────────────────────────────────────────
+   A rebuild of the Design Lab's own chrome. Permanently dark, like the
+   lab: a material can only be one thing, and this one is built for a
+   dark ground.                                                        */
+.gs {
+  position: relative;
+  width: min(92vw, 1080px);
+  margin: 32px auto 4px;
+  padding: 28px;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #17121F;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* (1) Structure behind the glass. A blurred flat colour is still a flat
+   colour, so there has to be an edge for a pane to soften. */
+.gs-field {
+  position: absolute;
+  inset: -25%;
+  background:
+    radial-gradient(48% 42% at 24% 26%, rgba(153, 69, 255, 0.62), transparent 68%),
+    radial-gradient(44% 46% at 80% 70%, rgba(227, 103, 192, 0.46), transparent 72%),
+    radial-gradient(38% 34% at 64% 12%, rgba(75, 240, 240, 0.20), transparent 70%);
+  animation: gs-drift 48s ease-in-out infinite alternate;
+}
+
+@keyframes gs-drift {
+  from { transform: translate3d(-3%, -2%, 0) scale(1.05); }
+  to   { transform: translate3d(3%, 3%, 0) scale(1.12); }
+}
+
+.gs-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* (2) Lift, with saturation kept low — over-saturating the backdrop
+   turns the veil purple and it stops reading as neutral glass.
+   (3) A directional rim: bright top-left, dark bottom-right, and no
+   uniform 1px border anywhere. */
+.gs-pane {
+  position: relative;
+  isolation: isolate;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(14px) saturate(104%);
+  -webkit-backdrop-filter: blur(14px) saturate(104%);
+  box-shadow:
+    inset 1.5px 1.5px 0 rgba(255, 255, 255, 0.16),
+    inset -1.5px -1.5px 0 rgba(0, 0, 0, 0.22),
+    0 10px 26px rgba(0, 0, 0, 0.16);
+}
+
+/* (4) The specular highlight follows the pointer, on the pane you are
+   actually pointing at. */
+.gs-pane::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(160px circle at var(--px, 50%) var(--py, 0%),
+              rgba(255, 255, 255, 0.16), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.gs:hover .gs-pane::after { opacity: 1; }
+
+@media (hover: none) {
+  .gs-pane::after { display: none; }
+}
+
+.gs-island {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px;
+  border-radius: 999px;
+}
+
+.gs-mark {
+  width: 20px; height: 20px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #ED4AD9, #9945FF);
+}
+
+.gs-brand {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #FFFFFF;
+}
+
+.gs-seg {
+  margin-left: auto;
+  display: flex;
+  padding: 3px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.22);
+}
+
+.gs-seg-opt {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* Selection is one neutral material, never a colour — purple is not a
+   text or fill colour in the lab. */
+.gs-seg-opt--on {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+}
+
+.gs-row { display: flex; gap: 16px; align-items: stretch; }
+
+.gs-side {
+  flex: 0 0 220px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px;
+}
+
+.gs-side-row {
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: var(--text-2xs);
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.gs-side-row--on {
+  background: rgba(255, 255, 255, 0.14);
+  color: #FFFFFF;
+  font-weight: var(--weight-semibold);
+}
+
+.gs-card {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+}
+
+.gs-card-title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #FFFFFF;
+  margin-bottom: 2px;
+}
+
+.gs-line {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.13);
+}
+
+@media (max-width: 720px) {
+  .gs { padding: 16px; }
+  .gs-row { flex-direction: column; }
+  .gs-side { flex: 0 0 auto; }
+  .gs-brand { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gs-field { animation: none; }
+}
+
+/* ── RESTORED: placeholder for an image that isn't there yet ──────────
+   The src is removed on error, so this frame is all the browser draws. */
+.rdl-img--missing {
+  display: block;
+  width: 100%;
+  min-height: 200px;
+  border: 2px dashed var(--color-border-card);
+  border-radius: 12px;
+  background: var(--color-surface-card-white);
+  position: relative;
+  opacity: 1 !important;
+}
+
+.rdl-img--missing::after {
+  content: attr(data-missing);
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  font-size: var(--text-sm);
+  line-height: 1.6;
+  color: var(--color-text-subtle);
+}
+
+/* ── RESTORED: narrow screens, for the drawn figures ────────────────── */
+@media (max-width: 720px) {
+  .rdl-anat { flex-direction: column; }
+  .rdl-anat-phone { flex: 0 0 auto; min-height: 120px; }
+  .rdl-loop { flex-direction: column; }
+  .rdl-loop-arrow { transform: rotate(90deg); }
+  .rdl-fig { padding: 16px; }
+}
+
+

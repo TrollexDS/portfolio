@@ -1,0 +1,47 @@
+/* ══════════════════════════════════════
+   CLAW INVEST CARD
+══════════════════════════════════════ */
+.claw-invest-card { padding: 0 !important; overflow: hidden; }
+
+.claw-invest-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url('../../assets/images/general/claw-invest-bg.jpg');
+  background-size: cover;
+  background-position: center top;
+  transition: transform 0.4s ease;
+}
+
+.claw-invest-card:hover .claw-invest-bg {
+  transform: scale(1.04);
+}
+
+.claw-invest-label {
+  position: absolute;
+  bottom: 16px;
+  left: 18px;
+  right: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.claw-invest-title {
+  font-size: var(--claw-title-size);
+  font-weight: var(--claw-title-weight);
+  letter-spacing: var(--claw-title-tracking);
+  color: var(--color-text-on-primary);
+  line-height: 1.2;
+}
+
+/* Telegram badge — bottom right, matches duolingo-app-icon spec */
+.claw-invest-badge {
+  position: absolute;
+  bottom: 16px; right: 16px;
+  width: 48px; height: 48px;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 3;
+}
+.claw-invest-badge img { width: 100%; height: 100%; object-fit: cover; }
+

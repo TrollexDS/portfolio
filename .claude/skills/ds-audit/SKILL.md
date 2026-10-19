@@ -26,14 +26,14 @@ Search all `.js` and `.css` files in `src/` for hardcoded colour values that sho
 
 **Flag as issues:**
 - Hardcoded colours in component `.js` files that aren't using `var(--token-name)`
-- Hardcoded colours in `main.css` that should reference a token
+- Hardcoded colours in `src/styles/partials/*.css` that should reference a token
 - Inline styles in components with colour values instead of token references
 
 For each hardcoded value found, suggest which existing token it should map to (by comparing the value against primitives in `tokens.css`).
 
 ### 2. Unused tokens
 
-Cross-reference tokens defined in `tokens.css` against their usage in `main.css` and component files:
+Cross-reference tokens defined in `tokens.css` against their usage in `src/styles/partials/*.css` and component files:
 
 - Parse all `--color-*`, `--font-*`, `--text-*`, `--weight-*`, `--tracking-*`, `--leading-*` custom properties from `:root` in `tokens.css`
 - Search for each token name across all `.css` and `.js` files in `src/` (excluding `tokens.css` itself)

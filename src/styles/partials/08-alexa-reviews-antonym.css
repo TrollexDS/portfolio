@@ -1,0 +1,313 @@
+/* ── Alexa Review Cards ─────────────────────────────────────── */
+
+.cs-review-marquee {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-top: 48px;
+  overflow: hidden;
+  padding: 24px 0;
+}
+
+.cs-review-track {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: cs-marquee-left 35s linear infinite;
+}
+
+.cs-review-marquee:hover .cs-review-track {
+  animation-play-state: paused;
+}
+
+.cs-review-set {
+  display: flex;
+  gap: 16px;
+  flex-shrink: 0;
+}
+
+.cs-review-card {
+  width: 320px;
+  min-height: 180px;
+  flex-shrink: 0;
+  background: var(--color-surface-card-white);
+  border: 1px solid var(--color-border-card);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: background 0.5s ease, border-color 0.5s ease;
+}
+
+.cs-review-stars {
+  display: flex;
+  gap: 2px;
+  font-size: var(--stars-size);
+  color: var(--color-brand-alexa-star);
+  letter-spacing: 1px;
+}
+
+.cs-review-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--review-title-size);
+  font-weight: var(--review-title-weight);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.3;
+  transition: color 0.5s ease;
+}
+
+.cs-review-body {
+  font-family: var(--font-family-primary);
+  font-size: var(--review-body-size);
+  font-weight: var(--review-body-weight);
+  color: var(--color-text-body);
+  margin: 0;
+  line-height: var(--review-body-leading);
+  transition: color 0.5s ease;
+}
+
+/* ── Alexa Account Link Steps ──────────────────────────────── */
+
+.cs-account-link-steps {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 24px;
+  margin-top: 32px;
+  max-width: 680px;
+  width: 100%;
+}
+
+.cs-account-link-img {
+  width: calc((100% - 48px) / 3);
+  border-radius: 16px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.cs-account-link-img--1 {
+  margin-top: 0;
+}
+
+.cs-account-link-img--2 {
+  margin-top: 40px;
+}
+
+.cs-account-link-img--3 {
+  margin-top: 80px;
+}
+
+@media (max-width: 768px) {
+  .cs-account-link-steps {
+    gap: 12px;
+    max-width: calc(100vw - 48px);
+  }
+
+  .cs-account-link-img {
+    border-radius: 10px;
+  }
+
+  .cs-account-link-img--1 {
+    margin-top: 0;
+  }
+
+  .cs-account-link-img--3 {
+    margin-top: 64px;
+  }
+}
+
+/* ── Antonym Section ─────────────────────────────────────────── */
+
+/* Figure captions. Every figure in an expanded case study is centred, so
+   its caption is too — and it was, but only by accident: `.cs-expanded-
+   content` is a centring flex column, so a caption that is a direct child
+   of it is a shrink-to-fit box that happens to land in the middle. That
+   stops being true the moment one sits inside a `.cs-body` column, or the
+   moment one wraps to a second line. Saying it outright covers both. */
+.cs-hint {
+  font-family: var(--font-family-primary);
+  font-size: var(--hint-size);
+  font-weight: var(--hint-weight);
+  color: var(--color-text-subtle);
+  margin-top: 12px;
+  text-align: center;
+  transition: color 0.5s ease;
+}
+
+.cs-antonym-section {
+  position: relative;
+  /* width & height set by JS inline style for responsive scaling */
+  background: var(--color-surface-card-white);
+  border-radius: 32px;
+  flex-shrink: 0;
+  margin-top: 48px;
+  transition: background 0.5s ease;
+}
+
+/* ── Mobile antonym layout: cards left, screenshot right ── */
+.cs-antonym-section--mobile {
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  gap: 20px;
+  height: auto !important;
+}
+
+.cs-antonym-mobile-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 50%;
+  min-width: 0;
+}
+
+.cs-antonym-section--mobile .cs-antonym-card {
+  box-shadow: none;
+}
+
+.cs-antonym-mobile-screenshot {
+  flex: 1 1 50%;
+  min-width: 0;
+  border-radius: 7px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cs-antonym-mobile-screenshot .cs-antonym-screenshot {
+  position: static;
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Centre screenshot */
+/* Clips the sliding screenshots */
+.cs-antonym-screenshot-wrap {
+  position: absolute;
+  /* left, top, width, height set by JS inline style for responsive scaling */
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 1;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Invisible hover zones layered over the screenshot */
+.cs-antonym-zone {
+  z-index: 2;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.cs-antonym-zone:hover,
+.cs-antonym-zone--active {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.cs-antonym-screenshot {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
+}
+
+/* Podcast screenshot sits off to the right by default */
+.cs-antonym-screenshot--podcast {
+  transform: translateX(100%);
+}
+
+/* When content-type is hovered: default exits left, podcast enters from right */
+.cs-antonym-screenshot--exit {
+  transform: translateX(-100%);
+}
+
+.cs-antonym-screenshot--podcast.cs-antonym-screenshot--active {
+  transform: translateX(0);
+}
+
+/* Wrapper for each card + its hover image */
+.cs-antonym-card-wrapper {
+  position: absolute;
+  /* width set by JS inline style for responsive scaling */
+}
+
+/* The annotation card itself */
+.cs-antonym-card {
+  background: var(--color-surface-card);
+  border-radius: 16px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: opacity 0.2s ease, background 0.5s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cs-antonym-card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  margin: 0;
+  transition: color 0.5s ease;
+}
+
+.cs-antonym-card-desc {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--color-text-body);
+  margin: 0;
+  transition: color 0.5s ease;
+}
+
+/* Hover image — fades in just below its card */
+.cs-antonym-hover-img {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  width: 100%;
+  object-fit: contain;
+  border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.cs-antonym-hover-img--visible {
+  opacity: 1;
+}
+
+/* ── Sun / Moon Theme Toggle Card ─────────────────────────── */
+.bulb-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  transition: background 0.5s ease, box-shadow 0.25s ease;
+}
+
+
+/* Icon wrapper — sun and moon are stacked inside */
+.icon-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  z-index: 1;
+  overflow: visible;
+}
+
