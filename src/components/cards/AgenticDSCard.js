@@ -219,6 +219,25 @@ const AgentWorkflowDemo = defineComponent({
 
 
 /* ─────────────────────────────────────────────────────────────
+   Screen-reader summaries of the two demos above. The demos are
+   aria-hidden (and only show one tab/layer at a time), so these
+   carry the same data for assistive tech and the no-JS fallback.
+   ───────────────────────────────────────────────────────────── */
+const tokenLayersSummary = () =>
+  h('ul', { class: 'sr-only' }, TOKEN_LAYERS.map(l =>
+    h('li', null, [
+      h('strong', null, l.tier), `: ${l.desc} Example tokens: `,
+      l.tokens.map(t => `${t.name} ${t.value}${t.dark ? ` (dark ${t.dark})` : ''}`).join(', '), '.',
+    ])))
+
+const agentActionsSummary = () =>
+  h('ul', { class: 'sr-only' }, AGENT_ACTIONS.map(a =>
+    h('li', null, [
+      h('strong', null, a.action), `. Input: ${a.input}. Finding: ${a.output}. Outcome: ${a.outcome}.`,
+    ])))
+
+
+/* ─────────────────────────────────────────────────────────────
    Main case study component
    ───────────────────────────────────────────────────────────── */
 export default defineComponent({
@@ -346,6 +365,7 @@ export default defineComponent({
             ),
 
             h(TokenLayerDemo),
+            tokenLayersSummary(),
             h(InteractiveTag, { hint: 'Explore the three token layers', centered: true }),
 
             full(
@@ -397,6 +417,7 @@ export default defineComponent({
             ),
 
             h(AgentWorkflowDemo),
+            agentActionsSummary(),
             h(InteractiveTag, { hint: 'Click each workflow to see the full loop', centered: true }),
 
             full(

@@ -39,7 +39,7 @@ const BeforeAfterToggle = defineComponent({
       }, 1220)
     }
 
-    return () => h('div', { class: 'ba-wrap' }, [
+    return () => h('div', { class: 'ba-wrap', 'data-fallback': 'skip' }, [
       h('div', { class: 'ba-img-clip' }, [
         // Exiting image — absolutely layered behind, slides out
         animating.value && exitSrc.value

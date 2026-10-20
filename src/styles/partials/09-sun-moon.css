@@ -1,0 +1,136 @@
+/* ── Sun ── */
+.sun {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+  transition:
+    opacity    0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform  0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sun.hidden {
+  opacity: 0;
+  transform: rotate(90deg) scale(0.4);
+}
+
+
+.sun-circle {
+  position: absolute;
+  width: 49px;
+  height: 49px;
+  background: var(--gradient-sun);
+  border-radius: 50%;
+  box-shadow: 0 0 18px var(--color-sun-glow);
+  animation: sun-breathe 2.8s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes sun-breathe {
+  0%, 100% { box-shadow: 0 0 14px rgba(245, 166, 35, 0.45); }
+  50%       { box-shadow: 0 0 36px rgba(245, 166, 35, 0.90), 0 0 64px rgba(255, 190, 40, 0.28); }
+}
+
+/*
+ * B-style sharp burst rays:
+ * .ray-arm  — zero-size anchor at icon centre, rotated per ray
+ * .ray-bar  — sits at centre (bottom: 0), shoots outward via scaleY, fades as it travels
+ */
+.ray-arm {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 0; height: 0;
+  z-index: 1;
+}
+
+.ray-bar {
+  position: absolute;
+  width: 3px; height: 110px;
+  bottom: 0; margin-left: -1.5px;
+  transform-origin: bottom center;
+  transform: scaleY(0);
+  opacity: 0;
+  border-radius: 2px 2px 1px 1px;
+  background: linear-gradient(to top,
+    rgba(245, 158, 11, 1)   0%,
+    rgba(245, 158, 11, 0)   100%);
+  animation: shoot-b 1.6s cubic-bezier(0.25, 0, 0.6, 1) infinite;
+}
+
+@keyframes shoot-b {
+  0%   { transform: scaleY(0);    opacity: 0;    }
+  5%   { transform: scaleY(0.05); opacity: 0.95; }
+  100% { transform: scaleY(1);    opacity: 0;    }
+}
+
+/* Pause all sun animations when hidden (dark mode) */
+.sun.hidden .ray-bar,
+.sun.hidden .sun-circle { animation-play-state: paused; }
+
+/* ── Moon ── */
+.moon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: rotate(-90deg) scale(0.4);
+  transition:
+    opacity    0.35s cubic-bezier(0.4, 0, 0.2, 1) 0.05s,
+    transform  0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s;
+}
+.moon.visible {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+}
+
+/* Crescent shape — full circle with a punched-out circle on top-right */
+.moon-shape {
+  position: relative;
+  width: 50px;
+  height: 50px;
+}
+.moon-shape::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--gradient-moon);
+  box-shadow: 0 0 18px var(--color-moon-glow);
+}
+/* The punch-out circle uses the card's own background colour to carve the crescent */
+.moon-shape::after {
+  content: '';
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  top: -7px;
+  left: 18px;
+  border-radius: 50%;
+  background: var(--color-surface-card);
+  transition: background 0.5s ease;
+}
+
+/* Twinkling stars beside the moon */
+.moon-stars {
+  position: absolute;
+  inset: 0;
+}
+.mstar {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-moon-star);
+  animation: twinkle 1.8s ease-in-out infinite;
+}
+.mstar:nth-child(1) { width: 7px; height: 7px; top:  5px; right:  2px; animation-delay: 0.0s; }
+.mstar:nth-child(2) { width: 5px; height: 5px; top: 26px; right: -8px; animation-delay: 0.6s; }
+.mstar:nth-child(3) { width: 5px; height: 5px; top:  0px; right: 15px; animation-delay: 1.1s; }
+
+@keyframes twinkle {
+  0%, 100% { opacity: 1;   transform: scale(1);   }
+  50%       { opacity: 0.2; transform: scale(0.4); }
+}
+

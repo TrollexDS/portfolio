@@ -133,9 +133,9 @@
       No-JS / pre-hydration fallback. Vue replaces this on mount, so JS users
       never see it. Serves as indexable content for search and LLM crawlers.
 
-      When case-studies.config.js provides a `content` field, we drop it in
-      verbatim (it's pre-authored HTML). Otherwise we fall back to the short
-      summary — used for case studies that haven't been expanded yet.
+      Server-rendered from the case study's Vue card at build time (see
+      scripts/lib/render-card.mjs). Falls back to the short summary only if
+      the config entry has no `card`.
     -->
     <main class="seo-fallback" style="max-width:720px;margin:0 auto;padding:48px 24px;font-family:'Inter',system-ui,-apple-system,sans-serif;line-height:1.6;color:#1a1a1a;">
       <p style="margin:0 0 16px;"><a href="/">← Back to all work</a></p>
@@ -147,17 +147,13 @@
 <p>Design system lead</p>
 
 <h2>Impact</h2>
-
-<h3>Simplified Component Architecture</h3>
+<h3>🧩 Simplified Component Architecture</h3>
 <p>Reduced the overall complexity of the system by minimising the number of variants and introducing nested components. This created a more modular and flexible structure, making components easier to maintain, scale, and reuse without duplication.</p>
-
-<h3>Improved Design–Engineering Alignment</h3>
-<p>Streamlined the handoff process by introducing clear documentation, structured usage notes, and leveraging Figma's Dev Mode. This ensured design intent was communicated more effectively, reducing back-and-forth and increasing implementation accuracy.</p>
-
-<h3>Reliable Theming with Colour Variables</h3>
+<h3>🤝 Improved Design–Engineering Alignment</h3>
+<p>Streamlined the handoff process by introducing clear documentation, structured usage notes, and leveraging Figma’s Dev Mode. This ensured design intent was communicated more effectively, reducing back-and-forth and increasing implementation accuracy.</p>
+<h3>🎨 Reliable Theming with Colour Variables</h3>
 <p>Eliminated light and dark mode inconsistencies by implementing Figma colour variables. This removed manual overrides and significantly reduced the risk of human error, ensuring themes remain consistent and scalable across the system.</p>
-
-<h3>Accessible & Easy to Adopt</h3>
+<h3>🚀 Accessible &amp; Easy to Adopt</h3>
 <p>Lowered the barrier to entry for new designers by simplifying the system and improving guidance. Even new joiners can quickly understand and use the design system with confidence, without feeling overwhelmed by complexity.</p>
 
 <h2>Problem</h2>
@@ -165,27 +161,27 @@
 <p>In addition, an outdated colour token system required manual switching between light and dark modes. This increased the number of unnecessary variants and introduced a higher risk of human error in production-ready designs.</p>
 
 <h2>Colour variables</h2>
-<p>Following Figma's variable framework, I collaborated with another designer to establish a scalable colour system. We defined primitive variables based on the brand style guide, and mapped them into semantic tokens for both light and dark modes. This removed the need for manual theme switching and created a more consistent and maintainable foundation for theming.</p>
+<p>Following <a href="https://help.figma.com/hc/en-us/articles/15145852043927-Create-and-manage-variables-and-collections">Figma’s variable framework</a>, I collaborated with another designer to establish a scalable colour system. We defined primitive variables based on the brand style guide, and mapped them into semantic tokens for both light and dark modes. This removed the need for manual theme switching and created a more consistent and maintainable foundation for theming.</p>
 
-<h2>Spacing & Responsiveness</h2>
+<h2>Spacing &amp; Responsiveness</h2>
 <p>Working closely with the team, we standardised spacing and radius values to improve visual consistency across components. I also introduced breakpoints as variables, enabling responsive behaviour within components and automating layout adjustments across different screen sizes.</p>
+<p><em>Automated responsive and light and dark mode</em></p>
 
 <h2>Components refactor</h2>
 <p>The collection card component was a key focus of the refactor. Previously, it contained 48 variants that largely duplicated the same structure, differing only in background styles and spacing adjustments for tablet layouts.</p>
+<p><em>[BEFORE] On-demand card component</em></p>
 <p>Instead of encoding these differences as variants, I extracted background styles into a separate, reusable background component. This allowed backgrounds to be applied as nested instances, exposed through a simple dropdown selection, making them easier to manage and update.</p>
+<p><em>[NEW] Gradient background component</em></p>
 <p>As a result, the number of variants was reduced from 48 to just 4, while maintaining the same level of flexibility. This approach also scaled across other components with similar background requirements, significantly reducing duplication and improving overall system efficiency.</p>
 
 <h2>One Component, Multiple Contexts</h2>
 <p>As part of the design system optimisation, we leveraged auto layout wherever possible. Since most components share the same structure across mobile and tablet (differing primarily in width), this approach allowed us to use a single variant across breakpoints. By simply adjusting width within designs, components can responsively adapt without the need for separate variants, reducing duplication and improving consistency.</p>
+<p><em>Responsive component structure</em></p>
 
 <h2>Intuitive System Architecture</h2>
 <p>The existing file structure could no longer support the growing complexity of the design system. Components were spread across multiple pages with unclear grouping logic, making them difficult to locate and navigate.</p>
 <p>To address this, I redesigned the system architecture with clarity and usability in mind. This ensures even new or less experienced designers can navigate it with ease. Each component now has its own dedicated page, structured into three clear sections:</p>
-<ul>
-  <li>Overview for context and usage guidance</li>
-  <li>Component for the master variants</li>
-  <li>Examples to showcase real use cases and expose nested configurations</li>
-</ul>
+<ul><li>Overview for context and usage guidance</li> <li>Component for the master variants</li> <li>Examples to showcase real use cases and expose nested configurations</li></ul>
 <p>The example section also allows designers to quickly copy and paste production-ready instances directly into their work, streamlining adoption and reducing setup time.</p>
 
 <h2>Outcome</h2>

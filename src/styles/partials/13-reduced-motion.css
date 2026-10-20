@@ -1,0 +1,54 @@
+/* ══════════════════════════════════════
+   REDUCED MOTION
+   When the OS (or low-power mode) signals reduced motion,
+   disable all keyframe animations and heavy transitions.
+   Cards appear instantly; hover/active still work via
+   simple property changes — just without animated movement.
+══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  /* Kill all keyframe animations globally */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+  }
+
+  /* Cap transition durations to instant-feeling snaps */
+  .bento-card,
+  .bento-card:hover,
+  .bento-card:active,
+  .bento-card--pressed,
+  .grid-slot,
+  .nav-pill-indicator,
+  .nav-pill-indicator--ready,
+  .nav-pill-indicator--liquid,
+  .back-to-top {
+    transition-duration: 0.1s !important;
+  }
+
+  /* Hide custom cursor — native cursor is fine */
+  .cs-root,
+  .cursor-tooltip {
+    display: none !important;
+  }
+
+  /* Restore native cursor when custom one is hidden */
+  *, *::before, *::after {
+    cursor: auto !important;
+  }
+
+  /* Remove persistent GPU layers that aren't needed without animation */
+  .bento-card {
+    will-change: auto !important;
+  }
+
+  .nav-pill-indicator {
+    will-change: auto !important;
+  }
+
+  .ba-img {
+    will-change: auto !important;
+  }
+}
+
+

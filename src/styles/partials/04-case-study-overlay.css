@@ -1,0 +1,517 @@
+/* ── Case Study Overlay (shared fullscreen expand) ──────────── */
+
+.cs-card-wrapper { position: relative; }
+.cs-card-wrapper > .bento-card { width: 100%; height: 100%; }
+
+/* Ghost — keep grid slot occupied while expanded */
+.cs-card--ghost { opacity: 0; pointer-events: none; }
+.cs-card--was-open { animation: none; }
+
+/* ── Backdrop ── */
+.cs-backdrop {
+  position: fixed;
+  inset: 0;
+  background: var(--color-backdrop);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 200;
+  animation: cs-backdrop-in 0.3s ease forwards;
+  touch-action: none;
+}
+
+@keyframes cs-backdrop-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cs-backdrop--out {
+  animation: cs-backdrop-out 0.45s ease forwards;
+}
+
+@keyframes cs-backdrop-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ── Expanded fullscreen card — FLIP animated ── */
+.cs-expanded {
+  position: fixed;
+  background: var(--color-bg-body);
+  border-radius: 32px;
+  box-shadow: 0 2px 200px rgba(0, 0, 0, 0.01);
+  z-index: 300;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+.cs-expanded--settled {
+  border-radius: 0;
+  transition:
+    left          0.7s cubic-bezier(0.34, 1.1, 0.64, 1),
+    top           0.7s cubic-bezier(0.34, 1.1, 0.64, 1),
+    width         0.7s cubic-bezier(0.34, 1.1, 0.64, 1),
+    height        0.7s cubic-bezier(0.34, 1.1, 0.64, 1),
+    border-radius 0.7s cubic-bezier(0.34, 1.1, 0.64, 1);
+}
+
+/* ── Header bar (logo left, close right) ── */
+.cs-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 40px calc(6.25% + 74px);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cs-header-close {
+  pointer-events: auto;
+}
+
+.cs-header-close {
+  width: 40px;
+  height: 40px;
+  background: var(--color-surface-action-icon);
+  border: none;
+  border-radius: 100px;
+  box-shadow: 0 2px 40px var(--color-shadow-action-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.5s ease;
+}
+
+.cs-header-close img {
+  filter: var(--filter-action-icon);
+}
+
+/* ── Scrollable inner area ── */
+.cs-expanded-inner {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  box-sizing: border-box;
+}
+
+/* Content fades in after expand, fades out instantly on close */
+.cs-expanded-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  padding-bottom: 80px;
+}
+
+.cs-expanded--settled .cs-expanded-content {
+  transition: opacity 0.3s ease 0.38s;
+  opacity: 1;
+}
+
+.cs-expanded--closing .cs-expanded-content {
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+/* ── Hero video in expanded view ── */
+.cs-hero-video {
+  display: block;
+  border-radius: 32px;
+  object-fit: cover;
+  flex-shrink: 0;
+  margin-top: 40px;
+  transition: opacity 0.2s ease;
+}
+
+/* ── Back-to-top inside expanded case study ── */
+.cs-back-to-top {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  z-index: 20;
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  border: none;
+  background: var(--color-surface-action-icon);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 40px var(--color-shadow-action-icon);
+  opacity: 0;
+  transform: scale(0.8);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.5s ease;
+  filter: var(--filter-action-icon);
+  cursor: pointer;
+}
+
+.cs-back-to-top--visible {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.cs-back-to-top:hover {
+  transform: scale(1.08);
+}
+
+.cs-back-to-top:active {
+  transform: scale(0.95);
+}
+
+/* ── Flying video — fixed, travels between card and hero positions ── */
+.cs-video-fly {
+  position: fixed;
+  object-fit: cover;
+  z-index: 400;
+  pointer-events: none;
+}
+
+/* ── TL;DR toggle — liquid glass pill (matches main nav) ── */
+.tldr-bar {
+  position: sticky;
+  top: 40px;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin: 24px 0 8px;
+  padding: 4px;
+  border-radius: 100px;
+  background: var(--color-surface-nav-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  width: fit-content;
+  transition: background 0.5s ease;
+}
+.tldr-indicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 6px);
+  border-radius: 100px;
+  background: var(--color-surface-nav);
+  box-shadow: 0 0 40px var(--color-shadow-nav);
+  pointer-events: none;
+  transition: transform 0.62s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tldr-pill {
+  position: relative;
+  z-index: 1;
+  padding: 8px 24px;
+  border-radius: 100px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-family-primary);
+  font-size: var(--action-size);
+  font-weight: var(--action-weight);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease;
+  text-align: center;
+}
+.tldr-pill:not(.tldr-pill--active):hover {
+  color: var(--color-primary);
+}
+
+/* ── TL;DR collapsible content ── */
+.tldr-collapsible {
+  display: grid;
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.35s ease;
+}
+.tldr-collapsible > * {
+  overflow: hidden;
+}
+.tldr-collapsible--hidden {
+  grid-template-rows: 0fr;
+  opacity: 0;
+}
+
+/* ── Case study body sections ── */
+.cs-body {
+  max-width: 680px;
+  width: 100%;
+  padding: 0 24px;
+  margin-top: 80px;
+}
+
+.cs-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--cs-title-size);
+  font-weight: var(--cs-title-weight);
+  line-height: var(--cs-title-leading);
+  color: var(--color-text-primary);
+  margin: 0 0 24px;
+  transition: color 0.5s ease;
+}
+
+.cs-section-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--cs-section-size);
+  font-weight: var(--cs-section-weight);
+  line-height: var(--cs-section-leading);
+  color: var(--color-text-primary);
+  margin: 48px 0 8px;
+  transition: color 0.5s ease;
+}
+
+.cs-subsection-title {
+  font-family: var(--font-family-primary);
+  font-size: var(--cs-subsection-size);
+  font-weight: var(--cs-subsection-weight);
+  line-height: var(--cs-subsection-leading);
+  color: var(--color-text-primary);
+  margin: 32px 0 0;
+  transition: color 0.5s ease;
+}
+
+.cs-body-text {
+  font-family: var(--font-family-primary);
+  font-size: var(--cs-body-size);
+  font-weight: var(--cs-body-weight);
+  line-height: var(--cs-body-leading);
+  color: var(--color-text-body);
+  margin: 4px 0 24px 0;
+  transition: color 0.5s ease;
+}
+
+.cs-body-list {
+  padding-left: 24px;
+  margin: -12px 0 24px 0;
+  font-family: var(--font-family-primary);
+  font-size: var(--cs-body-size);
+  font-weight: var(--cs-body-weight);
+  line-height: var(--cs-body-leading);
+  color: var(--color-text-body);
+  transition: color 0.5s ease;
+}
+.cs-body-list li {
+  margin: 0 0 6px 0;
+}
+
+/* A list straight after a subsection heading needs its own breathing room -
+   the negative top margin above is tuned for lists that follow a paragraph. */
+.cs-subsection-title + .cs-body-list {
+  margin-top: 4px;
+}
+.cs-body-list .cs-body-text {
+  margin: 0 0 6px 0;
+}
+
+
+/* ── Case study stat row ── */
+.cs-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  padding: 48px 0 40px;
+}
+
+.cs-stat-item {
+  padding-right: 28px;
+}
+
+.cs-stat-item + .cs-stat-item {
+  padding-left: 28px;
+  padding-right: 0;
+  border-left: 1px solid var(--color-text-muted);
+}
+
+.cs-stat-num {
+  font-size: var(--text-9xl);
+  font-weight: var(--weight-bold);
+  line-height: 1.1;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.cs-stat-lbl {
+  font-size: var(--text-base);
+  color: var(--color-text-body);
+  line-height: var(--leading-normal);
+  transition: color 0.5s ease;
+}
+
+@media (max-width: 600px) {
+  .cs-stat-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cs-stat-item {
+    padding-right: 0;
+    padding-bottom: 24px;
+  }
+
+  .cs-stat-item + .cs-stat-item {
+    padding-left: 0;
+    padding-top: 24px;
+    border-left: none;
+    border-top: 1px solid var(--color-text-muted);
+  }
+}
+
+
+.cs-link {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.cs-link:hover {
+  opacity: 0.6;
+}
+
+/* Second cs-body block (Problem / Solution) — less top margin since it follows the antonym section */
+.cs-body--continued {
+  margin-top: 48px;
+}
+
+/* Demo video inside case study body */
+.cs-demo-video {
+  display: block;
+  width: 680px;
+  aspect-ratio: 3024 / 1822;
+  border-radius: 20px;
+  margin-top: 32px;
+}
+
+/* Before / After image toggle */
+.ba-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+  width: 80vw;
+  max-width: 80vw;
+}
+.ba-img-clip {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 20px;
+}
+.ba-img {
+  display: block;
+  width: 100%;
+}
+.ba-img--abs {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+.ba-img--enter-from-right {
+  animation: ba-enter-right 1.2s cubic-bezier(0.9, 0, 0.1, 1) forwards;
+}
+.ba-img--enter-from-left {
+  animation: ba-enter-left 1.2s cubic-bezier(0.9, 0, 0.1, 1) forwards;
+}
+.ba-img--exit-to-left {
+  animation: ba-exit-left 1.2s cubic-bezier(0.9, 0, 0.1, 1) forwards;
+}
+.ba-img--exit-to-right {
+  animation: ba-exit-right 1.2s cubic-bezier(0.9, 0, 0.1, 1) forwards;
+}
+@keyframes ba-enter-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes ba-enter-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes ba-exit-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+@keyframes ba-exit-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
+.ba-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+.ba-label {
+  font-family: var(--font-family-primary);
+  font-size: var(--action-size);
+  font-weight: var(--action-weight);
+  color: var(--color-text-body);
+  opacity: 0.4;
+  transition: opacity 0.2s ease;
+}
+.ba-label--active {
+  opacity: 1;
+}
+.ba-toggle .ba-label:last-child.ba-label--active {
+  color: var(--color-primary);
+}
+.ba-track {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 100px;
+  background: var(--color-text-body);
+  opacity: 1;
+  transition: background 0.25s ease;
+}
+.ba-track--on {
+  background: var(--color-primary);
+  opacity: 1;
+}
+.ba-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--color-panel-bg);
+  transition: transform 0.25s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.ba-track--on .ba-thumb {
+  transform: translateX(18px);
+}
+
+/* Cover image inside case study body */
+.cs-cover-img {
+  display: block;
+  width: 680px;
+  border-radius: 20px;
+  margin-top: 32px;
+}
+
+.cs-cover-img--full {
+  width: calc(100% - 48px);
+  max-width: 100%;
+  padding: 0 24px;
+  box-sizing: content-box;
+}
+

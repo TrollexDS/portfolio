@@ -442,7 +442,7 @@ const BeforeAfterToggle = defineComponent({
     }
 
     return () =>
-      h('div', { class: 'll-before-after' }, [
+      h('div', { class: 'll-before-after', 'data-fallback': 'skip' }, [
         h('div', { class: 'll-toggle-bar' }, [
           h('button', {
             class: ['ll-toggle-btn', !showAfter.value ? 'll-toggle-btn--active' : ''].filter(Boolean).join(' '),

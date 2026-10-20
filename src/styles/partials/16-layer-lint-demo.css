@@ -1,0 +1,226 @@
+/* ── Plugin demo ── */
+.ll-demo {
+  max-width: 380px;
+  margin: 0 auto;
+  border-radius: 12px;
+  border: 1px solid var(--border-light, #e0e0e0);
+  overflow: hidden;
+  background: var(--color-surface-primary, #fff);
+}
+
+.ll-demo-chrome {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border-light, #e0e0e0);
+}
+
+.ll-demo-tabs {
+  display: flex;
+  gap: 0;
+  flex: 1;
+}
+
+.ll-demo-tab {
+  padding: 10px 14px;
+  border: none;
+  background: transparent;
+  color: var(--color-text-secondary, #888);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.ll-demo-tab--active {
+  color: var(--color-text-primary, #333);
+  font-weight: 600;
+  border-bottom-color: #0d9488;
+}
+
+.ll-demo-settings {
+  font-size: 14px;
+  opacity: 0.3;
+}
+
+.ll-demo-body {
+  padding: 12px;
+  min-height: 200px;
+}
+
+.ll-demo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ll-demo-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.ll-demo-row:hover {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.ll-demo-name {
+  flex: 1;
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  color: var(--color-text-primary, #333);
+}
+
+.ll-demo-reason {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.ll-demo-reason--hidden {
+  background: rgba(224, 62, 62, 0.12);
+  color: #c33;
+}
+
+.ll-demo-reason--empty {
+  background: rgba(161, 102, 255, 0.15);
+  color: #7a4ccc;
+}
+
+.ll-demo-remove-btn {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text-secondary, #888);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.ll-demo-remove-btn:hover {
+  background: rgba(224, 62, 62, 0.1);
+  color: #e03e3e;
+}
+
+.ll-demo-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  color: #0d9488;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Rename rows */
+.ll-demo-rename-row {
+  gap: 6px;
+}
+
+.ll-demo-old {
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 10px;
+  color: var(--color-text-secondary, #888);
+  text-decoration: line-through;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ll-demo-arrow {
+  color: var(--color-text-secondary, #aaa);
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+.ll-demo-new {
+  font-family: ui-monospace, 'Cascadia Code', monospace;
+  font-size: 10px;
+  color: #0d9488;
+  font-weight: 500;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ll-demo-apply-btn {
+  padding: 3px 10px;
+  border: 1px solid #0d9488;
+  border-radius: 4px;
+  background: transparent;
+  color: #0d9488;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.ll-demo-apply-btn:hover {
+  background: rgba(13, 148, 136, 0.08);
+}
+
+.ll-demo-check {
+  color: #0d9488;
+  font-size: 13px;
+  flex-shrink: 0;
+  width: 42px;
+  text-align: center;
+}
+
+.ll-demo-row--applied .ll-demo-old {
+  opacity: 0.3;
+}
+
+.ll-demo-row--applied .ll-demo-new {
+  font-weight: 600;
+}
+
+.cs-subtitle {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-subtle);
+  margin: -8px 0 24px;
+  line-height: var(--leading-relaxed);
+  font-style: italic;
+}
+
+.cs-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-bottom: 32px;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  color: var(--color-text-subtle);
+  letter-spacing: var(--tracking-wide);
+}
+
+.cs-closing {
+  font-size: var(--text-4xl);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-relaxed);
+  font-style: italic;
+  color: var(--color-text-subtle);
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--color-border-card);
+}
+

@@ -1,0 +1,696 @@
+/* ── Click ripple (all cards) ── */
+.card-ripple {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: card-ripple 0.52s linear forwards;
+  background: var(--color-card-ripple);
+  pointer-events: none;
+  z-index: 10;
+}
+@keyframes card-ripple {
+  to { transform: scale(20); opacity: 0; }
+}
+
+/* Gmail / LinkedIn */
+.gmail-card, .linkedin-card { display: flex; align-items: center; justify-content: center; }
+
+/* ── LinkedIn animated icon ── */
+.li-svg {
+  overflow: visible;
+  display: block;
+}
+
+.li-dot {
+  fill: var(--color-brand-linkedin);
+  transform-origin: 11px 10px;
+  transform: scale(0);
+  opacity: 0;
+  animation: li-pop-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.li-path {
+  fill: none;
+  stroke: var(--color-brand-linkedin);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3.2;
+  stroke-dasharray: var(--len);
+  stroke-dashoffset: var(--len);
+  animation: li-draw var(--draw-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1) var(--draw-delay, 0s) forwards;
+}
+
+@keyframes li-draw {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes li-pop-in {
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ── Gmail copy animation ── */
+
+/* 1. Container transitions: grows + flips bg after the icon fades (delay 0.1s) */
+.gmail-card .action-icon {
+  overflow: hidden;
+  transition:
+    width            0.28s cubic-bezier(0.34, 1.4, 0.64, 1) 0.1s,
+    background-color 0.22s ease                              0.1s,
+    padding          0.28s ease                              0.1s;
+}
+
+.gmail-card .action-icon.gmail-copied-label {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  width: 86px;
+  padding: 0 14px;
+  background: var(--color-text-primary);
+}
+
+/* 2. Copy icon fades out immediately on click */
+.gm-copy-icon {
+  flex-shrink: 0;
+  transition: opacity 0.12s ease;
+}
+
+.gm-copy-icon--out {
+  opacity: 0 !important;
+}
+
+/* 3. "Copied" text fades in once the pill has grown (delay 0.3s) */
+.gm-copied-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  opacity: 0;
+  font-size: var(--text-md);
+  font-weight: var(--weight-semibold);
+  color: var(--color-surface-card);
+  white-space: nowrap;
+  letter-spacing: var(--tracking-tight);
+  pointer-events: none;
+  transition: opacity 0.15s ease 0s;
+}
+
+.gm-copied-text--in {
+  opacity: 1;
+  transition: opacity 0.4s ease 0.3s;
+}
+
+.gm-check-lottie {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.gm-check-lottie svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: var(--filter-checkmark);
+}
+
+/* ── Gmail animated icon ── */
+.gm-svg {
+  overflow: hidden;
+  display: block;
+}
+
+.gm-from-top   { transform: translateY(-50px); opacity: 0; }
+.gm-from-left  { transform: translateX(-70px); opacity: 0; }
+.gm-from-right { transform: translateX(70px);  opacity: 0; }
+
+.gm-from-top,
+.gm-from-left,
+.gm-from-right {
+  animation-duration: 0.5s;
+  animation-timing-function: cubic-bezier(0.34, 1.15, 0.64, 1);
+  animation-delay: 0s;
+  animation-fill-mode: both;
+}
+
+.gm-from-top   { animation-name: gm-in-top; }
+.gm-from-left  { animation-name: gm-in-left; }
+.gm-from-right { animation-name: gm-in-right; }
+
+@keyframes gm-in-top {
+  from { transform: translateY(-50px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+@keyframes gm-in-left {
+  from { transform: translateX(-70px); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes gm-in-right {
+  from { transform: translateX(70px);  opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+
+
+/* Project cards (dark) */
+.plugin-card, .alexa-card, .schedule-card {
+  background: var(--color-surface-card-dark);
+  border-radius: 32px;
+  border: none;
+}
+.alexa-card, .schedule-card { background: var(--color-surface-card-dark); }
+
+/* Alexa card video background */
+.alexa-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.alexa-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.alexa-card .action-icon {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+}
+
+/* Plugin card video background */
+.plugin-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.plugin-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transform: scale(1.05);
+  transform-origin: center;
+}
+
+.plugin-card .action-icon {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+}
+
+/* Project card — purple background override */
+.bento-card.dark.project-card-1 {
+  background: var(--color-brand-project-purple);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.bento-card.dark.project-card-1:hover {
+  background: var(--color-brand-project-purple-hover);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Full-card fill image */
+.project-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* ── Infinite logo banner ── */
+.pc1-banner {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+  z-index: 0;
+  /* Fade out edges for a polished look */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image:         linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  /* Safari fix: isolate the mask into its own compositing layer so it
+     doesn't get dropped when the animated child triggers a layer change */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+.pc1-track {
+  display: flex;
+  /* Safari fix: promote to GPU layer before animation starts so the
+     translateX range is calculated correctly from the first frame */
+  will-change: transform;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  animation: pc1-scroll 40s linear infinite;
+  -webkit-animation: pc1-scroll 40s linear infinite;
+}
+
+.pc1-track img {
+  /* Explicit pixel dimensions derived from natural size (1624×40) at
+     display height 32px: width = 1624 × (32/40) = 1299px.
+     Safari fix: without explicit width, the browser doesn't know the
+     track's total width before images load, so translateX(-50%) is
+     calculated from ~0px and the marquee barely moves on cold load. */
+  height: 32px;
+  width: 1299px;
+  flex-shrink: 0;
+  padding-right: 64px;
+}
+
+@-webkit-keyframes pc1-scroll {
+  from { -webkit-transform: translateX(0); }
+  to   { -webkit-transform: translateX(-50%); }
+}
+
+@keyframes pc1-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.project-label {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  font-weight: var(--project-label-weight);
+  font-size: var(--project-label-size);
+  letter-spacing: var(--project-label-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-muted-dark);
+}
+
+/* Simplestream DS card — image-based case study */
+.ss-ds-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.ss-ds-card .action-icon {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+}
+
+.ss-ds-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Hero wrap — purple bg + rounded corners to match homepage card */
+.ss-ds-hero-wrap {
+  border-radius: 32px;
+  overflow: hidden;
+  margin-top: 40px;
+}
+
+.ss-ds-hero-wrap .cs-hero-video {
+  margin-top: 0;
+}
+
+/* Hero overlay — logo rail on top of the expanded hero image */
+.ss-ds-hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 40px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.pc1-banner--expanded {
+  position: relative;
+  top: auto;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pc1-banner--expanded .pc1-track img {
+  height: 28px;
+}
+
+/* Scrollable tall-image container */
+.ss-ds-scroll-container {
+  max-height: 480px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ss-ds-scroll-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Full-width image — stretches to scroll container, no rounding, no enter animation */
+.cs-cover-img.ss-ds-img-full {
+  max-width: none;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  border-radius: 0;
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Design System */
+.ds-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.ds-card .action-icon {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+}
+
+.ds-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+
+/* Duolingo */
+.duolingo-card {
+  position: relative;
+  overflow: hidden;
+}
+.duolingo-streak {
+  position: absolute;
+  top: 32px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 2px;
+  white-space: nowrap;
+  z-index: 2;
+}
+.duolingo-fire { width: 28px; height: calc(28px * 1.27); flex-shrink: 0; }
+.streak-number {
+  font-family: var(--font-family-display);
+  font-weight: var(--streak-weight);
+  font-size: var(--streak-size);
+  line-height: 1;
+  background: var(--gradient-duo-streak);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.duolingo-avatar {
+  display: block;
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  height: 70%;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
+  z-index: 1;
+}
+.duolingo-app-icon {
+  position: absolute; bottom: 16px; right: 16px;
+  width: 48px; height: 48px; border-radius: 16px; overflow: hidden;
+  z-index: 3;
+}
+.duolingo-app-icon img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Strava */
+.strava-card { padding: 0 !important; }
+
+/* Leaflet map fills the entire card */
+.strava-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  border-radius: 32px;
+  overflow: hidden;
+}
+
+/* Tile canvas sits under the tiles — themed so gaps and the moment before
+   tiles land never flash white in dark mode. */
+.strava-map .leaflet-container {
+  background: var(--color-surface-map-base);
+}
+
+/* Cross-fade the basemap when the theme flips */
+.strava-map .leaflet-tile {
+  transition: opacity 0.3s ease;
+}
+
+/* Loading pulse */
+.strava-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--color-surface-skeleton-base) 25%, var(--color-surface-skeleton-shine) 50%, var(--color-surface-skeleton-base) 75%);
+  background-size: 200% 100%;
+  animation: strava-shimmer 1.4s ease infinite;
+  z-index: 1;
+  border-radius: 32px;
+}
+@keyframes strava-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Stats bar — bottom of card */
+.strava-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px 16px 14px;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  z-index: 2;
+}
+.strava-distance {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-brand-strava);
+  letter-spacing: -0.01em;
+}
+.strava-elevation {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-brand-strava);
+}
+
+/* Basemap attribution — top left, required by CARTO free-tier terms */
+.strava-attribution {
+  position: absolute;
+  top: 14px; left: 18px;
+  z-index: 2;
+  font-size: var(--text-2xs);
+  line-height: 1;
+  color: var(--color-text-subtle);
+}
+.strava-attribution a {
+  color: inherit;
+  text-decoration: none;
+}
+.strava-attribution a:hover { text-decoration: underline; }
+
+/* Strava logo badge — bottom right */
+.strava-badge {
+  position: absolute;
+  bottom: 16px; right: 16px;
+  width: 48px; height: 48px;
+  border-radius: 16px;
+  overflow: hidden;
+  z-index: 3;
+}
+.strava-badge img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Schedule */
+.schedule-card {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.schedule-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+}
+
+.schedule-card .action-icon {
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+}
+
+/* ── UX Quote Card — expandable wrapper ── */
+.ux-quote-card-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+.ux-quote-card-wrapper > .ux-quote-card {
+  width: 100%; height: 100%;
+}
+
+/* Ghost: hide collapsed card while expanded, keep grid slot occupied */
+.ux-quote-card--ghost { opacity: 0; pointer-events: none; }
+
+/* ── UX Quote expanded content ── */
+.ux-quote-expanded-inner {
+  padding: 40px 56px !important;   /* narrower side padding for 560px card */
+  justify-content: center;
+}
+
+.ux-quote-expanded-icon {
+  width: 36px; height: auto;
+  display: block; flex-shrink: 0;
+}
+
+.ux-quote-expanded-quote {
+  font-size: var(--quote-expanded-size);
+  font-weight: var(--quote-expanded-weight);
+  line-height: var(--quote-expanded-leading);
+  text-align: center;
+  color: var(--color-text-primary);
+  transition: color 0.5s ease;
+  margin: 0;
+}
+
+.ux-quote-expanded-quote strong {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: var(--weight-bold);
+}
+
+
+.ux-quote-expanded-body {
+  font-size: var(--quote-body-size);
+  line-height: var(--quote-body-leading);
+  color: var(--color-text-body);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+  width: 100%;
+  transition: color 0.5s ease;
+}
+
+.ux-quote-expanded-body p { margin: 0; }
+
+.ux-quote-expanded-list {
+  padding-left: 20px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ux-quote-expanded-list li {
+  padding-left: 4px;
+}
+
+/* ── DS Quote Card — expandable wrapper ── */
+.ds-quote-card-wrapper {
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+.ds-quote-card-wrapper > .ds-quote-card {
+  width: 100%; height: 100%;
+}
+
+.ds-quote-card--ghost {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ds-quote-expanded-inner {
+  padding: 40px 56px !important;
+  justify-content: center;
+}
+
+.ds-quote-expanded-icon {
+  width: 36px;
+  height: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.ds-quote-expanded-quote {
+  font-size: var(--quote-expanded-size);
+  font-weight: var(--quote-expanded-weight);
+  line-height: var(--quote-expanded-leading);
+  text-align: center;
+}
+
+.ds-quote-expanded-quote strong {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+
+.ds-quote-expanded-body {
+  font-size: var(--quote-body-size);
+  line-height: var(--quote-body-leading);
+  color: var(--color-text-body);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+}
+
+/* Quote cards */
+.ux-quote-card, .ds-quote-card, .ai-quote-card {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 32px; gap: 16px;
+}
+
+.ux-quote-card .quote-text,
+.ds-quote-card .quote-text,
+.ai-quote-card .quote-text {
+  font-size: var(--quote-size); line-height: var(--quote-leading);
+  color: var(--color-text-primary); transition: color 0.5s ease;
+  font-weight: var(--quote-weight);
+}
+
+.ux-quote-card strong,
+.ds-quote-card strong,
+.ai-quote-card strong {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: var(--weight-bold);
+}
+
+.quote-icon {
+  width: 29px; height: auto;
+  display: block; flex-shrink: 0;
+}
+
+.design-principle {
+  font-size: var(--principle-size);
+  font-weight: var(--principle-weight);
+  letter-spacing: var(--principle-tracking);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  opacity: 0.3;
+  transition: color 0.5s ease;
+}
+

@@ -31,7 +31,7 @@ export default {
 
 1. **Import style**: Always `import { h } from 'vue'` and use `h()` render functions in stories
 2. **CSS tokens**: Use CSS custom properties from `tokens.css` with fallback values: `var(--color-bg-body, #f0ede8)`
-3. **Scoped CSS**: If the component needs styles from `main.css`, check if a scoped CSS file exists in `src/storybook/`. If not, create one extracting only the relevant rules — never import `main.css` directly (it pulls cursor:none, grid constraints, and page-level rules that break Storybook)
+3. **Scoped CSS**: If the component needs styles from `src/styles/partials/` (find them with `grep -ln "\.<prefix>-" src/styles/partials/*.css`), check if a scoped CSS file exists in `src/storybook/`. If not, create one extracting only the relevant rules — never import `main.css` directly (it pulls cursor:none, grid constraints, and page-level rules that break Storybook)
 4. **Font references**: Use `'Syne', sans-serif` for UI labels in stories
 5. **Static assets**: SVGs referenced as string paths (`src/assets/icons/...`) are served via `staticDirs` in `.storybook/main.mjs`. For story-only icons, use inline data URLs
 6. **Story location**: All stories go in `src/storybook/`
@@ -51,7 +51,7 @@ Read the component file the user specifies. Identify:
 
 ### 2. Check for existing scoped CSS
 
-Look in `src/storybook/` for existing `storybook-*.css` files. If the component uses classes not covered, either extend an existing file or create a new one by extracting rules from `src/styles/main.css`.
+Look in `src/storybook/` for existing `storybook-*.css` files. If the component uses classes not covered, either extend an existing file or create a new one by extracting rules from the relevant file in `src/styles/partials/`.
 
 When extracting CSS:
 - Include all visual styles for the component's classes

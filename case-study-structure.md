@@ -8,7 +8,7 @@ This document captures the content structure, writing patterns, and conventions 
 
 Case studies are Vue 3 components using `h()` render functions (no templates). Each is wrapped in `CaseStudyOverlay`, which provides the expand/collapse card animation, fullscreen overlay, TL;DR toggle, lazy-loading images, and scroll management.
 
-All content is inline in `.js` files — there are no external markdown or JSON content files.
+All content is inline in `.js` files — there are no external markdown or JSON content files. The no-JS/SEO fallback in `case-studies/<slug>/index.html` is generated from the card by `scripts/build-case-study-pages.js`; never hand-edit it. Workflow: the `edit-case-study` skill.
 
 ---
 

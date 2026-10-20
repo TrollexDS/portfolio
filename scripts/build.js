@@ -16,7 +16,10 @@
  *   1. Computes the version string
  *   2. Rewrites src="src/main.js" / href="src/styles/main.css" in index.html
  *      to include ?v=<version>
- *   3. Re-runs build-case-study-pages.js with BUILD_VERSION in env so the
+ *   3. Stamps ?v=<version> onto every @import in src/styles/main.css (the
+ *      styles are split into src/styles/partials/, and the query string on
+ *      main.css alone wouldn't bust the partials)
+ *   4. Re-runs build-case-study-pages.js with BUILD_VERSION in env so the
  *      generated per-case-study pages share the same version
  *
  * Usage:  node scripts/build.js
@@ -29,6 +32,7 @@ const { execSync } = require('child_process')
 
 const ROOT = path.resolve(__dirname, '..')
 const INDEX_HTML = path.join(ROOT, 'index.html')
+const MAIN_CSS   = path.join(ROOT, 'src', 'styles', 'main.css')
 
 // ── Version ──────────────────────────────────────────────────────────────
 // Prefer the short git SHA: stable, content-tied, unique per commit. If we're
@@ -67,6 +71,18 @@ function stampFile(file, version) {
   return changes
 }
 
+// @import url("partials/01-base.css?v=abc") → re-stamped with the new version
+function stampCssImports(file, version) {
+  let css = fs.readFileSync(file, 'utf8')
+  let changes = 0
+  css = css.replace(/(@import url\("[^"?]+)(\?v=[^"]*)?("\);)/g, (_m, prefix, _old, close) => {
+    changes++
+    return `${prefix}?v=${version}${close}`
+  })
+  fs.writeFileSync(file, css, 'utf8')
+  return changes
+}
+
 function main() {
   const version = computeVersion()
   console.log(`Building with version: ${version}\n`)
@@ -75,7 +91,11 @@ function main() {
   const rootChanges = stampFile(INDEX_HTML, version)
   console.log(`  ✓ index.html (${rootChanges} asset reference${rootChanges === 1 ? '' : 's'} stamped)`)
 
-  // 2. Regenerate case study pages with BUILD_VERSION so the generator can
+  // 2. Stamp the stylesheet partial imports
+  const cssChanges = stampCssImports(MAIN_CSS, version)
+  console.log(`  ✓ src/styles/main.css (${cssChanges} @import${cssChanges === 1 ? '' : 's'} stamped)`)
+
+  // 3. Regenerate case study pages with BUILD_VERSION so the generator can
   //    embed it into every generated index.html. Using spawn with env instead
   //    of require() to keep build-case-study-pages.js runnable standalone.
   console.log(`\n  Regenerating case-study pages with version…`)
