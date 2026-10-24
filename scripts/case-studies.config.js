@@ -137,15 +137,15 @@ const caseStudies = [
     slug: 'rayo-design-lab',
     cardKey: 'designlab',
     card: 'RayoDesignLabCard',
-    title: 'From Hit-and-Miss to Ideas We Took Forward',
+    title: 'The Platform That Lets Our Whole Design Team Prototype with AI',
     description:
-      'The Rayo Design Lab - a React mirror of our iOS design system where AI builds working prototypes inside the real components, tokens and rules.',
+      'The Rayo Design Lab - a platform where the whole design team briefs AI to build working prototypes inside the real Rayo components, tokens and rules, with no code required.',
     about:
-      'A React mirror of Rayo’s iOS design system where AI builds working prototypes inside the real components, tokens and usage rules.',
+      'A prototyping platform built on a React mirror of Rayo’s iOS design system, where any designer can brief AI to build working prototypes inside the real components and tokens.',
     datePublished: '2026-09-07',
-    dateModified:  '2026-10-01',
+    dateModified:  '2026-10-21',
     summary:
-      'Designing with AI on its own was a gamble - the output was always nearly right, which is the worst kind of wrong. The Rayo Design Lab is a React mirror of our iOS design system where AI builds inside the real components and tokens, with each component’s usage rules written in Markdown beside it. Explorations start from faithful rebuilds of the app’s own screens and arrive as competing options across every state, each carrying the argument for it. A guide and open review rules mean the team doesn’t need the person who built it to use it.',
+      'Designing with AI on its own was a gamble, and even once it worked it only worked for me. The Rayo Design Lab is a platform where AI builds inside the real Rayo components and tokens, and where any designer on the team - no Terminal, no git, no code - can brief it, see several directions side by side in every state, and share the result. Faster to prototype, so more of us explore more of the options before we choose.',
   },
 ]
 

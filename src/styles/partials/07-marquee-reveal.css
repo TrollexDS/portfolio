@@ -73,7 +73,8 @@
 .cs-expanded-content .cs-cover-img,
 .cs-expanded-content .cs-demo-video,
 .cs-expanded-content .cs-account-link-steps,
-.cs-expanded-content .ba-wrap {
+.cs-expanded-content .ba-wrap,
+.cs-expanded-content .cs-reveal {
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 1.2s ease, transform 1.2s ease;
@@ -82,7 +83,8 @@
 .cs-expanded-content .cs-cover-img.cs-img-visible,
 .cs-expanded-content .cs-demo-video.cs-img-visible,
 .cs-expanded-content .cs-account-link-steps.cs-img-visible,
-.cs-expanded-content .ba-wrap.cs-img-visible {
+.cs-expanded-content .ba-wrap.cs-img-visible,
+.cs-expanded-content .cs-reveal.cs-img-visible {
   opacity: 1;
   transform: translateY(0);
 }

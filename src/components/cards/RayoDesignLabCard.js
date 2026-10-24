@@ -9,18 +9,25 @@ import InteractiveTag from '../InteractiveTag.js'
 
    Nothing from inside a prototype's phone frame appears here except
    IMG_HARNESS, which shows a direction that was NOT taken forward, and
-   IMG_HANDOVER, cleared by Alex (Sep 2026). IMG_PAGES is a Page: a
+   IMG_HANDOVER, cleared by Alex (Sep 2026). VID_PAGES is a Page: a
    rebuild of a shipped screen, not an exploration.
    ───────────────────────────────────────────────────────────── */
 const HERO_SRC     = '/src/assets/images/rayo-design-lab/rdl-hero.svg'
 const IMG_POC      = '/src/assets/images/rayo-design-lab/rayo-design-lab-mvp.png'
 const IMG_NOW      = '/src/assets/images/rayo-design-lab/rayo-design-lab-current-v2.png'
 const IMG_HARNESS  = '/src/assets/images/rayo-design-lab/rayo-design-lab-prototype-harness.png'
-const IMG_STORAGE  = '/src/assets/images/rayo-design-lab/rayo-design-lab-prototype-download-storag.png'
+const IMG_SKILLS   = '/src/assets/images/rayo-design-lab/rayo-design-lab-skills.png'   // the Guide's Skills chapter: the table of commands
+const IMG_KEPT     = '/src/assets/images/rayo-design-lab/rayo-design-lab-offline-b.png'   // Offline listening, direction B: the show page with one toggle, the mini player paused
 const IMG_SEARCH   = '/src/assets/images/rayo-design-lab/rayo-design-lab-search-v2.png'
-const IMG_PAGES    = '/src/assets/images/rayo-design-lab/rayo-design-lab-pages.png'
+const VID_PAGES    = '/src/assets/videos/rayo-design-lab-pages.mp4'   // For you: iOS 26 → iOS 18 → Android → dark → Danish → iOS 26 → English → light, looping
 const IMG_HANDOVER = '/src/assets/images/rayo-design-lab/rayo-design-lab-handover.png'
 const IMG_GUIDE    = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide.png'
+const IMG_HARNESS_V2     = '/src/assets/images/rayo-design-lab/rayo-design-lab-harness-v2.png'
+const IMG_SKETCHES       = '/src/assets/images/rayo-design-lab/rayo-design-lab-sketches.png'
+const IMG_GUIDE_BEFORE   = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide-before.png'
+const IMG_GUIDE_AFTER    = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide-after.png'
+const IMG_OPTIONS_BEFORE = '/src/assets/images/rayo-design-lab/rayo-design-lab-options-before.png'
+const VID_OPTIONS_AFTER  = '/src/assets/videos/rayo-design-lab-options-after.mp4'   // iPhone → iPad portrait → landscape → iPhone, looping
 
 /**
  * softImg - an <img> that degrades to a labelled placeholder instead of a
@@ -40,6 +47,15 @@ const softImg = (src, alt, cls) =>
       el.setAttribute('data-missing', alt)
     },
   })
+
+
+/**
+ * loopClip - a short looping screen recording in a cover image's slot. Muted,
+ * inline and looping, so it reads as an animated figure rather than a player;
+ * the same class, so it gets the scroll reveal and the frame the images get.
+ */
+const loopClip = (src, label, cls = 'cs-cover-img') =>
+  h('video', { class: cls, src, autoplay: true, muted: true, loop: true, playsinline: true, 'aria-label': label })
 
 
 /* ─────────────────────────────────────────────────────────────
@@ -374,17 +390,39 @@ const LabLoop = defineComponent({
 
 
 /* ─────────────────────────────────────────────────────────────
-   BeforeAfterToggle - the first build against the same page today.
+   BeforeAfterToggle - the lab before a change against the lab after it.
 
    Same pattern and the same `ba-*` styles as the Rayo Design System
    case study: an Old/New switch, with the outgoing image sliding out
-   as the incoming one slides in from the opposite side.
+   as the incoming one slides in from the opposite side. Takes its two
+   images as props, so one component serves every before/after here.
    ───────────────────────────────────────────────────────────── */
 const BeforeAfterToggle = defineComponent({
   name: 'BeforeAfterToggle',
-  setup() {
-    // Preload both so the browser has decoded them before the first toggle
-    ;[IMG_NOW, IMG_POC].forEach(src => { const i = new Image(); i.src = src })
+  props: {
+    before:      { type: String, required: true },
+    after:       { type: String, required: true },
+    beforeAlt:   { type: String, default: '' },
+    afterAlt:    { type: String, default: '' },
+    beforeLabel: { type: String, default: 'Old' },
+    afterLabel:  { type: String, default: 'New' },
+    /** width / height of both sides, so the frame has its height before the
+     *  incoming image or clip has loaded - otherwise the first toggle
+     *  collapses the frame for a frame and the page jumps. */
+    ratio:       { type: String, default: '1600 / 1039' },
+  },
+  setup(props) {
+    const isVideo = src => /\.(mp4|webm|mov)$/i.test(src)
+
+    // Preload both images so the browser has decoded them before the first toggle
+    ;[props.after, props.before].filter(src => !isVideo(src)).forEach(src => { const i = new Image(); i.src = src })
+
+    // One side can be a short looping clip - the same slot, playing. Muted,
+    // inline and looping, so it behaves like an animated image, not a player.
+    const media = (src, alt, cls) =>
+      isVideo(src)
+        ? h('video', { class: cls, src, autoplay: true, muted: true, loop: true, playsinline: true, 'aria-label': alt, key: src })
+        : h('img', { class: cls, src, alt, key: src })
 
     const showNew    = ref(true)
     const animating  = ref(false)
@@ -397,7 +435,7 @@ const BeforeAfterToggle = defineComponent({
       const goingToNew = !showNew.value
 
       // Capture the image that's leaving before we flip state
-      exitSrc.value    = showNew.value ? IMG_NOW : IMG_POC
+      exitSrc.value    = showNew.value ? props.after : props.before
       // New sits on the right → enters from right / exits to left
       // Old sits on the left  → enters from left  / exits to right
       enterClass.value = goingToNew ? 'ba-img--enter-from-right' : 'ba-img--enter-from-left'
@@ -411,25 +449,23 @@ const BeforeAfterToggle = defineComponent({
       }, 1220)
     }
 
-    return () => h('div', { class: 'ba-wrap' }, [
+    return () => h('div', { class: 'ba-wrap ba-wrap--fixed', style: { '--ba-ratio': props.ratio } }, [
       h('div', { class: 'ba-img-clip' }, [
         animating.value && exitSrc.value
-          ? h('img', { class: ['ba-img', 'ba-img--abs', exitClass.value].join(' '), src: exitSrc.value, alt: '' })
+          ? media(exitSrc.value, '', ['ba-img', 'ba-img--abs', exitClass.value].join(' '))
           : null,
-        h('img', {
-          class: ['ba-img', animating.value ? enterClass.value : ''].filter(Boolean).join(' '),
-          src: showNew.value ? IMG_NOW : IMG_POC,
-          alt: showNew.value
-            ? 'The Design Lab today: four portals, sidebar and the component grid'
-            : 'The first build: a plain column of components',
-        }),
+        media(
+          showNew.value ? props.after : props.before,
+          showNew.value ? props.afterAlt : props.beforeAlt,
+          ['ba-img', animating.value ? enterClass.value : ''].filter(Boolean).join(' '),
+        ),
       ]),
       h('div', { class: 'ba-toggle', onClick: toggle }, [
-        h('span', { class: ['ba-label', !showNew.value ? 'ba-label--active' : ''].filter(Boolean).join(' ') }, 'First build'),
+        h('span', { class: ['ba-label', !showNew.value ? 'ba-label--active' : ''].filter(Boolean).join(' ') }, props.beforeLabel),
         h('div', { class: ['ba-track', showNew.value ? 'ba-track--on' : ''].filter(Boolean).join(' ') }, [
           h('div', { class: 'ba-thumb' }),
         ]),
-        h('span', { class: ['ba-label', showNew.value ? 'ba-label--active' : ''].filter(Boolean).join(' ') }, 'Today'),
+        h('span', { class: ['ba-label', showNew.value ? 'ba-label--active' : ''].filter(Boolean).join(' ') }, props.afterLabel),
       ]),
     ])
   },
@@ -471,7 +507,7 @@ const BetSwitcher = defineComponent({
     const active = ref(BETS[0])
 
     return () =>
-      h('div', { class: 'rdl-lab' }, [
+      h('div', { class: 'rdl-lab cs-reveal' }, [
         h('div', { class: 'rdl-lab-rail' }, [
           h('div', { class: 'rdl-lab-head' }, [
             h('span', { class: 'rdl-lab-title' }, 'Downloading in the player'),
@@ -524,7 +560,7 @@ const StateWalk = defineComponent({
     const active = ref(STATES.find(x => x.id === 'waiting'))
 
     return () =>
-      h('div', { class: 'rdl-lab' }, [
+      h('div', { class: 'rdl-lab cs-reveal' }, [
         h('div', { class: 'rdl-lab-rail' }, [
           h('div', { class: 'rdl-lab-head' }, [
             h('span', { class: 'rdl-lab-title' }, 'Download control'),
@@ -600,7 +636,7 @@ function md(text) {
 }
 
 const ContractFile = () =>
-  h('div', { class: 'rdl-file' }, [
+  h('div', { class: 'rdl-file cs-reveal' }, [
     h('div', { class: 'rdl-file-bar' }, [
       h('span', { class: 'rdl-file-dots', 'aria-hidden': 'true' }, [h('i'), h('i'), h('i')]),
       h('span', { class: 'rdl-file-tab' }, [
@@ -626,41 +662,62 @@ const ContractFile = () =>
 
 // Cover: the anatomy of one exploration. The phone is an empty outline.
 const HarnessAnatomy = () =>
-  h('div', { class: 'rdl-fig rdl-fig--cover' }, [
+  h('div', { class: 'rdl-fig rdl-fig--cover cs-reveal' }, [
     h('div', { class: 'rdl-anat' }, [
-      h('div', { class: 'rdl-anat-col' }, [
-        h('div', { class: 'rdl-anat-group' }, [
-          h('span', { class: 'rdl-anat-label' }, 'Which design'),
-          h('div', { class: 'rdl-anat-pills' }, [
-            h('span', { class: 'rdl-anat-pill rdl-anat-pill--on' }, 'A'),
-            h('span', { class: 'rdl-anat-pill' }, 'B'),
-            h('span', { class: 'rdl-anat-pill' }, 'C'),
-            h('span', { class: 'rdl-anat-pill' }, 'D'),
+
+      // the options bar over the frame, as the lab draws it
+      h('div', { class: 'rdl-anat-bar' }, [
+        h('span', { class: 'rdl-anat-help', 'aria-hidden': 'true' }, '?'),
+        h('span', { class: 'rdl-anat-chip rdl-anat-chip--on' }, [
+          h('span', { class: 'rdl-anat-chip-key' }, 'A'),
+          h('span', { class: 'rdl-anat-chip-sep' }, '·'),
+          'Which design',
+          h('span', { class: 'rdl-anat-chev', 'aria-hidden': 'true' }),
+        ]),
+        h('span', { class: 'rdl-anat-chip' }, [
+          h('span', { class: 'rdl-anat-chip-name' }, 'State'),
+          'What condition',
+          h('span', { class: 'rdl-anat-chev', 'aria-hidden': 'true' }),
+        ]),
+        h('span', { class: 'rdl-anat-view', 'aria-hidden': 'true' }, [
+          h('i', { class: 'rdl-anat-ico rdl-anat-ico--phone' }),
+          h('i', { class: 'rdl-anat-ico rdl-anat-ico--sun' }),
+        ]),
+      ]),
+
+      // the stage: the option menu open over the frame, the bet beside the list
+      h('div', { class: 'rdl-anat-stage' }, [
+        h('div', { class: 'rdl-anat-menu' }, [
+          h('div', { class: 'rdl-anat-menu-list' }, [
+            h('span', { class: 'rdl-anat-label' }, 'Option'),
+            h('span', { class: 'rdl-anat-item rdl-anat-item--on' }, 'A'),
+            h('span', { class: 'rdl-anat-item' }, 'B'),
+            h('span', { class: 'rdl-anat-item' }, 'C'),
+            h('span', { class: 'rdl-anat-item' }, 'D'),
+          ]),
+          h('div', { class: 'rdl-anat-menu-bet' }, [
+            h('span', { class: 'rdl-anat-label rdl-anat-label--bet' }, 'The bet'),
+            h('span', { class: 'rdl-anat-line' }),
+            h('span', { class: 'rdl-anat-line' }),
+            h('span', { class: 'rdl-anat-line rdl-anat-line--short' }),
           ]),
         ]),
-        h('div', { class: 'rdl-anat-group' }, [
-          h('span', { class: 'rdl-anat-label' }, 'What condition'),
-          h('div', { class: 'rdl-anat-seg' }, [
-            h('span', { class: 'rdl-anat-segopt rdl-anat-segopt--on' }, 'Default'),
-            h('span', { class: 'rdl-anat-segopt' }, 'Offline'),
-            h('span', { class: 'rdl-anat-segopt' }, 'Error'),
-          ]),
+        h('div', { class: 'rdl-anat-phone' }, [
+          h('span', { class: 'rdl-anat-phone-note' }, 'the screen under test'),
         ]),
-        h('div', { class: 'rdl-anat-panel' }, [
-          h('span', { class: 'rdl-anat-label' }, 'The bet'),
-          h('span', { class: 'rdl-anat-line' }),
+      ]),
+
+      // the notes, under About
+      h('div', { class: 'rdl-anat-notes' }, [
+        h('div', { class: 'rdl-anat-note' }, [
+          h('span', { class: 'rdl-anat-label' }, 'Needs a system decision'),
           h('span', { class: 'rdl-anat-line' }),
           h('span', { class: 'rdl-anat-line rdl-anat-line--short' }),
         ]),
-        h('div', { class: 'rdl-anat-panel' }, [
-          h('span', { class: 'rdl-anat-label' }, 'Needs a system decision'),
-          h('span', { class: 'rdl-anat-line' }),
+        h('div', { class: 'rdl-anat-note' }, [
           h('span', { class: 'rdl-anat-label' }, 'Still unverified'),
           h('span', { class: 'rdl-anat-line rdl-anat-line--short' }),
         ]),
-      ]),
-      h('div', { class: 'rdl-anat-phone' }, [
-        h('span', { class: 'rdl-anat-phone-note' }, 'the screen under test'),
       ]),
     ]),
   ])
@@ -762,7 +819,7 @@ const FLOW = [
 ]
 
 const TeamFlow = () =>
-  h('div', { class: 'rdl-fig' }, [
+  h('div', { class: 'rdl-fig cs-reveal' }, [
     h('div', { class: 'rdl-flow' },
       FLOW.flatMap((group, gi) => {
         const block = h('div', { class: 'rdl-flow-group', key: group.lane }, [
@@ -786,7 +843,7 @@ const TeamFlow = () =>
 
 // The gap → token loop.
 const GapLoop = () =>
-  h('div', { class: 'rdl-fig' }, [
+  h('div', { class: 'rdl-fig cs-reveal' }, [
     h('div', { class: 'rdl-loop' }, [
       h('div', { class: 'rdl-loop-node' }, [
         h('span', { class: 'rdl-loop-step' }, '01'),
@@ -831,7 +888,7 @@ export default defineComponent({
         imageSrc: HERO_SRC,
         imageClass: 'rdl-hero-img',
         heroWrapClass: 'rdl-hero-wrap',
-        tooltip: 'Turning AI’s nonsense into\nideas worth taking forward 🧪',
+        tooltip: 'Prototyping with AI,\nfor designers who don’t code 🧑‍🎨',
         heroSize: 448,
       }, {
         default: () => cardFace(),
@@ -844,32 +901,36 @@ export default defineComponent({
 
           h('div', { class: 'cs-body' }, [
 
-            h('h1', { class: 'cs-title' }, 'From Hit-and-Miss to Ideas We Took Forward'),
+            h('h1', { class: 'cs-title' }, 'The Platform That Lets Our Whole Design Team Prototype with AI'),
 
-            // Deliberately short. Everything this used to spell out - the
-            // states, the gambling, “nearly right” - is the Problem section
-            // two screens down, where it has the room to land. An intro that
-            // makes the same case first only spends the good lines twice.
+            // Short on purpose: the three problems get their room in Problem,
+            // two screens down. The intro only has to say what was built and
+            // what it changed.
             full(
-              h('p', { class: 'cs-body-text' }, 'Exploring a design properly is expensive, so a feature gets one direction drawn at its happy path, and the states that actually decide it never get drawn at all. AI looked like the fix, and at first it made things worse. So I built the Rayo Design Lab, where AI builds inside our own design system, with the rules for using it written down where it can read them. What comes out is worth arguing over, and some of it we’ve taken forward. It’s also built so the rest of the team doesn’t need me to use it.'),
+              h('p', { class: 'cs-body-text' }, 'Exploring a design properly is expensive, so a feature gets one direction drawn at its happy path, and the states that actually decide it never get drawn at all. AI looked like the fix, and at first it made things worse: nearly right, which is the worst kind of wrong. And even once I’d got it working, it only worked for me.'),
+
+              h('p', { class: 'cs-body-text' }, 'So I built the Rayo Design Lab: a platform where AI builds inside our own design system, with the rules written where it can read them, and where any designer - no Terminal, no git, no code - can brief it, see several directions side by side in every state, and share the result. The team works in it now. A prototype that took days to draw and link in Figma is a brief and a conversation, and the time that frees goes on looking at more ideas before we choose.'),
             ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
-            h('p', { class: 'cs-body-text' }, 'Design and development. I built the lab, wrote the guide that gets the team into it, and set up how work gets reviewed. I own the foundations every prototype sits on; any designer can review and merge an exploration.'),
+            h('p', { class: 'cs-body-text' }, 'Design and development. I built the lab, designed the workflow and the Guide that get the team into it, and set up how work is checked and reviewed. I own the foundations every prototype sits on; the explorations are the team’s.'),
 
             h('h2', { class: 'cs-section-title' }, 'Impact'),
+
+            h('h3', { class: 'cs-subsection-title' }, '⛹️‍♂️ The whole team can build with AI, not just the person who set it up'),
+            full(h('p', { class: 'cs-body-text' }, 'Every designer on the team has set up from the Guide alone, without a session with me. The whole workflow is four commands, each with a button that opens Claude with the prompt already typed, and a button that messages me on Teams if it goes wrong.')),
+
+            h('h3', { class: 'cs-subsection-title' }, '⚡ Days of linking screens in Figma become a brief'),
+            full(h('p', { class: 'cs-body-text' }, 'A clickable prototype with its states used to mean days of drawing and linking screens, and re-linking them after every change. Now it’s a sentence or a pasted brief, a couple of questions, and a working prototype in the real components, in code where a state is a prop rather than another screen.')),
+
+            h('h3', { class: 'cs-subsection-title' }, '🗺️ A feature arrives as competing directions, not one frame'),
+            full(h('p', { class: 'cs-body-text' }, 'Every exploration starts as three directions sketched side by side - one close to today’s app, two bold - before anything is built out. Each option states what it’s betting and what it costs, in the frame, next to the thing it describes.')),
 
             h('h3', { class: 'cs-subsection-title' }, '💡 New ideas land inside the product, not beside it'),
             full(h('p', { class: 'cs-body-text' }, 'The lab keeps the app’s own screens as they actually are, so a new idea gets designed into the real screen rather than generated as a fresh page of invented parts. That’s the difference between reviewing a change to the product and reviewing something that merely resembles it.')),
 
-            h('h3', { class: 'cs-subsection-title' }, '🗺️ A feature arrives as competing directions, not one frame'),
-            full(h('p', { class: 'cs-body-text' }, 'Every exploration puts several working options side by side rather than one frame. Each option stating what it’s betting and what it costs, measured, in the frame, next to the thing it describes.')),
-
             h('h3', { class: 'cs-subsection-title' }, '⚠️ States we’d have got to last'),
-            full(h('p', { class: 'cs-body-text' }, 'Building this way surfaces the states nobody has got to yet. The ones that are neither an error nor progress, and so get drawn last or not at all. More than once they’ve changed the direction we took rather than just how quickly we got there.')),
-
-            h('h3', { class: 'cs-subsection-title' }, '⛹️‍♂️ A playground the whole team can get into'),
-            full(h('p', { class: 'cs-body-text' }, 'It’s meant to be somewhere you try things, and the designers do the trying. The lab carries its own guide, written for designers who have never opened Terminal, from a blank Mac to a first prototype. Any designer can approve someone else’s exploration, so an idea never waits on the person who built the tool.')),
+            full(h('p', { class: 'cs-body-text' }, 'Building this way surfaces the states nobody has got to yet, the ones that are neither an error nor progress. More than once they’ve changed the direction we took rather than just how quickly we got there.')),
           ]),
 
           HarnessAnatomy(),
@@ -878,279 +939,277 @@ export default defineComponent({
           h('div', { class: 'cs-body cs-body--continued' }, [
             h('h2', { class: 'cs-section-title' }, 'Problem'),
 
-            h('p', { class: 'cs-body-text' }, 'Two things were true at once, and each made the other worse.'),
+            h('p', { class: 'cs-body-text' }, 'Three things were true at once, and each made the others worse.'),
 
             h('p', { class: 'cs-body-text' }, [
               h('strong', null, 'Exploration was expensive, so it stayed narrow.'),
-              ' Producing screens in Figma was never the problem; prototyping them is. A Figma prototype is a graph of screens, and every state is another screen (loading, empty, error, offline, locked etc.) each one drawn, linked and kept in step by hand. Three directions across five states is fifteen screens to maintain, and a change to one of them is a change to all of them. That cost lands hardest on user testing, where the version you test stays the version you drew first, whichever way the first session went.',
+              ' Drawing screens in Figma was never the problem; prototyping them is. Every state is another screen - loading, empty, error, offline, locked - drawn, linked and kept in step by hand. Three directions across five states is fifteen screens, and a change to one is a change to all. So a feature got one direction, and the argument happened over a frame that couldn’t answer the question.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              h('strong', null, 'And AI, on its own, made it worse rather than better.'),
-              ' Designing with it felt like gambling: write a prompt, spin, mostly miss. The output was always ',
+              h('strong', null, 'AI, on its own, made it worse.'),
+              ' Write a prompt, spin, mostly miss. The output was always ',
               h('em', null, 'nearly'),
-              ' right, which is the worst kind of wrong: a colour close to ours, a component we don’t have, a locked state invented from scratch. You can’t decide anything from a screen that is approximately the product.',
+              ' right - a colour close to ours, a component we don’t have, a locked state invented from scratch - and you can’t decide anything from a screen that is approximately the product. It wasn’t the tool. Give a capable model nothing of ours to work from and you get something plausible and generic.',
             ]),
 
-            h('p', { class: 'cs-body-text' }, 'It wasn’t the tool, it happened across every AI design tool I tried. Give a capable model nothing of ours to work from and you get something plausible and generic, because that is all the information it has.'),
+            h('p', { class: 'cs-body-text' }, [
+              h('strong', null, 'And when I did get it working, it worked for one person.'),
+              ' It took a repo, a terminal, git and a feel for how an agent reads a codebase, and none of that is a designer’s job. AI that makes one designer faster while the other six wait for them isn’t a gain for a team; it’s a bottleneck with a demo. The first two problems are about what the AI has to work with. The third is about who gets to use it, and it turned out to be most of the work.',
+            ]),
 
-            h('h2', { class: 'cs-section-title' }, 'It started as the Storybook iOS can’t have'),
-
-            full(
-              h('p', { class: 'cs-body-text' }, 'Rayo ships on iOS and Android, and the two platforms aren’t equally stuck. Android has workable routes to a browsable component gallery, iOS doesn’t. SwiftUI previews live inside Xcode, which is not a place a designer goes. I started from the iOS side, which is the half with no answer, and mirrored it in React: I extracted it from the iOS source with Claude Code: colours from the asset catalogue, spacing and radius constants, type sizes and weights, and each component’s variants, states and animation timings from its Swift file.'),
-
-              h('p', { class: 'cs-body-text' }, 'It is a smaller library than a designer expects, and that is worth explaining. Engineering makes something a component when it gets reused; designers make components of almost everything, including modules assembled out of other modules. So a library mirrored from the app is structurally short - a dozen or so real primitives, and the composing happens in the prototype instead. Which turns out to be the right split: what the app guarantees lives in the library, and everything still being decided stays where it can be argued with.'),
-
-              h('p', { class: 'cs-body-text' }, 'The icons are in there too: the full set, browsable and grouped by what each one is for, including the handful the app only ships as images and so have no component at all.'),
-
-              h('p', { class: 'cs-body-text' }, 'That alone would have been useful. It’s also the least interesting thing here: a library is a catalogue, so it tells you which components exist. It doesn’t tell you which of them is the wrong choice for the screen in front of you.'),
-            ),
-
-          ]),
-
-          h(BeforeAfterToggle),
-
-          h('div', { class: 'cs-body cs-body--continued' }, [
-
-            h('h2', { class: 'cs-section-title' }, 'The part that made the AI useful'),
+            h('h2', { class: 'cs-section-title' }, 'The foundation: something true for the AI to build with'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'Each component ships a contract beside it - a Markdown file next to the code, and where they disagree the Markdown wins. Not an API reference. Use when, don’t use when, content rules, anti-patterns.'),
+              h('p', { class: 'cs-body-text' }, 'The first job was giving the agent our system instead of its guesses. iOS has no browsable component gallery - SwiftUI previews live in Xcode, which is not a place a designer goes - so I mirrored the iOS design system in React, extracted from the Swift source with Claude Code: colours, spacing, type, and each component’s variants, states and animation timings.'),
 
-              h('p', { class: 'cs-body-text' }, 'None of that is in the code, and none of it was written down anywhere. It lived in designers’ heads and in review comments. It’s also exactly what an agent needs, because an agent doesn’t hedge and doesn’t ask: given a list of components and no rules, it picks something reasonable-looking and is confidently wrong.'),
+              h('p', { class: 'cs-body-text' }, 'A library tells an agent which components exist, not which one is the wrong choice for the screen in front of it. So each component ships a contract: a Markdown file beside the code - use when, don’t use when, content rules, anti-patterns - and where the two disagree, the Markdown wins. None of that was written down before. It lived in designers’ heads, and it’s exactly what an agent needs, because an agent doesn’t hedge and doesn’t ask.'),
             ),
 
             ContractFile(),
             h('p', { class: 'cs-hint' }, 'One component’s rules, in a file an agent can read'),
 
-            h('h2', { class: 'cs-section-title' }, 'The cold-start test'),
-
             full(
-              h('p', { class: 'cs-body-text' }, 'Documentation nobody can fail is documentation nobody maintains. So the system has a test. Open a fresh agent session in the repo - no history, no hints - and give it one prompt: build a list screen for a piece of locked content. Then audit what comes back. Right components? Tokens throughout? Locked state handled the way the pattern doc describes? Both themes?'),
-
               h('p', { class: 'cs-body-text' }, [
-                'The rule that makes it useful is how you read the result: ',
-                h('strong', null, 'every failure is a documentation bug, not a model failure.'),
-                ' Don’t rewrite the prompt and don’t add context in the chat - find the missing rule, put it in the contract, run it again.',
+                'The system has a test. Open a fresh agent session with no history, give it one prompt - a list screen for locked content - and audit what comes back. Right components? Tokens throughout? Both themes? ',
+                h('strong', null, 'Every failure is a documentation bug, not a model failure:'),
+                ' find the missing rule, write it into the contract, run it again. The same rule turned out to apply to people, and it comes back later.',
               ]),
-            ),
 
-            h('h2', { class: 'cs-section-title' }, 'Then it became a place to explore'),
-
-            full(
-              h('p', { class: 'cs-body-text' }, 'Once real components existed with rules attached, building a screen stopped being the expensive part, and in code a state is a prop, not another screen. That single difference is what makes exploring several directions across all their states affordable at all. So the lab grew a prototype harness, and the harness is built around the argument rather than the screen.'),
-
-              h('p', { class: 'cs-body-text' }, 'Each exploration has two sets of controls. One switches between the design options; the other switches the state: offline, error, loading, locked. They look different on purpose, because they aren’t the same kind of choice. Any option can be seen in any state, which is the thing a static mockup can’t do.'),
+              h('p', { class: 'cs-body-text' }, 'The last piece was Pages. Once the team was exploring, the screens their ideas sat on drifted: every prototype rebuilt the existing screen first, and every rebuild lost something. Five ended up with a nav bar 20 points taller than the app’s, because there was no correct version to copy. So the lab grew Production: every screen in the app rebuilt as it is, on iPhone, iPad and Android, its source named, and not allowed to improve the screen even where the screen is wrong. A prototype now starts from a Page, so what differs between directions is the idea, not the screen underneath.'),
             ),
           ]),
 
-          softImg(IMG_HARNESS, 'The prototype harness: option and condition switchers, the bet panel, and a phone frame', 'cs-cover-img'),
-          h('p', { class: 'cs-hint' }, 'An example of the Design Lab’s prototype harness'),
+          loopClip(VID_PAGES, 'The For you tab as a Page in the lab, switched through its faces: iOS 26, iOS 18, Android, then dark appearance and the Danish market, and back to iOS 26 in English, light'),
+          h('p', { class: 'cs-hint' }, 'The For you tab as a Page: one truth, every face - iOS 26, iOS 18, Android, light and dark, and the Danish market - and the rest of the app in the sidebar'),
+
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            h('h2', { class: 'cs-section-title' }, 'Then it became a place to explore'),
+
+            full(
+              h('p', { class: 'cs-body-text' }, 'In code a state is a prop, not another screen, and that single difference is what makes exploring several directions in all their states affordable. So the lab grew a harness, built around the argument rather than the screen. Each exploration has two sets of controls: one switches the design option, the other the state - offline, error, loading, locked. Any option can be seen in any state, which a static mockup can’t do, and Compare puts them all on screen at once.'),
+
+              ),
+          ]),
+
+          softImg(IMG_HARNESS_V2, 'The prototype harness: the options bar over the phone frame, with the Option menu open listing directions A to F and the bet for the selected one beside them', 'cs-cover-img'),
+          h('p', { class: 'cs-hint' }, 'An exploration in the harness: every option in one menu, with its bet beside it'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
             full(
-              h('p', { class: 'cs-body-text' }, 'Each option carries a bet: what it’s good for, and what it costs, written next to it. Not a description of the layout - an argument, with the trade-off named and measured where it can be. Rejected options keep their place, with the reason they lost written next to them. It is much easier to agree that something is too loud once you can see it, and easier still not to have the same argument again in three months.'),
+              h('p', { class: 'cs-body-text' }, 'Each option carries a bet: what it’s good for and what it costs, written next to it. Not a description of the layout - an argument, with the trade-off named. Options that lost keep their place with the reason beside them, because it’s easier to agree something is too loud once you can see it, and easier still not to have the argument again in three months.'),
             ),
 
             h(BetSwitcher),
             h(InteractiveTag, { hint: 'Click to see the argument for each bet', centered: true }),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'Every prototype also carries two lists underneath it. The first is called Needs a system decision, and it collects the gaps that exploration ran into. The second is Still unverified, and it lists everything in the screen we made up: invented content, guessed values, placeholder copy. One prototype says outright that a number in it is invented and has to be replaced before anyone sees it, because that number is the whole thing a test of that screen would measure. Both lists are part of the work rather than an appendix to it. A prototype that hides what it guessed is worse than one that stops and asks.'),
-
-              h('p', { class: 'cs-body-text' }, 'Which is the opposite of where I started. When I began, designing with AI was a bet I couldn’t see the odds on. Now every option has to state its own.'),
+              h('p', { class: 'cs-body-text' }, [
+                'Every prototype also carries two lists. ',
+                h('strong', null, 'Needs a system decision'),
+                ' collects the gaps the exploration ran into; ',
+                h('strong', null, 'Still unverified'),
+                ' lists everything in the screen we made up. Both are part of the work rather than an appendix to it. A prototype that hides what it guessed is worse than one that stops and asks.',
+              ]),
             ),
 
-            h('h2', { class: 'cs-section-title' }, 'The states we’d have got to last'),
+            h('h3', { class: 'cs-subsection-title' }, 'The states we’d have got to last'),
 
-            full(h('p', { class: 'cs-body-text' }, 'This is where it stopped being a faster way to do the same work. Downloading a podcast has a state most download UIs skip: the listener taps download while on mobile data, with mobile-data downloads switched off, and nothing happens. The control ended up with six states rather than the obvious four.')),
-
+            full(h('p', { class: 'cs-body-text' }, 'This is where it stopped being only a faster way to do the same work. Downloading a podcast has a state most download UIs skip: the listener taps download on mobile data with mobile-data downloads off, and nothing happens. The control ended up with six states rather than four, and the waiting state is the one that generates the support ticket.')),
 
             h(StateWalk),
             h(InteractiveTag, { hint: 'Step through the six states', centered: true }),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'The other was storage: how much room downloads are taking and how much is left, at the top of the screen. Obvious once it’s there, and a list of episodes cannot answer the question everyone actually has before a flight. Neither is decoration, and the second one carried weight in where the feature landed.'),
+              h('p', { class: 'cs-body-text' }, 'The other was a toggle on the show page: keep the newest episodes on this phone, on Wi-Fi, and they play without a signal. The download button on each episode stays; this sits above it, for the shows you never want to be without. One decision instead of a chore every week, and the kind of thing that only shows up when a direction is built out properly rather than drawn.'),
             ),
-
           ]),
 
-          softImg(IMG_STORAGE, 'A downloads exploration in the lab, with a storage meter at the top of the screen showing space used and space left', 'cs-cover-img'),
+          softImg(IMG_KEPT, 'The offline-listening exploration in the lab, direction B on the show page: a Keep new episodes on this phone toggle above the episode list, and the mini player holding a paused episode of the show', 'cs-cover-img'),
           h('p', { class: 'cs-hint' }, 'Example of a great suggestion that we kept'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
-
             full(
-
               h('p', { class: 'cs-body-text' }, [
-                'I don’t read that as the model being clever. The house rules in the repo say build the unhappy states, and the design doc says a screen isn’t finished until loading, empty, error and locked all exist. What happened is that a rule I’d written got applied further than I’d applied it myself - because state exploration is tedious, so humans do it last and under time pressure, which is exactly why unhappy states ship broken. ',
+                'I don’t read that as the model being clever. The house rules say build the unhappy states; the design doc says a screen isn’t finished until loading, empty, error and locked exist. A rule I’d written got applied further than I’d applied it myself, because state exploration is tedious and humans do it last. ',
                 h('strong', null, 'Write the intent down properly and it holds you to it too.'),
               ]),
             ),
 
-            h('h2', { class: 'cs-section-title' }, 'Ideas need something true to start from'),
+            h('h2', { class: 'cs-section-title' }, 'Making it usable by someone who has never written code'),
 
-            full(
-              h('p', { class: 'cs-body-text' }, 'Once the team was exploring in it, a different problem showed up. The ideas were good, but the screens they sat on drifted. Every prototype that touched an existing screen rebuilt it first, from memory or from another prototype, and every rebuild lost something. The podcast show page was rebuilt three separate times, and five prototypes ended up with a nav bar 20 points taller than the app’s, because there was no correct version anywhere to copy. An idea shown on a screen that isn’t quite the app has the same problem as AI with nothing of ours to work from: you end up arguing about the difference rather than the idea.'),
+            full(h('p', { class: 'cs-body-text' }, 'Everything above worked, for me. The people it was for are designers who have never opened Terminal, don’t know what a branch is, and shouldn’t have to. Most of the work since has been re-designing the process for them, and the test was simple: could someone set up and build their first prototype without me in the room?')),
 
-              h('p', { class: 'cs-body-text' }, 'So the lab grew a second portal, Pages: the production screens rebuilt as they are, from the reference designs and the iOS source. It now covers close to every screen in the app, tab by tab, plus settings, the premium flow and login.'),
+            h('h3', { class: 'cs-subsection-title' }, 'The whole workflow is four commands'),
 
-              h('p', { class: 'cs-body-text' }, 'A Page plays by different rules from a prototype. It answers no question, so it has states but no options. It has to name its source, so anyone can check it against the thing it claims to be. And it isn’t allowed to improve the screen, even where the screen is wrong, because a baseline that quietly fixes things can’t tell you which parts are the product.'),
-            ),
-          ]),
-
-          softImg(IMG_PAGES, 'The For you tab rebuilt as a Page in the lab, with the Pages sidebar listing every section of the app and a state switcher beside the phone frame', 'cs-cover-img'),
-          h('p', { class: 'cs-hint' }, 'The For you tab as a Page: one truth, its states, and the rest of the app in the sidebar'),
-
-          h('div', { class: 'cs-body cs-body--continued' }, [
-            full(
-              h('p', { class: 'cs-body-text' }, 'The Pages link up the way the app does. You can tap from the Welcome screen through login and land on For you, or from a Go Premium prompt through sign-up to the congrats screen and back to where you started. The content is Rayo’s real catalogue, so a show looks the same on every screen you find it on.'),
-
-              h('p', { class: 'cs-body-text' }, 'A prototype now starts from the Pages rather than redrawing them. The first one built this way explores five ways to hand Hits Radio app listeners over to Rayo, and it doesn’t copy the screens it touches: it uses the Pages themselves, so a fix to a Page reaches every prototype built on it. What differs between the directions is the idea, not the screen underneath it.'),
-            ),
-          ]),
-
-          softImg(IMG_HANDOVER, 'A prototype for moving Hits Radio app listeners to Rayo: option E, signed in by link, drawn over the real Welcome screen and its presenter carousel', 'cs-cover-img'),
-          h('p', { class: 'cs-hint' }, 'A new idea built on a real Page: the Welcome screen as it ships, with the sign-in on top'),
-
-          h('div', { class: 'cs-body cs-body--continued' }, [
-            full(
-              h('p', { class: 'cs-body-text' }, 'A Page is also the strictest audit the design system gets, because it’s the only thing in the lab that isn’t allowed to design around a gap. Every missing token or component turns up in its notes.'),
-            ),
-
-            h('h2', { class: 'cs-section-title' }, 'It finds what the system is missing'),
-
-            full(
-              h('p', { class: 'cs-body-text' }, 'Building real things in a design system is the fastest way to discover what it doesn’t have, and the gap lists turned out to be a channel rather than a complaint box.'),
-            ),
-          ]),
-
-          GapLoop(),
-          h('p', { class: 'cs-hint' }, 'A gap list is a feedback channel' ),
-
-          h('div', { class: 'cs-body cs-body--continued' }, [
             full(
               h('p', { class: 'cs-body-text' }, [
-                'The audit file that started as a record of what was inferred from the Swift now runs to twelve sections, and the later ones are all things found by using the system rather than reading it: no motion, elevation or blur primitives; a secondary text colour that doesn’t survive being placed on anything tinted; a button with no nav-bar size; a selected state that is a colour and nothing else, still open. ',
-                h('strong', null, 'Each one is a question the design system now has to answer, raised by something real rather than in the abstract.'),
+                'I cut the process to what a designer actually does and made each step one command: ',
+                h('strong', null, '/start'),
+                ' opens the lab, gets everyone’s latest work and puts you on your own branch; ',
+                h('strong', null, '/new-prototype'),
+                ' takes the brief; ',
+                h('strong', null, '/save'),
+                ' commits and pushes; ',
+                h('strong', null, '/submit'),
+                ' checks the build and opens the pull request, written from the prototype itself. Git still happens. The designer never types it. Each command is a playbook Claude follows, so when a step trips someone, the fix goes in the playbook and nobody hits it again.',
               ]),
             ),
 
-            h('h2', { class: 'cs-section-title' }, 'Designing the lab itself'),
+          ]),
 
-            full(
-              h('p', { class: 'cs-body-text' }, 'I should admit a bias here. I like the way Apple’s software feels - Liquid Glass, the spatial UI direction, that sense of something modern and slightly ahead of itself - and I wanted this to feel like that rather than like a documentation site. It’s where the name came from: a lab is somewhere you try things, not somewhere you file them.'),
+          softImg(IMG_SKILLS, 'The Guide’s Skills chapter: a table of the lab’s commands - start, setup-design-lab, new-prototype, save, submit and review-prototype - with what each does, how it starts and what to say', 'cs-cover-img'),
+          h('p', { class: 'cs-hint' }, 'The skills, as the Guide lists them: what each one does, how it starts, and what to say'),
 
-              h('p', { class: 'cs-body-text' }, 'Prototypes is what people open the lab for, so it’s the front door, with Pages, Components and Icons one click away in the top bar. Moving between prototypes doesn’t send you back to an index either. You go straight from one to the next, which is what makes comparing them quick. And ⌘K searches everything at once. It runs locally, with no model behind it, and the panel says so, because a search box shaped like a prompt that could only match text would be lying about what the tool does.'),
-
-              h('p', { class: 'cs-body-text' }, 'Prototypes and Pages each open on a feed of what’s changed, because a lab that changes most days is only useful if people can tell what’s new. Half of it writes itself: when the site builds, it reads its own git history and works out which prototype, page or component each change touched, so the feed says what moved rather than repeating a commit message. The other half is a written note, for the changes that deserve a headline, saying what to go and look at. Anything new since your last visit is marked.'),
-            ),
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            h('h3', { class: 'cs-subsection-title' }, 'Briefing it like a designer, not prompting it like an engineer'),
 
             full(
               h('p', { class: 'cs-body-text' }, [
-                'The one rule the whole thing is built on: ',
-                h('strong', null, 'the shell is transparent, the frame is not.'),
-                ' The lab’s own chrome is deliberately unlike Rayo - glass over a slow wash of light, permanently dark - and it stops dead at the edge of the phone frame. Inside, the screen under test sits on a real Rayo surface and is judged against it, never through a veil. Light and dark belong to the screen being reviewed, not to the tool, so the appearance switch sits above the frame rather than in the header. That rule is what stops a nicely-designed tool contaminating the thing it’s supposed to help you judge.',
+                'The command that matters most is the one that builds. Getting a good result out of an agent used to mean knowing what to ask for, which is the expertise I least wanted the team to need. So ',
+                h('strong', null, '/new-prototype'),
+                ' asks instead. Type an idea in a sentence, or paste the whole brief, and it comes back with at most two rounds of multiple-choice questions: three readings of the idea, from one close to your words to two you didn’t say, with “suggest bolder ones” as a fourth; where in the app someone meets it; which screen it starts from. Then it sketches each direction as one screen, side by side in Compare, and stops. Only the direction you pick gets built out, with what was dropped written into the notes.',
+              ]),
+
+              h('p', { class: 'cs-body-text' }, [
+                'That order is the point. Building three directions across five states when two get dropped on first sight is where the time and the tokens went. ',
+                h('strong', null, 'Sketch first, react, then build.'),
               ]),
             ),
           ]),
 
-          softImg(IMG_SEARCH,
-            'The lab’s command palette open over a blurred background: a search field reading “Jump to a prototype, a component, a state”, results grouped under Prototypes, Pages and Icons, each Page showing its source, and a footer reading “Search is local - no model, no network”',
-            'cs-cover-img'),
-          h('p', { class: 'cs-hint' }, '⌘K across prototypes, pages and icons, with the panel saying search is local'),
+          softImg(IMG_SKETCHES, 'Compare in the lab: the three offline-listening directions side by side with the Screen set to Offline, each with its name and bet above its phone frame - a downloads list, a shelf of what is on the phone, and a pocket station that keeps playing', 'cs-cover-img'),
+          h('p', { class: 'cs-hint' }, 'Compare: three answers to the same question, side by side, with the connection switched off for all of them'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
-
-            h('h2', { class: 'cs-section-title' }, 'It shouldn’t depend on me'),
+            h('h3', { class: 'cs-subsection-title' }, 'A Guide that does the typing'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'A prototyping tool one designer uses is a hobby, and one that needs its builder in the room is a bottleneck. That was the risk here. I was the only one who could set it up, get someone unstuck and merge their work, and AI that speeds up one designer while everyone else queues behind them isn’t a gain for the team. So a lot of the work since has been getting myself out of everyone’s way.'),
+              h('p', { class: 'cs-body-text' }, 'The lab carries its own Guide, written for someone who has never opened Terminal. It started as a manual: eleven chapters, read top to bottom, that told you what to type. It’s now a workflow: a one-time setup, then the four steps drawn as a stepper across the top of every page, so you always know which one you’re on.'),
 
-              h('p', { class: 'cs-body-text' }, 'Onboarding started as sessions I ran: install Node, clone the repo with GitHub Desktop, run it locally, let Claude Code handle git. That got people started, but a session doesn’t scale. Steps heard once are easy to lose, and the next person to join wasn’t in the room.'),
-
-              h('p', { class: 'cs-body-text' }, 'So the lab now carries its own Guide, written for someone who has never opened Terminal, used git or written a line of code. It goes from a blank Mac to a first prototype: a one-time setup, a file you double-click to open the lab, and then the whole workflow in plain words. Get the latest, start a branch, brief Claude the way you’d brief another designer, save, and share it for review.'),
-
-              h('p', { class: 'cs-body-text' }, 'The line I think does the most work is near the top: you can’t break it. Nothing on your Mac reaches the published lab until another designer has looked at it and approved it. For someone who has never used Terminal, knowing that matters more than any of the instructions.'),
-
+              h('p', { class: 'cs-body-text' }, [
+                'What changed most is that it stopped asking people to type. Every step has a ',
+                h('strong', null, 'Copy'),
+                ' button for the exact command, because retyping is where a branch name gets mistyped, and an ',
+                h('strong', null, 'Open in Claude'),
+                ' button that opens the app with the prompt already in the box and the lab folder chosen. Setup is two downloads and one button. When something goes wrong, ',
+                h('strong', null, 'Message Alex on Teams'),
+                ' opens a chat with the message already drafted - which step, and a space for what Claude said - so asking for help costs one click.',
+              ]),
             ),
           ]),
 
-          softImg(IMG_GUIDE, 'The Guide in the lab: five workflow steps across the top, a chapter explaining the published lab and your own copy, and a sidebar of chapters from How it works to Words you’ll hear', 'cs-cover-img'),
-          h('p', { class: 'cs-hint' }, 'The Guide: from a blank Mac to a first prototype, for people who have never opened Terminal'),
+          h(BeforeAfterToggle, {
+            before:    IMG_GUIDE_BEFORE,
+            after:     IMG_GUIDE_AFTER,
+            beforeAlt: 'The Guide before: chapter 06 of 11, Build with Claude, a good brief described in prose with numbered steps',
+            afterAlt:  'The Guide after: the Build step with the four-step stepper across the top, the /new-prototype prompt with a Copy button and an Open in Claude button',
+          }),
+          h('p', { class: 'cs-hint' }, 'The Guide’s Build step, old and new: a chapter to read became a step to click'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
             full(
-              h('p', { class: 'cs-body-text' }, 'The details are where people actually get stuck, so that’s where most of the writing went. The usual Node installer needs an administrator password, which not everyone has, so setup has a second route that doesn’t. The launcher catches the macOS privacy block that otherwise surfaces as a baffling EPERM error, and says exactly which setting to change. There’s a chapter for when things go wrong, and another for the words you’ll hear.'),
-
               h('p', { class: 'cs-body-text' }, [
-                'The Guide ends with one rule for itself: if a step tripped you, it will trip the next person, and the fix belongs on the page. It’s the cold-start test again, pointed at people instead of an agent. ',
-                h('strong', null, 'A failure is a documentation bug, not the reader’s fault.'),
-              ]),
-
-              h('p', { class: 'cs-body-text' }, [
-                'Approval was the other bottleneck, because it used to be mine. Every pull request now needs one approval and a passing build, and any designer’s approval is enough to merge an exploration, because explorations should be cheap to merge. Only the foundations every prototype sits on need mine: the tokens, the components, the shared screen furniture and the rules Claude reads, because a change there quietly moves everyone else’s screens. ',
-                h('strong', null, 'I hold the parts where a mistake spreads, and nobody waits for me to try an idea.'),
+                'The details are where people get stuck, so that’s where the writing went: it works on Windows as well as a Mac, needs no administrator password, and has chapters for the words you’ll hear, for looking at someone else’s work, and for when something goes wrong. The Guide ends with a rule for itself: if a step tripped you, it will trip the next person, and the fix belongs on the page. ',
+                h('strong', null, 'The cold-start test, pointed at people.'),
               ]),
             ),
+
+            h('h3', { class: 'cs-subsection-title' }, 'You can’t break it, and that’s enforced'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'And it deploys itself - merging to main publishes the lab internally, so an exploration is a link you send in Slack rather than an export, and the link is never out of date because it is the repo.'),
-            ),
+              h('p', { class: 'cs-body-text' }, 'The line in the Guide that does the most work is near the top: you can’t break it. For someone who has never used git, that matters more than any instruction, so it isn’t a promise, it’s built in. Everyone works on their own branch; nothing reaches the published lab until it’s reviewed. Claude itself is fenced: a hook stops it touching anything platform-owned without asking, and refuses to hand-edit generated files at all. The build fails on a literal colour or font, so a prototype can’t quietly drift off-system.'),
 
+              h('p', { class: 'cs-body-text' }, [
+                'Approval was the other bottleneck. Every pull request needs one approval and a passing build, and any designer’s approval merges an exploration; only the foundations every prototype sits on need mine, because a change there moves everyone else’s screens. In practice the reviews have all been mine so far - reviewing each other is the next habit to form. Merging publishes the lab, so ',
+                h('strong', null, 'an exploration is a link, never an export, and never out of date because it is the repo.'),
+              ]),
+            ),
           ]),
 
           TeamFlow(),
           h('p', { class: 'cs-hint' }, 'From a blank Mac to the whole team, with no step that waits for me'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
+            h('h2', { class: 'cs-section-title' }, 'Designing the lab itself'),
 
             full(
-              h('p', { class: 'cs-body-text' }, 'Where it stands: designers have set up from the Guide, and the first explorations to go through another designer’s review are what I’m watching for next.'),
+              h('p', { class: 'cs-body-text' }, 'The look is the Bauer AI team’s design system - their canvas, glass, type and components, used as they ship - so the lab sits with the rest of Bauer’s AI tools and I don’t maintain a visual language of my own. Everything else is mine: what the lab does, how it is laid out, how it moves.'),
 
-              h('p', { class: 'cs-body-text' }, 'It doesn’t have to stay a design-team tool, and that’s the next thing I want to test. Anyone who can describe a screen can now get a real one built from the real system: an engineer sketching a feature they’ve been thinking about, a product manager putting an idea in front of people instead of describing it. The platform is open to them; whether they take it up is the interesting question.'),
+              h('p', { class: 'cs-body-text' }, [
+                'The options used to sit in a column beside the frame and took a third of a laptop window. They are now one bar over it, so the screen under review is as big as the window allows and the option and state chips are always in reach. The bar glides between screens, the view controls merge and split with the window, and the theme switch previews before it spreads. One rule holds all of it: ',
+                h('strong', null, 'the chrome is Bauer’s, the screen under review is Rayo’s'),
+                ', and nothing of theirs reaches inside the frame.',
+              ]),
+            ),
+          ]),
+
+          h(BeforeAfterToggle, {
+            before:    IMG_OPTIONS_BEFORE,
+            after:     VID_OPTIONS_AFTER,
+            beforeAlt: 'Before: the lab’s own dark glass chrome, seven rows of switches in a column beside an iPad landscape Page that is cut off at the edge of the window',
+            afterAlt:  'After: the Bauer AI design system chrome with one options bar over the frame, switching the same For you Page from iPhone to iPad portrait to iPad landscape and back, the frame resizing and rotating to fit',
+          }),
+          h('p', { class: 'cs-hint' }, 'Old and new: the lab’s own chrome with a column of switches beside a cut-off iPad, then the Bauer AI design system with one bar over the frame, and the frame changing device under it'),
+
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            h('h2', { class: 'cs-section-title' }, 'Where the team is with it'),
+
+            full(
+              h('p', { class: 'cs-body-text' }, 'Everyone on the team has set up from the Guide, without a session with me, and the buttons get used - the one that opens Claude with the message typed, and the Teams one when something stops. The first prototype through the sketch-first flow is an offline-listening exploration: four directions sketched, three built out across the whole journey, the fourth and the reason it was dropped written into the notes.'),
+
+              h('p', { class: 'cs-body-text' }, 'It’s also finding what the design system is missing faster than one person reading it could. The gap lists became a channel: an exploration hits a gap, names it in the frame, and the system grows. Gradient tokens exist because a paywall prototype asked for them.'),
+            ),
+          ]),
+
+          GapLoop(),
+          h('p', { class: 'cs-hint' }, 'A gap list is a feedback channel'),
+
+          h('div', { class: 'cs-body cs-body--continued' }, [
+            full(
+              h('p', { class: 'cs-body-text' }, [
+                'The audit file now runs to twelve sections, and the later ones are all things found by using the system - no motion, elevation or blur primitives; a secondary text colour that doesn’t survive a tint; a button with no nav-bar size. ',
+                h('strong', null, 'Each one is a question the design system now has to answer, raised by something real rather than in the abstract.'),
+              ]),
             ),
 
             h('h2', { class: 'cs-section-title' }, 'What’s next'),
 
             h('p', { class: 'cs-body-text' }, [
-              h('strong', null, 'Designing with AI is a solo activity, and it shouldn’t be.'),
-              ' Setting up and reviewing no longer depend on one person, but the work in between still does. It’s a question design leaders raised at an AI conference I went to recently, and I agree with them. Sharing the result is solved: a prototype is a link you can send to anyone. Working on it together isn’t. The session where the options get generated happens between one designer and one agent, and the feedback happens somewhere else, in a message thread, detached from the thing it’s about. There’s nowhere to pin a comment to the exact state you disagree with, the way you would in Figma, and no way to pick up another designer’s direction and take it somewhere new. The bets and the gap lists were a first step towards the argument living inside the work. The next is making room for other people’s arguments there too, designers first, then engineering and product. That’s what I’m exploring next.',
+              h('strong', null, 'Reviewing each other.'),
+              ' The rule is live; the habit isn’t yet. The next thing I’m watching for is an exploration merged on another designer’s approval, not mine.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              h('strong', null, 'Handoff annotations.'),
-              ' Pages closed the fidelity gap for screens that already exist. What’s still missing is annotations, so for now this is a system for exploring and deciding internally, not for handing over.',
+              h('strong', null, 'Designing together.'),
+              ' Designing with AI is still a solo activity. Sharing the result is solved - a prototype is a link - but the session where the options get generated happens between one designer and one agent, and the feedback happens somewhere else, detached from the thing it’s about. There’s nowhere to pin a comment to the exact state you disagree with, and no way to pick up a colleague’s direction and take it somewhere new. The bets and gap lists were a first step towards the argument living inside the work. The next is making room for other people’s arguments there too.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              h('strong', null, 'Prototypes built for real user testing.'),
-              ' Everything so far has been for internal decisions: arguing a direction out among ourselves. The next step is somewhere in the lab built for putting a prototype in front of actual listeners. The form isn’t decided yet, but a prototype made of the real system, with its states already built, is most of the way to being testable already.',
+              h('strong', null, 'Beyond the design team.'),
+              ' Anyone who can describe a screen can now get a real one built from the real system: an engineer sketching a feature, a product manager putting an idea in front of people instead of describing it. The platform is open to them; whether they take it up is the interesting question.',
+            ]),
+
+            h('p', { class: 'cs-body-text' }, [
+              h('strong', null, 'Real listeners.'),
+              ' Everything so far has been for internal decisions. A prototype made of the real system with its states already built is most of the way to being testable; the form that takes isn’t decided yet.',
             ]),
 
             h('h2', { class: 'cs-section-title' }, 'Outcome'),
 
             h('p', { class: 'cs-body-text' }, [
-              'The team works in it, and what changed isn’t the speed. ',
-              h('strong', null, 'We can see many ways of doing the same thing side by side, each with its argument and its cost attached, before anyone commits.'),
-              ' It’s an ideation tool more than a decision tool, and that’s the honest description: the downloads work ran through three destinations for where downloaded episodes should live, and the one we took forward won on grounds the exploration made visible - separating managing saved content from managing downloaded content, and being the only place that could show storage.',
-            ]),
-
-            h('p', { class: 'cs-body-text' }, 'It isn’t finished, and the list above is honest about that. The team also isn’t yet at the point where designers push pull requests for UI changes, which is a question about how design and engineering work together rather than about the repo.'),
-
-            h('p', { class: 'cs-body-text' }, [
-              'What I’d take from it is narrower than “AI makes design faster”, and more useful. ',
-              h('strong', null, 'The models were never the constraint. The constraint was that they had nothing of ours to build with'),
-              ' - no tokens they could reach, no components that were really ours, and no written rules about when each one is the wrong choice. Give an agent the actual system and the rules that go with it, and the work it produces is something you can decide from.',
+              'The team works in it. Making a prototype is faster - the days spent drawing and linking Figma screens are gone - and that’s the speed that matters, because it’s the cost that kept exploration narrow. ',
+              h('strong', null, 'We can now see many ways of doing the same thing side by side, each with its argument attached, before anyone commits.'),
+              ' The downloads work ran through three destinations for downloaded episodes, and the one we took forward won on grounds the exploration made visible.',
             ]),
 
             h('p', { class: 'cs-body-text' }, [
-              'The second is about who it’s for. ',
-              h('strong', null, 'AI that makes one designer faster while everyone else waits for them isn’t a gain for the team.'),
-              ' Much of the work on the lab since has gone into the parts nobody sees in a demo - the Guide, the review rules, the baseline everyone builds on - so the lab works without me in the room.',
+              'What I’d take from it is more specific than “AI makes design faster”. ',
+              h('strong', null, 'The models were never the constraint. The constraint was that they had nothing of ours to build with, and then that only one of us could use them.'),
+              ' Give an agent the real system and its rules, and the work is something you can decide from. Take yourself out of the loop - the Guide, the commands, the guardrails, the baseline - and it’s something the whole team can decide from.',
             ]),
 
-            h('p', { class: 'cs-closing' }, 'It didn’t make us faster. It let us explore more of the options before we chose.'),
+            h('p', { class: 'cs-closing' }, 'Faster to prototype, so more of us explore more of the options before we choose.'),
           ]),
         ],
       })

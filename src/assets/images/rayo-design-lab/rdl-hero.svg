@@ -1,10 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 448" width="448" height="448" role="img" aria-label="Rayo Design Lab">
+  <!-- The lab's ground: the Bauer AI design system's canvas with its two
+       aurora glows, purple top-left and aqua bottom-right. The card face's
+       own wash draws the same thing, so the hero and the face match while
+       the card flies open and back. -->
   <defs>
-    <linearGradient id="rdl" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#2A1E3D"/>
-      <stop offset="0.55" stop-color="#5B2E8F"/>
-      <stop offset="1" stop-color="#16121F"/>
-    </linearGradient>
+    <radialGradient id="p" cx="0.08" cy="-0.05" r="0.6" fx="0.08" fy="-0.05">
+      <stop offset="0" stop-color="#4700A3" stop-opacity="0.16"/>
+      <stop offset="0.7" stop-color="#4700A3" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="a" cx="1" cy="1.05" r="0.5" fx="1" fy="1.05">
+      <stop offset="0" stop-color="#5AF0FF" stop-opacity="0.14"/>
+      <stop offset="0.7" stop-color="#5AF0FF" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="448" height="448" fill="url(#rdl)"/>
+  <rect width="448" height="448" fill="#F8F7FC"/>
+  <rect width="448" height="448" fill="url(#p)"/>
+  <rect width="448" height="448" fill="url(#a)"/>
 </svg>

@@ -1,15 +1,32 @@
 /* ═══════════════════════════════════════════════════════════════════
    RAYO DESIGN LAB CARD  (rdl-)
    Case study: "Prototyping with AI, Inside Our Own Design System"
-   Card face echoes the lab's own chrome — glass panes over a wash.
+   Card face echoes the lab's own chrome: the Bauer AI design system's
+   light canvas and aurora, white glass panes, brand purple.
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Collapsed card face ─────────────────────────────────────────── */
-.rayo-design-lab-card {
+.rayo-design-lab-card,
+.rayo-design-lab-card.bento-card.dark {
   position: relative;
   overflow: hidden;
-  background: #16121F;
+  background: #F8F7FC;
+  /* The overlay gives every case-study card the dark bento treatment. This
+     face is light now, so take the light card's edge: a white lip at the
+     top, a faint base shadow, no black line along the bottom - that line
+     was the "black border" visible while the card flew back. */
+  --color-card-inset-top:    rgba(255, 255, 255, 0.90);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.04);
+  --card-grain-opacity:      0.028;
+  --card-grain-blend:        multiply;
+  border-color: rgba(71, 0, 163, 0.10);
+  /* No border-color in the transition: the bento card eases it over 0.3s,
+     and on the frame the card reappears after the overlay closes that
+     ease runs from a dark value - a visible black outline for an instant. */
+  transition: background 0.5s ease, box-shadow 0.3s ease, transform 0.15s ease;
 }
+
+
 
 .rdl-card-face {
   position: absolute;
@@ -27,7 +44,7 @@
   font-weight: var(--weight-semibold);
   letter-spacing: var(--tracking-widest);
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.62);
+  color: rgba(31, 28, 43, 0.62);
 }
 
 .rdl-card-title {
@@ -38,7 +55,7 @@
   font-weight: var(--weight-bold);
   line-height: 1.02;
   letter-spacing: var(--tracking-tight);
-  color: #FFFFFF;
+  color: #1F1C2B;
 }
 
 /* Hero wrapper — same pattern as ss-ds / ads / ll. It was sharing a rule
@@ -47,7 +64,7 @@
 .rdl-hero-wrap {
   border-radius: 32px;
   overflow: hidden;
-  background: #16121F;
+  background: #F8F7FC;
   margin-top: 40px;
 }
 
@@ -61,7 +78,7 @@
   overflow: hidden;
   /* so the loop is cut to the same corners as the frame around it */
   border-radius: inherit;
-  background: #16121F;
+  background: #F8F7FC;
 }
 
 .rdl-hero-img { width: 100%; height: 100%; object-fit: cover; }
@@ -87,91 +104,233 @@
   margin-top: 8px;
 }
 
-/* ── Cover diagram: the anatomy of one exploration ───────────────── */
-.rdl-anat { display: flex; gap: 22px; align-items: stretch; }
-.rdl-anat-col { flex: 1 1 auto; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
-.rdl-anat-group { display: flex; flex-direction: column; gap: 7px; }
+/* ── Cover diagram: the anatomy of one exploration ─────────────────
+   The harness as the lab draws it now: the options bar over the frame,
+   the Option menu open with the bet beside the list, the notes under
+   About. Drawn in the Bauer AI design system's light values like the
+   bet switcher below, and light in both themes for the same reason. */
+.rdl-fig--cover {
+  background-color: #F8F7FC;
+  background-image:
+    radial-gradient(60% 55% at 8% -5%, rgba(71, 0, 163, 0.16), transparent 70%),
+    radial-gradient(50% 50% at 100% 105%, rgba(90, 240, 255, 0.14), transparent 70%);
+  border-color: rgba(71, 0, 163, 0.08);
+}
 
-.rdl-anat-label {
+.rdl-anat { display: flex; flex-direction: column; gap: 12px; }
+
+/* the bar */
+.rdl-anat-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
+}
+
+.rdl-anat-help {
+  flex: 0 0 auto;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  border: 1px solid rgba(71, 0, 163, 0.22);
+  background: #FFFFFF;
+  display: grid;
+  place-items: center;
   font-size: var(--text-3xs);
   font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: var(--color-text-subtle);
+  color: #4700A3;
+  margin-right: 4px;
 }
 
-.rdl-anat-pills { display: flex; gap: 6px; flex-wrap: wrap; }
-
-.rdl-anat-pill {
-  padding: 5px 13px;
-  border-radius: 999px;
-  border: 1px solid var(--color-border-card);
-  font-size: var(--text-xs);
-  color: var(--color-text-subtle);
-}
-
-.rdl-anat-pill--on {
-  background: var(--color-text-primary);
-  border-color: var(--color-text-primary);
-  color: var(--color-surface-card);
-}
-
-.rdl-anat-seg {
+.rdl-anat-chip {
   display: inline-flex;
-  padding: 3px;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
   border-radius: 999px;
-  background: var(--color-surface-card-white);
-  border: 1px solid var(--color-border-card);
-  align-self: flex-start;
-}
-
-.rdl-anat-segopt {
-  padding: 4px 11px;
-  border-radius: 999px;
+  border: 1px solid rgba(71, 0, 163, 0.10);
+  background: #FFFFFF;
   font-size: var(--text-xs);
-  color: var(--color-text-subtle);
+  font-weight: var(--weight-medium);
+  color: #1F1C2B;
+  white-space: nowrap;
 }
 
-.rdl-anat-segopt--on {
-  background: var(--color-surface-card);
-  color: var(--color-text-primary);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+.rdl-anat-chip--on {
+  background: #4700A3;
+  border-color: #4700A3;
+  color: #FFFFFF;
 }
 
-.rdl-anat-panel {
+.rdl-anat-chip-key { font-weight: var(--weight-bold); }
+.rdl-anat-chip-sep { opacity: 0.7; }
+.rdl-anat-chip-name { color: #645F75; font-weight: var(--weight-regular); margin-right: 2px; }
+
+.rdl-anat-chev {
+  width: 6px; height: 6px;
+  margin: -3px 0 0 2px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  opacity: 0.8;
+}
+
+.rdl-anat-view { margin-left: auto; display: inline-flex; gap: 6px; }
+
+.rdl-anat-ico {
+  display: block;
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  border: 1px solid rgba(71, 0, 163, 0.10);
+  background: #FFFFFF;
+  position: relative;
+}
+
+.rdl-anat-ico--phone::after {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 7px; height: 11px;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid #1F1C2B;
+  border-radius: 2px;
+}
+
+.rdl-anat-ico--sun::after {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 7px; height: 7px;
+  transform: translate(-50%, -50%);
+  border: 1.5px solid #1F1C2B;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px #FFFFFF, 0 0 0 3px rgba(31, 28, 43, 0.35);
+}
+
+/* the stage */
+.rdl-anat-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.rdl-anat-menu {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
+  margin-left: 32px;
+}
+
+.rdl-anat-menu-list {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding: 13px 15px;
-  border-radius: 10px;
-  background: var(--color-surface-card-white);
-  border: 1px solid var(--color-border-card);
+  gap: 4px;
+  padding: 12px 14px 12px 12px;
+  border-right: 1px solid #E4E1EF;
+}
+
+.rdl-anat-menu-bet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px;
+}
+
+/* the lab's list heading: small, medium, muted */
+.rdl-anat-label {
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-medium);
+  color: #645F75;
+  margin-bottom: 2px;
+}
+
+.rdl-anat-label--bet { color: #4700A3; font-weight: var(--weight-semibold); }
+
+.rdl-anat-item {
+  position: relative;
+  padding: 3px 8px 3px 20px;
+  border-radius: 6px;
+  font-size: var(--text-xs);
+  color: #1F1C2B;
+}
+
+.rdl-anat-item--on { font-weight: var(--weight-semibold); color: #4700A3; }
+
+.rdl-anat-item--on::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 50%;
+  width: 5px; height: 9px;
+  transform: translateY(-62%) rotate(45deg);
+  border-right: 1.5px solid #4700A3;
+  border-bottom: 1.5px solid #4700A3;
 }
 
 .rdl-anat-line {
+  display: block;
   height: 6px;
   border-radius: 3px;
-  background: var(--color-border-card);
+  background: #E4E1EF;
 }
 
 .rdl-anat-line--short { width: 58%; }
 
 .rdl-anat-phone {
-  flex: 0 0 132px;
-  border: 2px dashed var(--color-border-card);
+  justify-self: center;
+  width: 100%;
+  max-width: 132px;
+  min-height: 190px;
+  border: 2px dashed rgba(71, 0, 163, 0.22);
   border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 16px;
-  min-height: 260px;
+  background: rgba(255, 255, 255, 0.45);
 }
 
 .rdl-anat-phone-note {
   font-size: var(--text-2xs);
   text-align: center;
-  color: var(--color-text-subtle);
+  color: #645F75;
   line-height: 1.5;
+}
+
+/* the notes */
+.rdl-anat-notes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.rdl-anat-note {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+}
+
+@media (max-width: 720px) {
+  .rdl-anat-bar { padding: 6px 8px; gap: 6px; }
+  .rdl-anat-help { width: 22px; height: 22px; margin-right: 0; }
+  .rdl-anat-chip { padding: 5px 10px; font-size: var(--text-2xs); }
+  .rdl-anat-chip-name,
+  .rdl-anat-view { display: none; }
+  .rdl-anat-stage { grid-template-columns: 1fr; }
+  .rdl-anat-menu { margin-left: 0; }
+  .rdl-anat-phone { min-height: 120px; }
+  .rdl-anat-notes { grid-template-columns: 1fr; }
 }
 
 /* ── Gap → token loop ────────────────────────────────────────────── */
@@ -190,13 +349,14 @@
 }
 
 .rdl-loop-node--done {
-  border-color: var(--color-primary);
+  border-color: #4700A3;
+  box-shadow: 0 0 0 3px rgba(71, 0, 163, 0.10);
 }
 
 .rdl-loop-step {
   font-family: var(--font-family-mono, monospace);
   font-size: var(--text-2xs);
-  color: var(--color-primary);
+  color: #4700A3;
   letter-spacing: var(--tracking-wide);
 }
 
@@ -219,29 +379,34 @@
   flex: 0 0 auto;
 }
 
-/* ── Bet switcher: a replica of the lab's controls rail ──────────────
-   Dark in both themes, like the code file above it — this is a piece of
-   the Design Lab quoted inside the case study, not part of the page.   */
+/* ── Bet switcher: the lab's options panel, quoted ─────────────────
+   Drawn the way the lab draws it now: the Bauer AI design system's
+   light canvas and aurora, white glass panes with a hairline and the
+   glass elevation, brand purple for the selected option. Light in both
+   of the portfolio's themes, because it is a piece of the lab quoted
+   inside the case study, not part of the page.                        */
 .rdl-lab {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 18px;
   margin: 24px 0 4px;
   padding: 20px;
-  border-radius: 18px;
-  background:
-    radial-gradient(120% 90% at 78% 8%, rgba(153, 69, 255, 0.30), transparent 62%),
-    #1A1424;
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 24px;
+  background-color: #F8F7FC;
+  background-image:
+    radial-gradient(60% 55% at 8% -5%, rgba(71, 0, 163, 0.16), transparent 70%),
+    radial-gradient(50% 50% at 100% 105%, rgba(90, 240, 255, 0.14), transparent 70%);
+  background-repeat: no-repeat;
+  border: 1px solid rgba(71, 0, 163, 0.08);
 }
 
 .rdl-lab-rail,
 .rdl-lab-note {
   padding: 18px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.055);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.10);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
 }
 
 .rdl-lab-head {
@@ -254,29 +419,29 @@
 
 .rdl-lab-title {
   font-size: var(--text-md);
-  font-weight: var(--weight-semibold);
-  color: #FFFFFF;
+  font-weight: var(--weight-bold);
+  color: #4700A3;
 }
 
 .rdl-lab-help {
   flex: 0 0 auto;
   width: 22px; height: 22px;
   border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(71, 0, 163, 0.22);
+  background: #FFFFFF;
   display: grid;
   place-items: center;
   font-size: var(--text-2xs);
-  color: rgba(255, 255, 255, 0.55);
+  color: #4700A3;
 }
 
+/* The lab's list heading: 12 medium, muted, never tracked caps. */
 .rdl-lab-group {
   display: block;
   margin-bottom: 10px;
-  font-size: var(--text-3xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  color: #645F75;
 }
 
 .rdl-lab-opts { display: flex; flex-direction: column; gap: 8px; }
@@ -285,36 +450,36 @@
   width: 100%;
   padding: 11px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  background: #FFFFFF;
   cursor: pointer;
   font: inherit;
   font-size: var(--text-sm);
   text-align: left;
-  color: rgba(255, 255, 255, 0.78);
+  color: #1F1C2B;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.rdl-lab-opt:not(.rdl-lab-opt--on):hover { background: rgba(255, 255, 255, 0.09); color: #FFFFFF; }
+.rdl-lab-opt:not(.rdl-lab-opt--on):hover { background: #E1DCFF; border-color: transparent; }
 
 .rdl-lab-opt--on {
-  background: #FFFFFF;
-  border-color: #FFFFFF;
-  color: #1A1424;
+  background: #4700A3;
+  border-color: #4700A3;
+  color: #FFFFFF;
   font-weight: var(--weight-semibold);
 }
 
 /* The two branch states are outlined rather than indented — they sit in
    the same list, but they are visibly not part of the main line. */
 .rdl-lab-opt--branch {
-  border-color: rgba(255, 255, 255, 0.85);
+  border-color: #4700A3;
 }
 
 .rdl-lab-foot {
   margin: 16px 0 0;
   font-size: var(--text-2xs);
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.45);
+  color: #645F75;
 }
 
 .rdl-lab-note { display: flex; flex-direction: column; gap: 12px; }
@@ -323,31 +488,30 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: var(--text-3xs);
-  font-weight: var(--weight-semibold);
-  letter-spacing: var(--tracking-widest);
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-medium);
+  color: #645F75;
 }
 
 .rdl-lab-flag {
   padding: 3px 9px;
   border-radius: 999px;
-  letter-spacing: var(--tracking-wide);
-  background: rgba(255, 255, 255, 0.10);
-  color: rgba(255, 255, 255, 0.72);
+  font-size: var(--text-3xs);
+  font-weight: var(--weight-medium);
+  background: #F1EFF8;
+  color: #4A455D;
 }
 
 .rdl-lab-flag--rec {
-  background: rgba(115, 233, 179, 0.18);
-  color: #9BE7C4;
+  background: #BEFAEB;
+  color: #007776;
 }
 
 .rdl-lab-note-text {
   margin: 0;
   font-size: var(--text-sm);
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.86);
+  color: #1F1C2B;
 }
 
 @media (max-width: 720px) {
@@ -355,16 +519,17 @@
 }
 
 /* ── Component contract, as a file in an editor ──────────────────────
-   Deliberately dark in both themes: a code window reads as code. The
-   markdown markers are left visible — this is a document sitting beside
-   the component, and it should look like one.                          */
+   Light, like the lab: a white glass pane with the Bauer hairline, a
+   neutral title bar, mono text in ink with the markdown markers left
+   visible — this is a document sitting beside the component, and it
+   should look like one.                                                */
 .rdl-file {
   margin: 24px 0 4px;
-  border-radius: 12px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #1E1B26;
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  background: #FFFFFF;
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
 }
 
 .rdl-file-bar {
@@ -372,8 +537,8 @@
   align-items: center;
   gap: 14px;
   padding: 10px 14px;
-  background: #171420;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: #F8F7FC;
+  border-bottom: 1px solid #E4E1EF;
 }
 
 .rdl-file-dots { display: flex; gap: 7px; }
@@ -381,7 +546,7 @@
 .rdl-file-dots i {
   width: 11px; height: 11px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.16);
+  background: #E4E1EF;
 }
 
 .rdl-file-tab {
@@ -390,17 +555,18 @@
   gap: 8px;
   padding: 4px 12px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
+  background: #FFFFFF;
+  border: 1px solid #E4E1EF;
   font-family: var(--font-family-mono, monospace);
   font-size: var(--text-2xs);
-  color: rgba(255, 255, 255, 0.72);
+  color: #1F1C2B;
 }
 
 .rdl-file-ext {
   padding: 1px 5px;
   border-radius: 3px;
-  background: rgba(153, 69, 255, 0.28);
-  color: #D6BBFF;
+  background: #E1DCFF;
+  color: #4700A3;
   font-size: 9px;
   letter-spacing: var(--tracking-wide);
 }
@@ -417,7 +583,7 @@
   font-size: var(--text-2xs);
   line-height: 1.9;
   white-space: pre;
-  color: rgba(255, 255, 255, 0.78);
+  color: #4A455D;
 }
 
 .rdl-file-num {
@@ -425,17 +591,17 @@
   width: 44px;
   padding-right: 16px;
   text-align: right;
-  color: rgba(255, 255, 255, 0.24);
+  color: #CFCBDD;
   user-select: none;
 }
 
-.rdl-file-text--h  { color: #A8E1FF; }               /* headings */
-.rdl-file-text--li { color: rgba(255, 255, 255, 0.86); }
-.rdl-file-text--c  { color: rgba(255, 255, 255, 0.66); } /* wrapped continuation */
+.rdl-file-text--h  { color: #4700A3; font-weight: var(--weight-semibold); }  /* headings */
+.rdl-file-text--li { color: #1F1C2B; }
+.rdl-file-text--c  { color: #645F75; }                                        /* wrapped continuation */
 
-.rdl-md-strong { color: #FFD08A; }
-.rdl-md-code   { color: #9BE7C4; }
-.rdl-md-em     { color: #C9B6FF; font-style: italic; }
+.rdl-md-strong { color: #1F1C2B; font-weight: var(--weight-bold); }
+.rdl-md-code   { color: #007776; }
+.rdl-md-em     { color: #5B58A9; font-style: italic; }
 
 @media (max-width: 720px) {
   .rdl-file-line { font-size: 10px; line-height: 1.85; }
@@ -493,7 +659,7 @@
 .rdl-flow-num {
   font-family: var(--font-family-mono, monospace);
   font-size: var(--text-2xs);
-  color: var(--color-primary);
+  color: #4700A3;
 }
 
 .rdl-flow-label {
@@ -735,11 +901,25 @@
 
 /* ── RESTORED: narrow screens, for the drawn figures ────────────────── */
 @media (max-width: 720px) {
-  .rdl-anat { flex-direction: column; }
-  .rdl-anat-phone { flex: 0 0 auto; min-height: 120px; }
   .rdl-loop { flex-direction: column; }
   .rdl-loop-arrow { transform: rotate(90deg); }
   .rdl-fig { padding: 16px; }
 }
 
+/* ── Old/New toggle with a fixed frame ───────────────────────────────
+   The shared toggle sizes its frame from whichever image is showing, so
+   the first switch to a side that hasn't loaded yet collapses the frame
+   and the page jumps. Here the frame takes its height from the aspect
+   ratio and both sides fill it. */
+.ba-wrap--fixed .ba-img-clip {
+  aspect-ratio: var(--ba-ratio, 1600 / 1039);
+  height: auto;
+}
 
+.ba-wrap--fixed .ba-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

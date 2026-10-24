@@ -69,29 +69,32 @@
   position: absolute;
   inset: 0;
   overflow: hidden;
+  /* No blur, no clip-path and no extra layer in here, on purpose. The glass
+     on this face used backdrop-filter, which Safari composites on its own
+     layer and paints before the card's rounded clip on the frame the card
+     lands from the overlay (square corners for an instant); clipping the
+     face with a clip-path fixed that and drew its own antialiased edge over
+     the card's border instead (a dark arc at each corner). Over a light,
+     near-flat ground, 72% white reads as glass without blurring anything,
+     so the face is plain painted boxes and the card's own radius clips it. */
+  border-radius: inherit;
   container-type: size;
   --rdlv-k: 0.6;               /* wordmark fit, measured in the component */
 }
 
-/* The Design Lab's own background, assembled the way the lab assembles
-   it: the canvas colour, and the gradient over it at a fifth strength —
-   `--lab-field-opacity: 0.2` in the lab's own `AppShell.css`. The image
-   at full strength is a different thing entirely, and every piece of
-   glass on this card is mixed against the dark ground, not the bloom. */
+/* The Design Lab's own background, as the Bauer AI design system draws
+   it: the canvas colour with two soft glows — their `aurora` — purple
+   at the top left, aqua at the bottom right. Every piece of glass on
+   this card is white over that light ground, with the hairline border
+   and elevation the lab's panes carry. */
 .rdlv-wash {
   position: absolute;
   inset: 0;
-  background: #160E21;
-}
-
-.rdlv-wash::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    url('/src/assets/images/rayo-design-lab/design-lab-bg-dark.webp')
-    center center / cover no-repeat;
-  opacity: 0.2;
+  background-color: #F8F7FC;
+  background-image:
+    radial-gradient(60% 55% at 8% -5%, rgba(71, 0, 163, 0.16), transparent 70%),
+    radial-gradient(50% 50% at 100% 105%, rgba(90, 240, 255, 0.14), transparent 70%);
+  background-repeat: no-repeat;
 }
 
 
@@ -175,12 +178,9 @@
   align-items: center;
   padding: 2.4cqmin 3cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.18),
-    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
   opacity: 0;
   transform: translateY(8px);
   transition: opacity 0.4s ease, transform 0.62s cubic-bezier(0.32, 1.04, 0.35, 1);
@@ -232,7 +232,7 @@
   font-family: var(--font-family-primary);
   font-size: 2.5cqmin;
   line-height: 1;
-  color: rgba(255, 255, 255, 0.92);
+  color: #1F1C2B;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -242,7 +242,7 @@
   width: 1.5px;
   height: 2.8cqmin;
   margin-left: 2px;
-  background: rgba(255, 255, 255, 0.85);
+  background: #1F1C2B;
   animation: rdlv-blink 1s steps(2, start) infinite;
   transition: opacity 0.2s ease;
 }
@@ -259,8 +259,8 @@
   width: 3cqmin;
   height: 3cqmin;
   border-radius: 50%;
-  border: 0.5cqmin solid rgba(255, 255, 255, 0.24);
-  border-top-color: #FFFFFF;
+  border: 0.5cqmin solid rgba(71, 0, 163, 0.18);
+  border-top-color: #4700A3;
   margin-left: auto;
   opacity: 0;
   transform: scale(0.5);
@@ -297,11 +297,11 @@
   width: 5cqmin;
   height: 1.3cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(71, 0, 163, 0.16);
   transition: background 0.3s ease, width 0.3s ease;
 }
 
-.rdlv-pill--on { background: #FFFFFF; width: 7cqmin; }
+.rdlv-pill--on { background: #4700A3; width: 7cqmin; }
 
 
 /* ── The prototype, and the file it becomes ──────────────────────────
@@ -321,14 +321,13 @@
   padding: 2cqmin 1.6cqmin 1.6cqmin;
   border-radius: 4cqmin;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.20),
-    inset -1px -1px 0 rgba(0, 0, 0, 0.20),
-    0 14px 30px rgba(0, 0, 0, 0.26);
-  clip-path: polygon(0 0, 100% 0, 100% 0, 100% 100%, 0 100%);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05), 0 14px 30px rgba(42, 10, 94, 0.12);
+  /* inset(round) rather than a polygon: a polygon clips square corners
+     over the radius, and inset-to-inset interpolates, so the phone's
+     corners tighten into the file's instead of jumping. */
+  clip-path: inset(0 round 4cqmin);
   opacity: 0;
   transform: translate(-50%, calc(-50% + 14px)) scale(0.94);
   transition:
@@ -362,10 +361,8 @@
   padding: 0;
   border-radius: 1cqmin;
   background: #FFFFFF;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.30);
-  clip-path: polygon(0 0, 70% 0, 100% 24%, 100% 100%, 0 100%);
+  box-shadow: 0 8px 20px rgba(42, 10, 94, 0.18);
+  clip-path: inset(0 round 1.2cqmin);
 }
 
 /* Up into the cloud. It fades on the way rather than at the end, so it
@@ -383,6 +380,7 @@
 }
 
 /* the fold */
+.rdlv-phone::before,
 .rdlv-phone::after {
   content: '';
   position: absolute;
@@ -390,12 +388,26 @@
   right: 0;
   width: 30%;
   height: 24%;
-  background: rgba(22, 18, 31, 0.16);
-  clip-path: polygon(0 0, 100% 100%, 0 100%);
   opacity: 0;
   transition: opacity 0.3s ease 0.3s;
 }
 
+/* the corner cut away: the ground colour, since the clip is now round
+   and can't take the notch out itself */
+.rdlv-phone::before {
+  background: #F8F7FC;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+/* the flap folded back over the page */
+.rdlv-phone::after {
+  background: rgba(22, 18, 31, 0.16);
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+}
+
+.rdlv[data-phase='fold'] .rdlv-phone::before,
+.rdlv[data-phase='upload'] .rdlv-phone::before,
+.rdlv[data-phase='rest'] .rdlv-phone::before,
 .rdlv[data-phase='fold'] .rdlv-phone::after,
 .rdlv[data-phase='upload'] .rdlv-phone::after,
 .rdlv[data-phase='rest'] .rdlv-phone::after { opacity: 1; }
@@ -421,7 +433,7 @@
   height: 0.7cqmin;
   margin: 0 auto 1.8cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.40);
+  background: rgba(31, 28, 43, 0.16);
 }
 
 .rdlv-screen {
@@ -453,7 +465,7 @@
   height: 1.7cqmin;
   margin-bottom: 0.6cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.62);
+  background: rgba(31, 28, 43, 0.34);
 }
 
 /* Glass, like everything else on the screen. A brand gradient in here
@@ -463,15 +475,15 @@
   flex: 0 0 auto;
   height: 9cqmin;
   border-radius: 2cqmin;
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.24);
+  background: rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(71, 0, 163, 0.14);
 }
 
 .rdlv-banner {
   flex: 0 0 auto;
   height: 5.4cqmin;
   border-radius: 1.6cqmin;
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(31, 28, 43, 0.10);
 }
 
 .rdlv-tiles {
@@ -484,7 +496,7 @@
 .rdlv-tiles i {
   height: 5cqmin;
   border-radius: 1.4cqmin;
-  background: rgba(255, 255, 255, 0.17);
+  background: rgba(31, 28, 43, 0.08);
 }
 
 .rdlv-row {
@@ -499,7 +511,7 @@
   width: 5.2cqmin;
   height: 5.2cqmin;
   border-radius: 1.5cqmin;
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(31, 28, 43, 0.11);
 }
 
 .rdlv-lines {
@@ -514,14 +526,14 @@
   width: 84%;
   height: 1.2cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.46);
+  background: rgba(31, 28, 43, 0.22);
 }
 
 .rdlv-l2 {
   width: 52%;
   height: 1.2cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(31, 28, 43, 0.11);
 }
 
 .rdlv-toggle {
@@ -536,7 +548,7 @@
   width: 48%;
   height: 1.2cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.38);
+  background: rgba(31, 28, 43, 0.16);
 }
 
 .rdlv-tg-s {
@@ -545,7 +557,7 @@
   width: 6.2cqmin;
   height: 3.4cqmin;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.30);
+  background: rgba(31, 28, 43, 0.13);
 }
 
 .rdlv-tg-s::after {
@@ -557,6 +569,7 @@
   height: 2.4cqmin;
   border-radius: 50%;
   background: #FFFFFF;
+  box-shadow: 0 1px 2px rgba(42, 10, 94, 0.18);
 }
 
 .rdlv-tabs {
@@ -571,7 +584,7 @@
   width: 2cqmin;
   height: 2cqmin;
   border-radius: 0.6cqmin;
-  background: rgba(255, 255, 255, 0.30);
+  background: rgba(31, 28, 43, 0.13);
 }
 
 
@@ -590,13 +603,10 @@
   height: 9cqmin;
   margin-left: -4.5cqmin;
   border-radius: 50%;
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, 0.24),
-    inset -1px -1px 0 rgba(0, 0, 0, 0.18);
+  color: #4700A3;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(71, 0, 163, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.60), 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
   opacity: 0;
   transform: translateY(6px) scale(0.9);
   transition: opacity 0.35s ease, transform 0.4s cubic-bezier(0.34, 1.35, 0.5, 1),
@@ -609,7 +619,7 @@
 
 /* the press */
 .rdlv[data-phase='share'] .rdlv-share {
-  background: rgba(255, 255, 255, 0.28);
+  background: rgba(71, 0, 163, 0.12);
   transform: scale(0.9);
 }
 
@@ -684,7 +694,11 @@
   top: calc(7cqmin - 26cqh);
   width: 100cqw;
   height: 100cqh;
-  background: #160E21;
+  background-color: #F8F7FC;
+  background-image:
+    radial-gradient(60% 55% at 8% -5%, rgba(71, 0, 163, 0.16), transparent 70%),
+    radial-gradient(50% 50% at 100% 105%, rgba(90, 240, 255, 0.14), transparent 70%);
+  background-repeat: no-repeat;
   -webkit-mask-image: var(--rdlv-cloud);
   mask-image: var(--rdlv-cloud);
   -webkit-mask-repeat: no-repeat;
@@ -696,24 +710,14 @@
   --rdlv-cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23fff' d='M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z'/%3E%3C/svg%3E");
 }
 
-.rdlv-cloud-fill::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    url('/src/assets/images/rayo-design-lab/design-lab-bg-dark.webp')
-    center center / cover no-repeat;
-  opacity: 0.2;
-}
-
 .rdlv-cloud-svg { position: relative; display: block; width: 100%; height: 100%; }
 
 .rdlv-cloud-p {
   /* Not `transparent`. That is rgba(0,0,0,0), so interpolating it to
-     white runs the fill through greys and the cloud goes muddy on the
+     purple runs the fill through greys and the cloud goes muddy on the
      way in. Same colour, no alpha — only the alpha then moves. */
-  fill: rgba(255, 255, 255, 0);
-  stroke: rgba(255, 255, 255, 0.72);
+  fill: rgba(71, 0, 163, 0);
+  stroke: rgba(71, 0, 163, 0.78);
   stroke-width: 1.5;
   stroke-linejoin: round;
   transition: fill 0.5s ease, stroke 0.5s ease;
@@ -732,8 +736,8 @@
 .rdlv[data-phase='upload'] .rdlv-cloud-p,
 .rdlv[data-phase='rest'] .rdlv-cloud-p,
 .rdlv[data-phase='done'] .rdlv-cloud-p {
-  fill: #FFFFFF;
-  stroke: #FFFFFF;
+  fill: #4700A3;
+  stroke: #4700A3;
   transition: fill 0.12s ease 0.36s, stroke 0.12s ease 0.36s;
 }
 

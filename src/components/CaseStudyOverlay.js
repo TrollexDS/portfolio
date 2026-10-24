@@ -143,8 +143,9 @@ export default defineComponent({
         { threshold: 0, rootMargin: '200px', root: container.closest('.cs-expanded-inner') }
       )
 
-      // Observe all static images, videos, and grouped image containers
-      container.querySelectorAll('.cs-cover-img, .cs-demo-video, .cs-account-link-steps, .ba-wrap').forEach(el => {
+      // Observe all static images, videos, grouped image containers, and any
+      // drawn figure that opts in with `cs-reveal`
+      container.querySelectorAll('.cs-cover-img, .cs-demo-video, .cs-account-link-steps, .ba-wrap, .cs-reveal').forEach(el => {
         imgObserver.observe(el)
       })
 
