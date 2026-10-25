@@ -524,19 +524,18 @@
 @media (min-width: 769px) {
   .cs-header { display: none; }
 
+  /* in its place in the page, and once scrolled past, stuck at the
+     header row's height; stuck, it hides and returns with the row, on
+     the same curve */
   .cs-expanded .tldr-bar {
-    position: fixed;
     top: 25px;
-    left: 50%;
-    transform: translateX(-50%);
-    margin: 0;
     z-index: 355;
     transition: background 0.5s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
   }
-  /* hides with the header row, on the same curve */
-  body.nav-hidden .cs-expanded .tldr-bar {
-    transform: translate(-50%, -140%);
+  body.nav-hidden .cs-expanded .tldr-bar--stuck {
+    transform: translateY(-140%);
     opacity: 0;
     pointer-events: none;
   }
 }
+.tldr-sentinel { height: 1px; margin-bottom: -1px; }
