@@ -515,3 +515,28 @@
   box-sizing: content-box;
 }
 
+
+
+/* ── The header stays over an open case study (desktop) ──
+   The overlay's own close is replaced by the header's minimise, and the
+   Detailed / TL;DR pill sits in the header row, centred where the section
+   pills were, and hides with the row. Only the minimise stays. */
+@media (min-width: 769px) {
+  .cs-header { display: none; }
+
+  .cs-expanded .tldr-bar {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0;
+    z-index: 355;
+    transition: background 0.5s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+  }
+  /* hides with the header row, on the same curve */
+  body.nav-hidden .cs-expanded .tldr-bar {
+    transform: translate(-50%, -140%);
+    opacity: 0;
+    pointer-events: none;
+  }
+}

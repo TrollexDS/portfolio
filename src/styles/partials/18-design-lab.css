@@ -923,3 +923,112 @@
   height: 100%;
   object-fit: cover;
 }
+
+
+/* ═══ Dark theme ═══════════════════════════════════════════════════════
+   The Bauer AI design system's dark values, from the lab's own build:
+   canvas #14121C under a lavender and an aqua glow, glass at black 30%
+   with a lavender hairline, text #F8F7FC, headings lavender #E1DCFF,
+   selected = lavender on purple. The page's data-theme drives it, so the
+   lab in the figures and the lab in the drawn widgets switch together. */
+
+/* ── Light/dark pairs in one slot ─────────────────────────────────── */
+.rdl-themed { position: relative; overflow: hidden; }
+.rdl-themed > img,
+.rdl-themed > video { display: block; width: 100%; height: auto; border-radius: inherit; }
+.rdl-themed > .rdl-themed-dark { display: none; }
+[data-theme="dark"] .rdl-themed > .rdl-themed-light { display: none; }
+[data-theme="dark"] .rdl-themed > .rdl-themed-dark  { display: block; }
+.ba-wrap--fixed .rdl-themed { position: absolute; inset: 0; }
+.ba-wrap--fixed .rdl-themed > img,
+.ba-wrap--fixed .rdl-themed > video { height: 100%; object-fit: cover; }
+
+/* ── Card ground and face ─────────────────────────────────────────── */
+[data-theme="dark"] .rayo-design-lab-card,
+[data-theme="dark"] .rayo-design-lab-card.bento-card.dark,
+[data-theme="dark"] .rdl-hero-wrap,
+[data-theme="dark"] .rdl-hero-overlay,
+[data-theme="dark"] .rdl-fly-overlay {
+  background: #14121C;
+  --color-card-inset-top:    rgba(255, 255, 255, 0.10);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.30);
+  --card-grain-opacity:      0.045;
+  --card-grain-blend:        screen;
+  border-color: rgba(160, 150, 255, 0.16);
+}
+
+/* ── The aurora panels (anatomy, bet switcher, state walk) ─────────── */
+[data-theme="dark"] .rdl-fig--cover,
+[data-theme="dark"] .rdl-lab {
+  background-color: #14121C;
+  background-image:
+    radial-gradient(60% 55% at 8% -5%, rgba(160, 150, 255, 0.25), transparent 70%),
+    radial-gradient(50% 50% at 100% 105%, rgba(90, 240, 255, 0.14), transparent 70%);
+  border-color: rgba(160, 150, 255, 0.16);
+}
+
+/* ── Anatomy ──────────────────────────────────────────────────────── */
+[data-theme="dark"] .rdl-anat-bar,
+[data-theme="dark"] .rdl-anat-menu,
+[data-theme="dark"] .rdl-anat-note {
+  background: rgba(0, 0, 0, 0.30);
+  border-color: rgba(160, 150, 255, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.10), 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 1px 3px 0 rgba(0, 0, 0, 0.30);
+}
+[data-theme="dark"] .rdl-anat-help { background: transparent; border-color: rgba(160, 150, 255, 0.30); color: #E1DCFF; }
+[data-theme="dark"] .rdl-anat-chip { background: rgba(255, 255, 255, 0.06); border-color: rgba(160, 150, 255, 0.16); color: #F8F7FC; }
+[data-theme="dark"] .rdl-anat-chip--on { background: #E1DCFF; border-color: #E1DCFF; color: #4700A3; }
+[data-theme="dark"] .rdl-anat-chip-name { color: #A9A4BD; }
+[data-theme="dark"] .rdl-anat-ico { background: rgba(255, 255, 255, 0.06); border-color: rgba(160, 150, 255, 0.16); }
+[data-theme="dark"] .rdl-anat-ico--phone::after { border-color: #F8F7FC; }
+[data-theme="dark"] .rdl-anat-ico--sun::after { border-color: #F8F7FC; box-shadow: 0 0 0 2px #1F1C2B, 0 0 0 3px rgba(248, 247, 252, 0.4); }
+[data-theme="dark"] .rdl-anat-menu-list { border-right-color: #4A455D; }
+[data-theme="dark"] .rdl-anat-label { color: #A9A4BD; }
+[data-theme="dark"] .rdl-anat-label--bet { color: #E1DCFF; }
+[data-theme="dark"] .rdl-anat-item { color: #F8F7FC; }
+[data-theme="dark"] .rdl-anat-item--on { color: #E1DCFF; }
+[data-theme="dark"] .rdl-anat-item--on::before { border-color: #E1DCFF; }
+[data-theme="dark"] .rdl-anat-line { background: #4A455D; }
+[data-theme="dark"] .rdl-anat-phone { border-color: rgba(160, 150, 255, 0.35); background: rgba(255, 255, 255, 0.04); }
+[data-theme="dark"] .rdl-anat-phone-note { color: #A9A4BD; }
+
+/* ── Bet switcher / state walk ────────────────────────────────────── */
+[data-theme="dark"] .rdl-lab-rail,
+[data-theme="dark"] .rdl-lab-note {
+  background: rgba(0, 0, 0, 0.30);
+  border-color: rgba(160, 150, 255, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.10), 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 1px 3px 0 rgba(0, 0, 0, 0.30);
+}
+[data-theme="dark"] .rdl-lab-title { color: #E1DCFF; }
+[data-theme="dark"] .rdl-lab-help { background: transparent; border-color: rgba(160, 150, 255, 0.30); color: #E1DCFF; }
+[data-theme="dark"] .rdl-lab-group,
+[data-theme="dark"] .rdl-lab-foot,
+[data-theme="dark"] .rdl-lab-note-label { color: #A9A4BD; }
+[data-theme="dark"] .rdl-lab-opt { background: rgba(255, 255, 255, 0.06); border-color: rgba(160, 150, 255, 0.16); color: #F8F7FC; }
+[data-theme="dark"] .rdl-lab-opt:not(.rdl-lab-opt--on):hover { background: rgba(255, 255, 255, 0.12); border-color: transparent; }
+[data-theme="dark"] .rdl-lab-opt--on { background: #E1DCFF; border-color: #E1DCFF; color: #4700A3; }
+[data-theme="dark"] .rdl-lab-opt--branch { border-color: #A096FF; }
+[data-theme="dark"] .rdl-lab-flag { background: rgba(255, 255, 255, 0.10); color: #CFCBDD; }
+[data-theme="dark"] .rdl-lab-flag--rec { background: rgba(31, 209, 189, 0.16); color: #1FD1BD; }
+[data-theme="dark"] .rdl-lab-note-text { color: #F8F7FC; }
+
+/* ── Contract file ────────────────────────────────────────────────── */
+[data-theme="dark"] .rdl-file { background: #1F1C2B; border-color: rgba(160, 150, 255, 0.16); box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 1px 3px 0 rgba(0, 0, 0, 0.30); }
+[data-theme="dark"] .rdl-file-bar { background: #14121C; border-bottom-color: #4A455D; }
+[data-theme="dark"] .rdl-file-dots i { background: #4A455D; }
+[data-theme="dark"] .rdl-file-tab { background: #1F1C2B; border-color: #4A455D; color: #F8F7FC; }
+[data-theme="dark"] .rdl-file-ext { background: #4700A3; color: #E1DCFF; }
+[data-theme="dark"] .rdl-file-line { color: #CFCBDD; }
+[data-theme="dark"] .rdl-file-num { color: #4A455D; }
+[data-theme="dark"] .rdl-file-text--h { color: #E1DCFF; }
+[data-theme="dark"] .rdl-file-text--li { color: #F8F7FC; }
+[data-theme="dark"] .rdl-file-text--c { color: #A9A4BD; }
+[data-theme="dark"] .rdl-md-strong { color: #F8F7FC; }
+[data-theme="dark"] .rdl-md-code { color: #1FD1BD; }
+[data-theme="dark"] .rdl-md-em { color: #A096FF; }
+
+/* ── The drawn diagrams' accents ──────────────────────────────────── */
+[data-theme="dark"] .rdl-anat-pill--on { background: #E1DCFF; border-color: #E1DCFF; color: #4700A3; }
+[data-theme="dark"] .rdl-loop-node--done { border-color: #A096FF; box-shadow: 0 0 0 3px rgba(160, 150, 255, 0.16); }
+[data-theme="dark"] .rdl-loop-step,
+[data-theme="dark"] .rdl-flow-num { color: #E1DCFF; }

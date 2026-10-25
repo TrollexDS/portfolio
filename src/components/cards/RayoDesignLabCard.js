@@ -7,27 +7,29 @@ import InteractiveTag from '../InteractiveTag.js'
    Assets - real screenshots where the lab itself is the subject,
    everything else is drawn.
 
-   Nothing from inside a prototype's phone frame appears here except
-   IMG_HARNESS, which shows a direction that was NOT taken forward, and
-   IMG_HANDOVER, cleared by Alex (Sep 2026). VID_PAGES is a Page: a
-   rebuild of a shipped screen, not an exploration.
+   Every lab capture comes as a light/dark pair (`…-dark`), captured with
+   the lab's own theme switched, and the page's theme picks which shows.
+   The three "before" shots are the old chrome, which only had a dark
+   mode, so they are the same in both. Prototype screens shown: Station
+   handover and Offline listening, both cleared by Alex (Oct 2026).
    ───────────────────────────────────────────────────────────── */
 const HERO_SRC     = '/src/assets/images/rayo-design-lab/rdl-hero.svg'
-const IMG_POC      = '/src/assets/images/rayo-design-lab/rayo-design-lab-mvp.png'
-const IMG_NOW      = '/src/assets/images/rayo-design-lab/rayo-design-lab-current-v2.png'
-const IMG_HARNESS  = '/src/assets/images/rayo-design-lab/rayo-design-lab-prototype-harness.png'
 const IMG_SKILLS   = '/src/assets/images/rayo-design-lab/rayo-design-lab-skills.png'   // the Guide's Skills chapter: the table of commands
+const IMG_SKILLS_D = '/src/assets/images/rayo-design-lab/rayo-design-lab-skills-dark.png'
 const IMG_KEPT     = '/src/assets/images/rayo-design-lab/rayo-design-lab-offline-b.png'   // Offline listening, direction B: the show page with one toggle, the mini player paused
-const IMG_SEARCH   = '/src/assets/images/rayo-design-lab/rayo-design-lab-search-v2.png'
-const VID_PAGES    = '/src/assets/videos/rayo-design-lab-pages.mp4'   // For you: iOS 26 → iOS 18 → Android → dark → Danish → iOS 26 → English → light, looping
-const IMG_HANDOVER = '/src/assets/images/rayo-design-lab/rayo-design-lab-handover.png'
-const IMG_GUIDE    = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide.png'
+const IMG_KEPT_D   = '/src/assets/images/rayo-design-lab/rayo-design-lab-offline-b-dark.png'
+const VID_PAGES    = '/src/assets/videos/rayo-design-lab-pages.mp4'
+const VID_PAGES_D  = '/src/assets/videos/rayo-design-lab-pages-dark.mp4'   // For you: iOS 26 → iOS 18 → Android → dark → Danish → iOS 26 → English → light, looping
 const IMG_HARNESS_V2     = '/src/assets/images/rayo-design-lab/rayo-design-lab-harness-v2.png'
+const IMG_HARNESS_V2_D   = '/src/assets/images/rayo-design-lab/rayo-design-lab-harness-v2-dark.png'
 const IMG_SKETCHES       = '/src/assets/images/rayo-design-lab/rayo-design-lab-sketches.png'
+const IMG_SKETCHES_D     = '/src/assets/images/rayo-design-lab/rayo-design-lab-sketches-dark.png'
 const IMG_GUIDE_BEFORE   = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide-before.png'
 const IMG_GUIDE_AFTER    = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide-after.png'
+const IMG_GUIDE_AFTER_D  = '/src/assets/images/rayo-design-lab/rayo-design-lab-guide-after-dark.png'
 const IMG_OPTIONS_BEFORE = '/src/assets/images/rayo-design-lab/rayo-design-lab-options-before.png'
 const VID_OPTIONS_AFTER  = '/src/assets/videos/rayo-design-lab-options-after.mp4'   // iPhone → iPad portrait → landscape → iPhone, looping
+const VID_OPTIONS_AFTER_D = '/src/assets/videos/rayo-design-lab-options-after-dark.mp4'
 
 /**
  * softImg - an <img> that degrades to a labelled placeholder instead of a
@@ -49,13 +51,26 @@ const softImg = (src, alt, cls) =>
   })
 
 
+const isClip = src => /\.(mp4|webm|mov)$/i.test(src)
+
+/** One piece of media: a looping clip for a video source, an image otherwise. */
+const mediaEl = (src, alt, cls) =>
+  isClip(src)
+    ? h('video', { class: cls, src, autoplay: true, muted: true, loop: true, playsinline: true, 'aria-label': alt, key: src })
+    : h('img',   { class: cls, src, alt, loading: 'lazy', key: src })
+
 /**
- * loopClip - a short looping screen recording in a cover image's slot. Muted,
- * inline and looping, so it reads as an animated figure rather than a player;
- * the same class, so it gets the scroll reveal and the frame the images get.
+ * themed - the same figure captured with the lab in light and in dark, in one
+ * cover-image slot. Both are rendered; the page's `data-theme` decides which
+ * one shows (CSS, `.rdl-themed`), so switching the portfolio's theme switches
+ * the lab in every screenshot and clip with it. The wrapper carries the
+ * cover-image class, so it gets the frame and the scroll reveal.
  */
-const loopClip = (src, label, cls = 'cs-cover-img') =>
-  h('video', { class: cls, src, autoplay: true, muted: true, loop: true, playsinline: true, 'aria-label': label })
+const themed = (light, dark, alt, cls = 'cs-cover-img') =>
+  h('div', { class: cls + ' rdl-themed' }, [
+    mediaEl(light, alt, 'rdl-themed-light'),
+    mediaEl(dark,  alt, 'rdl-themed-dark'),
+  ])
 
 
 /* ─────────────────────────────────────────────────────────────
@@ -406,23 +421,29 @@ const BeforeAfterToggle = defineComponent({
     afterAlt:    { type: String, default: '' },
     beforeLabel: { type: String, default: 'Old' },
     afterLabel:  { type: String, default: 'New' },
+    /** The same side captured with the lab in dark; shown when the page is. */
+    beforeDark:  { type: String, default: '' },
+    afterDark:   { type: String, default: '' },
     /** width / height of both sides, so the frame has its height before the
      *  incoming image or clip has loaded - otherwise the first toggle
      *  collapses the frame for a frame and the page jumps. */
     ratio:       { type: String, default: '1600 / 1039' },
   },
   setup(props) {
-    const isVideo = src => /\.(mp4|webm|mov)$/i.test(src)
+    // Preload the images so the browser has decoded them before the first toggle
+    ;[props.after, props.before, props.afterDark, props.beforeDark]
+      .filter(src => src && !isClip(src)).forEach(src => { const i = new Image(); i.src = src })
 
-    // Preload both images so the browser has decoded them before the first toggle
-    ;[props.after, props.before].filter(src => !isVideo(src)).forEach(src => { const i = new Image(); i.src = src })
+    const darkOf = src => (src === props.after ? props.afterDark : src === props.before ? props.beforeDark : '')
 
-    // One side can be a short looping clip - the same slot, playing. Muted,
-    // inline and looping, so it behaves like an animated image, not a player.
-    const media = (src, alt, cls) =>
-      isVideo(src)
-        ? h('video', { class: cls, src, autoplay: true, muted: true, loop: true, playsinline: true, 'aria-label': alt, key: src })
-        : h('img', { class: cls, src, alt, key: src })
+    // One side can be a short looping clip, and either side can come as a
+    // light/dark pair; the page's theme picks (CSS, `.rdl-themed`).
+    const media = (src, alt, cls) => {
+      const dark = darkOf(src)
+      return dark
+        ? h('div', { class: cls + ' rdl-themed', key: src }, [mediaEl(src, alt, 'rdl-themed-light'), mediaEl(dark, alt, 'rdl-themed-dark')])
+        : mediaEl(src, alt, cls)
+    }
 
     const showNew    = ref(true)
     const animating  = ref(false)
@@ -980,7 +1001,7 @@ export default defineComponent({
             ),
           ]),
 
-          loopClip(VID_PAGES, 'The For you tab as a Page in the lab, switched through its faces: iOS 26, iOS 18, Android, then dark appearance and the Danish market, and back to iOS 26 in English, light'),
+          themed(VID_PAGES, VID_PAGES_D, 'The For you tab as a Page in the lab, switched through its faces: iOS 26, iOS 18, Android, then dark appearance and the Danish market, and back to iOS 26 in English, light'),
           h('p', { class: 'cs-hint' }, 'The For you tab as a Page: one truth, every face - iOS 26, iOS 18, Android, light and dark, and the Danish market - and the rest of the app in the sidebar'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -992,7 +1013,7 @@ export default defineComponent({
               ),
           ]),
 
-          softImg(IMG_HARNESS_V2, 'The prototype harness: the options bar over the phone frame, with the Option menu open listing directions A to F and the bet for the selected one beside them', 'cs-cover-img'),
+          themed(IMG_HARNESS_V2, IMG_HARNESS_V2_D, 'The prototype harness: the options bar over the phone frame, with the Option menu open listing directions A to F and the bet for the selected one beside them'),
           h('p', { class: 'cs-hint' }, 'An exploration in the harness: every option in one menu, with its bet beside it'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -1025,7 +1046,7 @@ export default defineComponent({
             ),
           ]),
 
-          softImg(IMG_KEPT, 'The offline-listening exploration in the lab, direction B on the show page: a Keep new episodes on this phone toggle above the episode list, and the mini player holding a paused episode of the show', 'cs-cover-img'),
+          themed(IMG_KEPT, IMG_KEPT_D, 'The offline-listening exploration in the lab, direction B on the show page: a Keep new episodes on this phone toggle above the episode list, and the mini player holding a paused episode of the show'),
           h('p', { class: 'cs-hint' }, 'Example of a great suggestion that we kept'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -1058,7 +1079,7 @@ export default defineComponent({
 
           ]),
 
-          softImg(IMG_SKILLS, 'The Guide’s Skills chapter: a table of the lab’s commands - start, setup-design-lab, new-prototype, save, submit and review-prototype - with what each does, how it starts and what to say', 'cs-cover-img'),
+          themed(IMG_SKILLS, IMG_SKILLS_D, 'The Guide’s Skills chapter: a table of the lab’s commands - start, setup-design-lab, new-prototype, save, submit and review-prototype - with what each does, how it starts and what to say'),
           h('p', { class: 'cs-hint' }, 'The skills, as the Guide lists them: what each one does, how it starts, and what to say'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -1078,7 +1099,7 @@ export default defineComponent({
             ),
           ]),
 
-          softImg(IMG_SKETCHES, 'Compare in the lab: the three offline-listening directions side by side with the Screen set to Offline, each with its name and bet above its phone frame - a downloads list, a shelf of what is on the phone, and a pocket station that keeps playing', 'cs-cover-img'),
+          themed(IMG_SKETCHES, IMG_SKETCHES_D, 'Compare in the lab: the three offline-listening directions side by side with the Screen set to Offline, each with its name and bet above its phone frame - a downloads list, a shelf of what is on the phone, and a pocket station that keeps playing'),
           h('p', { class: 'cs-hint' }, 'Compare: three answers to the same question, side by side, with the connection switched off for all of them'),
 
           h('div', { class: 'cs-body cs-body--continued' }, [
@@ -1102,6 +1123,7 @@ export default defineComponent({
           h(BeforeAfterToggle, {
             before:    IMG_GUIDE_BEFORE,
             after:     IMG_GUIDE_AFTER,
+            afterDark: IMG_GUIDE_AFTER_D,
             beforeAlt: 'The Guide before: chapter 06 of 11, Build with Claude, a good brief described in prose with numbered steps',
             afterAlt:  'The Guide after: the Build step with the four-step stepper across the top, the /new-prototype prompt with a Copy button and an Open in Claude button',
           }),
@@ -1147,6 +1169,7 @@ export default defineComponent({
           h(BeforeAfterToggle, {
             before:    IMG_OPTIONS_BEFORE,
             after:     VID_OPTIONS_AFTER,
+            afterDark: VID_OPTIONS_AFTER_D,
             beforeAlt: 'Before: the lab’s own dark glass chrome, seven rows of switches in a column beside an iPad landscape Page that is cut off at the edge of the window',
             afterAlt:  'After: the Bauer AI design system chrome with one options bar over the frame, switching the same For you Page from iPhone to iPad portrait to iPad landscape and back, the frame resizing and rotating to fit',
           }),

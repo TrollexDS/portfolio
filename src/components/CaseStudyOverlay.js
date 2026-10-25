@@ -173,7 +173,12 @@ export default defineComponent({
 
     // ── Escape key to close ──
     function onKeydown(e) { if (e.key === 'Escape') close() }
-    onUnmounted(() => document.removeEventListener('keydown', onKeydown))
+    // The header's minimise and logo ask the open overlay to close this way.
+    function onCloseRequest() { if (expanded.value) close() }
+    onUnmounted(() => {
+      document.removeEventListener('keydown', onKeydown)
+      window.removeEventListener('cs:close', onCloseRequest)
+    })
 
     // ── Deep-link + URL sync ──
     // App.js dispatches 'cs:open' with a cardKey when the current URL resolves
@@ -277,6 +282,9 @@ export default defineComponent({
       document.body.style.width = '100%'
       document.body.style.overflow = 'hidden'
       document.addEventListener('keydown', onKeydown)
+      window.addEventListener('cs:close', onCloseRequest)
+      document.body.classList.add('cs-open')
+      window.dispatchEvent(new CustomEvent('cs:open', { detail: { cardKey: props.cardKey } }))
 
       await nextTick()
       lockInnerScroll()
@@ -389,6 +397,9 @@ export default defineComponent({
         document.body.style.overflow = ''
         window.scrollTo(0, savedScrollY)
         document.removeEventListener('keydown', onKeydown)
+        window.removeEventListener('cs:close', onCloseRequest)
+        document.body.classList.remove('cs-open')
+        window.dispatchEvent(new CustomEvent('cs:closed', { detail: { cardKey: props.cardKey } }))
         // Return the URL to the site root when the overlay closes. Skip
         // when close() was triggered by popstate (browser already moved
         // the URL). Also clear any legacy /#<cardKey> hash that might

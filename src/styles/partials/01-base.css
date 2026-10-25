@@ -125,11 +125,89 @@ strong, b {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 100;
-  display: flex;
-  align-items: center;
   padding: 20px 48px;
   transform: translateY(0);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The islands sit in a column no wider than the grid plus a gutter each
+   side, so on a wide display they stay beside the content instead of at
+   the screen's edges - and an open case study, which is the same centred
+   column, finds its controls in the same place. */
+.nav-inner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: var(--nav-max-width, 1240px);
+  margin: 0 auto;
+}
+
+/* ── Over an open case study ──
+   The header stays: the logo and the toggles keep their place (and keep
+   hiding on scroll); the section pills go, and the case study's own
+   Detailed / TL;DR pill takes the centre. Clicks fall through the empty
+   parts of the bar to the content underneath. */
+body.cs-open .nav {
+  z-index: 350;
+  pointer-events: none;
+}
+body.cs-open .nav-inner > * { pointer-events: auto; }
+body.cs-open .nav-pills {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%) scale(0.96);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.nav-pills { transition: background 0.5s ease, opacity 0.25s ease, transform 0.25s ease; }
+.nav-logo--close { cursor: pointer; }
+
+/* room for the minimise at the end of the toggles */
+.nav-toggles { transition: margin-right 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+body.cs-open .nav-toggles { margin-right: 44px; }
+
+/* The minimise: its own fixed layer in the same column, so the scroll-hide
+   never takes it. The one thing in the row that stays, so it is drawn as
+   the exception: a quiet ghost ring rather than a sibling of the toggles,
+   and it comes forward on hover. */
+.nav-close {
+  position: fixed;
+  top: 20px; left: 0; right: 0;
+  z-index: 360;
+  padding: 0 48px;
+  pointer-events: none;
+}
+.nav-close__inner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 46px;
+  max-width: var(--nav-max-width, 1240px);
+  margin: 0 auto;
+}
+.nav-close__btn {
+  pointer-events: auto;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--color-border-card);
+  border-radius: 100px;
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.72;
+  animation: nav-close-in 0.35s cubic-bezier(0.34, 1.3, 0.64, 1) backwards;
+  transition: background 0.3s ease, opacity 0.2s ease, border-color 0.3s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.nav-close__btn:hover {
+  opacity: 1;
+  background: var(--color-surface-nav-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: scale(1.06);
+}
+.nav-close__btn:active { transform: scale(0.94); }
+.nav-close__btn img { width: 16px; height: 16px; display: block; filter: var(--filter-action-icon); }
+@keyframes nav-close-in {
+  from { opacity: 0; transform: scale(0.6); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 .nav--hidden {
@@ -315,3 +393,42 @@ strong, b {
   gap: 18px;
 }
 
+
+
+/* ── Icon-only toggles ─────────────────────────────────────────────
+   The two header toggles lost their labels: 36px rounds, the tooltip
+   names the state. The scroll toggle's cursor glyph animates between
+   its two states: the comet tail folds into the arrow and the click
+   burst pops out of its tip. */
+.lazy-toggle--icon {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  justify-content: center;
+  gap: 0;
+}
+.lazy-toggle--icon .lazy-toggle__icon { display: block; overflow: visible; }
+
+.lz-arrow { fill: currentColor; stroke: currentColor; stroke-width: 1; }
+
+.lz-ghost {
+  fill: currentColor;
+  stroke: none;
+  transform-box: view-box;
+  transition: opacity 0.3s ease, translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.lz-ghost--far  { opacity: 0.18; }
+.lz-ghost--near { opacity: 0.38; }
+
+/* instant: the tail collapses into the arrow */
+.lazy-toggle--off .lz-ghost--far  { opacity: 0; translate: 5px 5px; }
+.lazy-toggle--off .lz-ghost--near { opacity: 0; translate: 2.5px 2.5px; }
+
+.lz-burst {
+  transform-origin: 8px 6.5px;
+  transform-box: view-box;
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+.lazy-toggle--off .lz-burst { opacity: 1; transform: scale(1); }

@@ -1,8 +1,9 @@
 import { defineComponent, h, ref } from 'vue'
 
 /* ── Theme toggle ─────────────────────────────────────────────────────
-   Sits next to the smooth-scroll toggle in the nav and shares its pill
-   styling. Sun icon + "Light" in light mode, moon icon + "Dark" in dark.
+   Sits next to the smooth-scroll toggle in the nav and shares its round
+   icon-only styling. Sun in light mode, moon in dark; the tooltip names
+   the switch.
 
    Theme is stored on <html data-theme>, matching the rest of the app:
    '' = light, 'dark' = dark. The choice is persisted to localStorage so
@@ -23,16 +24,11 @@ export default defineComponent({
 
   setup() {
     const isDark = ref(document.documentElement.dataset.theme === 'dark')
-    const labelFading = ref(false)
 
     function onRelease() {
-      labelFading.value = true
-
       isDark.value = !isDark.value
       document.documentElement.dataset.theme = isDark.value ? 'dark' : ''
       try { localStorage.setItem(STORAGE_KEY, isDark.value ? 'dark' : 'light') } catch (e) { /* private mode */ }
-
-      setTimeout(() => { labelFading.value = false }, 100)
     }
 
     const tooltip = () => isDark.value
@@ -41,28 +37,26 @@ export default defineComponent({
 
     return () =>
       h('button', {
-        class: ['lazy-toggle', 'theme-toggle', isDark.value ? 'theme-toggle--dark' : 'theme-toggle--light'],
+        class: ['lazy-toggle', 'lazy-toggle--icon', 'theme-toggle', isDark.value ? 'theme-toggle--dark' : 'theme-toggle--light'],
         onPointerup: onRelease,
         'data-tooltip': tooltip(),
         'aria-label': tooltip(),
       }, [
         h('svg', {
           class: 'lazy-toggle__icon',
-          width: 16,
-          height: 16,
+          width: 18,
+          height: 18,
           viewBox: '0 0 24 24',
           fill: 'none',
           stroke: 'currentColor',
-          'stroke-width': 2.2,
+          'stroke-width': 2,
           'stroke-linecap': 'round',
           'stroke-linejoin': 'round',
+          'aria-hidden': 'true',
         }, isDark.value
           ? [h('path', { d: MOON_PATH })]
           : SUN_PATHS.map(d => h('path', { d }))
         ),
-        h('span', {
-          class: ['lazy-toggle__label', labelFading.value ? 'lazy-toggle__label--fading' : ''],
-        }, isDark.value ? 'Dark' : 'Light'),
       ])
   },
 })

@@ -1,10 +1,11 @@
-import { defineComponent, h, ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { defineComponent, h, ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
 import { MOBILE_BREAKPOINT } from '../filterLayouts.js'
 import LazyToggle from './LazyToggle.js'
 import ThemeToggle from './ThemeToggle.js'
 
 const LOGO      = '/src/assets/logos/alex-logo.svg'
 const ARROW_OUT = '/src/assets/icons/external-link.svg'
+import { ICON_SHRINK } from '../assets/icons/icons.js'
 
 const NAV_ITEMS = ['All', 'About', 'Work', 'Side Quests']
 
@@ -58,14 +59,33 @@ export default defineComponent({
 
     let lastScrollY = 0
 
-    function onScroll() {
+    // The header stays over an open case study (body.cs-open): the logo and
+    // the toggles keep their place and keep hiding on scroll, now against
+    // the case study's own scroller rather than the window. The minimise
+    // and the Detailed / TL;DR pill sit outside the part that hides.
+    const csOpen = ref(document.body.classList.contains('cs-open'))
+
+    function scrollerY() {
+      if (csOpen.value) {
+        const inner = document.querySelector('.cs-expanded-inner')
+        return inner ? inner.scrollTop : 0
+      }
+      return window.scrollY
+    }
+
+    function onScroll(e) {
       // On mobile the nav lives at the bottom and is always visible
-      if (window.innerWidth <= 768) {
+      if (window.innerWidth <= MOBILE_BREAKPOINT) {
         hidden.value = false
-        lastScrollY = window.scrollY
+        lastScrollY = scrollerY()
         return
       }
-      const currentY = window.scrollY
+      // Scrolls are captured document-wide: only the window's and the open
+      // case study's count, not a carousel's or a code block's.
+      if (e && e.target !== document && e.target !== window) {
+        if (!(csOpen.value && e.target.classList && e.target.classList.contains('cs-expanded-inner'))) return
+      }
+      const currentY = scrollerY()
       if (currentY > lastScrollY && currentY > SCROLL_THRESHOLD) {
         hidden.value = true
       } else {
@@ -74,12 +94,40 @@ export default defineComponent({
       lastScrollY = currentY
     }
 
+    // Peek: while the row is hidden by scrolling, bringing the cursor to
+    // the top of the window shows it, and taking the cursor away hides it
+    // again - a way to reach Light/Dark without scrolling up. A little
+    // hysteresis so the row doesn't flicker at the edge of the zone.
+    const PEEK_IN  = 88
+    const PEEK_OUT = 120
+    const peek = ref(false)
+    function onPointerMove(e) {
+      if (window.innerWidth <= 768) return
+      if (!peek.value && e.clientY <= PEEK_IN) peek.value = true
+      else if (peek.value && e.clientY > PEEK_OUT) peek.value = false
+    }
+    function onPointerLeave() { peek.value = false }
+
+    // The whole row hides together - logo, toggles, and the case study's
+    // Detailed / TL;DR pill, which lives in the overlay and follows this
+    // class. Only the minimise stays: an exit shouldn't move.
+    const rowHidden = computed(() => hidden.value && !peek.value)
+    watch(rowHidden, v => document.body.classList.toggle('nav-hidden', v), { immediate: true })
+
+    function onCsOpen()  { csOpen.value = true;  hidden.value = false; lastScrollY = 0 }
+    function onCsClose() { csOpen.value = false; hidden.value = false; lastScrollY = window.scrollY }
+    function closeCaseStudy() { window.dispatchEvent(new CustomEvent('cs:close')) }
+
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
     function onBreakpoint(e) { isMobile.value = e.matches }
 
     onMounted(() => {
       lastScrollY = window.scrollY
-      window.addEventListener('scroll', onScroll, { passive: true })
+      document.addEventListener('scroll', onScroll, { passive: true, capture: true })
+      document.addEventListener('mousemove', onPointerMove, { passive: true })
+      document.documentElement.addEventListener('mouseleave', onPointerLeave)
+      window.addEventListener('cs:open',  onCsOpen)
+      window.addEventListener('cs:closed', onCsClose)
       mql.addEventListener('change', onBreakpoint)
       nextTick(() => {
         updateIndicator(true)
@@ -88,7 +136,11 @@ export default defineComponent({
     })
 
     onUnmounted(() => {
-      window.removeEventListener('scroll', onScroll)
+      document.removeEventListener('scroll', onScroll, { capture: true })
+      document.removeEventListener('mousemove', onPointerMove)
+      document.documentElement.removeEventListener('mouseleave', onPointerLeave)
+      window.removeEventListener('cs:open',  onCsOpen)
+      window.removeEventListener('cs:closed', onCsClose)
       mql.removeEventListener('change', onBreakpoint)
     })
 
@@ -163,8 +215,31 @@ export default defineComponent({
         baseIndicator.transform = stretchTransform.value
       }
 
-      return h('nav', { class: ['nav', hidden.value ? 'nav--hidden' : ''].filter(Boolean).join(' ') }, [
-        h('img', { class: 'nav-logo', src: LOGO, alt: 'Alex Chiu' }),
+      return h('div', { class: 'nav-root' }, [
+
+      // The minimise lives outside the nav so the scroll-hide never takes it.
+      csOpen.value
+        ? h('div', { class: 'nav-close' }, [
+            h('div', { class: 'nav-close__inner' }, [
+              h('button', {
+                class:          'nav-close__btn',
+                onClick:        closeCaseStudy,
+                'aria-label':   'Close case study',
+                'data-tooltip': 'Press Esc to exit fullscreen',
+              }, [h('img', { src: ICON_SHRINK, alt: '', width: 20, height: 20 })]),
+            ]),
+          ])
+        : null,
+
+      h('nav', { class: ['nav', rowHidden.value ? 'nav--hidden' : ''].filter(Boolean).join(' ') }, [
+       h('div', { class: 'nav-inner' }, [
+        h('img', {
+          class: ['nav-logo', csOpen.value ? 'nav-logo--close' : ''].filter(Boolean).join(' '),
+          src: LOGO,
+          alt: 'Alex Chiu',
+          // inside a case study the logo is a way home: it closes it
+          onClick: () => { if (csOpen.value) closeCaseStudy() },
+        }),
 
         h('div', {
           class: 'nav-pills',
@@ -202,6 +277,8 @@ export default defineComponent({
           h(LazyToggle),
           h(ThemeToggle),
         ]),
+       ]),
+      ]),
       ])
     }
   },

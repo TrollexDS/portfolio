@@ -767,3 +767,59 @@
   .rdlv * { transition: none !important; }
 }
 
+
+
+/* ═══ Dark theme ═══════════════════════════════════════════════════════
+   The same face on the Bauer dark canvas: white glass becomes black
+   glass with the lavender hairline, ink lines become light ones, and the
+   brand purple accents go lavender, as the lab's own dark mode does. */
+[data-theme="dark"] .rdlv-wash,
+[data-theme="dark"] .rdlv-cloud-fill {
+  background-color: #14121C;
+  background-image:
+    radial-gradient(60% 55% at 8% -5%, rgba(160, 150, 255, 0.25), transparent 70%),
+    radial-gradient(50% 50% at 100% 105%, rgba(90, 240, 255, 0.14), transparent 70%);
+}
+
+[data-theme="dark"] .rdlv-prompt,
+[data-theme="dark"] .rdlv-share {
+  background: rgba(0, 0, 0, 0.30);
+  border-color: rgba(160, 150, 255, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.10), 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 1px 3px 0 rgba(0, 0, 0, 0.30);
+}
+[data-theme="dark"] .rdlv-text,
+[data-theme="dark"] .rdlv-caret { color: #F8F7FC; background-color: transparent; }
+[data-theme="dark"] .rdlv-caret { background: #F8F7FC; }
+[data-theme="dark"] .rdlv-load { border-color: rgba(160, 150, 255, 0.25); border-top-color: #E1DCFF; }
+[data-theme="dark"] .rdlv-pill { background: rgba(160, 150, 255, 0.28); }
+[data-theme="dark"] .rdlv-pill--on { background: #E1DCFF; }
+[data-theme="dark"] .rdlv-share { color: #E1DCFF; }
+[data-theme="dark"] .rdlv[data-phase='share'] .rdlv-share { background: rgba(160, 150, 255, 0.22); }
+
+[data-theme="dark"] .rdlv-phone {
+  background: rgba(0, 0, 0, 0.30);
+  border-color: rgba(160, 150, 255, 0.16);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.10), 0 14px 30px rgba(0, 0, 0, 0.45);
+}
+/* the file it becomes stays a sheet of paper; the corner cut away is the dark ground */
+[data-theme="dark"] .rdlv[data-phase='fold'] .rdlv-phone,
+[data-theme="dark"] .rdlv[data-phase='upload'] .rdlv-phone,
+[data-theme="dark"] .rdlv[data-phase='rest'] .rdlv-phone { background: #F8F7FC; box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); }
+[data-theme="dark"] .rdlv-phone::before { background: #14121C; }
+
+[data-theme="dark"] .rdlv-notch  { background: rgba(248, 247, 252, 0.20); }
+[data-theme="dark"] .rdlv-title  { background: rgba(248, 247, 252, 0.45); }
+[data-theme="dark"] .rdlv-hero   { background: rgba(160, 150, 255, 0.14); box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.25); }
+[data-theme="dark"] .rdlv-banner { background: rgba(248, 247, 252, 0.14); }
+[data-theme="dark"] .rdlv-tiles i,
+[data-theme="dark"] .rdlv-thumb,
+[data-theme="dark"] .rdlv-l2,
+[data-theme="dark"] .rdlv-tabs i,
+[data-theme="dark"] .rdlv-tg-s { background: rgba(248, 247, 252, 0.16); }
+[data-theme="dark"] .rdlv-l1,
+[data-theme="dark"] .rdlv-tg-l { background: rgba(248, 247, 252, 0.28); }
+
+[data-theme="dark"] .rdlv-cloud-p { stroke: rgba(160, 150, 255, 0.85); }
+[data-theme="dark"] .rdlv[data-phase='upload'] .rdlv-cloud-p,
+[data-theme="dark"] .rdlv[data-phase='rest'] .rdlv-cloud-p,
+[data-theme="dark"] .rdlv[data-phase='done'] .rdlv-cloud-p { fill: #E1DCFF; stroke: #E1DCFF; }
