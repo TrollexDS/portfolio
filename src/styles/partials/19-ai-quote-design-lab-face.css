@@ -67,7 +67,6 @@
    without a second set of numbers.                                   */
 .rdlv {
   position: absolute;
-  inset: 0;
   overflow: hidden;
   /* No blur, no clip-path and no extra layer in here, on purpose. The glass
      on this face used backdrop-filter, which Safari composites on its own
@@ -76,8 +75,15 @@
      face with a clip-path fixed that and drew its own antialiased edge over
      the card's border instead (a dark arc at each corner). Over a light,
      near-flat ground, 72% white reads as glass without blurring anything,
-     so the face is plain painted boxes and the card's own radius clips it. */
+     so the face is plain painted boxes and the card's own radius clips it.
+     Bled 1px past the padding box: the card has a 1px border, so the
+     inner edge of its 32px corner is a 31px curve, and a face with the
+     inherited 32px radius starting inside the border left a crescent of
+     the card showing at each corner - a light arc in dark mode. Starting
+     the curve on the border box makes the two coincide; overflow: hidden
+     on the card still clips the bleed at the padding edge. */
   border-radius: inherit;
+  inset: -1px;
   container-type: size;
   --rdlv-k: 0.6;               /* wordmark fit, measured in the component */
 }
