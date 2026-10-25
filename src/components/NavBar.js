@@ -125,7 +125,7 @@ export default defineComponent({
     const closing = ref(false)   // the minimise is on its way out
     const goo = ref(null)        // 'in' | 'out' while the liquid plays
     let gooTimer = 0
-    const GOO_MS = 620
+    const GOO_MS = 800
 
     function playGoo(dir) {
       clearTimeout(gooTimer)
