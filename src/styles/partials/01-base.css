@@ -457,7 +457,7 @@ body.cs-open .nav-toggles { margin-right: 44px; }
 .theme-lens {
   --lens: 126px;
   position: fixed;
-  z-index: 90;
+  z-index: 110;
   width: var(--lens);
   height: var(--lens);
   margin: calc(var(--lens) / -2) 0 0 calc(var(--lens) / -2);
@@ -470,8 +470,9 @@ body.cs-open .nav-toggles { margin-right: 44px; }
   transform: scale(0);
   transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
 }
-/* under the nav, over everything else - including an open case study */
-body.cs-open .theme-lens { z-index: 340; }
+/* over the nav too, so the button and its neighbour preview with the page;
+   under the tooltip and the cursor */
+body.cs-open .theme-lens { z-index: 365; }
 
 .theme-lens--lit {
   transform: scale(1);
