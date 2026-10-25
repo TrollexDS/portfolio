@@ -86,6 +86,7 @@ export default defineComponent({
         if (!(csOpen.value && e.target.classList && e.target.classList.contains('cs-expanded-inner'))) return
       }
       const currentY = scrollerY()
+      if (holdRow) { lastScrollY = currentY; return }
       if (currentY > lastScrollY && currentY > SCROLL_THRESHOLD) {
         hidden.value = true
       } else {
@@ -143,6 +144,8 @@ export default defineComponent({
     }
     function onCsClose() {
       csOpen.value = false; hidden.value = false; lastScrollY = window.scrollY
+      // the row is free to hide again once the liquid is done
+      setTimeout(() => { holdRow = false }, GOO_MS)
       if (isMobile.value) return
       closing.value = true
       // With the row hidden there is nothing to merge into: a plain fade.
@@ -153,7 +156,16 @@ export default defineComponent({
         playGoo('out')
       }
     }
-    function closeCaseStudy() { window.dispatchEvent(new CustomEvent('cs:close')) }
+    // Minimising from the header: the row is up (a peek, if you had
+    // scrolled) and it stays up through the case study's close, so the
+    // merge plays into a toggle that is there - rather than the row going
+    // with the pointer and coming back for it.
+    let holdRow = false
+    function closeCaseStudy() {
+      holdRow = true
+      hidden.value = false
+      window.dispatchEvent(new CustomEvent('cs:close'))
+    }
 
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
     function onBreakpoint(e) { isMobile.value = e.matches }
