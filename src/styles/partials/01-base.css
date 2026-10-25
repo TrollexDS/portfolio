@@ -464,8 +464,8 @@ body.cs-open .nav-goo { z-index: 345; }
 /* ── Icon-only toggles ─────────────────────────────────────────────
    The two header toggles lost their labels: 36px rounds, the tooltip
    names the state. The scroll toggle's cursor glyph animates between
-   its two states: the comet tail folds into the arrow and the click
-   burst pops out of its tip. */
+   its two states: the comet tail folds into the arrow and the crosshair
+   ticks snap in around its tip. */
 .lazy-toggle--icon {
   width: 36px;
   height: 36px;
@@ -490,14 +490,35 @@ body.cs-open .nav-goo { z-index: 345; }
 .lazy-toggle--off .lz-ghost--far  { opacity: 0; translate: 5px 5px; }
 .lazy-toggle--off .lz-ghost--near { opacity: 0; translate: 2.5px 2.5px; }
 
-.lz-burst {
+.lz-ticks {
   transform-origin: 8px 6.5px;
   transform-box: view-box;
   opacity: 0;
-  transform: scale(0.4);
+  transform: scale(1.5);
   transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
-.lazy-toggle--off .lz-burst { opacity: 1; transform: scale(1); }
+.lazy-toggle--off .lz-ticks { opacity: 1; transform: scale(1); }
+
+/* ── The cursor over the scroll toggle (CursorShape.js) ──
+   A second drawing around the cursor's tip: ghosts it sheds in smooth
+   mode, ticks that lock around it in instant. Drawn in the cursor's own
+   ink, placed and timed from script. */
+.cs-fx {
+  position: absolute;
+  left: -30px; top: -30px;
+  overflow: visible;
+  pointer-events: none;
+}
+.cs-fx-ghost { fill: #333333; }
+.cs-fx-ticks {
+  fill: none;
+  stroke: #333333;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  paint-order: stroke;
+  opacity: 0;
+  transform-origin: 1px 2px;
+}
 
 
 /* ── Theme toggle: the lens and the wipe ───────────────────────────────

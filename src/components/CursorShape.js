@@ -47,6 +47,23 @@ const BEAM = {
 const ARROW_OFFSET = [0, 0]
 const BEAM_OFFSET  = [-1.2, -9]
 
+const ARROW_SCALE  = 17 / 28   // viewBox units → px, as the cursor is drawn
+
+/* ── Over the scroll toggle ─────────────────────────────────
+   The cursor demonstrates the mode it is in, without moving:
+   smooth, it sheds ghost arrows behind itself that drift back
+   and fade (a comet); instant, crosshair ticks snap in around
+   its tip and lock, then let go, on a beat. The same two marks
+   as the toggle's icon (LazyToggle.js).
+─────────────────────────────────────────────────────────── */
+const FX_SELECTOR   = '.lazy-toggle:not(.theme-toggle)'
+const GHOST_EVERY   = 170    // ms between ghosts
+const GHOST_LIFE    = 720    // ms a ghost lasts
+const GHOST_DRIFT   = 16     // px it travels back along the diagonal
+const TICK_BEAT     = 900    // ms per lock-and-release
+const TICKS_PATH    = 'M1 -6V-2.5M-6 2H-2.5M-4.6 -3.4L-2.3 -1.2'
+const SVG_NS        = 'http://www.w3.org/2000/svg'
+
 const ARROW_STROKE = 2
 const BEAM_STROKE  = 1.2
 const DURATION     = 200  // ms
@@ -98,6 +115,51 @@ export default defineComponent({
     let svgEl  = null
     let pathEl = null
 
+    // The over-the-toggle drawing (see FX_SELECTOR)
+    let fxGhosts = null      // <g> the ghosts go in
+    let fxTicks  = null      // the crosshair <path>
+    let onToggle = false
+    let lastGhost = 0
+    let beatStart = 0
+    const ghosts = []        // { el, born }
+    let arrowD = ''
+
+    function shedGhost(now) {
+      const el = document.createElementNS(SVG_NS, 'path')
+      el.setAttribute('class', 'cs-fx-ghost')
+      el.setAttribute('d', arrowD)
+      fxGhosts.appendChild(el)
+      ghosts.push({ el, born: now })
+    }
+
+    function tickFx(now) {
+      if (!fxGhosts || !fxTicks) return
+      const lazy = isLazy.value
+      // smooth: a ghost every so often while hovering
+      if (onToggle && lazy && now - lastGhost > GHOST_EVERY) { shedGhost(now); lastGhost = now }
+      // ghosts drift back along the diagonal, shrink a little, fade
+      for (let i = ghosts.length - 1; i >= 0; i--) {
+        const g = ghosts[i]
+        const a = (now - g.born) / GHOST_LIFE
+        if (a >= 1) { g.el.remove(); ghosts.splice(i, 1); continue }
+        const ease = 1 - (1 - a) * (1 - a)
+        const d = GHOST_DRIFT * ease
+        g.el.setAttribute('transform', `translate(${(-d * 0.9).toFixed(2)},${(-d * 0.75).toFixed(2)}) scale(${(ARROW_SCALE * (0.95 - 0.35 * a)).toFixed(3)})`)
+        g.el.style.opacity = (0.42 * (1 - a)).toFixed(3)
+      }
+      // instant: the ticks snap in and lock, then release, on a beat
+      if (onToggle && !lazy) {
+        if (!beatStart) beatStart = now
+        const ph = ((now - beatStart) % TICK_BEAT) / TICK_BEAT
+        const on = ph > 0.2 && ph < 0.65
+        fxTicks.style.opacity = on ? 0.95 : 0
+        fxTicks.style.transform = on ? (ph < 0.26 ? 'scale(1.35)' : 'scale(1)') : 'scale(1.4)'
+      } else {
+        beatStart = 0
+        fxTicks.style.opacity = 0
+      }
+    }
+
     function onMouseMove(e) {
       rawX = e.clientX
       rawY = e.clientY
@@ -125,6 +187,7 @@ export default defineComponent({
       // scrolling content, and any situation where mousemove doesn't fire
       if (visible.value) {
         const el = document.elementFromPoint(rawX, rawY)
+        onToggle = !!el?.closest?.(FX_SELECTOR)
         const newIsText = !!el?.closest?.(TEXT_SELECTOR)
           && !el?.closest?.('.action-icon, .about-shrink-btn, .nav-pills, .cv-wrap, .cc-outer')
         if (newIsText !== isText) {
@@ -156,6 +219,8 @@ export default defineComponent({
         pathEl.setAttribute('stroke-width', lerp(ARROW_STROKE, BEAM_STROKE, current).toFixed(2))
       }
 
+      tickFx(now)
+
       rafId = requestAnimationFrame(tick)
     }
 
@@ -179,6 +244,9 @@ export default defineComponent({
       if (pathEl) {
         pathEl.setAttribute('d', buildPath(ARROW, BEAM, 0))
       }
+      arrowD   = buildPath(ARROW, BEAM, 0)
+      fxGhosts = document.getElementById('cs-fx-ghosts')
+      fxTicks  = document.getElementById('cs-fx-ticks')
 
       window.addEventListener('mousemove', onMouseMove, { passive: true })
       document.documentElement.addEventListener('mouseleave', onMouseLeave)
@@ -218,6 +286,18 @@ export default defineComponent({
             'stroke-width': ARROW_STROKE,
             filter: 'url(#cs-shadow)',
           }),
+        ]),
+        // the over-the-toggle drawing, around the tip (CSS: .cs-fx)
+        h('svg', {
+          class: 'cs-fx',
+          width: 60,
+          height: 60,
+          viewBox: '-30 -30 60 60',
+          'aria-hidden': 'true',
+          xmlns: 'http://www.w3.org/2000/svg',
+        }, [
+          h('g', { id: 'cs-fx-ghosts' }),
+          h('path', { id: 'cs-fx-ticks', class: 'cs-fx-ticks', d: TICKS_PATH }),
         ]),
       ])
     }

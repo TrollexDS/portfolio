@@ -4,9 +4,12 @@ import { isLazy, toggleLazy } from '../lazyMode.js'
 /* ── Smooth / instant scroll toggle ───────────────────────────────────
    Icon-only, like the theme toggle beside it. The glyph is a cursor:
    with a comet tail of two ghost arrows behind it when scrolling is
-   smooth (it glides), and a small click-burst at its tip when scrolling
-   is instant (it lands). The arrow stays; the tail folds into it and the
-   burst pops out, on the pill's own easing.
+   smooth (it glides), and crosshair ticks around its tip when scrolling
+   is instant (it lands exactly where you point). The arrow stays; the
+   tail folds into it and the ticks snap in, on the pill's own easing.
+
+   Hovered, the page's own cursor does the same (CursorShape.js): it sheds
+   ghosts in smooth mode, and the ticks lock around its tip in instant.
 
    The cursor is drawn with its tip at the origin so the ghosts are the
    same path, scaled down and stepped back along the diagonal.
@@ -50,8 +53,8 @@ export default defineComponent({
           ]),
           // the cursor
           h('path', { class: 'lz-arrow', d: ARROW, transform: 'translate(8,6.5)' }),
-          // the click-burst at its tip
-          h('path', { class: 'lz-burst', d: 'M5.2 3.7L3 1.5M8 3V.4M4.5 6.5H1.9' }),
+          // the crosshair ticks around its tip
+          h('path', { class: 'lz-ticks', d: 'M8 0.5V3.5M2 6.5H5M3.6 2.1L5.5 4' }),
         ]),
       ])
   },
