@@ -133,10 +133,20 @@
     padding: 24px 24px;
   }
 
-  /* ── TLDR bar — align with exit button ── */
-  .tldr-bar {
+  /* ── Reading preferences row — align with exit button ── */
+  .cs-readbar {
     top: 24px;
   }
+  /* no room to hang off the pill's edge on a phone: sit in the row and
+     let the pair centre. A tap opens it; a tap outside closes. Narrower
+     stepper so the open row still fits a 360px screen. */
+  .tsz {
+    position: static;
+  }
+  .tsz-btn   { width: 32px; }
+  .tsz-value { width: 40px; }
+  .tsz-steps-inner { width: 104px; }
+  .tsz:hover .tsz-steps, .tsz:has(:focus-visible) .tsz-steps, .tsz--open .tsz-steps { width: 104px; }
 
   /* ── Case study hero video — scale down with page padding ── */
   .cs-hero-video {
@@ -195,18 +205,18 @@
   /* ── Case study containers — fit viewport with same padding as text ── */
   .cs-demo-video {
     width: calc(100vw - 48px) !important;
-    max-width: 680px;
+    max-width: var(--cs-column);
   }
 
   .cs-cover-img {
     width: calc(100vw - 48px) !important;
-    max-width: 680px;
+    max-width: var(--cs-column);
   }
 
   .cs-zoom-viewer,
   .cs-miro-viewer {
     width: calc(100vw - 48px) !important;
-    max-width: 680px;
+    max-width: var(--cs-column);
     height: 320px;
   }
 
@@ -229,7 +239,7 @@
 
   .cs-error-section {
     width: calc(100vw - 48px);
-    max-width: 680px;
+    max-width: var(--cs-column);
   }
 
   /* Antonym & version section widths/heights set in JS via csScale */

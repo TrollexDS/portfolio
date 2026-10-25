@@ -2,7 +2,7 @@
 
 .cs-zoom-viewer {
   position: relative;
-  width: 680px;
+  width: var(--cs-column);
   height: 448px;
   overflow: hidden;
   border-radius: 20px;
@@ -79,7 +79,7 @@
 
 .cs-miro-viewer {
   position: relative;
-  width: 680px;
+  width: var(--cs-column);
   height: 448px;
   overflow: hidden;
   border-radius: 20px;

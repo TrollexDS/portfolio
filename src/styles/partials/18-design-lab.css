@@ -567,7 +567,7 @@
   border-radius: 3px;
   background: #E1DCFF;
   color: #4700A3;
-  font-size: 9px;
+  font-size: var(--text-3xs);
   letter-spacing: var(--tracking-wide);
 }
 
@@ -604,7 +604,7 @@
 .rdl-md-em     { color: #5B58A9; font-style: italic; }
 
 @media (max-width: 720px) {
-  .rdl-file-line { font-size: 10px; line-height: 1.85; }
+  .rdl-file-line { font-size: var(--text-2xs); line-height: 1.85; }
   .rdl-file-num  { width: 30px; padding-right: 10px; }
 }
 

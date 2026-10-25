@@ -27,7 +27,7 @@
   background: transparent;
   color: var(--color-text-secondary, #888);
   font: inherit;
-  font-size: 12px;
+  font-size: var(--text-sm);
   cursor: pointer;
   border-bottom: 2px solid transparent;
   transition: all 0.15s ease;
@@ -40,7 +40,7 @@
 }
 
 .ll-demo-settings {
-  font-size: 14px;
+  font-size: var(--text-base);
   opacity: 0.3;
 }
 
@@ -61,7 +61,7 @@
   gap: 8px;
   padding: 6px 10px;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: var(--text-xs);
   transition: all 0.2s ease;
 }
 
@@ -76,7 +76,7 @@
 }
 
 .ll-demo-reason {
-  font-size: 9px;
+  font-size: var(--text-3xs);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.4px;
@@ -102,7 +102,7 @@
   border-radius: 4px;
   background: transparent;
   color: var(--color-text-secondary, #888);
-  font-size: 14px;
+  font-size: var(--text-base);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -121,7 +121,7 @@
   justify-content: center;
   min-height: 160px;
   color: #0d9488;
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 500;
 }
 
@@ -132,7 +132,7 @@
 
 .ll-demo-old {
   font-family: ui-monospace, 'Cascadia Code', monospace;
-  font-size: 10px;
+  font-size: var(--text-2xs);
   color: var(--color-text-secondary, #888);
   text-decoration: line-through;
   flex: 1;
@@ -144,13 +144,13 @@
 
 .ll-demo-arrow {
   color: var(--color-text-secondary, #aaa);
-  font-size: 11px;
+  font-size: var(--text-xs);
   flex-shrink: 0;
 }
 
 .ll-demo-new {
   font-family: ui-monospace, 'Cascadia Code', monospace;
-  font-size: 10px;
+  font-size: var(--text-2xs);
   color: #0d9488;
   font-weight: 500;
   flex: 1;
@@ -166,7 +166,7 @@
   border-radius: 4px;
   background: transparent;
   color: #0d9488;
-  font-size: 10px;
+  font-size: var(--text-2xs);
   font-weight: 500;
   cursor: pointer;
   flex-shrink: 0;
@@ -179,7 +179,7 @@
 
 .ll-demo-check {
   color: #0d9488;
-  font-size: 13px;
+  font-size: var(--text-md);
   flex-shrink: 0;
   width: 42px;
   text-align: center;

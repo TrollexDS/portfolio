@@ -169,23 +169,23 @@
   --font-family-manrope:  'Manrope', sans-serif;
 
   /* Font sizes — T-shirt scale */
-  --text-3xs:   9px;
-  --text-2xs:   10px;
-  --text-xs:    11px;
-  --text-sm:    12px;
-  --text-md:    13px;
-  --text-base:  14px;
-  --text-lg:    15px;
-  --text-xl:    16px;
-  --text-2xl:   17px;
-  --text-3xl:   18px;
-  --text-4xl:   20px;
-  --text-5xl:   22px;
-  --text-6xl:   24px;
-  --text-7xl:   32px;
-  --text-8xl:   36px;
-  --text-9xl:   40px;
-  --text-10xl:  48px;
+  --text-3xs:   0.5625rem;   /* 9px */
+  --text-2xs:   0.625rem;   /* 10px */
+  --text-xs:    0.6875rem;   /* 11px */
+  --text-sm:    0.75rem;   /* 12px */
+  --text-md:    0.8125rem;   /* 13px */
+  --text-base:  0.875rem;   /* 14px */
+  --text-lg:    0.9375rem;   /* 15px */
+  --text-xl:    1rem;   /* 16px */
+  --text-2xl:   1.0625rem;   /* 17px */
+  --text-3xl:   1.125rem;   /* 18px */
+  --text-4xl:   1.25rem;   /* 20px */
+  --text-5xl:   1.375rem;   /* 22px */
+  --text-6xl:   1.5rem;   /* 24px */
+  --text-7xl:   2rem;   /* 32px */
+  --text-8xl:   2.25rem;   /* 36px */
+  --text-9xl:   2.5rem;   /* 40px */
+  --text-10xl:  3rem;   /* 48px */
 
   /* Font weights */
   --weight-regular:   400;
@@ -377,20 +377,25 @@
   ─────────────────────────────────────────── */
 
   /* Case study headings */
-  --cs-title-size:           var(--text-7xl);     /* 32px */
+  /* The reader's text size (TextSizeControl): 0.875–1.5, set on <html>.
+     Multiplies the four case-study type sizes below, on top of the
+     browser's own font size. */
+  --cs-type-scale:           1;
+  --cs-column:               42.5rem;             /* 680px reading column; scales with root font so measure stays ~65ch */
+  --cs-title-size:           calc(var(--text-7xl) * var(--cs-type-scale, 1));  /* 32px × reader text size */
   --cs-title-weight:         var(--weight-bold);
   --cs-title-leading:        var(--leading-relaxed);
 
-  --cs-section-size:         var(--text-6xl);     /* 24px */
+  --cs-section-size:         calc(var(--text-6xl) * var(--cs-type-scale, 1));  /* 24px × reader text size */
   --cs-section-weight:       var(--weight-bold);
   --cs-section-leading:      var(--leading-relaxed);
 
-  --cs-subsection-size:      var(--text-3xl);     /* 18px */
+  --cs-subsection-size:      calc(var(--text-3xl) * var(--cs-type-scale, 1));  /* 18px × reader text size */
   --cs-subsection-weight:    var(--weight-bold);
   --cs-subsection-leading:   var(--leading-relaxed);
 
   /* Case study body */
-  --cs-body-size:            var(--text-3xl);     /* 18px */
+  --cs-body-size:            calc(var(--text-3xl) * var(--cs-type-scale, 1));  /* 18px × reader text size */
   --cs-body-weight:          var(--weight-regular);
   --cs-body-leading:         var(--leading-relaxed);
 

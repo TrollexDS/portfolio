@@ -180,15 +180,25 @@
   pointer-events: none;
 }
 
-/* ── TL;DR toggle — liquid glass pill (matches main nav) ── */
-.tldr-bar {
+/* ── Reading preferences row — Detailed / TL;DR and text size ──
+   Sticks to the top once scrolled past (see TldrToggle). */
+.cs-readbar {
   position: sticky;
   top: 40px;
   z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 8px;
+  width: fit-content;
+}
+
+/* ── TL;DR toggle — liquid glass pill (matches main nav) ── */
+.tldr-bar {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 4px;
-  margin: 24px 0 8px;
   padding: 4px;
   border-radius: 100px;
   background: var(--color-surface-nav-blur);
@@ -229,6 +239,87 @@
   color: var(--color-primary);
 }
 
+/* ── Text size control — "Aa" beside the TL;DR pill ──
+   Hangs off the pill's right edge so the pill keeps its place. At rest a
+   round glass pill reading Aa, no fill. Hovered, keyboard-focused or tapped open
+   (`tsz--open`), the Aa folds away and the stepper takes its place:
+   smaller, the current size (a reset), larger. */
+.tsz {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 0;
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 4px;
+  border-radius: 100px;
+  background: var(--color-surface-nav-blur);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.5s ease;
+}
+.tsz-label, .tsz-steps {
+  overflow: hidden;
+  transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+}
+.tsz-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-family: var(--font-family-primary);
+  font-size: var(--action-size);
+  font-weight: var(--action-weight);
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  user-select: none;
+  cursor: pointer;
+}
+.tsz-steps { width: 0; opacity: 0; }
+/* the three buttons' widths: 40 + 52 + 40 */
+.tsz-steps-inner { display: flex; align-items: center; width: 132px; }
+
+.tsz:hover .tsz-label, .tsz:has(:focus-visible) .tsz-label, .tsz--open .tsz-label { width: 0; opacity: 0; }
+.tsz:hover .tsz-steps, .tsz:has(:focus-visible) .tsz-steps, .tsz--open .tsz-steps { width: 132px; opacity: 1; transition-delay: 0s, 0.15s; }
+
+.tsz-btn, .tsz-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  border: none;
+  border-radius: 100px;
+  background: transparent;
+  font-family: var(--font-family-primary);
+  font-weight: var(--action-weight);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tsz-btn {
+  width: 40px;
+  gap: 2px;
+}
+.tsz-btn--down .tsz-glyph { font-size: var(--text-md); }
+.tsz-btn--up   .tsz-glyph { font-size: var(--text-4xl); }
+.tsz-sign { font-size: var(--text-base); line-height: 1; }
+.tsz-value {
+  padding: 0;
+  width: 52px;
+  font-size: var(--text-base);
+  font-variant-numeric: tabular-nums;
+}
+.tsz-btn:not(:disabled):hover, .tsz-value:not(:disabled):hover { color: var(--color-primary); }
+.tsz-btn:not(:disabled):active { transform: scale(0.92); }
+.tsz-btn:disabled { opacity: 0.35; cursor: default; }
+.tsz-value:disabled { cursor: default; }
+.tsz-btn:focus-visible, .tsz-value:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
 /* ── TL;DR collapsible content ── */
 .tldr-collapsible {
   display: grid;
@@ -247,7 +338,7 @@
 
 /* ── Case study body sections ── */
 .cs-body {
-  max-width: 680px;
+  max-width: var(--cs-column);
   width: 100%;
   padding: 0 24px;
   margin-top: 80px;
@@ -391,7 +482,7 @@
 /* Demo video inside case study body */
 .cs-demo-video {
   display: block;
-  width: 680px;
+  width: var(--cs-column);
   aspect-ratio: 3024 / 1822;
   border-radius: 20px;
   margin-top: 32px;
@@ -503,7 +594,7 @@
 /* Cover image inside case study body */
 .cs-cover-img {
   display: block;
-  width: 680px;
+  width: var(--cs-column);
   border-radius: 20px;
   margin-top: 32px;
 }
@@ -527,12 +618,12 @@
   /* in its place in the page, and once scrolled past, stuck at the
      header row's height; stuck, it hides and returns with the row, on
      the same curve */
-  .cs-expanded .tldr-bar {
+  .cs-expanded .cs-readbar {
     top: 25px;
     z-index: 355;
-    transition: background 0.5s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
   }
-  body.nav-hidden .cs-expanded .tldr-bar--stuck {
+  body.nav-hidden .cs-expanded .cs-readbar--stuck {
     transform: translateY(-140%);
     opacity: 0;
     pointer-events: none;

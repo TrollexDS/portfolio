@@ -64,7 +64,7 @@
 
 .ads-card-title {
   font-family: 'Tiny5', monospace;
-  font-size: 40px;
+  font-size: var(--text-9xl);
   line-height: 1;
   color: var(--color-text-on-primary);
   text-align: center;

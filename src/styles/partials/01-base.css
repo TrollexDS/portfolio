@@ -352,7 +352,7 @@ body.cs-open .nav-goo { z-index: 345; }
   border-radius: 100px;
   font-family: var(--font-family-primary);
   font-weight: 500;
-  font-size: 16px;
+  font-size: 1rem;      /* 16px */
   color: var(--color-text-primary);
   text-decoration: none;
   transition: color 0.2s;
@@ -419,7 +419,7 @@ body.cs-open .nav-goo { z-index: 345; }
 .lazy-toggle__label {
   font-family: 'Syne', sans-serif;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 0.8125rem; /* 13px */
   transition: opacity 0.15s ease;
 }
 

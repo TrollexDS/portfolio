@@ -61,7 +61,7 @@ const DROP = new Set(['button', 'video', 'svg', 'script', 'style', 'input', 'img
 const VOID = new Set(['br', 'img', 'input', 'source', 'hr', 'meta', 'link', 'wbr', 'area', 'col', 'embed', 'track'])
 const BLOCK = new Set(['h1', 'h2', 'h3', 'h4', 'p', 'ul', 'ol', 'li', 'dl', 'dt', 'dd', 'blockquote', 'table', 'tr'])
 // Interactive chrome that carries no case-study prose.
-const DROP_CLASS = /\b(tldr-bar|cs-review-stars|cs-zoom-controls)\b/
+const DROP_CLASS = /\b(cs-readbar|tldr-bar|cs-review-stars|cs-zoom-controls)\b/
 
 const hasClass = (node, c) => typeof node !== 'string' && new RegExp(`\\b${c}\\b`).test(node.attrs.class || '')
 const textOf = node => typeof node === 'string' ? node : node.children.map(textOf).join('')

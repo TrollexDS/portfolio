@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, onMounted, onUnmounted, nextTick } from 'vue'
+import TextSizeControl from './TextSizeControl.js'
 
 /**
  * TldrToggle — reusable Detailed / TL;DR pill-bar toggle.
@@ -14,8 +15,11 @@ import { defineComponent, h, ref, onMounted, onUnmounted, nextTick } from 'vue'
  *
  * The bar sits in the page where the case study puts it and sticks to the
  * top once scrolled past. A sentinel just above it tells the two apart:
- * while stuck (`tldr-bar--stuck`) it hides and returns with the header
+ * while stuck (`cs-readbar--stuck`) it hides and returns with the header
  * row; in place it stays put.
+ *
+ * It shares its row (`cs-readbar`) with the text size control: the two
+ * reading preferences stick, hide and return together.
  */
 export default defineComponent({
   name: 'TldrToggle',
@@ -43,19 +47,22 @@ export default defineComponent({
 
     return () => [
       h('div', { ref: sentinel, class: 'tldr-sentinel', 'aria-hidden': 'true' }),
-      h('div', { class: ['tldr-bar', stuck.value ? 'tldr-bar--stuck' : ''] }, [
-        h('div', {
-          class: 'tldr-indicator',
-          style: { transform: props.modelValue ? 'translateX(calc(100% + 4px))' : 'translateX(0)' },
-        }),
-        h('button', {
-          class: ['tldr-pill', !props.modelValue ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-          onClick: () => emit('update:modelValue', false),
-        }, 'Detailed'),
-        h('button', {
-          class: ['tldr-pill', props.modelValue ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
-          onClick: () => emit('update:modelValue', true),
-        }, 'TL;DR'),
+      h('div', { class: ['cs-readbar', stuck.value ? 'cs-readbar--stuck' : ''] }, [
+        h('div', { class: 'tldr-bar' }, [
+          h('div', {
+            class: 'tldr-indicator',
+            style: { transform: props.modelValue ? 'translateX(calc(100% + 4px))' : 'translateX(0)' },
+          }),
+          h('button', {
+            class: ['tldr-pill', !props.modelValue ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
+            onClick: () => emit('update:modelValue', false),
+          }, 'Detailed'),
+          h('button', {
+            class: ['tldr-pill', props.modelValue ? 'tldr-pill--active' : ''].filter(Boolean).join(' '),
+            onClick: () => emit('update:modelValue', true),
+          }, 'TL;DR'),
+        ]),
+        h(TextSizeControl),
       ]),
     ]
   },

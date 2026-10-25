@@ -53,7 +53,7 @@
 }
 
 .ads-token-chevron {
-  font-size: 20px;
+  font-size: var(--text-4xl);
   color: var(--color-text-subtle);
   font-weight: var(--weight-bold);
   width: 24px;
@@ -233,7 +233,7 @@
   display: flex;
   align-items: center;
   color: var(--color-text-subtle);
-  font-size: 20px;
+  font-size: var(--text-4xl);
   flex-shrink: 0;
 }
 
@@ -406,7 +406,7 @@
 
   .ads-token-name {
     min-width: 0;
-    font-size: 9px;
+    font-size: var(--text-3xs);
   }
 
   .ads-token-tier-desc {

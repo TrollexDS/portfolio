@@ -206,7 +206,7 @@ export default defineComponent({
 
     // ── Ripple on expanded card click (skip interactive widgets) ──
     function onExpandedClick(e) {
-      if (e.target.closest('.cc-outer') || e.target.closest('.cv-outer') || e.target.closest('.tldr-bar')) return
+      if (e.target.closest('.cc-outer') || e.target.closest('.cv-outer') || e.target.closest('.cs-readbar')) return
       spawnRipple(e)
     }
 

@@ -76,7 +76,7 @@
   align-items: flex-start;
   gap: 24px;
   margin-top: 32px;
-  max-width: 680px;
+  max-width: var(--cs-column);
   width: 100%;
 }
 
@@ -252,7 +252,7 @@
 
 .cs-antonym-card-title {
   font-family: 'Syne', sans-serif;
-  font-size: 13px;
+  font-size: var(--text-md);
   font-weight: 600;
   line-height: 1.4;
   color: var(--color-text-primary);
@@ -263,7 +263,7 @@
 
 .cs-antonym-card-desc {
   font-family: 'Syne', sans-serif;
-  font-size: 12px;
+  font-size: var(--text-sm);
   font-weight: 400;
   line-height: 1.5;
   color: var(--color-text-body);
