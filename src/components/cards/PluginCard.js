@@ -3,8 +3,10 @@ import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
+import { PLUGIN_LIBRARY } from './pluginLibrary.data.js'
 
-const VIDEO_SRC = '/src/assets/videos/rayo-plugin-clip.mp4'
+const PLUGIN_LOGO = '/src/assets/images/rayo/plugin/rayo-plugin-logo.svg'
+const PLUGIN_HERO = '/src/assets/images/rayo/plugin/rayo-plugin-hero.svg'
 const SCREENSHOT         = '/src/assets/images/rayo/plugin/rayo-plugin-screenshot.png'
 const PODCAST_SCREENSHOT = '/src/assets/images/rayo/plugin/rayo-plugin-podcast-screenshot.png'
 const IMG_SEL_REGION = '/src/assets/images/rayo/plugin/select-a-region-hover.png'
@@ -27,6 +29,144 @@ const ANTONYM_CARD_W       = 152
 
 // Mobile card order: content-type first, then the rest stacked
 const MOBILE_CARDS = [CARDS[2], CARDS[0], CARDS[1], CARDS[3], CARDS[4]]
+
+/* ─────────────────────────────────────────────────────────────
+   RayoLibraryBg — DOM-based animated plugin panel for the card face.
+   Walks the asset library: for each region, the Radio Show tab with
+   one station's shows, then the Podcast tab with that region's
+   podcasts. Rows stagger in, hold, stagger out; the segmented
+   control slides and the region/station labels swap between steps.
+   Decorative only (aria-hidden); the prose carries the meaning.
+   ───────────────────────────────────────────────────────────── */
+const PC_STEPS = PLUGIN_LIBRARY.flatMap(r => {
+  const radio = {
+    key: r.region + '-radio', tab: 'radio', flag: r.flag, regionName: r.name, station: r.station,
+    rows: [
+      ...(r.logo ? [{ title: r.station, img: r.logo, logo: true }] : []),
+      ...r.shows,
+    ],
+  }
+  const pods = r.pods.length
+    ? { key: r.region + '-pods', tab: 'podcast', flag: r.flag, regionName: r.name, station: 'All podcasts', rows: r.pods }
+    : null
+  return pods ? [radio, pods] : [radio]
+})
+
+const PC_T = {
+  rowIn:   70,    // stagger between rows entering
+  hold:    2300,  // all rows visible
+  rowOut:  35,    // stagger between rows leaving
+  outDur:  320,   // row exit transition
+  inLag:   140,   // new rows start entering this long after the old start leaving
+}
+
+const RayoLibraryBg = defineComponent({
+  name: 'RayoLibraryBg',
+
+  setup() {
+    const stepIdx     = ref(0)
+    const rowsIn      = ref(0)      // rows of the current step revealed so far
+    const leavingRows = ref(null)   // previous step's rows while they animate out
+    const leavingOut  = ref(0)      // how many of those have been dismissed
+    const reduced = typeof window !== 'undefined'
+      && window.matchMedia
+      && window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    let timers = []
+    let destroyed = false
+    const step = () => PC_STEPS[stepIdx.value % PC_STEPS.length]
+
+    function schedule(fn, ms) {
+      const id = setTimeout(() => { if (!destroyed) fn() }, ms)
+      timers.push(id)
+    }
+
+    // Reveal the current step's rows, then hand over to the next step.
+    function enter(lag = 0) {
+      const n = step().rows.length
+      rowsIn.value = 0
+      for (let i = 0; i < n; i++) schedule(() => { rowsIn.value = i + 1 }, lag + i * PC_T.rowIn)
+      schedule(advance, lag + n * PC_T.rowIn + PC_T.hold)
+    }
+
+    // The switch: tab, labels and rows all change together. The old rows
+    // stagger out on top while the new ones stagger in underneath.
+    function advance() {
+      const old = step().rows
+      leavingRows.value = old
+      leavingOut.value = 0
+      for (let i = 0; i < old.length; i++) schedule(() => { leavingOut.value = i + 1 }, i * PC_T.rowOut)
+      schedule(() => { leavingRows.value = null }, old.length * PC_T.rowOut + PC_T.outDur)
+
+      stepIdx.value = (stepIdx.value + 1) % PC_STEPS.length
+      enter(PC_T.inLag)
+    }
+
+    onMounted(() => {
+      if (reduced) { rowsIn.value = step().rows.length; return }
+      schedule(() => enter(0), 250)
+    })
+    onUnmounted(() => { destroyed = true; timers.forEach(clearTimeout) })
+
+    const chevron = () => h('svg', { class: 'pc-chevron', viewBox: '0 0 12 12', width: 10, height: 10 }, [
+      h('path', { d: 'M2.5 4.5 6 8l3.5-3.5', fill: 'none', stroke: 'currentColor', 'stroke-width': 1.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }),
+    ])
+
+    const rowNode = (row, i, cls, key) =>
+      h('div', { key, class: ['pc-row', ...cls, row.logo ? 'pc-row--logo' : ''].filter(Boolean).join(' ') }, [
+        h('img', { class: 'pc-thumb', src: row.img, alt: '', loading: 'lazy', decoding: 'async' }),
+        h('span', { class: 'pc-name' }, row.title),
+      ])
+
+    return () => {
+      const s = step()
+      return h('div', { class: 'pc-bg-wrap', 'aria-hidden': 'true' }, [
+        h('div', { class: 'pc-panel' }, [
+
+          // Segmented control — pill slides between tabs
+          h('div', { class: ['pc-seg', s.tab === 'podcast' ? 'pc-seg--podcast' : ''].filter(Boolean).join(' ') }, [
+            h('span', { class: 'pc-seg-pill' }),
+            h('span', { class: ['pc-seg-item', s.tab === 'radio' ? 'pc-seg-item--on' : ''].filter(Boolean).join(' ') }, 'Radio Show'),
+            h('span', { class: ['pc-seg-item', s.tab === 'podcast' ? 'pc-seg-item--on' : ''].filter(Boolean).join(' ') }, 'Podcast'),
+          ]),
+
+          // Region
+          h('div', { class: 'pc-select' }, [
+            h('span', { key: s.regionName, class: 'pc-select-label pc-select-label--in' }, s.flag + ' ' + s.regionName),
+            chevron(),
+          ]),
+
+          // Station / podcast scope
+          h('div', { class: 'pc-select pc-select--station' }, [
+            h('span', { key: s.key, class: 'pc-select-label pc-select-label--in' }, s.station),
+            chevron(),
+          ]),
+
+          h('div', { class: 'pc-divider' }),
+
+          // Asset rows — two stacked lists during a switch: leaving on top, entering below
+          h('div', { class: 'pc-list' }, [
+            h('div', { key: s.key, class: 'pc-list-layer' },
+              s.rows.map((row, i) => rowNode(row, i, [i < rowsIn.value ? 'pc-row--in' : ''], s.key + '-' + i))
+            ),
+            leavingRows.value
+              ? h('div', { key: 'leaving', class: 'pc-list-layer pc-list-layer--leaving' },
+                  leavingRows.value.map((row, i) =>
+                    rowNode(row, i, ['pc-row--in', i < leavingOut.value ? 'pc-row--out' : ''], 'leaving-' + i))
+                )
+              : null,
+          ]),
+        ]),
+      ])
+    }
+  },
+})
+
+// Collapsed face + hero overlay + fly content share this block
+const pluginFace = () => h('div', { class: 'pc-card-face' }, [
+  h('img', { src: PLUGIN_LOGO, alt: 'Rayo Thumbnails', class: 'pc-card-logo' }),
+  h('p', { class: 'pc-card-title' }, 'Rayo\nThumbnails'),
+])
 
 const AntonymSection = defineComponent({
   name: 'AntonymSection',
@@ -293,11 +433,29 @@ export default defineComponent({
       h(CaseStudyOverlay, {
         cardKey: 'plugin',
         cardClass: 'plugin-card',
-        videoSrc: VIDEO_SRC,
-        videoClass: 'plugin-video',
+        imageSrc: PLUGIN_HERO,
+        imageClass: 'pc-hero-img',
+        heroWrapClass: 'pc-hero-wrap',
         tooltip: 'Streamline the design process\nwith a Figma plugin 🔁',
         heroSize: 448,
       }, {
+        // ── Collapsed card face: animated plugin panel + logo + title ──
+        default: () => [
+          h(RayoLibraryBg),
+          pluginFace(),
+        ],
+
+        // ── Hero overlay: live panel on top of the placeholder ──
+        heroOverlay: () => h('div', { class: 'pc-hero-overlay' }, [
+          h(RayoLibraryBg),
+          pluginFace(),
+        ]),
+
+        // ── Fly content ──
+        flyContent: () => h('div', { class: 'pc-fly-overlay' }, [
+          pluginFace(),
+        ]),
+
         content: () => [
 
           // ── TL;DR toggle ──
