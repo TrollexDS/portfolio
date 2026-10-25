@@ -26,7 +26,7 @@
 
   /* The case study keeps its own close on mobile; the header's minimise
      and the room made for it are desktop-only. */
-  .nav-close { display: none; }
+  .nav-close, .nav-goo { display: none; }
   body.cs-open .nav-toggles { margin-right: 0; }
   .nav-inner { max-width: none; }
 

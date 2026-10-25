@@ -194,9 +194,14 @@ body.cs-open .nav-toggles { margin-right: 44px; }
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   cursor: none;
-  animation: nav-close-in 0.35s cubic-bezier(0.34, 1.3, 0.64, 1) backwards;
-  transition: background 0.3s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition: background 0.3s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
 }
+/* arriving: the liquid does the moving; the real button fades in over the
+   blob once the split has happened. Leaving: it fades out first and the
+   blob it leaves behind merges back. */
+.nav-close__btn--goo-in  { animation: nav-close-fade 0.2s ease 0.36s both; }
+.nav-close__btn--out     { opacity: 0; pointer-events: none; transition: opacity 0.15s ease; }
+@keyframes nav-close-fade { from { opacity: 0; } to { opacity: 1; } }
 /* the same hover and press as the two toggles beside it */
 .nav-close__btn:hover {
   background: var(--color-surface-nav);
@@ -204,10 +209,68 @@ body.cs-open .nav-toggles { margin-right: 44px; }
 }
 .nav-close__btn:active { transform: scale(0.92); }
 .nav-close__btn img { width: 16px; height: 16px; display: block; filter: var(--filter-action-icon); }
-@keyframes nav-close-in {
-  from { opacity: 0; transform: scale(0.6); }
-  to   { opacity: 1; transform: scale(1); }
+
+/* ── The liquid behind the minimise ──
+   Its own fixed layer in the same column, under the nav. Two blobs in the
+   nav's solid surface colour under the goo filter; the theme blob makes
+   the same 44px move as the real toggle (same duration, same easing), the
+   minimise blob holds the toggle's old place and grows out of it. */
+.nav-goo {
+  position: fixed;
+  top: 20px; left: 0; right: 0;
+  z-index: 95;              /* under the nav (100) - and under it over a case study (350) */
+  padding: 0 48px;
+  pointer-events: none;
 }
+body.cs-open .nav-goo { z-index: 345; }
+.nav-goo__filter { position: absolute; width: 0; height: 0; }
+.nav-goo__inner {
+  position: relative;
+  min-height: 46px;
+  max-width: var(--nav-max-width, 1240px);
+  margin: 0 auto;
+}
+.nav-goo__blobs {
+  position: absolute;
+  top: 5px; right: 0;
+  width: 160px; height: 36px;
+  filter: url(#nav-goo);
+}
+.nav-goo__blob {
+  position: absolute;
+  top: 0; right: 0;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--color-surface-nav);
+}
+.nav-goo--in  { animation: nav-goo-fade-out 0.2s ease 0.42s both; }
+.nav-goo--out { animation: nav-goo-fade-out 0.2s ease 0.42s both; }
+
+/* opening: one circle at the toggle's place divides into two */
+.nav-goo--in .nav-goo__blob--theme { animation: nav-goo-theme-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.nav-goo--in .nav-goo__blob--close { animation: nav-goo-close-in 0.42s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes nav-goo-theme-in {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-44px); }
+}
+@keyframes nav-goo-close-in {
+  0%   { transform: scale(0.55); }
+  70%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* closing: the minimise is drawn back into the toggle */
+.nav-goo--out .nav-goo__blob--theme { animation: nav-goo-theme-out 0.35s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.nav-goo--out .nav-goo__blob--close { animation: nav-goo-close-out 0.4s cubic-bezier(0.4, 0, 0.6, 1) 0.06s both; }
+@keyframes nav-goo-theme-out {
+  from { transform: translateX(-44px); }
+  to   { transform: translateX(0); }
+}
+@keyframes nav-goo-close-out {
+  0%   { transform: scale(1); }
+  100% { transform: scale(0.3); opacity: 0; }
+}
+@keyframes nav-goo-fade-out { from { opacity: 1; } to { opacity: 0; } }
 
 .nav--hidden {
   transform: translateY(-110%);

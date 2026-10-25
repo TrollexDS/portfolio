@@ -114,8 +114,45 @@ export default defineComponent({
     const rowHidden = computed(() => hidden.value && !peek.value)
     watch(rowHidden, v => document.body.classList.toggle('nav-hidden', v), { immediate: true })
 
-    function onCsOpen()  { csOpen.value = true;  hidden.value = false; lastScrollY = 0 }
-    function onCsClose() { csOpen.value = false; hidden.value = false; lastScrollY = window.scrollY }
+    // The minimise arrives and leaves as liquid: it splits off the theme
+    // toggle when a case study opens and merges back into it when one
+    // closes. The goo is a layer of its own behind the buttons - two solid
+    // blobs under an SVG goo filter, shown only for the length of the move,
+    // because glass and goo don't mix (a filtered parent takes the blur
+    // away from the buttons inside it). The theme blob tracks the real
+    // toggle, which slides 44px to make room; the minimise blob stays
+    // where the toggle was and grows, so one circle divides into two.
+    const closing = ref(false)   // the minimise is on its way out
+    const goo = ref(null)        // 'in' | 'out' while the liquid plays
+    let gooTimer = 0
+    const GOO_MS = 620
+
+    function playGoo(dir) {
+      clearTimeout(gooTimer)
+      goo.value = dir
+      gooTimer = setTimeout(() => {
+        goo.value = null
+        if (dir === 'out') closing.value = false
+      }, GOO_MS)
+    }
+
+    function onCsOpen() {
+      csOpen.value = true; hidden.value = false; lastScrollY = 0
+      closing.value = false
+      if (!isMobile.value) playGoo('in')
+    }
+    function onCsClose() {
+      csOpen.value = false; hidden.value = false; lastScrollY = window.scrollY
+      if (isMobile.value) return
+      closing.value = true
+      // With the row hidden there is nothing to merge into: a plain fade.
+      if (rowHidden.value) {
+        clearTimeout(gooTimer)
+        gooTimer = setTimeout(() => { closing.value = false }, 250)
+      } else {
+        playGoo('out')
+      }
+    }
     function closeCaseStudy() { window.dispatchEvent(new CustomEvent('cs:close')) }
 
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`)
@@ -217,12 +254,32 @@ export default defineComponent({
 
       return h('div', { class: 'nav-root' }, [
 
+      // The liquid, behind the buttons (see onCsOpen).
+      goo.value
+        ? h('div', { key: `goo-${goo.value}`, class: ['nav-goo', `nav-goo--${goo.value}`] }, [
+            h('svg', { class: 'nav-goo__filter', width: 0, height: 0, 'aria-hidden': 'true' }, [
+              h('defs', [
+                h('filter', { id: 'nav-goo', x: '-50%', y: '-50%', width: '200%', height: '200%', 'color-interpolation-filters': 'sRGB' }, [
+                  h('feGaussianBlur', { in: 'SourceGraphic', stdDeviation: 5, result: 'blur' }),
+                  h('feColorMatrix', { in: 'blur', mode: 'matrix', values: '1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10', result: 'goo' }),
+                ]),
+              ]),
+            ]),
+            h('div', { class: 'nav-goo__inner' }, [
+              h('div', { class: 'nav-goo__blobs' }, [
+                h('span', { class: 'nav-goo__blob nav-goo__blob--theme' }),
+                h('span', { class: 'nav-goo__blob nav-goo__blob--close' }),
+              ]),
+            ]),
+          ])
+        : null,
+
       // The minimise lives outside the nav so the scroll-hide never takes it.
-      csOpen.value
+      (csOpen.value || closing.value)
         ? h('div', { class: 'nav-close' }, [
             h('div', { class: 'nav-close__inner' }, [
               h('button', {
-                class:          'nav-close__btn',
+                class:          ['nav-close__btn', closing.value ? 'nav-close__btn--out' : '', goo.value ? `nav-close__btn--goo-${goo.value}` : ''],
                 onClick:        closeCaseStudy,
                 'aria-label':   'Close case study',
                 'data-tooltip': 'Press Esc to exit fullscreen',
