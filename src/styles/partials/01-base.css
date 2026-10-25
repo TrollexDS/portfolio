@@ -432,3 +432,73 @@ body.cs-open .nav-toggles { margin-right: 44px; }
   transition: opacity 0.2s ease, transform 0.35s cubic-bezier(0.34, 1.5, 0.64, 1);
 }
 .lazy-toggle--off .lz-burst { opacity: 1; transform: scale(1); }
+
+
+/* ── Theme toggle: the lens and the wipe ───────────────────────────────
+   Hovered, a circle around the button previews the other theme: a lens
+   over the page that inverts what is under it, growing out of the
+   button's centre and breathing while you hover. Clicked, the new theme
+   grows out of that circle until it covers the page (ThemeToggle.js). */
+.theme-toggle { position: relative; }
+
+/* the two icons sit on top of each other and morph: the one on its way
+   out turns and shrinks, the one arriving turns and grows */
+.theme-toggle__icon {
+  position: absolute;
+  left: 50%; top: 50%;
+  margin: -9px 0 0 -9px;
+  transform: rotate(0) scale(1);
+  opacity: 1;
+  transition: transform 0.4s cubic-bezier(0.05, 0.7, 0.1, 1), opacity 0.4s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+.theme-toggle__sun.theme-toggle__icon--out  { transform: rotate(90deg) scale(0);  opacity: 0; }
+.theme-toggle__moon.theme-toggle__icon--out { transform: rotate(-90deg) scale(0); opacity: 0; }
+
+.theme-lens {
+  --lens: 126px;
+  position: fixed;
+  z-index: 90;
+  width: var(--lens);
+  height: var(--lens);
+  margin: calc(var(--lens) / -2) 0 0 calc(var(--lens) / -2);
+  border-radius: 50%;
+  pointer-events: none;
+  -webkit-backdrop-filter: invert(1) hue-rotate(180deg);
+  backdrop-filter: invert(1) hue-rotate(180deg);
+  /* a point on the button's centre until hovered: grows out of it, and
+     on hover out shrinks back into it - scale only, no fade */
+  transform: scale(0);
+  transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+}
+/* under the nav, over everything else - including an open case study */
+body.cs-open .theme-lens { z-index: 340; }
+
+.theme-lens--lit {
+  transform: scale(1);
+  transition: transform 0.6s cubic-bezier(0.05, 0.7, 0.1, 1);
+  /* the breath is on `scale`, not `transform`: the two compose, so taking
+     the breath away on hover out leaves the shrink free to run */
+  animation: theme-lens-breathe 1.6s cubic-bezier(0.2, 0, 0, 1) 0.6s infinite;
+}
+
+@keyframes theme-lens-breathe {
+  0%, 100% { scale: 1; }
+  50%      { scale: 1.08; }
+}
+
+/* The wipe: the old picture holds still and the new one is clipped to a
+   circle growing out of the button, animated from script. No blending,
+   so the edge is an edge. Without the attribute (reduced motion) the
+   browser's own cross-fade runs instead. */
+:root[data-theme-wipe]::view-transition-old(root),
+:root[data-theme-wipe]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+/* no element runs its own colour transition underneath the new picture */
+[data-theme-switching] *,
+[data-theme-switching] *::before,
+[data-theme-switching] *::after {
+  transition: none !important;
+}
