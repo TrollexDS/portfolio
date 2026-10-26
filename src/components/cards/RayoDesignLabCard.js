@@ -77,227 +77,100 @@ const themed = (light, dark, alt, cls = 'cs-cover-img') =>
 /* ─────────────────────────────────────────────────────────────
    LabLoop - the card face.
 
-   The lab's own intro, then one pass of the loop the case study
-   describes: a prompt is typed and worked on, a prototype arrives,
-   options are tried, it is shared, and it becomes a file in the repo.
+   One pass of the loop the case study describes, with the two things
+   that make the lab different from a chat window kept in: the answer
+   arrives as options side by side, not one at a time, and the second
+   prompt turns up the states nobody had designed yet.
 
-   The wordmark is sampled the way the real splash samples it - the
-   word is rendered once to an offscreen canvas in the display face and
-   cut into columns, so the type is the actual font rather than a
-   hand-drawn bar alphabet. Quantised horizontally, exact vertically:
-   a bar only has to be a bar in x, and snapping in y turns every thin
-   horizontal stroke into a square dot.
+   The lab boots like the app it builds - the name is the splash on the
+   phone's own screen - then a prompt is typed and worked on, three
+   prototypes fan out, one is kept, a follow-up prompt is asked of it,
+   and its states branch off the frame. The pass ends there: the state
+   branch is the part worth holding on.
    ───────────────────────────────────────────────────────────── */
-const WORD   = 'Rayo Design Lab'
-const PROMPT = 'Add download function in the Rayo app'
-
-const CELL = 5        // sampling pitch - the horizontal resolution
-const PITCH = 6       // display pitch - deliberately wider than CELL
-const BAR_W = 4
-const FONT_PX = 76
-const TRACKING = 1.5
-const INK = 132       // alpha at which a pixel counts as ink
-const MERGE_GAP = 2   // vertical gaps below this are antialiasing
-const MIN_RUN = 3
-const PEAK = 1.18     // how far past its own height the wave crests
-const SWEEP_STEP = 6  // per-column delay: the wave's travel speed
-
-// Rayo's brand gradient, painted one column at a time - a real gradient
-// can't paint a few hundred separate boxes as one image.
-const G_FROM = '#ED4AD9'
-const G_TO   = '#8132FE'
+const WORD    = 'Rayo Design Lab'
+const PROMPT  = 'Add download function in the Rayo app'
+const PROMPT2 = 'What if the download fails?'
+const TYPE_MS = 46
 
 const TIMELINE = [
-  [0,     { phase: 'splash', pill: 0 }],
-  [2650,  { phase: 'clear'   }],   // the word stands for a beat first
-  [3800,  { phase: 'prompt'  }],
-  [5900,  { phase: 'loading' }],
-  [7900,  { phase: 'sent'    }],   // the bar moves up out of the way
-  [8500,  { phase: 'proto'   }],
-  [9300,  { phase: 'options' }],
-  [10200, { pill: 1 }],
-  [11100, { pill: 2 }],
-  [12000, { phase: 'share'   }],
-  [12700, { phase: 'shared'  }],
-  [13500, { phase: 'fold'    }],   // it becomes a file; the bar leaves
-  [14700, { phase: 'upload'  }],   // and goes up into the cloud
-  [15700, { phase: 'rest'    }],   // filled and holding
-  [16050, { phase: 'done'    }],   // then goes, leaving the frame empty
+  [0,     { phase: 'boot'     }],   // the lab starts: name on the phone's screen
+  [1300,  { phase: 'clear'    }],   // splash leaves; an empty frame
+  [1900,  { phase: 'prompt',  type: PROMPT }],
+  [4100,  { phase: 'loading'  }],
+  [5400,  { phase: 'fanout'   }],   // three answers, side by side
+  [7700,  { phase: 'pick'     }],   // the middle one is kept
+  [8700,  { phase: 'prompt2', type: PROMPT2 }],
+  [10500, { phase: 'loading2' }],
+  [11600, { phase: 'branch'   }],   // its states branch off the frame
+  [14300, { phase: 'rest'     }],
+  [15100, { phase: 'done'     }],   // and it all goes, leaving the frame empty
 ]
+const LOOP_MS = 16500
 
-// The cloud no longer waits for `rest` to light up - it does that on
-// contact, from inside `upload`. `rest` is the beat it holds for after.
-// `done` at 16050 plus its own exit lands on an empty frame at ~16500,
-// and the loop turns 1.45s after that - the pause is the point.
-const LOOP_MS = 17950
-
-const ICON_SHARE = 'M12 3v12M12 3l-4 4M12 3l4 4M5 14v5a1 1 0 001 1h12a1 1 0 001-1v-5'
 const ICON_CHECK = 'M5 12.5l4.2 4.2L19 7'
-const ICON_CLOUD = 'M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z'
 
-function sampleWord() {
-  try {
-    const canvas = document.createElement('canvas')
-    const ctx = canvas.getContext('2d', { willReadFrequently: true })
-    if (!ctx) return null
+/* The three answers to the first prompt, and the kept one after the
+   second. Each is an arrangement of Rayo-shaped parts: a now-playing
+   hero, a station row, a download toggle, a grid of downloaded shows. */
+const SCREENS = [
+  ['hero', 'banner', 'row', 'row'],            // A: a download call-out under the artwork
+  ['row', 'toggle', 'row', 'row'],             // B: one toggle on the show page (kept)
+  ['tiles', 'row', 'row'],                     // C: a grid of what you've downloaded
+]
+const SCREEN_FAILED = ['row', 'toggle', 'alert', 'row']
 
-    const root = getComputedStyle(document.documentElement)
-    const family = root.getPropertyValue('--font-family-display').trim() ||
-                   root.getPropertyValue('--font-family-primary').trim() || 'sans-serif'
-    const font = `700 ${FONT_PX}px ${family}`
-
-    ctx.letterSpacing = `${TRACKING}px`
-    ctx.font = font
-    const m = ctx.measureText(WORD)
-    const ascent = Math.ceil(m.actualBoundingBoxAscent)
-    const descent = Math.ceil(m.actualBoundingBoxDescent)
-    canvas.width = Math.ceil(m.width) + CELL * 2
-    canvas.height = ascent + descent + CELL * 2
-    // resizing resets the context, so both go on again
-    ctx.letterSpacing = `${TRACKING}px`
-    ctx.font = font
-    ctx.fillText(WORD, CELL, ascent + CELL)
-
-    const { data } = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    const cols = Math.floor(canvas.width / CELL)
-    const raw = []
-    let minY = canvas.height, maxY = 0, firstCol = -1, lastCol = -1
-
-    for (let cx = 0; cx < cols; cx++) {
-      const x0 = cx * CELL
-      const x1 = Math.min(x0 + CELL, canvas.width)
-      // full vertical resolution: any ink in the column counts, because a
-      // one-pixel stroke still has to survive and averaging deletes it
-      const ink = []
-      for (let py = 0; py < canvas.height; py++) {
-        let hit = false
-        for (let px = x0; px < x1 && !hit; px++) {
-          if (data[(py * canvas.width + px) * 4 + 3] > INK) hit = true
-        }
-        ink.push(hit)
-      }
-      let py = 0
-      while (py < canvas.height) {
-        if (!ink[py]) { py++; continue }
-        let end = py
-        while (end + 1 < canvas.height && ink[end + 1]) end++
-        let next = end + 1
-        while (next < canvas.height && next - end <= MERGE_GAP) {
-          if (ink[next]) { end = next; while (end + 1 < canvas.height && ink[end + 1]) end++; next = end + 1 }
-          else next++
-        }
-        const height = Math.max(MIN_RUN, end - py + 1)
-        raw.push({ x: cx, top: py, bottom: py + height })
-        minY = Math.min(minY, py); maxY = Math.max(maxY, py + height)
-        if (firstCol < 0) firstCol = cx
-        lastCol = cx
-        py = end + 1
-      }
-    }
-    if (!raw.length) return null
-
-    const span = Math.max(1, lastCol - firstCol)
-    const width = (lastCol - firstCol + 1) * PITCH - (PITCH - BAR_W)
-    const height = maxY - minY
-    const midY = height / 2
-
-    // Fill the empty columns so the resting line is continuous and the wave
-    // passes through the spaces instead of breaking apart at them.
-    const inked = new Set(raw.map(r => r.x))
-    const dotTop = minY + midY - BAR_W / 2
-    const fillers = new Set()
-    for (let cx = firstCol; cx <= lastCol; cx++) {
-      if (inked.has(cx)) continue
-      fillers.add(cx)
-      raw.push({ x: cx, top: dotTop, bottom: dotTop + BAR_W })
-    }
-
-    const bits = raw.map(({ x, top, bottom }) => {
-      const col = x - firstCol
-      const y = top - minY
-      const hh = bottom - top
-      return {
-        x: col * PITCH, y, w: BAR_W, h: hh,
-        dy: midY - (y + hh / 2),
-        c: Math.min(1, BAR_W / hh),
-        p: (height * PEAK) / hh,
-        e: fillers.has(x) ? 0 : 1,
-        delay: col * SWEEP_STEP,
-        t: col / span,
-      }
-    })
-    return { bits, width, height, built: 300 + span * SWEEP_STEP + 420 }
-  } catch (e) {
-    return null
-  }
-}
+/* The states the second prompt turns up. Same tones the lab uses. */
+const LOOP_STATES = [
+  { id: 'loading', name: 'Loading',       tone: 'info'    },
+  { id: 'failed',  name: 'Failed',        tone: 'error'   },
+  { id: 'offline', name: 'No connection', tone: 'warning' },
+]
 
 const LabLoop = defineComponent({
   name: 'LabLoop',
   setup() {
-    const phase = ref('splash')
-    const pill  = ref(0)
+    const phase = ref('boot')
     const typed = ref('')
-    const word  = ref(null)
-    // bumped once per pass so the splash remounts and its build keyframes
-    // replay - an animation that has already run will not run again
-    const cycle = ref(0)
     const root  = ref(null)
 
     let timers = []
     let typer  = null
-    let ro     = null
 
     function stopLoop() {
       timers.forEach(clearTimeout); timers = []
       if (typer) { clearInterval(typer); typer = null }
     }
-    function clearAll() {
-      stopLoop()
-      if (ro) { ro.disconnect(); ro = null }
-    }
 
     // The loop only runs while the face is on (or near) screen and the tab
     // is visible; it stops off-screen and starts a fresh pass on return.
-    let started = false     // fonts ready, word sampled
     let animate = false     // false under reduced motion
     let inView  = false
     useInView(root, { rootMargin: '120px' }, v => {
       inView = v
-      if (!started || !animate) return
+      if (!animate) return
       stopLoop()
       if (v) run()
     })
 
-    /* The wordmark is sampled at a fixed 76px, so it has one true size in
-       pixels. The card face does not - it is a grid cell on the board and
-       the full width of the overlay. One scalar, measured, keeps the word
-       at the same share of the frame in both. */
-    function fit() {
-      const el = root.value
-      if (!el || !word.value || !word.value.width) return
-      const k = Math.max(0.28, Math.min(1, (el.clientWidth * 0.82) / word.value.width))
-      el.style.setProperty('--rdlv-k', String(k))
-    }
-
-    function typeOut() {
+    function typeOut(text) {
       let i = 0
       typed.value = ''
       if (typer) clearInterval(typer)
       typer = setInterval(() => {
         i += 1
-        typed.value = PROMPT.slice(0, i)
-        if (i >= PROMPT.length) { clearInterval(typer); typer = null }
-      }, 48)
+        typed.value = text.slice(0, i)
+        if (i >= text.length) { clearInterval(typer); typer = null }
+      }, TYPE_MS)
     }
 
     function run() {
-      cycle.value += 1
+      phase.value = 'boot'
+      typed.value = ''
       TIMELINE.forEach(([at, change]) => {
         timers.push(setTimeout(() => {
-          if (change.phase) phase.value = change.phase
-          if (change.pill !== undefined) pill.value = change.pill
-          if (change.phase === 'prompt') typeOut()
+          phase.value = change.phase
+          if (change.type) typeOut(change.type)
         }, at))
       })
       timers.push(setTimeout(run, LOOP_MS))
@@ -306,75 +179,58 @@ const LabLoop = defineComponent({
     onMounted(() => {
       const still = typeof window !== 'undefined' && window.matchMedia &&
         window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      // Sampling before the display face has loaded would bake the fallback
-      // font into the bars, so it waits for it.
-      const start = () => {
-        word.value = sampleWord()
-        fit()
-        if (typeof ResizeObserver !== 'undefined' && root.value) {
-          ro = new ResizeObserver(fit)
-          ro.observe(root.value)
-        }
-        started = true
-        if (still) { phase.value = 'options'; typed.value = PROMPT; return }
-        animate = true
-        if (inView) run()
-      }
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(start)
-      else start()
+      // Under reduced motion the face holds on the last beat of the pass.
+      if (still) { phase.value = 'branch'; typed.value = PROMPT2; return }
+      animate = true
+      if (inView) run()
     })
-    onUnmounted(clearAll)
+    onUnmounted(stopLoop)
 
     const svg = (d, cls) =>
       h('svg', { class: cls, viewBox: '0 0 24 24', fill: 'none' }, [
-        h('path', { d, stroke: 'currentColor', 'stroke-width': '2',
+        h('path', { d, stroke: 'currentColor', 'stroke-width': '2.2',
                     'stroke-linecap': 'round', 'stroke-linejoin': 'round' }),
       ])
 
-    /* Each option is a different arrangement of fake components. */
-    const SCREENS = [
-      [['hero'], ['row'], ['row'], ['row']],
-      [['row'], ['toggle'], ['row'], ['row'], ['toggle']],
-      [['banner'], ['tiles'], ['row'], ['row']],
-    ]
-
     const part = (kind, i) => {
-      if (kind === 'hero')   return h('span', { class: 'rdlv-hero', key: i })
-      if (kind === 'banner') return h('span', { class: 'rdlv-banner', key: i })
-      if (kind === 'tiles')  return h('span', { class: 'rdlv-tiles', key: i }, [h('i'), h('i'), h('i'), h('i')])
-      if (kind === 'toggle') return h('span', { class: 'rdlv-toggle', key: i }, [h('span', { class: 'rdlv-tg-l' }), h('span', { class: 'rdlv-tg-s' })])
-      return h('span', { class: 'rdlv-row', key: i }, [
+      if (kind === 'hero')   return h('span', { class: 'rdlv-hero', key: 'hero' + i })
+      if (kind === 'banner') return h('span', { class: 'rdlv-banner', key: 'banner' + i })
+      if (kind === 'tiles')  return h('span', { class: 'rdlv-tiles', key: 'tiles' + i }, [h('i'), h('i'), h('i'), h('i')])
+      if (kind === 'toggle') return h('span', { class: 'rdlv-toggle', key: 'toggle' + i }, [h('span', { class: 'rdlv-tg-l' }), h('span', { class: 'rdlv-tg-s' })])
+      if (kind === 'alert')  return h('span', { class: 'rdlv-alert', key: 'alert' + i }, [h('i'), h('span', { class: 'rdlv-lines' }, [h('span', { class: 'rdlv-l1' }), h('span', { class: 'rdlv-l2' })])])
+      return h('span', { class: 'rdlv-row', key: 'row' + i }, [
         h('span', { class: 'rdlv-thumb' }),
         h('span', { class: 'rdlv-lines' }, [h('span', { class: 'rdlv-l1' }), h('span', { class: 'rdlv-l2' })]),
       ])
     }
 
+    // The kept phone shows the failed state once the branch is drawn.
+    const AFTER_BRANCH = new Set(['branch', 'rest', 'done'])
+    const screenFor = (slot) =>
+      slot === 1 && AFTER_BRANCH.has(phase.value) ? SCREEN_FAILED : SCREENS[slot]
+
+    const phone = (slot) =>
+      h('div', { class: 'rdlv-phone', 'data-slot': slot, key: 'phone' + slot }, [
+        slot === 1
+          ? h('div', { class: 'rdlv-boot' }, [
+              h('span', { class: 'rdlv-boot-mark' }),
+              h('span', { class: 'rdlv-boot-word' }, WORD),
+            ])
+          : null,
+        h('span', { class: 'rdlv-notch' }),
+        h('div', { class: 'rdlv-screen', key: screenFor(slot).join() }, [
+          h('span', { class: 'rdlv-title' }),
+          ...screenFor(slot).map((kind, i) => part(kind, i)),
+        ]),
+        h('span', { class: 'rdlv-mini' }, [h('i', { class: 'rdlv-mini-art' }), h('i', { class: 'rdlv-mini-line' }), h('i', { class: 'rdlv-mini-play' })]),
+        h('span', { class: 'rdlv-tabs' }, [h('i'), h('i'), h('i'), h('i')]),
+        slot === 1 ? h('span', { class: 'rdlv-kept' }, [svg(ICON_CHECK, 'rdlv-kept-icon')]) : null,
+      ])
+
     return () =>
       h('div', { class: 'rdlv', ref: root, 'data-phase': phase.value, 'aria-hidden': 'true' }, [
         h('div', { class: 'rdlv-wash' }),
 
-        // ── the wordmark, built and cleared by two waves ──
-        word.value
-          ? h('div', { class: 'rdlv-splash', key: cycle.value }, [
-              h('div', {
-                class: 'rdlv-word',
-                style: { width: word.value.width + 'px', height: word.value.height + 'px' },
-              }, word.value.bits.map((b, i) =>
-                h('span', {
-                  key: i,
-                  class: 'rdlv-bit',
-                  style: {
-                    left: b.x + 'px', top: b.y + 'px', width: b.w + 'px', height: b.h + 'px',
-                    background: `color-mix(in srgb, ${G_FROM} ${Math.round((1 - b.t) * 100)}%, ${G_TO})`,
-                    '--dy': b.dy + 'px', '--c': b.c, '--p': b.p, '--e': b.e,
-                    '--d': b.delay + 'ms',
-                  },
-                })
-              )),
-            ])
-          : null,
-
-        // ── the prompt, with the loader at the end of the bar ──
         h('div', { class: 'rdlv-prompt' }, [
           h('span', { class: 'rdlv-spark' }),
           h('span', { class: 'rdlv-text' }, typed.value),
@@ -382,41 +238,24 @@ const LabLoop = defineComponent({
           h('span', { class: 'rdlv-load' }),
         ]),
 
-        // ── the options ──
-        h('div', { class: 'rdlv-pills' },
-          [0, 1, 2].map(i =>
+        // the three answers: the kept one is in the middle, so the
+        // frame you watched boot is the one that stays
+        h('div', { class: 'rdlv-stage' }, [phone(0), phone(1), phone(2)]),
+
+        // the states, branching off the kept frame
+        h('div', { class: 'rdlv-states' }, [
+          h('span', { class: 'rdlv-rail' }),
+          ...LOOP_STATES.map((s, i) =>
             h('span', {
-              key: i,
-              class: ['rdlv-pill', pill.value === i ? 'rdlv-pill--on' : ''].filter(Boolean).join(' '),
-              style: { transitionDelay: (i * 55) + 'ms' },
-            })
-          )
-        ),
-
-        // ── the prototype, and the file it becomes ──
-        h('div', { class: 'rdlv-phone' }, [
-          h('span', { class: 'rdlv-notch' }),
-          h('div', { class: 'rdlv-screen', key: pill.value }, [
-            h('span', { class: 'rdlv-title' }),
-            ...SCREENS[pill.value].map(([kind], i) => part(kind, i)),
-          ]),
-          h('span', { class: 'rdlv-tabs' }, [h('i'), h('i'), h('i'), h('i')]),
+              class: ['rdlv-state', 'rdlv-state--' + s.tone, s.id === 'failed' ? 'rdlv-state--on' : ''].filter(Boolean).join(' '),
+              style: { '--i': i },
+              key: s.id,
+            }, [h('i', { class: 'rdlv-state-dot' }), h('span', { class: 'rdlv-state-name' }, s.name)])
+          ),
         ]),
 
-        h('span', { class: 'rdlv-share' }, [
-          svg(ICON_SHARE, 'rdlv-icon rdlv-icon--share'),
-          svg(ICON_CHECK, 'rdlv-icon rdlv-icon--check'),
-        ]),
-
-        // ── where it goes ──
-        h('div', { class: 'rdlv-cloud' }, [
-          // a cloud-shaped patch of the card's own ground, so the file is
-          // occluded rather than overlaid as it goes in
-          h('span', { class: 'rdlv-cloud-fill' }),
-          h('svg', { class: 'rdlv-cloud-svg', viewBox: '0 0 24 24' }, [
-            h('path', { class: 'rdlv-cloud-p', d: ICON_CLOUD }),
-          ]),
-        ]),
+        // the name, quietly, for the whole pass
+        h('span', { class: 'rdlv-label' }, WORD),
       ])
   },
 })
