@@ -89,10 +89,10 @@ const themed = (light, dark, alt, cls = 'cs-cover-img') =>
    run off the card), and the parts the system didn't have arrive in
    purple. Then a follow-up prompt is asked of all five at once: the
    row moves up and under each screen its state arrives - loading,
-   failed, offline - on a stem. Then the whole exploration folds into
-   one file, and the file slots into the archive with the lab's other
-   files, and the pass starts again: the system feeds the work, the
-   work feeds the system.
+   failed, offline - on a stem. Then a folder opens, every screen flies
+   into it, it closes, and it slots into the archive with the lab's
+   other folders, and the pass starts again: the system feeds the work,
+   the work feeds the system.
 
    Every part on a screen is a free element on the face rather than a
    child of the phone, because a part has to travel from where it sat
@@ -116,21 +116,24 @@ const TIMELINE = [
   [11200, { phase: 'loading2' }],
   [12300, { phase: 'branch'   }],   // the row moves up; under each, its state
   [15800, { phase: 'rest'     }],
-  [16600, { phase: 'fold'     }],   // it all folds into one file
-  [17700, { phase: 'archive'  }],   // the archive appears, with a gap in it
-  [18600, { phase: 'slot'     }],   // the file slots in
-  [21000, { phase: 'done'     }],   // and it all goes, leaving the face empty
+  [16600, { phase: 'open'     }],   // a folder opens; every screen flies in
+  [17800, { phase: 'close'    }],   // and it closes
+  [18600, { phase: 'archive'  }],   // the archive appears, with a gap in it
+  [19400, { phase: 'slot'     }],   // the folder slots in
+  [21800, { phase: 'done'     }],   // and it all goes, leaving the face empty
 ]
-const LOOP_MS = 22300
+const LOOP_MS = 23100
 
-/* The archive the pass ends on: the lab's files, in a list, with a gap
-   where this one goes. Row centres from the face's centre, in cqmin. */
+/* The archive the pass ends on: the lab's folders, in a list, with a
+   gap where this one goes. Row centres from the face's centre, in
+   cqmin. The folder is drawn in two layers - its back under the
+   screens, its front over them - so the screens go inside it. */
 const ARCHIVE_ROWS = 6
 const ARCHIVE_PITCH = 8.4
-const ARCHIVE_GAP = 2                 // the row the file slots into
+const ARCHIVE_GAP = 2                 // the row the folder slots into
 const ARCHIVE_W = 44
-const FILE_W = 9, FILE_H = 12         // the file, folded
-const GLYPH_W = 4.6                   // a file, in a row
+const FOLDER_W = 30                   // the folder, open at the centre
+const GLYPH_W = 5.6                   // a folder, in a row
 const archiveY = i => (i - (ARCHIVE_ROWS - 1) / 2) * ARCHIVE_PITCH
 
 /* The states the second prompt turns up, one under each screen. Same
@@ -211,7 +214,7 @@ function layoutScreen(kinds) {
 
 /* Which kinds a screen shows in a phase; a child screen is its parent
    with one part swapped for its state's. */
-const EDITED = new Set(['new', 'prompt2', 'loading2', 'branch', 'rest', 'done'])
+const EDITED = new Set(['new', 'prompt2', 'loading2', 'branch', 'rest', 'open', 'close', 'archive', 'slot', 'done'])
 function screenKinds(slot, phase, child) {
   let k = SCREENS[slot]
   const add = NEW_PARTS[slot]
@@ -375,7 +378,7 @@ const LabLoop = defineComponent({
     /* Under each screen, its state: the same screen with one part swapped,
        on a stem that carries the state's name. Only rendered once the
        second prompt has been answered, so everything in it arrives. */
-    const BRANCHED = new Set(['branch', 'rest', 'done'])
+    const BRANCHED = new Set(['branch', 'rest', 'open', 'close', 'archive', 'slot', 'done'])
     const child = (slot) => {
       if (!BRANCHED.has(phase.value)) return null
       const st = LOOP_STATES[STATE_OF[slot]]
@@ -388,7 +391,7 @@ const LabLoop = defineComponent({
     }
 
     /* A row of the archive. The gap row has no glyph of its own - the
-       folded file becomes it - and carries who it is shared with. */
+       folder becomes it - and carries who it is shared with. */
     const archiveRow = (i) => {
       const gap = i === ARCHIVE_GAP
       return h('div', {
@@ -396,7 +399,7 @@ const LabLoop = defineComponent({
         style: { '--ay': cq(archiveY(i)), '--i': i },
         key: 'arow' + i,
       }, [
-        gap ? h('span', { class: 'rdlv-aglyph rdlv-aglyph--gap' }) : h('span', { class: 'rdlv-aglyph' }, [h('i'), h('i')]),
+        gap ? h('span', { class: 'rdlv-aglyph rdlv-aglyph--gap' }) : h('span', { class: 'rdlv-aglyph' }, [h('i', { class: 'rdlv-aglyph-back' }), h('i', { class: 'rdlv-aglyph-front' })]),
         h('span', { class: 'rdlv-aname' }),
         gap
           ? h('span', { class: 'rdlv-aavs' }, [h('i'), h('i'), h('i')])
@@ -404,21 +407,18 @@ const LabLoop = defineComponent({
       ])
     }
 
-    /* The file: the exploration, folded. It grows out of the fold at the
-       centre and travels into the gap, shrinking to a row's glyph. */
-    const file = () =>
+    /* The folder, one layer of it: `back` sits under the stage, `front`
+       over it, both on the same spot with the same travel, so the
+       screens fly in between them. */
+    const folder = (layer) =>
       h('div', {
-        class: 'rdlv-file',
+        class: 'rdlv-folder rdlv-folder--' + layer,
         style: {
           '--fx': cq(-ARCHIVE_W / 2 + GLYPH_W / 2),
           '--fy': cq(archiveY(ARCHIVE_GAP)),
-          '--fk': (GLYPH_W / FILE_W).toFixed(3),
+          '--fk': (GLYPH_W / FOLDER_W).toFixed(3),
         },
-      }, [
-        h('span', { class: 'rdlv-file-strip' }, [h('i'), h('i'), h('i'), h('i'), h('i')]),
-        h('span', { class: 'rdlv-file-line' }),
-        h('span', { class: 'rdlv-file-line rdlv-file-line--short' }),
-      ])
+      }, [h('span', { class: 'rdlv-folder-' + layer })])
 
     return () =>
       h('div', { class: 'rdlv', ref: root, 'data-phase': phase.value, 'aria-hidden': 'true' }, [
@@ -431,17 +431,20 @@ const LabLoop = defineComponent({
           h('span', { class: 'rdlv-load' }),
         ]),
 
+        // the back of the folder, under everything that flies into it
+        folder('back'),
+
         // the five screens, and in them the library; then their states
         h('div', { class: 'rdlv-stage' }, [
           ...[0, 1, 2, 3, 4].map(phone),
           ...[0, 1, 2, 3, 4].map(child),
         ]),
 
-        // where it ends up: a file in the archive, with the lab's others
-        h('div', { class: 'rdlv-archive' }, [
-          ...Array.from({ length: ARCHIVE_ROWS }, (_, i) => archiveRow(i)),
-          file(),
-        ]),
+        // the front of the folder, over them
+        folder('front'),
+
+        // where it ends up: a folder in the archive, with the lab's others
+        h('div', { class: 'rdlv-archive' }, Array.from({ length: ARCHIVE_ROWS }, (_, i) => archiveRow(i))),
 
         // the name, quietly, for the whole pass
         h('span', { class: 'rdlv-label' }, WORD),

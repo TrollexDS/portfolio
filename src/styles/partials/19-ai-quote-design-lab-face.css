@@ -272,21 +272,24 @@
 .rdlv[data-phase='rest']   .rdlv-slot[data-row='0'],
 .rdlv[data-phase='done']   .rdlv-slot[data-row='0'] { --y: -24cqmin; }
 
-/* the fold: every slot, both rows, pulls into the centre and goes, and
-   the file grows out of the same point */
-.rdlv[data-phase='fold']    .rdlv-slot,
+/* into the folder: every slot, both rows, flies to the centre and in
+   behind the folder's front, which is painted over the stage; it only
+   fades once it is inside, so you see it go in */
+.rdlv[data-phase='open']    .rdlv-slot,
+.rdlv[data-phase='close']   .rdlv-slot,
 .rdlv[data-phase='archive'] .rdlv-slot,
 .rdlv[data-phase='slot']    .rdlv-slot,
 .rdlv[data-phase='done']    .rdlv-slot,
-.rdlv[data-phase='fold']    .rdlv-slot[data-row='1'],
+.rdlv[data-phase='open']    .rdlv-slot[data-row='1'],
+.rdlv[data-phase='close']   .rdlv-slot[data-row='1'],
 .rdlv[data-phase='archive'] .rdlv-slot[data-row='1'],
 .rdlv[data-phase='slot']    .rdlv-slot[data-row='1'],
 .rdlv[data-phase='done']    .rdlv-slot[data-row='1'] {
   --x: 0cqmin;
-  --y: 0cqmin;
-  --k: 0.1;
+  --y: 1cqmin;
+  --k: 0.16;
   opacity: 0;
-  transition: transform 0.7s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.35s ease 0.3s;
+  transition: transform 0.75s cubic-bezier(0.5, 0, 0.2, 1) calc(var(--s) * 0.04s), opacity 0.2s ease calc(0.6s + var(--s) * 0.04s);
 }
 
 /* the children: only rendered from `branch`, so they arrive by animation,
@@ -327,7 +330,9 @@
 .rdlv[data-phase='prompt2']  .rdlv-frame,
 .rdlv[data-phase='loading2'] .rdlv-frame,
 .rdlv[data-phase='branch']   .rdlv-frame,
-.rdlv[data-phase='rest']     .rdlv-frame {
+.rdlv[data-phase='rest']     .rdlv-frame,
+.rdlv[data-phase='open']     .rdlv-frame,
+.rdlv[data-phase='close']    .rdlv-frame {
   opacity: 1;
   transform: none;
 }
@@ -390,7 +395,9 @@
 .rdlv[data-phase='prompt2']  .rdlv-tile,
 .rdlv[data-phase='loading2'] .rdlv-tile,
 .rdlv[data-phase='branch']   .rdlv-tile,
-.rdlv[data-phase='rest']     .rdlv-tile { opacity: 1; }
+.rdlv[data-phase='rest']     .rdlv-tile,
+.rdlv[data-phase='open']     .rdlv-tile,
+.rdlv[data-phase='close']    .rdlv-tile { opacity: 1; }
 
 .rdlv[data-phase='build'] .rdlv-tile:not(.rdlv-tile--lib) {
   transition-delay: calc(0.5s + var(--i) * 0.06s), 0s, 0s, 0s, 0s, 0s;
@@ -407,7 +414,9 @@
 .rdlv[data-phase='prompt2']  .rdlv-tile--spare,
 .rdlv[data-phase='loading2'] .rdlv-tile--spare,
 .rdlv[data-phase='branch']   .rdlv-tile--spare,
-.rdlv[data-phase='rest']     .rdlv-tile--spare { opacity: 0; transform: scale(0.84); }
+.rdlv[data-phase='rest']     .rdlv-tile--spare,
+.rdlv[data-phase='open']     .rdlv-tile--spare,
+.rdlv[data-phase='close']    .rdlv-tile--spare { opacity: 0; transform: scale(0.84); }
 
 /* the parts the system didn't have: they are only rendered from `new`
    on, so they arrive by animation, with a ring that fades. The state
@@ -734,53 +743,75 @@
   height: 0;
 }
 
-/* the file */
-.rdlv-file {
+/* the folder: two layers on one spot. The back is a tinted sheet with
+   a tab; the front is the flap, hinged at its bottom edge, tilted open
+   towards you while the screens go in and laid flat to close. Both
+   layers make the same trip into the archive. */
+.rdlv-folder {
   position: absolute;
-  left: -4.5cqmin;
-  top: -6cqmin;
-  width: 9cqmin;
-  height: 12cqmin;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 1cqmin;
-  padding: 2.6cqmin 1.2cqmin 1.2cqmin;
-  border-radius: 1.2cqmin;
-  background: var(--rdlv-card);
-  box-shadow: 0 8px 20px rgba(42, 10, 94, 0.18);
+  left: calc(50% - 15cqmin);
+  top: calc(54% - 11cqmin);
+  width: 30cqmin;
+  height: 22cqmin;
   opacity: 0;
-  transform: scale(0.5);
+  transform: scale(0.7);
   transform-origin: 50% 50%;
   transition: opacity 0.35s ease, transform var(--rdlv-fly);
+  pointer-events: none;
 }
 
-/* the corner: cut away in the ground colour, the flap folded back */
-.rdlv-file::before,
-.rdlv-file::after {
+.rdlv-folder-back,
+.rdlv-folder-front {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 2cqmin;
+}
+
+.rdlv-folder-back {
+  top: 3cqmin;
+  background: rgba(71, 0, 163, 0.16);
+}
+/* the tab */
+.rdlv-folder-back::before {
   content: '';
   position: absolute;
-  top: 0;
-  right: 0;
-  width: 30%;
-  height: 22%;
-}
-.rdlv-file::before { background: #F8F7FC; clip-path: polygon(0 0, 100% 0, 100% 100%); }
-.rdlv-file::after  { background: rgba(22, 18, 31, 0.16); clip-path: polygon(0 0, 100% 100%, 0 100%); }
-
-.rdlv-file-strip { display: flex; gap: 0.5cqmin; height: 2.6cqmin; }
-.rdlv-file-strip i { flex: 1 1 0; border-radius: 0.4cqmin; background: rgba(129, 50, 254, 0.18); }
-.rdlv-file-line { height: 0.9cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.22); }
-.rdlv-file-line--short { width: 60%; background: rgba(31, 28, 43, 0.12); }
-
-.rdlv[data-phase='fold']    .rdlv-file,
-.rdlv[data-phase='archive'] .rdlv-file {
-  opacity: 1;
-  transform: scale(1.1);
-  transition-delay: 0.4s, 0.4s;
+  left: 0;
+  top: -2.4cqmin;
+  width: 36%;
+  height: 4cqmin;
+  border-radius: 1.4cqmin 1.4cqmin 0 0;
+  background: rgba(71, 0, 163, 0.16);
 }
 
-.rdlv[data-phase='slot'] .rdlv-file {
+.rdlv-folder-front {
+  top: 5.5cqmin;
+  background: var(--rdlv-card);
+  box-shadow: 0 6px 16px -4px rgba(42, 10, 94, 0.14), 0 1px 3px 0 rgba(42, 10, 94, 0.06), inset 0 0 0 1px rgba(71, 0, 163, 0.1);
+  transform-origin: 50% 100%;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+/* a line of purple on the flap: it is this exploration's */
+.rdlv-folder-front::after {
+  content: '';
+  position: absolute;
+  left: 2.4cqmin;
+  bottom: 2.2cqmin;
+  width: 40%;
+  height: 1.3cqmin;
+  border-radius: 999px;
+  background: rgba(129, 50, 254, 0.35);
+}
+
+.rdlv[data-phase='open']    .rdlv-folder,
+.rdlv[data-phase='close']   .rdlv-folder,
+.rdlv[data-phase='archive'] .rdlv-folder { opacity: 1; transform: none; }
+
+/* open: the flap falls forward */
+.rdlv[data-phase='open'] .rdlv-folder-front { transform: perspective(70cqmin) rotateX(-62deg); transition-duration: 0.45s; }
+
+.rdlv[data-phase='slot'] .rdlv-folder {
   opacity: 1;
   transform: translate(var(--fx), var(--fy)) scale(var(--fk));
   transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
@@ -809,32 +840,21 @@
   transition-delay: calc(var(--i) * 0.06s), calc(var(--i) * 0.06s);
 }
 
-/* the file, in a row: a small sheet with the same corner */
+/* a folder, in a row: the same two layers, small and grey */
 .rdlv-aglyph {
   position: relative;
   flex: 0 0 auto;
-  width: 4.6cqmin;
-  height: 6.1cqmin;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6cqmin;
-  padding: 1.5cqmin 0.7cqmin 0.7cqmin;
-  border-radius: 0.7cqmin;
-  background: var(--rdlv-card);
-  box-shadow: 0 2px 6px rgba(42, 10, 94, 0.12);
-  overflow: hidden;
+  width: 5.6cqmin;
+  height: 4.1cqmin;
 }
-.rdlv-aglyph::before,
-.rdlv-aglyph::after { content: ''; position: absolute; top: 0; right: 0; width: 30%; height: 22%; }
-.rdlv-aglyph::before { background: #F8F7FC; clip-path: polygon(0 0, 100% 0, 100% 100%); }
-.rdlv-aglyph::after  { background: rgba(22, 18, 31, 0.16); clip-path: polygon(0 0, 100% 100%, 0 100%); }
-.rdlv-aglyph i { height: 0.5cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.2); }
-.rdlv-aglyph i + i { width: 60%; background: rgba(31, 28, 43, 0.1); }
+.rdlv-aglyph-back,
+.rdlv-aglyph-front { position: absolute; left: 0; right: 0; bottom: 0; border-radius: 0.5cqmin; }
+.rdlv-aglyph-back { top: 0.55cqmin; background: rgba(31, 28, 43, 0.14); }
+.rdlv-aglyph-back::before { content: ''; position: absolute; left: 0; top: -0.45cqmin; width: 36%; height: 0.9cqmin; border-radius: 0.3cqmin 0.3cqmin 0 0; background: rgba(31, 28, 43, 0.14); }
+.rdlv-aglyph-front { top: 1.05cqmin; background: var(--rdlv-card); box-shadow: inset 0 0 0 1px rgba(31, 28, 43, 0.08), 0 1px 2px rgba(42, 10, 94, 0.08); }
 
-/* the gap: nothing there until the file arrives */
-.rdlv-aglyph--gap { background: transparent; box-shadow: none; }
-.rdlv-aglyph--gap::before, .rdlv-aglyph--gap::after { display: none; }
+/* the gap: nothing there until the folder arrives */
+.rdlv-aglyph--gap { visibility: hidden; }
 
 .rdlv-aname { flex: 0 0 auto; width: 42%; height: 1.5cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.3); }
 .rdlv-adate { margin-left: auto; width: 6cqmin; height: 1.4cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
@@ -948,14 +968,11 @@
 [data-theme="dark"] .rdlv-alert .rdlv-l2 { background: rgba(255, 107, 125, 0.30); }
 
 [data-theme="dark"] .rdlv-stem { background: rgba(160, 150, 255, 0.38); }
-[data-theme="dark"] .rdlv-file { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 8px 20px rgba(0, 0, 0, 0.5); }
-[data-theme="dark"] .rdlv-file::before, [data-theme="dark"] .rdlv-aglyph::before { background: #14121C; }
-[data-theme="dark"] .rdlv-file::after,  [data-theme="dark"] .rdlv-aglyph::after  { background: rgba(248, 247, 252, 0.14); }
-[data-theme="dark"] .rdlv-file-strip i { background: rgba(160, 150, 255, 0.26); }
-[data-theme="dark"] .rdlv-file-line, [data-theme="dark"] .rdlv-aglyph i { background: rgba(248, 247, 252, 0.3); }
-[data-theme="dark"] .rdlv-file-line--short, [data-theme="dark"] .rdlv-aglyph i + i { background: rgba(248, 247, 252, 0.14); }
-[data-theme="dark"] .rdlv-aglyph { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 2px 6px rgba(0, 0, 0, 0.4); }
-[data-theme="dark"] .rdlv-aglyph--gap { box-shadow: none; }
+[data-theme="dark"] .rdlv-folder-back, [data-theme="dark"] .rdlv-folder-back::before { background: rgba(160, 150, 255, 0.22); }
+[data-theme="dark"] .rdlv-folder-front { background: #1A1726; box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.2), 0 6px 16px -4px rgba(0, 0, 0, 0.55); }
+[data-theme="dark"] .rdlv-folder-front::after { background: rgba(160, 150, 255, 0.5); }
+[data-theme="dark"] .rdlv-aglyph-back, [data-theme="dark"] .rdlv-aglyph-back::before { background: rgba(248, 247, 252, 0.18); }
+[data-theme="dark"] .rdlv-aglyph-front { background: #1A1726; box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16); }
 [data-theme="dark"] .rdlv-aname { background: rgba(248, 247, 252, 0.4); }
 [data-theme="dark"] .rdlv-arow--new .rdlv-aname { background: rgba(225, 220, 255, 0.85); }
 [data-theme="dark"] .rdlv-adate { background: rgba(248, 247, 252, 0.16); }
