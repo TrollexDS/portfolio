@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, onMounted, onUnmounted } from 'vue'
+import { useInView } from '../composables/useInView.js'
 
 /**
  * MagneticTokensBg — a canvas-based animated background showing
@@ -179,6 +180,32 @@ export default defineComponent({
       ctx.fillText(s.name, s.x, s.y + r + 1)
     }
 
+    // ── Sprites ──
+    // Each chip is drawn once, with its opacity baked in, into a small
+    // offscreen canvas at device resolution. The frame loop then only
+    // places those images: no font setup, text measuring, paths or text
+    // per frame. Rebuilt on resize and once web fonts have loaded.
+    const SPRITE_W = 150, SPRITE_H = 44   // css px, room for the longest label + swatch caption
+    function makeSprite(sh, dpr) {
+      const c = document.createElement('canvas')
+      c.width = Math.ceil(SPRITE_W * dpr)
+      c.height = Math.ceil(SPRITE_H * dpr)
+      const g = c.getContext('2d')
+      g.scale(dpr, dpr)
+      const at = { ...sh, x: SPRITE_W / 2, y: SPRITE_H / 2 }
+      g.globalAlpha = sh.opacity
+      switch (sh.kind) {
+        case 'token':     drawTokenChip(g, at);     break
+        case 'component': drawComponentChip(g, at);  break
+        case 'swatch':    drawSwatch(g, at);         break
+      }
+      return c
+    }
+    function buildSprites() {
+      const dpr = window.devicePixelRatio || 1
+      shapes.forEach(sh => { sh.sprite = makeSprite(sh, dpr) })
+    }
+
     // ── Animation loop ──
 
     function draw() {
@@ -188,24 +215,24 @@ export default defineComponent({
       ctx.clearRect(0, 0, W, H)
       time += 0.012
 
-      shapes.forEach(s => {
+      for (const s of shapes) {
         // Gentle ambient drift
         s.x = s.hx + Math.sin(time * s.speed + s.phase) * s.ampX
         s.y = s.hy + Math.cos(time * s.speed * 0.7 + s.phase) * s.ampY
+        if (s.sprite) ctx.drawImage(s.sprite, s.x - SPRITE_W / 2, s.y - SPRITE_H / 2, SPRITE_W, SPRITE_H)
+      }
 
-        ctx.globalAlpha = s.opacity
-
-        switch (s.kind) {
-          case 'token':     drawTokenChip(ctx, s);     break
-          case 'component': drawComponentChip(ctx, s);  break
-          case 'swatch':    drawSwatch(ctx, s);         break
-        }
-
-        ctx.globalAlpha = 1
-      })
-
-      animId = requestAnimationFrame(draw)
+      animId = running ? requestAnimationFrame(draw) : null
     }
+
+    // Only animate while the canvas is on (or near) screen and the tab is
+    // visible; off-screen the loop stops and the last frame stays painted.
+    let running = false
+    useInView(canvasRef, { rootMargin: '120px' }, v => {
+      running = v
+      if (v && !animId) animId = requestAnimationFrame(draw)
+      if (!v && animId) { cancelAnimationFrame(animId); animId = null }
+    })
 
     function resize() {
       const canvas = canvasRef.value
@@ -221,13 +248,18 @@ export default defineComponent({
       const ctx = canvas.getContext('2d')
       ctx.scale(dpr, dpr)
       initShapes()
+      buildSprites()
     }
 
     let resizeObs = null
 
     onMounted(() => {
       resize()
-      draw()
+      draw()   // one frame now; the loop runs once the canvas is in view
+      // labels were baked with whatever font was ready; redo once web fonts land
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => { buildSprites(); if (!running) draw() })
+      }
       // Use ResizeObserver to handle card size changes
       resizeObs = new ResizeObserver(() => resize())
       if (canvasRef.value?.parentElement) {

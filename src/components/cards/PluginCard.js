@@ -5,7 +5,7 @@ import InteractiveTag from '../InteractiveTag.js'
 import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
 import { PLUGIN_LIBRARY } from './pluginLibrary.data.js'
 
-const PLUGIN_LOGO = '/src/assets/images/rayo/plugin/rayo-plugin-logo.svg'
+const PLUGIN_ICON = '/src/assets/images/rayo/plugin/rayo-assets-icon.webp'
 const PLUGIN_HERO = '/src/assets/images/rayo/plugin/rayo-plugin-hero.svg'
 const SCREENSHOT         = '/src/assets/images/rayo/plugin/rayo-plugin-screenshot.png'
 const PODCAST_SCREENSHOT = '/src/assets/images/rayo/plugin/rayo-plugin-podcast-screenshot.png'
@@ -162,10 +162,12 @@ const RayoLibraryBg = defineComponent({
   },
 })
 
-// Collapsed face + hero overlay + fly content share this block
-const pluginFace = () => h('div', { class: 'pc-card-face' }, [
-  h('img', { src: PLUGIN_LOGO, alt: 'Rayo Thumbnails', class: 'pc-card-logo' }),
-  h('p', { class: 'pc-card-title' }, 'Rayo\nThumbnails'),
+// Collapsed face + hero overlay + fly content share this block: the card
+// reads as the plugin's window, with Figma's title bar across the top
+// (no close button) over the live panel.
+const pluginFace = () => h('div', { class: 'pc-window-bar' }, [
+  h('img', { src: PLUGIN_ICON, alt: '', class: 'pc-window-icon' }),
+  h('p', { class: 'pc-window-title' }, 'Rayo Assets Plugin'),
 ])
 
 const AntonymSection = defineComponent({
@@ -469,7 +471,7 @@ export default defineComponent({
 
             full(
               h('p', { class: 'cs-body-text' },
-                'Rayo Thumbnails is a Figma plugin that connects directly to Bauer\'s Listen API, instantly applying live assets and metadata to selected layers. It empowers designers to move faster. From early concepts to production-ready designs—without manual asset handling.'),
+                'Rayo Assets Plugin is a Figma plugin that connects directly to Bauer\'s Listen API, instantly applying live assets and metadata to selected layers. It empowers designers to move faster. From early concepts to production-ready designs—without manual asset handling.'),
             ),
 
             h('h2', { class: 'cs-section-title' }, 'My role'),
@@ -559,7 +561,7 @@ export default defineComponent({
           h('div', { class: 'cs-body cs-body--continued' }, [
             h('h2', { class: 'cs-section-title' }, 'Result'),
             h('p', { class: 'cs-body-text' },
-              'Rayo Thumbnails has become an integral part of our design workflow, enabling the team to work faster, stay aligned with live content, and scale design output across multiple regions with confidence. By removing repetitive tasks and reducing errors, it allows designers to focus on what matters most - crafting better user experiences.'),
+              'Rayo Assets Plugin has become an integral part of our design workflow, enabling the team to work faster, stay aligned with live content, and scale design output across multiple regions with confidence. By removing repetitive tasks and reducing errors, it allows designers to focus on what matters most - crafting better user experiences.'),
           ]),
 
           // ── Moving background — radio station tiles ──

@@ -1,0 +1,203 @@
+/* ═══════════════════════════════════════════════════════════════════
+ *  RAYO DESIGN SYSTEM — card face (RayoDSCard → RayoDSFace)
+ *  Columns of Rayo iOS components drift behind the mark and title.
+ *  The components were exported in the Tokens collection's Light and
+ *  Dark modes; [data-theme] picks the matching set. Ground matches the
+ *  Design Lab card (both Rayo): #F8F7FC light, #14121C dark.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --rds-ground: #F8F7FC;
+}
+[data-theme="dark"] {
+  --rds-ground: #14121C;
+}
+
+/* ── Card ground: light by default, the overlay's dark edge only in dark ── */
+.ds-card,
+.ds-card.bento-card.dark {
+  position: relative;
+  overflow: hidden;
+  padding: 0 !important;
+  background: var(--rds-ground);
+  --color-card-inset-top:    rgba(255, 255, 255, 0.90);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.04);
+  --card-grain-opacity:      0.028;
+  --card-grain-image:        var(--grain-specks-dark);
+  border-color: rgba(22, 14, 33, 0.06);
+}
+[data-theme="dark"] .ds-card,
+[data-theme="dark"] .ds-card.bento-card.dark {
+  --color-card-inset-top:    rgba(255, 255, 255, 0.10);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.30);
+  --card-grain-opacity:      0.045;
+  --card-grain-image:        var(--grain-specks-light);
+  border-color: rgba(160, 150, 255, 0.16);
+}
+
+/* Empty placeholder under the face: sizes the card, fly and hero */
+.rds-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.rds-hero-wrap {
+  border-radius: 32px;
+  overflow: hidden;
+  margin-top: 40px;
+  background: var(--rds-ground);
+}
+.rds-hero-wrap .cs-hero-video { margin-top: 0; }
+
+.rds-hero-overlay,
+.rds-fly-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Face ── */
+.rds-face {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: var(--rds-ground);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  container-type: size;    /* the selection label scales with the face: 252 card, 448 hero, ~160 mobile */
+}
+
+/* Four columns, centred: a tall card shows the middle two and the edges
+   of the outer pair; the 448 hero shows nearly all four. */
+.rds-cols {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  display: flex;
+  gap: 8px;
+  transform: translateX(-50%);
+}
+.rds-col {
+  flex: 0 0 112px;
+  width: 112px;
+  position: relative;
+}
+
+.rds-track {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-bottom: 5px;     /* track = 2 × (column + gap), so -50% is one exact loop */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.rds-track--up   { animation-name: rds-up; }
+.rds-track--down { animation-name: rds-down; }
+/* Off-screen: no animation at all, so the browser can drop the layers */
+.rds-face--off .rds-track { animation: none; }
+
+@keyframes rds-up   { from { transform: translateY(0); }    to { transform: translateY(-50%); } }
+@keyframes rds-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+
+.rds-copy {
+  position: relative;
+  width: 100%;
+}
+.rds-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  -webkit-user-drag: none;
+}
+
+/* Top and bottom fades into the ground (painted, not a mask on the moving
+   columns, which would cost a mask layer per frame) */
+.rds-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--rds-ground) 0, transparent 9%, transparent 91%, var(--rds-ground) 100%);
+}
+
+/* ── Name: a Figma component selection around the card's content ──
+   Figma's component purple, white corner handles, the component's name
+   on a tag at the top-left corner and a size badge underneath. Scales
+   down with the face (container units) for the narrow mobile card. */
+.rds-select {
+  --rds-purple: #9747FF;
+  position: absolute;
+  top: clamp(34px, 15cqw, 42px);
+  left: clamp(10px, 5cqw, 14px);
+  right: clamp(10px, 5cqw, 14px);
+  bottom: clamp(30px, 13cqw, 38px);
+  border: 1.5px solid var(--rds-purple);
+  pointer-events: none;
+}
+.rds-select-tag {
+  position: absolute;
+  left: -1.5px;
+  bottom: 100%;
+  margin-bottom: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 7px 3px 6px;
+  border-radius: 4px;
+  background: var(--rds-purple);
+  color: #fff;
+  font-family: var(--font-family-system);
+  font-size: clamp(10px, 4.6cqw, 12px);
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.rds-select-diamond {
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: #fff;
+}
+.rds-handle {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border: 1.5px solid var(--rds-purple);
+  box-sizing: border-box;
+}
+.rds-handle--tl { top: -4px;    left: -4px; }
+.rds-handle--tr { top: -4px;    right: -4px; }
+.rds-handle--bl { bottom: -4px; left: -4px; }
+.rds-handle--br { bottom: -4px; right: -4px; }
+.rds-select-size {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-top: 6px;
+  transform: translateX(-50%);
+  padding: 2px 5px;
+  border-radius: 3px;
+  background: var(--rds-purple);
+  color: #fff;
+  font-family: var(--font-family-system);
+  font-size: clamp(9px, 3.8cqw, 10.5px);
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Narrow mobile card: the open button covers the top-right, so the name
+   tag moves under the box (bottom-left) and the size badge steps aside */
+@media (max-width: 768px) {
+  .ds-card .rds-select { top: 16px; bottom: 34px; left: 10px; right: 10px; }
+  .ds-card .rds-select-tag { bottom: auto; top: 100%; margin: 6px 0 0; }
+  .ds-card .rds-select-size { display: none; }
+}

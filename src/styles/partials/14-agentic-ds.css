@@ -35,6 +35,7 @@
   gap: 12px;
   pointer-events: none;
   z-index: 1;
+  container-type: size;    /* logos + title scale down in the narrow mobile tall slot */
 }
 
 .ads-card-logos {
@@ -44,8 +45,8 @@
 }
 
 .ads-card-logo-wrap {
-  width: 48px;
-  height: 48px;
+  width: clamp(30px, 19cqw, 48px);
+  height: clamp(30px, 19cqw, 48px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -64,7 +65,7 @@
 
 .ads-card-title {
   font-family: 'Tiny5', monospace;
-  font-size: var(--text-9xl);
+  font-size: clamp(24px, 15.9cqw, var(--text-9xl));
   line-height: 1;
   color: var(--color-text-on-primary);
   text-align: center;
@@ -110,5 +111,6 @@
   justify-content: center;
   gap: 12px;
   pointer-events: none;
+  container-type: size;
 }
 

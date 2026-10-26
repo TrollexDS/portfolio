@@ -100,21 +100,7 @@
   /* Card grid placements are driven by inline styles from MOBILE_LAYOUTS
      in filterLayouts.js — no CSS placement rules needed here. */
 
-  /* ── Animation delays — re-staggered for mobile reading order ── */
-  .about-card-wrapper { --card-enter-delay: 0s;   }
-  .gmail-card         { --card-enter-delay: 0.1s;  }
-  .linkedin-card      { --card-enter-delay: 0.2s;  }
-  .plugin-card        { --card-enter-delay: 0.3s;  }
-  .ds-quote-card      { --card-enter-delay: 0.4s;  }
-  .ds-card            { --card-enter-delay: 0.5s;  }
-  .ux-quote-card      { --card-enter-delay: 0.6s;  }
-  .ai-quote-card      { --card-enter-delay: 0.65s; }
-  .alexa-card         { --card-enter-delay: 0.7s;  }
-  .schedule-card      { --card-enter-delay: 0.8s;  }
-  .ss-ds-card         { --card-enter-delay: 0.9s;  }
-  .strava-card        { --card-enter-delay: 1.0s;  }
-  .duolingo-card      { --card-enter-delay: 1.1s;  }
-  .claw-invest-card   { --card-enter-delay: 1.2s;  }
+  /* Animation delays: mobile uses the same reading order as desktop (02-bento-card.css) */
 
   /* ── About card avatar — 1/3 of card width ── */
   .about-avatar {
@@ -275,6 +261,9 @@
   }
 
   /* ── Disable hover lift so tap goes straight to click ── */
+  .grid-slot::before { display: none; }
+  .grid-slot:has(.bento-card:hover) { transform: none; }
+
   .bento-card:hover {
     transform: none;
     border-color: var(--color-border-card);

@@ -364,24 +364,9 @@
   transition: none !important;
 }
 
-/* Design System */
-.ds-card {
-  padding: 0 !important;
-  overflow: hidden;
-}
-
+/* Design System — face and ground live in 22-rayo-ds-cover.css */
 .ds-card .action-icon {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
-}
-
-.ds-video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: inherit;
 }
 
 /* Duolingo */

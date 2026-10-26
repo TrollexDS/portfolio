@@ -1,4 +1,5 @@
 import { defineComponent, h, ref, onMounted, onUnmounted } from 'vue'
+import { useInView } from '../../composables/useInView.js'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
@@ -247,11 +248,26 @@ const LabLoop = defineComponent({
     let typer  = null
     let ro     = null
 
-    function clearAll() {
+    function stopLoop() {
       timers.forEach(clearTimeout); timers = []
       if (typer) { clearInterval(typer); typer = null }
+    }
+    function clearAll() {
+      stopLoop()
       if (ro) { ro.disconnect(); ro = null }
     }
+
+    // The loop only runs while the face is on (or near) screen and the tab
+    // is visible; it stops off-screen and starts a fresh pass on return.
+    let started = false     // fonts ready, word sampled
+    let animate = false     // false under reduced motion
+    let inView  = false
+    useInView(root, { rootMargin: '120px' }, v => {
+      inView = v
+      if (!started || !animate) return
+      stopLoop()
+      if (v) run()
+    })
 
     /* The wordmark is sampled at a fixed 76px, so it has one true size in
        pixels. The card face does not - it is a grid cell on the board and
@@ -299,8 +315,10 @@ const LabLoop = defineComponent({
           ro = new ResizeObserver(fit)
           ro.observe(root.value)
         }
+        started = true
         if (still) { phase.value = 'options'; typed.value = PROMPT; return }
-        run()
+        animate = true
+        if (inView) run()
       }
       if (document.fonts && document.fonts.ready) document.fonts.ready.then(start)
       else start()

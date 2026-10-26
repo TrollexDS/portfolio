@@ -10,9 +10,14 @@ import InteractiveTag from '../InteractiveTag.js'
 const P = 'cc' // CSS class prefix
 
 /* ─── Local asset paths ── */
+// Light and dark pairs are exports of the same Figma layers with the Rayo
+// Tokens collection on Light / Dark; the page's data-theme picks which shows
+// (CSS). In Rayo's dark mode only the episode cards and the fallback flip:
+// the gradient, title and arrow button use constant tokens and stay put.
+// The fallback background is CSS (.cc-fallback-bg), so it isn't listed here.
 const ASSETS = {
-  contentRail: '/src/assets/images/rayo/plugin/content-rail.png',
-  fallbackBg:  'https://www.figma.com/api/mcp/asset/1187763d-e800-412f-b8a8-22e5035f2ef5',
+  contentRail:     '/src/assets/images/rayo/plugin/content-rail.png',
+  contentRailDark: '/src/assets/images/rayo/plugin/content-rail-dark.png',
 }
 
 const BG_PATH = '/src/assets/images/rayo/plugin/component-bg'
@@ -120,9 +125,7 @@ export default defineComponent({
                       class: P+'-card-bg',
                       style: { backgroundImage: `url('${bgImagePath.value}')` },
                     })
-                  : h('div', { class: P+'-fallback-bg' }, [
-                      h('img', { src: ASSETS.fallbackBg }),
-                    ]),
+                  : h('div', { class: P+'-fallback-bg' }),
 
                 /* Card content */
                 h('div', { class: P+'-card-content' }, [
@@ -131,9 +134,15 @@ export default defineComponent({
                     h('div', { class: P+'-icon-button' }, [renderArrowSvg()]),
                   ]),
                   h('img', {
-                    class: P+'-content-rail',
+                    class: P+'-content-rail ' + P+'-content-rail--light',
                     src: ASSETS.contentRail,
                     alt: 'Content rail',
+                  }),
+                  h('img', {
+                    class: P+'-content-rail ' + P+'-content-rail--dark',
+                    src: ASSETS.contentRailDark,
+                    alt: '',
+                    loading: 'lazy',
                   }),
                 ]),
               ]),

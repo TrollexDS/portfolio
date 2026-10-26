@@ -422,13 +422,12 @@
   left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   overflow: hidden;
-  background: var(--color-brand-rayo-fallback-bg);
+  /* the Fallback image layer as Figma renders it inside the card (834 x 375,
+     centred), light and dark Rayo tokens */
+  background: var(--color-brand-rayo-fallback-bg) url('/src/assets/images/rayo/plugin/collection-fallback-light.webp') center / 834px 375px no-repeat;
 }
-.cc-fallback-bg img {
-  position: absolute;
-  width: 2796px; height: 1954px;
-  left: -1565px; top: -667px;
-  max-width: none;
+[data-theme="dark"] .cc-fallback-bg {
+  background-image: url('/src/assets/images/rayo/plugin/collection-fallback-dark.webp');
 }
 .cc-card-content {
   position: relative;
@@ -488,6 +487,24 @@
   height: 104px;
   width: auto;
   max-width: none;
+}
+.cc-content-rail--dark { display: none; }
+[data-theme="dark"] .cc-content-rail--light { display: none; }
+[data-theme="dark"] .cc-content-rail--dark  { display: block; }
+
+/* Dark theme for the Figma-style chrome (canvas + control panel). Scoped to
+   this widget: the same --color-panel-* tokens also style other widgets. */
+[data-theme="dark"] .cc-outer {
+  color-scheme: dark;   /* native select menus follow */
+  --color-panel-bg:            var(--color-primitive-indigo-800);
+  --color-panel-surface:       var(--color-primitive-indigo-850);
+  --color-panel-border:        var(--color-primitive-alpha-white-15);
+  --color-panel-border-subtle: var(--color-primitive-alpha-white-10);
+  --color-panel-text:          var(--color-primitive-indigo-100);
+  --color-panel-text-muted:    var(--color-primitive-indigo-200);
+  --color-panel-text-subtle:   var(--color-primitive-alpha-white-40);
+  --color-panel-text-dark:     var(--color-primitive-indigo-100);
+  --color-panel-caret:         var(--color-primitive-alpha-white-40);
 }
 
 .cc-episode-card {

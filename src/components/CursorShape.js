@@ -57,8 +57,8 @@ const ARROW_SCALE  = 17 / 28   // viewBox units → px, as the cursor is drawn
    as the toggle's icon (LazyToggle.js).
 ─────────────────────────────────────────────────────────── */
 const FX_SELECTOR   = '.lazy-toggle:not(.theme-toggle)'
-const GHOST_EVERY   = 170    // ms between ghosts
-const GHOST_LIFE    = 720    // ms a ghost lasts
+const GHOST_EVERY   = 340    // ms between ghosts (half speed: was 170)
+const GHOST_LIFE    = 1440   // ms a ghost lasts (half speed: was 720)
 const GHOST_DRIFT   = 16     // px it travels back along the diagonal
 const TICK_BEAT     = 900    // ms per lock-and-release
 const TICKS_PATH    = 'M1 -6V-2.5M-6 2H-2.5M-4.6 -3.4L-2.3 -1.2'
@@ -123,6 +123,7 @@ export default defineComponent({
     let beatStart = 0
     const ghosts = []        // { el, born }
     let arrowD = ''
+    let drawn  = NaN         // morph value last written to the path
 
     function shedGhost(now) {
       const el = document.createElementNS(SVG_NS, 'path')
@@ -148,16 +149,20 @@ export default defineComponent({
         g.el.style.opacity = (0.42 * (1 - a)).toFixed(3)
       }
       // instant: the ticks snap in and lock, then release, on a beat
+      // writes only on change: an unchanged inline style still costs a
+      // style recalc every frame
+      let op = '0', tf = null
       if (onToggle && !lazy) {
         if (!beatStart) beatStart = now
         const ph = ((now - beatStart) % TICK_BEAT) / TICK_BEAT
         const on = ph > 0.2 && ph < 0.65
-        fxTicks.style.opacity = on ? 0.95 : 0
-        fxTicks.style.transform = on ? (ph < 0.26 ? 'scale(1.35)' : 'scale(1)') : 'scale(1.4)'
+        op = on ? '0.95' : '0'
+        tf = on ? (ph < 0.26 ? 'scale(1.35)' : 'scale(1)') : 'scale(1.4)'
       } else {
         beatStart = 0
-        fxTicks.style.opacity = 0
       }
+      if (fxTicks.style.opacity !== op) fxTicks.style.opacity = op
+      if (tf !== null && fxTicks.style.transform !== tf) fxTicks.style.transform = tf
     }
 
     function onMouseMove(e) {
@@ -177,15 +182,30 @@ export default defineComponent({
       visible.value = false
     }
 
+    // Settle: once the smoothed position is within a hair of the mouse it
+    // snaps there, so the refs stop changing and Vue stops re-rendering.
+    const settle = (from, to, t) => {
+      const v = lerp(from, to, t)
+      return Math.abs(to - v) < 0.05 ? to : v
+    }
+
+    // Hit-testing is a forced layout, so it runs when something could have
+    // changed what's under the cursor (it moved, the page scrolled, or a
+    // short heartbeat for content that moves on its own, like a case study
+    // opening) rather than on every frame.
+    let probeX = NaN, probeY = NaN, lastProbe = 0, probeDirty = true
+    const markDirty = () => { probeDirty = true }
+
     function tick(now) {
       // Smooth cursor position
       const lp = isLazy.value ? LERP_POS : 1
-      sx.value = lerp(sx.value, rawX, lp)
-      sy.value = lerp(sy.value, rawY, lp)
+      sx.value = settle(sx.value, rawX, lp)
+      sy.value = settle(sy.value, rawY, lp)
 
-      // Detect text under cursor every frame — handles case study opening,
-      // scrolling content, and any situation where mousemove doesn't fire
-      if (visible.value) {
+      // Detect text under cursor — handles case study opening, scrolling
+      // content, and any situation where mousemove doesn't fire
+      if (visible.value && (probeDirty || rawX !== probeX || rawY !== probeY || now - lastProbe > 200)) {
+        probeDirty = false; probeX = rawX; probeY = rawY; lastProbe = now
         const el = document.elementFromPoint(rawX, rawY)
         onToggle = !!el?.closest?.(FX_SELECTOR)
         const newIsText = !!el?.closest?.(TEXT_SELECTOR)
@@ -208,7 +228,8 @@ export default defineComponent({
         if (raw >= 1) { current = animTo; animStart = null }
       }
 
-      if (svgEl && pathEl) {
+      if (svgEl && pathEl && current !== drawn) {
+        drawn = current
         // Hotspot offset
         const ox = lerp(ARROW_OFFSET[0], BEAM_OFFSET[0], current)
         const oy = lerp(ARROW_OFFSET[1], BEAM_OFFSET[1], current)
@@ -249,12 +270,14 @@ export default defineComponent({
       fxTicks  = document.getElementById('cs-fx-ticks')
 
       window.addEventListener('mousemove', onMouseMove, { passive: true })
+      window.addEventListener('scroll', markDirty, { passive: true, capture: true })
       document.documentElement.addEventListener('mouseleave', onMouseLeave)
       rafId = requestAnimationFrame(tick)
     })
 
     onUnmounted(() => {
       window.removeEventListener('mousemove', onMouseMove)
+      window.removeEventListener('scroll', markDirty, { capture: true })
       document.documentElement.removeEventListener('mouseleave', onMouseLeave)
       if (rafId) cancelAnimationFrame(rafId)
     })
@@ -264,7 +287,8 @@ export default defineComponent({
 
       return h('div', {
         class: 'cs-root',
-        style: `left:${sx.value}px;top:${sy.value}px;opacity:${visible.value ? 1 : 0}`,
+        // transform, not left/top: moving the cursor shouldn't re-run layout
+        style: `transform:translate3d(${sx.value}px,${sy.value}px,0);opacity:${visible.value ? 1 : 0}`,
       }, [
         h('svg', {
           id: 'cs-svg',

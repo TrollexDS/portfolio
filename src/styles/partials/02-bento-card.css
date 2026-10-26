@@ -13,7 +13,7 @@
   overflow: hidden;
   position: relative;
   cursor: pointer;
-  transition: background 0.5s ease, box-shadow 0.3s ease, border-color 0.3s ease, transform 0.15s ease;
+  transition: background 0.5s ease, border-color 0.3s ease, transform 0.15s ease;
   /* Fix Chrome bug: overflow:hidden + border-radius distortion */
   isolation: isolate;
   /* Staggered enter animation — delay overridden per card below */
@@ -21,27 +21,27 @@
   animation-delay: var(--card-enter-delay, 0s);
 }
 
-/* Grain texture layer — multiply on light, screen on dark */
+/* Grain texture layer — dark specks on light, light specks on dark.
+   A plain alpha texture: no mix-blend-mode, so nothing has to re-blend
+   when the card's content animates or the card is hovered. */
 .bento-card::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-image: var(--card-grain-image);
   background-size: 180px 180px;
   opacity: var(--card-grain-opacity);
-  mix-blend-mode: var(--card-grain-blend);
   pointer-events: none;
   z-index: 0;
   transition: opacity 0.5s ease;
 }
 
-.bento-card:hover {
-  box-shadow:
-    0 12px 40px var(--color-shadow-card-hover),
-    0 4px 12px var(--color-shadow-card-hover-2),
-    inset 0 1px 0 var(--color-card-inset-top),
-    inset 0 -1px 0 var(--color-card-inset-bottom);
+/* The hover lift happens on the card's grid slot (see GRID SLOT below),
+   so card and shadow rise as one layer and the card's content isn't
+   repainted. The About card lifts itself: its bio-link preview is
+   position:fixed, and a transform on the slot would re-anchor it. */
+.about-card:hover {
   transform: translateY(-3px);
 }
 
@@ -61,7 +61,7 @@
   --color-card-inset-top:     rgba(255, 255, 255, 0.05);
   --color-card-inset-bottom:  rgba(0, 0, 0, 0.30);
   --card-grain-opacity:       0.05;
-  --card-grain-blend:         screen;
+  --card-grain-image:         var(--grain-specks-light);
   --color-card-ripple:        rgba(255, 255, 255, 0.22);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow:
@@ -71,13 +71,6 @@
     inset 0 -1px 0 var(--color-card-inset-bottom);
 }
 
-.bento-card.dark:hover {
-  box-shadow:
-    0 12px 40px var(--color-shadow-card-hover),
-    0 4px 12px var(--color-shadow-card-hover-2),
-    inset 0 1px 0 var(--color-card-inset-top),
-    inset 0 -1px 0 var(--color-card-inset-bottom);
-}
 
 /* ── Action icon ── */
 .action-icon {
@@ -139,28 +132,23 @@
   }
 }
 
-/* Stagger delays — reading order: left→right, top→bottom, 0.1s apart */
-/* Row 1 */
-.about-card-wrapper { --card-enter-delay: 0s; }    /* cols 1-2 */
-.gmail-card         { --card-enter-delay: 0.1s; }  /* col 3    */
-.linkedin-card      { --card-enter-delay: 0.2s; }  /* col 4    */
-/* Row 2 */
-.strava-card        { --card-enter-delay: 0.3s; }  /* col 1    */
-.duolingo-card      { --card-enter-delay: 0.4s; }  /* col 2    */
-.plugin-card        { --card-enter-delay: 0.5s; }  /* cols 3-4 */
-/* Row 3 */
-.ds-card            { --card-enter-delay: 0.6s; }  /* cols 1-2 */
-/* Row 4 */
-.ds-quote-card       { --card-enter-delay: 0.7s; }  /* cols 3-4 */
-/* Row 5 */
-.ux-quote-card       { --card-enter-delay: 0.8s; }  /* cols 1-2 */
-.ai-quote-card       { --card-enter-delay: 0.85s; } /* cols 1-2 */
-.alexa-card         { --card-enter-delay: 0.9s; }  /* cols 3-4 */
-/* Row 6 */
-.schedule-card      { --card-enter-delay: 1.0s; }  /* cols 1-2 */
-/* Row 7 */
-.ss-ds-card         { --card-enter-delay: 1.1s; }  /* cols 3-4 */
-/* Row 8 */
+/* Stagger delays — the All view's reading order (same on mobile), ~0.06s apart */
+.about-card-wrapper   { --card-enter-delay: 0s;    }
+.gmail-card           { --card-enter-delay: 0.06s; }
+.linkedin-card        { --card-enter-delay: 0.12s; }
+.plugin-card          { --card-enter-delay: 0.18s; }
+.ll-card              { --card-enter-delay: 0.24s; }
+.rayo-design-lab-card { --card-enter-delay: 0.3s;  }
+.ai-quote-card        { --card-enter-delay: 0.36s; }
+.agentic-ds-card      { --card-enter-delay: 0.42s; }
+.ds-card              { --card-enter-delay: 0.48s; }
+.schedule-card        { --card-enter-delay: 0.54s; }
+.ds-quote-card        { --card-enter-delay: 0.6s;  }
+.ux-quote-card        { --card-enter-delay: 0.66s; }
+.alexa-card           { --card-enter-delay: 0.72s; }
+.ss-ds-card           { --card-enter-delay: 0.78s; }
+.strava-card          { --card-enter-delay: 0.84s; }
+.duolingo-card        { --card-enter-delay: 0.9s;  }
 .claw-invest-card   { --card-enter-delay: 1.3s; }  /* col 1    */
 
 /* ══════════════════════════════════════
@@ -169,8 +157,42 @@
    styles from filterLayouts.js via App.js.
 ══════════════════════════════════════ */
 .grid-slot {
+  position: relative;
   min-width: 0;
   min-height: 0;
+  transition: opacity 0.4s ease, transform 0.15s ease;
+}
+
+/* Hover shadow, pre-drawn on its own layer behind the card. Only its
+   opacity (and the same 3px lift as the card) animates, so hovering never
+   repaints the card or re-rasterises a 40px blur. It sits on the slot
+   because cards clip their own overflow. */
+.grid-slot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 32px;
+  box-shadow:
+    0 12px 40px var(--color-shadow-card-hover),
+    0 4px 12px var(--color-shadow-card-hover-2);
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.15s ease;
+  pointer-events: none;
+}
+.grid-slot:has(.bento-card:hover:not(.cs-card--ghost, .about-card--ghost))::before {
+  opacity: 1;
+}
+.grid-slot:has(.about-card:hover:not(.about-card--ghost))::before {
+  transform: translateY(-3px);    /* follows the About card's own lift */
+}
+
+/* Lift: slot and everything in it, except while a case study is opening,
+   open or closing - a transform here would re-anchor the overlay and the
+   flying media (position:fixed, inside the slot), so it drops instantly. */
+.grid-slot:has(.bento-card:hover):not(:has(.about-card, .cs-card--ghost, .cs-video-fly, .cs-expanded)) {
+  transform: translateY(-3px);
+}
+.grid-slot:has(.cs-card--ghost, .cs-video-fly, .cs-expanded) {
   transition: opacity 0.4s ease;
 }
 

@@ -1,4 +1,5 @@
-import { defineComponent, h, ref, onMounted, onUnmounted } from 'vue'
+import { defineComponent, h, ref, onUnmounted } from 'vue'
+import { useInView } from '../../composables/useInView.js'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
@@ -302,8 +303,11 @@ const FloatingLayersBg = defineComponent({
       }, T_SCROLL_DURATION + 50)
     }
 
-    onMounted(() => {
-      startCycle()
+    // Runs only while the card is on (or near) screen and the tab is
+    // visible: off-screen the timers stop, and a fresh cycle starts on return.
+    useInView(wrapRef, { rootMargin: '120px' }, v => {
+      clearTimers()
+      if (v) startCycle()
     })
 
     onUnmounted(() => {

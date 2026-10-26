@@ -73,25 +73,34 @@ export default defineComponent({
       return window.scrollY
     }
 
+    // Scroll events can fire several times a frame: filter by target here,
+    // then do the work at most once per frame. It only writes when the
+    // hidden state actually flips (the body class toggle restyles the page).
+    let scrollQueued = false
     function onScroll(e) {
-      // On mobile the nav lives at the bottom and is always visible
-      if (window.innerWidth <= MOBILE_BREAKPOINT) {
-        hidden.value = false
-        lastScrollY = scrollerY()
-        return
-      }
       // Scrolls are captured document-wide: only the window's and the open
       // case study's count, not a carousel's or a code block's.
       if (e && e.target !== document && e.target !== window) {
         if (!(csOpen.value && e.target.classList && e.target.classList.contains('cs-expanded-inner'))) return
       }
+      if (scrollQueued) return
+      scrollQueued = true
+      requestAnimationFrame(handleScroll)
+    }
+
+    function handleScroll() {
+      scrollQueued = false
       const currentY = scrollerY()
-      if (holdRow) { lastScrollY = currentY; return }
-      if (currentY > lastScrollY && currentY > SCROLL_THRESHOLD) {
-        hidden.value = true
-      } else {
-        hidden.value = false
+      // On mobile the nav lives at the bottom and is always visible
+      if (isMobile.value) {
+        if (hidden.value) hidden.value = false
+        lastScrollY = currentY
+        return
       }
+      if (holdRow) { lastScrollY = currentY; return }
+      if (currentY === lastScrollY) return
+      const hide = currentY > lastScrollY && currentY > SCROLL_THRESHOLD
+      if (hidden.value !== hide) hidden.value = hide
       lastScrollY = currentY
     }
 
@@ -103,7 +112,7 @@ export default defineComponent({
     const PEEK_OUT = 120
     const peek = ref(false)
     function onPointerMove(e) {
-      if (window.innerWidth <= 768) return
+      if (isMobile.value) return
       if (!peek.value && e.clientY <= PEEK_IN) peek.value = true
       else if (peek.value && e.clientY > PEEK_OUT) peek.value = false
     }

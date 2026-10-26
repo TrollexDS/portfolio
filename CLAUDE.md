@@ -16,7 +16,7 @@ Several files are large. Search them, read line ranges, never whole:
 | rayo-design-lab | RayoDesignLabCard | `rdl-`, `rdlv-`, `gs-` |
 | agentic-design-system | AgenticDSCard | `ads-` |
 | figma-plugin-layer-lint | LayerLintCard | `ll-` |
-| rayo-design-system | RayoDSCard (+ ColourVariables `cv-`, CollectionCard `cc-`) | `ba-` |
+| rayo-design-system | RayoDSCard (+ ColourVariables `cv-`, CollectionCard `cc-`) | `rds-` (face), `ba-` |
 | rayo-schedule | ScheduleCard | `cs-` shared |
 | figma-plugin-rayo-thumbnails | PluginCard | `cs-` shared |
 | simplestream-design-system | SimplestreamDSCard | `ss-` |

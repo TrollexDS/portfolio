@@ -259,7 +259,13 @@
   --color-card-inset-top:          var(--color-primitive-alpha-white-90);   /* bright lip at top edge */
   --color-card-inset-bottom:       var(--color-primitive-alpha-black-4);    /* subtle base shadow     */
   --card-grain-opacity:            0.028;
-  --card-grain-blend:              multiply;
+  /* Grain is a plain alpha texture (no blend mode, which forced every card
+     to re-blend whenever anything under it changed). Two tiles rendered from
+     the original SVG noise: dark specks reproduce the old multiply, light
+     specks the old screen, to within ~3/255. */
+  --grain-specks-dark:             url('/src/assets/images/grain/grain-dark.webp');
+  --grain-specks-light:            url('/src/assets/images/grain/grain-light.webp');
+  --card-grain-image:              var(--grain-specks-dark);
   --color-card-ripple:             var(--color-primitive-alpha-teal-10);   /* teal pulse on light bg */
 
   /* Shadow */
@@ -488,7 +494,7 @@
   --color-card-inset-top:          var(--color-primitive-alpha-white-6);       /* whisper-thin highlight */
   --color-card-inset-bottom:       var(--color-primitive-alpha-black-20);
   --card-grain-opacity:            0.045;
-  --card-grain-blend:              screen;                    /* screen lightens on dark bg */
+  --card-grain-image:              var(--grain-specks-light); /* light specks on dark bg (was screen) */
 
   /* Border */
   --color-border-card:             var(--color-primitive-alpha-white-6);

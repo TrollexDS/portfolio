@@ -1,5 +1,5 @@
 /*
- * Rayo Thumbnails card cover — asset library sample.
+ * Rayo Assets Plugin card cover — asset library sample.
  * One station per region plus a podcast set, pulled from the Rayo Design Lab
  * catalogue snapshot (listenapi, Oct 2026) and downscaled to 96px. Poland is a
  * station-list market with no podcast catalogue, so it has a radio step only.

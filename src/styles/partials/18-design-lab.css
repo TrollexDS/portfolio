@@ -18,7 +18,7 @@
   --color-card-inset-top:    rgba(255, 255, 255, 0.90);
   --color-card-inset-bottom: rgba(0, 0, 0, 0.04);
   --card-grain-opacity:      0.028;
-  --card-grain-blend:        multiply;
+  --card-grain-image:        var(--grain-specks-dark);
   border-color: rgba(71, 0, 163, 0.10);
   /* No border-color in the transition: the bento card eases it over 0.3s,
      and on the frame the card reappears after the overlay closes that
@@ -953,7 +953,7 @@
   --color-card-inset-top:    rgba(255, 255, 255, 0.10);
   --color-card-inset-bottom: rgba(0, 0, 0, 0.30);
   --card-grain-opacity:      0.045;
-  --card-grain-blend:        screen;
+  --card-grain-image:        var(--grain-specks-light);
   border-color: rgba(160, 150, 255, 0.16);
 }
 

@@ -33,19 +33,19 @@ const CARD_ENTRIES = [
   { key: 'about',      comp: AboutCard },
   { key: 'gmail',      comp: GmailCard },
   { key: 'linkedin',   comp: LinkedInCard },
-  { key: 'duolingo',   comp: DuolingoCard },
   { key: 'plugin',     comp: PluginCard },
+  { key: 'layerlint',  comp: LayerLintCard },
+  { key: 'designlab',  comp: RayoDesignLabCard },
+  { key: 'aiquote',    comp: AIQuoteCard },
+  { key: 'agenticds',  comp: AgenticDSCard },
   { key: 'ds',         comp: RayoDSCard },
-  { key: 'dsquote', comp: DSQuoteCard },
-  { key: 'uxquote', comp: UXQuoteCard },
-  { key: 'aiquote', comp: AIQuoteCard },
-  { key: 'alexa',      comp: AlexaCard },
   { key: 'schedule',   comp: ScheduleCard },
-  { key: 'ssds',      comp: SimplestreamDSCard },
+  { key: 'dsquote',    comp: DSQuoteCard },
+  { key: 'uxquote',    comp: UXQuoteCard },
+  { key: 'alexa',      comp: AlexaCard },
+  { key: 'ssds',       comp: SimplestreamDSCard },
   { key: 'strava',     comp: StravaCard },
-  { key: 'agenticds', comp: AgenticDSCard },
-  { key: 'layerlint', comp: LayerLintCard },
-  { key: 'designlab', comp: RayoDesignLabCard },
+  { key: 'duolingo',   comp: DuolingoCard },
 ]
 
 
@@ -179,13 +179,16 @@ export default defineComponent({
           el.style.transform = 'none'
 
           // Clean up inline styles after animation finishes
-          const cleanup = () => {
+          // Only the slot's own transform ending counts - transitionend
+          // bubbles from children and the hover-shadow pseudo-element too.
+          const cleanup = (e) => {
+            if (e.target !== el || e.pseudoElement || e.propertyName !== 'transform') return
             el.style.transition = ''
             el.style.transform  = ''
             el.style.willChange = ''
             el.removeEventListener('transitionend', cleanup)
           }
-          el.addEventListener('transitionend', cleanup, { once: true })
+          el.addEventListener('transitionend', cleanup)
         })
       })
     }

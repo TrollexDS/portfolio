@@ -87,7 +87,7 @@ const caseStudies = [
     about:
       'Custom Figma plugins that streamlined design workflows and improved team efficiency at scale.',
     datePublished: '2026-04-01',
-    dateModified:  '2026-04-17',
+    dateModified:  '2026-10-26',
     summary:
       'When a design team repeats the same manual step dozens of times a week, the fix is not a better spec — it is a plugin. This case study covers the Figma plugins built to automate Rayo thumbnail generation and related repetitive flows, and the efficiency gains that followed.',
   },

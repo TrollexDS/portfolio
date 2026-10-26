@@ -33,6 +33,9 @@ export default defineComponent({
       const lf = isLazy.value ? LERP_FACTOR : 1
       smoothX = lerp(smoothX, mouseX, lf)
       smoothY = lerp(smoothY, mouseY, lf)
+      // snap when settled so the refs stop changing (no re-render at rest)
+      if (Math.abs(mouseX - smoothX) < 0.05) smoothX = mouseX
+      if (Math.abs(mouseY - smoothY) < 0.05) smoothY = mouseY
       x.value = smoothX
       y.value = smoothY
       rafId = requestAnimationFrame(animLoop)
