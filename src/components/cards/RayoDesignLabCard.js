@@ -88,8 +88,9 @@ const themed = (light, dark, alt, cls = 'cs-cover-img') =>
    starts with the system: the component library is laid out on the
    face, the parts it needs fly into five phone screens (the outer two
    run off the card), and the parts the system didn't have arrive in
-   purple. One screen is kept, a follow-up prompt is asked of it, and
-   its states branch off the frame. The pass ends there.
+   purple. Then a follow-up prompt is asked of all five at once: the
+   row moves up and under each screen its state arrives - loading,
+   failed, offline - on a stem. The pass ends there.
 
    Every part on a screen is a free element on the face rather than a
    child of the phone, because a part has to travel from where it sat
@@ -111,23 +112,22 @@ const TIMELINE = [
   [4600,  { phase: 'library'  }],   // the design system, laid out
   [6900,  { phase: 'build'    }],   // the parts it needs fly into five screens
   [8800,  { phase: 'new'      }],   // and the parts the system didn't have arrive
-  [10600, { phase: 'pick'     }],   // the middle one is kept
-  [11600, { phase: 'prompt2', type: PROMPT2 }],
-  [13400, { phase: 'loading2' }],
-  [14500, { phase: 'branch'   }],   // its states branch off the frame
-  [17100, { phase: 'rest'     }],
-  [17800, { phase: 'done'     }],   // and it all goes, leaving the frame empty
+  [10800, { phase: 'prompt2', type: PROMPT2 }],
+  [12600, { phase: 'loading2' }],
+  [13700, { phase: 'branch'   }],   // the row moves up; under each, its state
+  [17200, { phase: 'rest'     }],
+  [17900, { phase: 'done'     }],   // and it all goes, leaving the frame empty
 ]
-const LOOP_MS = 19100
+const LOOP_MS = 19200
 
-const ICON_CHECK = 'M5 12.5l4.2 4.2L19 7'
-
-/* The states the second prompt turns up. Same tones the lab uses. */
-const LOOP_STATES = [
-  { id: 'loading', name: 'Loading',       tone: 'info'    },
-  { id: 'failed',  name: 'Failed',        tone: 'error'   },
-  { id: 'offline', name: 'No connection', tone: 'warning' },
-]
+/* The states the second prompt turns up, one under each screen. Same
+   tones the lab uses. `part` is what it puts on the screen. */
+const LOOP_STATES = {
+  loading: { name: 'Loading',       tone: 'info',    part: 'spinner' },
+  failed:  { name: 'Failed',        tone: 'error',   part: 'alert'   },
+  offline: { name: 'Offline',       tone: 'warning', part: 'offline' },
+}
+const STATE_OF = ['offline', 'loading', 'failed', 'failed', 'offline']
 
 /* ── Geometry, all in cqmin ──────────────────────────────────── */
 const PHONE_W = 21.8, PHONE_H = 46
@@ -135,44 +135,46 @@ const INNER_W = 18.6                 // phone width less its side padding
 const SCREEN_TOP = 4.5               // padding + notch + its margin
 const GAP = 1.4
 const PAD = 1.5                      // the card around a part in the library
-const LIB_SCALE = 1.3
 
 const PART_H = {
   title: 1.7, hero: 9, banner: 5.4, row: 5.2, tiles: 11.2, search: 4.4, chips: 3.4,
-  mini: 5.2, tabs: 2,
-  toggle: 3.4, progress: 3.2, badge: 5.2, alert: 5,
+  mini: 5.2, tabs: 2, avatar: 5.2, schedule: 4, button: 4.4, segment: 3.6, slider: 3,
+  stations: 5.2, card: 10, list: 5, stat: 5.4, playbar: 5, nav: 2.4,
+  toggle: 3.4, progress: 3.2, badge: 5.2,
+  alert: 5, spinner: 4.4, offline: 4.4,
 }
 const AFTER = { title: 0.6 }         // extra space under a part
 
 /* The five screens. The kept one is in the middle. The library holds
    one of each grey kind; the purple kinds are the ones the lab adds. */
 const SCREENS = [
-  ['title', 'hero', 'banner', 'row'],
+  ['title', 'hero', 'button', 'row'],
   ['title', 'tiles', 'row'],
   ['title', 'row', 'row', 'row'],
   ['title', 'hero', 'row', 'row'],
-  ['title', 'row', 'row', 'tiles'],
+  ['title', 'schedule', 'schedule', 'schedule', 'row'],
 ]
 const NEW_PARTS = {                   // [index, kind] inserted at `new`
   1: [3, 'badge'],
   2: [2, 'toggle'],
   3: [4, 'progress'],
 }
-const KEPT = 2
-const KEPT_FAILED = ['title', 'row', 'toggle', 'alert', 'row']
+const STATE_AT = 3                    // the part a state replaces, on every screen
+const KEPT = 2                        // the one that boots
 
-const SLOT_X = [-52, -26, 0, 26, 52] // phone centres, built; the outer two crop
-
-/* The library: three columns, three rows, no grid lines. Each kind sits
-   on a white card at LIB_SCALE. Rows are centred on these lines. */
-const LIB_COLS = [-32, 0, 32]
-const LIB_ROWS = [-26, -2, 23]
+/* The library: five columns, four rows, no grid lines; the outer
+   columns run off the card. Each kind sits on a white card. Rows are
+   centred on these lines. */
+const LIB_COLS = [-42, -21, 0, 21, 42]
+const LIB_ROWS = [-24, -8, 8, 24]
 const LIBRARY = [
-  ['row', 'mini', 'hero'],
-  ['tiles', 'title', 'tabs'],
-  ['banner', 'search', 'chips'],
+  ['nav', 'row', 'mini', 'hero', 'avatar'],
+  ['tiles', 'title', 'tabs', 'card', 'stations'],
+  ['banner', 'search', 'chips', 'schedule', 'segment'],
+  ['button', 'slider', 'list', 'stat', 'playbar'],
 ]
 const NEW_KINDS = new Set(['toggle', 'progress', 'badge'])
+const STATE_KINDS = new Set(['alert', 'spinner', 'offline'])
 
 /* Lay a screen out: y runs down from the top of the phone; mini and
    tabs are pinned to the bottom. Returns one entry per part with a
@@ -194,17 +196,14 @@ function layoutScreen(kinds) {
   return out
 }
 
-/* Which kinds a screen shows in a phase. */
-const BUILT  = new Set(['build'])
-const EDITED = new Set(['new', 'pick', 'prompt2', 'loading2'])
-const BRANCHED = new Set(['branch', 'rest', 'done'])
-function screenKinds(slot, phase) {
-  if (BUILT.has(phase)) return SCREENS[slot]
-  if (slot === KEPT && BRANCHED.has(phase)) return KEPT_FAILED
+/* Which kinds a screen shows in a phase; a child screen is its parent
+   with one part swapped for its state's. */
+const EDITED = new Set(['new', 'prompt2', 'loading2', 'branch', 'rest', 'done'])
+function screenKinds(slot, phase, child) {
+  let k = SCREENS[slot]
   const add = NEW_PARTS[slot]
-  if (!add || !(EDITED.has(phase) || BRANCHED.has(phase))) return SCREENS[slot]
-  const k = SCREENS[slot].slice()
-  k.splice(add[0], 0, add[1])
+  if (add && EDITED.has(phase)) { k = k.slice(); k.splice(add[0], 0, add[1]) }
+  if (child) { k = k.slice(); k[STATE_AT] = LOOP_STATES[STATE_OF[slot]].part }
   return k
 }
 
@@ -282,12 +281,6 @@ const LabLoop = defineComponent({
     })
     onUnmounted(stopLoop)
 
-    const svg = (d, cls) =>
-      h('svg', { class: cls, viewBox: '0 0 24 24', fill: 'none' }, [
-        h('path', { d, stroke: 'currentColor', 'stroke-width': '2.2',
-                    'stroke-linecap': 'round', 'stroke-linejoin': 'round' }),
-      ])
-
     const lines = () => h('span', { class: 'rdlv-lines' }, [h('span', { class: 'rdlv-l1' }), h('span', { class: 'rdlv-l2' })])
 
     /* The drawing of a part, at its screen size. */
@@ -304,7 +297,20 @@ const LabLoop = defineComponent({
         case 'toggle':   return h('span', { class: 'rdlv-toggle' }, [h('span', { class: 'rdlv-tg-l' }), h('span', { class: 'rdlv-tg-s' })])
         case 'progress': return h('span', { class: 'rdlv-progress' }, [h('i'), h('b')])
         case 'badge':    return h('span', { class: 'rdlv-row rdlv-row--badge' }, [h('span', { class: 'rdlv-thumb' }), lines(), h('i', { class: 'rdlv-badge' })])
+        case 'avatar':   return h('span', { class: 'rdlv-row rdlv-row--avatar' }, [h('span', { class: 'rdlv-thumb' }), lines()])
+        case 'schedule': return h('span', { class: 'rdlv-sched' }, [h('i'), h('b'), h('u')])
+        case 'button':   return h('span', { class: 'rdlv-button' })
+        case 'segment':  return h('span', { class: 'rdlv-segment' }, [h('i'), h('i'), h('i')])
+        case 'slider':   return h('span', { class: 'rdlv-slider' }, [h('i'), h('b')])
+        case 'stations': return h('span', { class: 'rdlv-stations' }, [h('i'), h('i'), h('i')])
+        case 'card':     return h('span', { class: 'rdlv-card' }, [h('i'), h('b')])
+        case 'list':     return h('span', { class: 'rdlv-list' }, [h('i'), h('i'), h('i')])
+        case 'stat':     return h('span', { class: 'rdlv-stat' }, [h('i', {}, [h('b'), h('u')]), h('i', {}, [h('b'), h('u')])])
+        case 'playbar':  return h('span', { class: 'rdlv-playbar' }, [h('i'), h('b'), h('i')])
+        case 'nav':      return h('span', { class: 'rdlv-nav' }, [h('i'), h('b')])
         case 'alert':    return h('span', { class: 'rdlv-alert' }, [h('i'), lines()])
+        case 'spinner':  return h('span', { class: 'rdlv-spinner' }, [h('i')])
+        case 'offline':  return h('span', { class: 'rdlv-offline' }, [h('i'), h('b')])
         default:         return h('span', { class: 'rdlv-row' }, [h('span', { class: 'rdlv-thumb' }), lines()])
       }
     }
@@ -314,13 +320,14 @@ const LabLoop = defineComponent({
     /* A part on a screen: the element that may also have been the
        library card for its kind. `--dx/--dy` is the way back to its
        place in the library, used while the library is on show. */
-    const tile = (slot, p, i) => {
-      const id = slot + ':' + p.key
-      const isFlyer = FLYER[p.kind] === id
+    const tile = (slot, p, i, child) => {
+      const id = (child ? 'c' : '') + slot + ':' + p.key
+      const isFlyer = !child && FLYER[p.kind] === id
       const lib = isFlyer ? LIB_POS[p.kind] : null
       const cls = ['rdlv-tile', 'rdlv-tile--' + p.kind]
       if (isFlyer) cls.push('rdlv-tile--lib')
       if (NEW_KINDS.has(p.kind)) cls.push('rdlv-tile--new')
+      if (STATE_KINDS.has(p.kind)) cls.push('rdlv-tile--state')
       const style = {
         left: cq(p.x - PAD), top: cq(p.y - PAD), width: cq(p.w + 2 * PAD), height: cq(p.h + 2 * PAD),
         '--i': i,
@@ -346,7 +353,7 @@ const LabLoop = defineComponent({
     }
 
     const phone = (slot) =>
-      h('div', { class: 'rdlv-slot', 'data-slot': slot, key: 'slot' + slot }, [
+      h('div', { class: 'rdlv-slot', 'data-slot': slot, 'data-row': 0, style: { '--s': slot }, key: 'slot' + slot }, [
         h('div', { class: 'rdlv-frame' }, [
           slot === KEPT
             ? h('div', { class: 'rdlv-boot' }, [
@@ -355,11 +362,25 @@ const LabLoop = defineComponent({
               ])
             : null,
           h('span', { class: 'rdlv-notch' }),
-          slot === KEPT ? h('span', { class: 'rdlv-kept' }, [svg(ICON_CHECK, 'rdlv-kept-icon')]) : null,
         ]),
         ...layoutScreen(screenKinds(slot, phase.value)).map((p, i) => tile(slot, p, i)),
         ...(slot === KEPT ? UNUSED.map(spare) : []),
       ])
+
+    /* Under each screen, its state: the same screen with one part swapped,
+       on a stem that carries the state's name. Only rendered once the
+       second prompt has been answered, so everything in it arrives. */
+    const BRANCHED = new Set(['branch', 'rest', 'done'])
+    const child = (slot) => {
+      if (!BRANCHED.has(phase.value)) return null
+      const st = LOOP_STATES[STATE_OF[slot]]
+      return h('div', { class: 'rdlv-slot', 'data-slot': slot, 'data-row': 1, style: { '--s': slot }, key: 'child' + slot }, [
+        h('span', { class: 'rdlv-stem' }),
+        h('span', { class: 'rdlv-state rdlv-state--' + st.tone }, [h('i', { class: 'rdlv-state-dot' }), h('span', { class: 'rdlv-state-name' }, st.name)]),
+        h('div', { class: 'rdlv-frame' }, [h('span', { class: 'rdlv-notch' })]),
+        ...layoutScreen(screenKinds(slot, phase.value, true)).map((p, i) => tile(slot, p, i, true)),
+      ])
+    }
 
     return () =>
       h('div', { class: 'rdlv', ref: root, 'data-phase': phase.value, 'aria-hidden': 'true' }, [
@@ -372,19 +393,10 @@ const LabLoop = defineComponent({
           h('span', { class: 'rdlv-load' }),
         ]),
 
-        // the five screens, and in them the library
-        h('div', { class: 'rdlv-stage' }, [0, 1, 2, 3, 4].map(phone)),
-
-        // the states, branching off the kept frame
-        h('div', { class: 'rdlv-states' }, [
-          h('span', { class: 'rdlv-rail' }),
-          ...LOOP_STATES.map((s, i) =>
-            h('span', {
-              class: ['rdlv-state', 'rdlv-state--' + s.tone, s.id === 'failed' ? 'rdlv-state--on' : ''].filter(Boolean).join(' '),
-              style: { '--i': i },
-              key: s.id,
-            }, [h('i', { class: 'rdlv-state-dot' }), h('span', { class: 'rdlv-state-name' }, s.name)])
-          ),
+        // the five screens, and in them the library; then their states
+        h('div', { class: 'rdlv-stage' }, [
+          ...[0, 1, 2, 3, 4].map(phone),
+          ...[0, 1, 2, 3, 4].map(child),
         ]),
 
         // the name, quietly, for the whole pass

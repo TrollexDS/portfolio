@@ -146,7 +146,6 @@
 .rdlv[data-phase='library']  .rdlv-prompt,
 .rdlv[data-phase='build']    .rdlv-prompt,
 .rdlv[data-phase='new']      .rdlv-prompt,
-.rdlv[data-phase='pick']     .rdlv-prompt,
 .rdlv[data-phase='prompt2']  .rdlv-prompt,
 .rdlv[data-phase='loading2'] .rdlv-prompt,
 .rdlv[data-phase='branch']   .rdlv-prompt,
@@ -217,8 +216,10 @@
    Five points on the face, one per screen, all on the centre until
    the build spreads them. A slot is a 0×0 origin: its frame and every
    part on its screen are positioned from it, so moving the slot moves
-   the screen, parts and all. The outer two run off the card, which is
-   the point - there are more than fit.                               */
+   the screen, parts and all. Built, the outer two run off the card,
+   which is the point - there are more than fit. For the states the
+   row scales down and moves up, and a second row of slots sits under
+   it, one child per screen.                                          */
 .rdlv-stage { position: absolute; inset: 0; }
 
 .rdlv-slot {
@@ -228,40 +229,62 @@
   width: 0;
   height: 0;
   --x: 0cqmin;
-  transform: translate(var(--x), 0);
+  --y: 0cqmin;
+  --k: 1;
+  transform: translate(var(--x), var(--y)) scale(var(--k));
   transition: transform var(--rdlv-fly), opacity 0.4s ease;
 }
 
-.rdlv[data-phase='build'] .rdlv-slot[data-slot='0'],
-.rdlv[data-phase='new']   .rdlv-slot[data-slot='0'] { --x: -52cqmin; }
-.rdlv[data-phase='build'] .rdlv-slot[data-slot='1'],
-.rdlv[data-phase='new']   .rdlv-slot[data-slot='1'] { --x: -26cqmin; }
-.rdlv[data-phase='build'] .rdlv-slot[data-slot='3'],
-.rdlv[data-phase='new']   .rdlv-slot[data-slot='3'] { --x: 26cqmin; }
-.rdlv[data-phase='build'] .rdlv-slot[data-slot='4'],
-.rdlv[data-phase='new']   .rdlv-slot[data-slot='4'] { --x: 52cqmin; }
+.rdlv[data-phase='build']    .rdlv-slot[data-slot='0'],
+.rdlv[data-phase='new']      .rdlv-slot[data-slot='0'],
+.rdlv[data-phase='prompt2']  .rdlv-slot[data-slot='0'],
+.rdlv[data-phase='loading2'] .rdlv-slot[data-slot='0'] { --x: -52cqmin; }
+.rdlv[data-phase='build']    .rdlv-slot[data-slot='1'],
+.rdlv[data-phase='new']      .rdlv-slot[data-slot='1'],
+.rdlv[data-phase='prompt2']  .rdlv-slot[data-slot='1'],
+.rdlv[data-phase='loading2'] .rdlv-slot[data-slot='1'] { --x: -26cqmin; }
+.rdlv[data-phase='build']    .rdlv-slot[data-slot='3'],
+.rdlv[data-phase='new']      .rdlv-slot[data-slot='3'],
+.rdlv[data-phase='prompt2']  .rdlv-slot[data-slot='3'],
+.rdlv[data-phase='loading2'] .rdlv-slot[data-slot='3'] { --x: 26cqmin; }
+.rdlv[data-phase='build']    .rdlv-slot[data-slot='4'],
+.rdlv[data-phase='new']      .rdlv-slot[data-slot='4'],
+.rdlv[data-phase='prompt2']  .rdlv-slot[data-slot='4'],
+.rdlv[data-phase='loading2'] .rdlv-slot[data-slot='4'] { --x: 52cqmin; }
 
-/* the kept one stays; the others drop away */
-.rdlv[data-phase='pick']     .rdlv-slot:not([data-slot='2']),
-.rdlv[data-phase='prompt2']  .rdlv-slot:not([data-slot='2']),
-.rdlv[data-phase='loading2'] .rdlv-slot:not([data-slot='2']),
-.rdlv[data-phase='branch']   .rdlv-slot:not([data-slot='2']),
-.rdlv[data-phase='rest']     .rdlv-slot:not([data-slot='2']),
-.rdlv[data-phase='done']     .rdlv-slot:not([data-slot='2']) {
-  opacity: 0;
-  transform: translate(var(--x), 10px) scale(0.86);
-  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.4, 0, 0.6, 1);
+/* the states: the row closes up, scales down and moves up; the children
+   take the same columns underneath */
+.rdlv[data-phase='branch'] .rdlv-slot,
+.rdlv[data-phase='rest']   .rdlv-slot,
+.rdlv[data-phase='done']   .rdlv-slot { --k: 0.64; }
+.rdlv[data-phase='branch'] .rdlv-slot[data-slot='0'],
+.rdlv[data-phase='rest']   .rdlv-slot[data-slot='0'],
+.rdlv[data-phase='done']   .rdlv-slot[data-slot='0'] { --x: -35cqmin; }
+.rdlv[data-phase='branch'] .rdlv-slot[data-slot='1'],
+.rdlv[data-phase='rest']   .rdlv-slot[data-slot='1'],
+.rdlv[data-phase='done']   .rdlv-slot[data-slot='1'] { --x: -17.5cqmin; }
+.rdlv[data-phase='branch'] .rdlv-slot[data-slot='3'],
+.rdlv[data-phase='rest']   .rdlv-slot[data-slot='3'],
+.rdlv[data-phase='done']   .rdlv-slot[data-slot='3'] { --x: 17.5cqmin; }
+.rdlv[data-phase='branch'] .rdlv-slot[data-slot='4'],
+.rdlv[data-phase='rest']   .rdlv-slot[data-slot='4'],
+.rdlv[data-phase='done']   .rdlv-slot[data-slot='4'] { --x: 35cqmin; }
+.rdlv[data-phase='branch'] .rdlv-slot[data-row='0'],
+.rdlv[data-phase='rest']   .rdlv-slot[data-row='0'],
+.rdlv[data-phase='done']   .rdlv-slot[data-row='0'] { --y: -24cqmin; }
+
+/* the children: only rendered from `branch`, so they arrive by animation,
+   left to right, once the row above has moved */
+.rdlv-slot[data-row='1'] {
+  --y: 18cqmin;
+  animation: rdlv-child 0.6s cubic-bezier(0.2, 0.9, 0.3, 1) calc(0.55s + var(--s) * 0.09s) backwards;
 }
-.rdlv[data-phase='pick']     .rdlv-slot[data-slot='0'],
-.rdlv[data-phase='pick']     .rdlv-slot[data-slot='1'],
-.rdlv[data-phase='pick']     .rdlv-slot[data-slot='3'],
-.rdlv[data-phase='pick']     .rdlv-slot[data-slot='4'] { --x: 0cqmin; }
 
-/* and moves aside for the branch */
-.rdlv[data-phase='branch'] .rdlv-slot[data-slot='2'],
-.rdlv[data-phase='rest']   .rdlv-slot[data-slot='2'] { --x: -17cqmin; }
+@keyframes rdlv-child {
+  from { opacity: 0; transform: translate(var(--x), calc(var(--y) + 8px)) scale(var(--k)); }
+}
 
-.rdlv[data-phase='done'] .rdlv-slot[data-slot='2'] { opacity: 0; }
+.rdlv[data-phase='done'] .rdlv-slot { opacity: 0; }
 
 
 /* ── The frame ───────────────────────────────────────────────────────
@@ -287,7 +310,6 @@
 .rdlv[data-phase='boot']     .rdlv-slot[data-slot='2'] .rdlv-frame,
 .rdlv[data-phase='build']    .rdlv-frame,
 .rdlv[data-phase='new']      .rdlv-frame,
-.rdlv[data-phase='pick']     .rdlv-frame,
 .rdlv[data-phase='prompt2']  .rdlv-frame,
 .rdlv[data-phase='loading2'] .rdlv-frame,
 .rdlv[data-phase='branch']   .rdlv-frame,
@@ -305,33 +327,6 @@
   border-radius: 999px;
   background: rgba(31, 28, 43, 0.16);
 }
-
-/* The kept mark: on the frame's corner while it is the one being asked
-   about, gone once the branch has made the point. */
-.rdlv-kept {
-  position: absolute;
-  right: 1.4cqmin;
-  top: 1.4cqmin;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 4.6cqmin;
-  height: 4.6cqmin;
-  border-radius: 50%;
-  color: #FFFFFF;
-  background: var(--rdlv-accent);
-  box-shadow: 0 2px 6px rgba(42, 10, 94, 0.25);
-  opacity: 0;
-  transform: scale(0.4);
-  transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.34, 1.45, 0.5, 1);
-  z-index: 3;
-}
-.rdlv-kept-icon { width: 2.8cqmin; height: 2.8cqmin; }
-
-.rdlv[data-phase='pick']     .rdlv-kept,
-.rdlv[data-phase='prompt2']  .rdlv-kept,
-.rdlv[data-phase='loading2'] .rdlv-kept { opacity: 1; transform: none; transition-delay: 0.25s, 0.25s; }
-
 
 /* ── Booting ─────────────────────────────────────────────────────────
 
@@ -417,7 +412,7 @@
 .rdlv[data-phase='prompt']  .rdlv-tile--lib,
 .rdlv[data-phase='loading'] .rdlv-tile--lib,
 .rdlv[data-phase='library'] .rdlv-tile--lib {
-  transform: translate(var(--dx), var(--dy)) scale(1.3);
+  transform: translate(var(--dx), var(--dy)) scale(0.92);
   background: var(--rdlv-card);
   box-shadow: 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
 }
@@ -431,7 +426,6 @@
    flyers land */
 .rdlv[data-phase='build']    .rdlv-tile,
 .rdlv[data-phase='new']      .rdlv-tile,
-.rdlv[data-phase='pick']     .rdlv-tile,
 .rdlv[data-phase='prompt2']  .rdlv-tile,
 .rdlv[data-phase='loading2'] .rdlv-tile,
 .rdlv[data-phase='branch']   .rdlv-tile,
@@ -449,19 +443,16 @@
 /* the library kinds no screen needed: they go when the build starts */
 .rdlv[data-phase='build']    .rdlv-tile--spare,
 .rdlv[data-phase='new']      .rdlv-tile--spare,
-.rdlv[data-phase='pick']     .rdlv-tile--spare,
 .rdlv[data-phase='prompt2']  .rdlv-tile--spare,
 .rdlv[data-phase='loading2'] .rdlv-tile--spare,
 .rdlv[data-phase='branch']   .rdlv-tile--spare,
-.rdlv[data-phase='rest']     .rdlv-tile--spare { opacity: 0; transform: scale(1.18); }
+.rdlv[data-phase='rest']     .rdlv-tile--spare { opacity: 0; transform: scale(0.84); }
 
 /* the parts the system didn't have: they are only rendered from `new`
-   on, so they arrive by animation, with a ring that fades */
-.rdlv-tile--new,
-.rdlv-tile--alert {
-  animation: rdlv-arrive 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
-}
+   on, so they arrive by animation, with a ring that fades. The state
+   parts arrive the same way, after their screen has. */
 .rdlv-tile--new { animation: rdlv-arrive 0.55s cubic-bezier(0.2, 0.9, 0.3, 1) backwards, rdlv-new-ring 1.5s cubic-bezier(0.2, 0.8, 0.3, 1) 0.3s both; }
+.rdlv-tile--state { animation: rdlv-arrive 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) calc(1.15s + var(--s, 0) * 0.09s) backwards; }
 
 @keyframes rdlv-arrive {
   from { opacity: 0; transform: translateY(5px) scale(0.96); }
@@ -600,8 +591,72 @@
 .rdlv-row--badge .rdlv-thumb { background: var(--rdlv-grad); opacity: 0.9; }
 .rdlv-badge { flex: 0 0 auto; width: 4.4cqmin; height: 2.2cqmin; border-radius: 999px; background: var(--rdlv-grad); }
 
-/* The failed state: the one real colour on the screen, because it is
-   the one thing on it that is the answer to the second prompt. */
+/* the rest of the system */
+.rdlv-row--avatar .rdlv-thumb { border-radius: 50%; }
+
+.rdlv-sched { display: flex; align-items: center; gap: 1.3cqmin; }
+.rdlv-sched i { flex: 0 0 auto; width: 4cqmin; height: 1.3cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.26); }
+.rdlv-sched b { flex: 1 1 auto; height: 1.2cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
+.rdlv-sched u { flex: 0 0 auto; width: 2cqmin; height: 2cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.14); }
+
+.rdlv-button { border-radius: 999px; background: rgba(31, 28, 43, 0.24); }
+
+.rdlv-segment { display: flex; padding: 0.4cqmin; gap: 0.4cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.08); }
+.rdlv-segment i { flex: 1 1 0; border-radius: 999px; }
+.rdlv-segment i:first-child { background: rgba(31, 28, 43, 0.22); }
+
+.rdlv-slider i { position: absolute; left: 0; right: 0; top: 50%; height: 1.2cqmin; margin-top: -0.6cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
+.rdlv-slider b { position: absolute; left: 40%; top: 50%; width: 3cqmin; height: 3cqmin; margin-top: -1.5cqmin; border-radius: 50%; background: #FFFFFF; box-shadow: 0 1px 3px rgba(42, 10, 94, 0.25), 0 0 0 1px rgba(31, 28, 43, 0.08); }
+
+.rdlv-stations { display: flex; justify-content: space-between; align-items: center; padding: 0 0.6cqmin; }
+.rdlv-stations i { width: 5.2cqmin; height: 5.2cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.11); }
+
+.rdlv-card { display: flex; flex-direction: column; gap: 1.2cqmin; }
+.rdlv-card i { flex: 1 1 auto; border-radius: 1.8cqmin; background: rgba(31, 28, 43, 0.10); }
+.rdlv-card b { flex: 0 0 auto; width: 62%; height: 1.2cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.22); }
+
+.rdlv-list { display: flex; flex-direction: column; justify-content: space-between; }
+.rdlv-list i { height: 1.2cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.16); }
+.rdlv-list i:nth-child(2) { width: 76%; }
+.rdlv-list i:nth-child(3) { width: 58%; }
+
+.rdlv-stat { display: flex; gap: 1.3cqmin; }
+.rdlv-stat i { flex: 1 1 0; display: flex; flex-direction: column; justify-content: center; gap: 1cqmin; padding: 0 1.3cqmin; border-radius: 1.5cqmin; background: rgba(31, 28, 43, 0.07); }
+.rdlv-stat b { width: 50%; height: 1.6cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.28); }
+.rdlv-stat u { width: 70%; height: 1cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
+
+.rdlv-playbar { display: flex; align-items: center; justify-content: center; gap: 2.6cqmin; }
+.rdlv-playbar i { width: 2.6cqmin; height: 2.6cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.14); }
+.rdlv-playbar b { width: 5cqmin; height: 5cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.3); }
+
+.rdlv-nav { display: flex; align-items: center; gap: 1.3cqmin; }
+.rdlv-nav i { flex: 0 0 auto; width: 2.4cqmin; height: 2.4cqmin; border-radius: 0.7cqmin; background: rgba(31, 28, 43, 0.2); }
+.rdlv-nav b { width: 46%; height: 1.4cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.3); }
+
+/* The states: the one real colour on a screen, because it is the thing
+   on it that answers the second prompt. */
+.rdlv-spinner { display: flex; align-items: center; justify-content: center; }
+.rdlv-spinner i {
+  width: 3.6cqmin;
+  height: 3.6cqmin;
+  border-radius: 50%;
+  border: 0.6cqmin solid rgba(47, 111, 237, 0.2);
+  border-top-color: var(--rdlv-info);
+  animation: rdlv-spin 0.9s linear infinite;
+}
+
+.rdlv-offline {
+  display: flex;
+  align-items: center;
+  gap: 1.3cqmin;
+  padding: 0 1.3cqmin;
+  border-radius: 1.6cqmin;
+  background: rgba(217, 138, 11, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(217, 138, 11, 0.26);
+}
+.rdlv-offline i { flex: 0 0 auto; width: 2.6cqmin; height: 2.6cqmin; border-radius: 50%; background: var(--rdlv-warning); }
+.rdlv-offline b { width: 64%; height: 1.2cqmin; border-radius: 999px; background: rgba(217, 138, 11, 0.55); }
+
 .rdlv-alert {
   display: flex;
   align-items: center;
@@ -650,80 +705,45 @@
 }
 
 
-/* ── The states, branching off the kept frame ────────────────────────
+/* ── The stems ───────────────────────────────────────────────────────
 
-   Beside the frame, not on it: these are the conditions the screen
-   has to answer to, and the second prompt turned them up. A rail down
-   the left, a stub to each, and the one the screen is showing lit.  */
-.rdlv-states {
+   From each screen down to its state: a line, and on it the state's
+   name. Drawn in the child's own coordinates, so it scales with it. */
+.rdlv-stem {
   position: absolute;
-  left: calc(50% + 0.5cqmin);
-  top: 54%;
-  width: 32cqmin;
-  display: flex;
-  flex-direction: column;
-  gap: 2.6cqmin;
-  padding-left: 7cqmin;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.rdlv-rail {
-  position: absolute;
-  left: 3cqmin;
-  top: 3.6cqmin;
-  bottom: 3.6cqmin;
-  width: 1px;
+  left: -0.75px;
+  top: -42.7cqmin;              /* the gap between the rows, in local units */
+  width: 1.5px;
+  height: 19.7cqmin;
   background: rgba(71, 0, 163, 0.28);
-  transform: scaleY(0);
   transform-origin: 50% 0;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: rdlv-stem 0.4s cubic-bezier(0.4, 0, 0.2, 1) calc(0.35s + var(--s) * 0.09s) backwards;
 }
 
-/* the stub from the frame's edge into the rail */
-.rdlv-rail::before {
-  content: '';
-  position: absolute;
-  left: -4.5cqmin;
-  top: 50%;
-  width: 4.5cqmin;
-  height: 1px;
-  background: rgba(71, 0, 163, 0.28);
-}
+@keyframes rdlv-stem { from { transform: scaleY(0); } }
 
 .rdlv-state {
-  position: relative;
+  position: absolute;
+  left: 50%;
+  top: -32.85cqmin;             /* the stem's middle */
   display: flex;
   align-items: center;
-  gap: 1.6cqmin;
-  height: 7.2cqmin;
-  padding: 0 2.4cqmin 0 2cqmin;
+  gap: 1.8cqmin;
+  height: 7.6cqmin;
+  padding: 0 2.6cqmin 0 2.2cqmin;
   border-radius: 999px;
-  background: var(--rdlv-glass);
+  background: var(--rdlv-card);
   border: 1px solid var(--rdlv-line);
   box-shadow: var(--rdlv-shadow);
-  width: max-content;
-  max-width: 100%;
-  opacity: 0;
-  transform: translateX(-8px);
-  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.32, 1.04, 0.35, 1), box-shadow 0.3s ease;
-}
-
-/* the stub from the rail to each state */
-.rdlv-state::before {
-  content: '';
-  position: absolute;
-  left: -4cqmin;
-  top: 50%;
-  width: 4cqmin;
-  height: 1px;
-  background: rgba(71, 0, 163, 0.28);
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  animation: rdlv-arrive 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) calc(0.6s + var(--s) * 0.09s) backwards;
 }
 
 .rdlv-state-dot {
   flex: 0 0 auto;
-  width: 2.2cqmin;
-  height: 2.2cqmin;
+  width: 2.4cqmin;
+  height: 2.4cqmin;
   border-radius: 50%;
 }
 .rdlv-state--info    .rdlv-state-dot { background: var(--rdlv-info); }
@@ -732,22 +752,9 @@
 
 .rdlv-state-name {
   font-family: var(--font-family-primary);
-  font-size: 2.4cqmin;
+  font-size: 3.3cqmin;
   line-height: 1;
-  white-space: nowrap;
   color: var(--rdlv-ink);
-}
-
-.rdlv-state--on { box-shadow: var(--rdlv-shadow), 0 0 0 1.5px var(--rdlv-error); }
-
-.rdlv[data-phase='branch'] .rdlv-rail,
-.rdlv[data-phase='rest']   .rdlv-rail { transform: none; transition-delay: 0.3s; }
-
-.rdlv[data-phase='branch'] .rdlv-state,
-.rdlv[data-phase='rest']   .rdlv-state {
-  opacity: 1;
-  transform: none;
-  transition-delay: calc(0.45s + var(--i) * 0.14s), calc(0.45s + var(--i) * 0.14s), 0s;
 }
 
 
@@ -778,7 +785,11 @@
   .rdlv-load,
   .rdlv-boot-mark,
   .rdlv-boot-word,
-  .rdlv-tile { animation: none; }
+  .rdlv-tile,
+  .rdlv-slot,
+  .rdlv-stem,
+  .rdlv-state,
+  .rdlv-spinner i { animation: none; }
   .rdlv * { transition: none !important; }
 }
 
@@ -818,7 +829,6 @@
 }
 /* the splash is opaque over the dark screen, not glass over glass */
 [data-theme="dark"] .rdlv-boot { background: #1A1726; }
-[data-theme="dark"] .rdlv-kept { color: #1F1C2B; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5); }
 [data-theme="dark"] .rdlv-tg-s::after { background: #1F1C2B; }
 
 [data-theme="dark"] .rdlv-notch  { background: rgba(248, 247, 252, 0.20); }
@@ -846,8 +856,16 @@
 [data-theme="dark"] .rdlv-alert .rdlv-l1 { background: rgba(255, 107, 125, 0.65); }
 [data-theme="dark"] .rdlv-alert .rdlv-l2 { background: rgba(255, 107, 125, 0.30); }
 
-[data-theme="dark"] .rdlv-rail,
-[data-theme="dark"] .rdlv-rail::before,
-[data-theme="dark"] .rdlv-state::before { background: rgba(160, 150, 255, 0.38); }
+[data-theme="dark"] .rdlv-stem { background: rgba(160, 150, 255, 0.38); }
+[data-theme="dark"] .rdlv-sched i, [data-theme="dark"] .rdlv-button, [data-theme="dark"] .rdlv-segment i:first-child,
+[data-theme="dark"] .rdlv-card b, [data-theme="dark"] .rdlv-stat b, [data-theme="dark"] .rdlv-playbar b,
+[data-theme="dark"] .rdlv-nav i, [data-theme="dark"] .rdlv-nav b { background: rgba(248, 247, 252, 0.3); }
+[data-theme="dark"] .rdlv-sched b, [data-theme="dark"] .rdlv-sched u, [data-theme="dark"] .rdlv-segment, [data-theme="dark"] .rdlv-slider i,
+[data-theme="dark"] .rdlv-stations i, [data-theme="dark"] .rdlv-card i, [data-theme="dark"] .rdlv-list i, [data-theme="dark"] .rdlv-stat i,
+[data-theme="dark"] .rdlv-stat u, [data-theme="dark"] .rdlv-playbar i { background: rgba(248, 247, 252, 0.14); }
+[data-theme="dark"] .rdlv-slider b { background: #F8F7FC; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
+[data-theme="dark"] .rdlv-offline { background: rgba(242, 181, 68, 0.14); box-shadow: inset 0 0 0 1px rgba(242, 181, 68, 0.3); }
+[data-theme="dark"] .rdlv-offline b { background: rgba(242, 181, 68, 0.6); }
+[data-theme="dark"] .rdlv-spinner i { border-color: rgba(125, 166, 255, 0.22); border-top-color: var(--rdlv-info); }
 
 [data-theme="dark"] .rdlv-label { color: rgba(248, 247, 252, 0.55); }
