@@ -83,10 +83,13 @@ const themed = (light, dark, alt, cls = 'cs-cover-img') =>
    prompt turns up the states nobody had designed yet.
 
    The lab boots like the app it builds - the name is the splash on the
-   phone's own screen - then a prompt is typed and worked on, three
-   prototypes fan out, one is kept, a follow-up prompt is asked of it,
-   and its states branch off the frame. The pass ends there: the state
-   branch is the part worth holding on.
+   phone's own screen - then a prompt is typed and worked on. The answer
+   starts with the design system: the component list is read, the useful
+   ones light up, the screen is built from them, and where the system has
+   a gap a new component is added to it. Then three prototypes fan out,
+   one is kept, a follow-up prompt is asked of it, and its states branch
+   off the frame. The pass ends there: the state branch is the part worth
+   holding on.
    ───────────────────────────────────────────────────────────── */
 const WORD    = 'Rayo Design Lab'
 const PROMPT  = 'Add download function in the Rayo app'
@@ -95,18 +98,35 @@ const TYPE_MS = 46
 
 const TIMELINE = [
   [0,     { phase: 'boot'     }],   // the lab starts: name on the phone's screen
-  [1300,  { phase: 'clear'    }],   // splash leaves; an empty frame
-  [1900,  { phase: 'prompt',  type: PROMPT }],
-  [4100,  { phase: 'loading'  }],
-  [5400,  { phase: 'fanout'   }],   // three answers, side by side
-  [7700,  { phase: 'pick'     }],   // the middle one is kept
-  [8700,  { phase: 'prompt2', type: PROMPT2 }],
-  [10500, { phase: 'loading2' }],
-  [11600, { phase: 'branch'   }],   // its states branch off the frame
-  [14300, { phase: 'rest'     }],
-  [15100, { phase: 'done'     }],   // and it all goes, leaving the frame empty
+  [1100,  { phase: 'clear'    }],   // splash leaves; an empty frame
+  [1700,  { phase: 'prompt',  type: PROMPT }],
+  [3900,  { phase: 'loading'  }],
+  [4700,  { phase: 'library'  }],   // the component list, read top to bottom
+  [6100,  { phase: 'select'   }],   // the useful ones light up
+  [6800,  { phase: 'assemble' }],   // the screen is built from them
+  [8000,  { phase: 'new'      }],   // and one component the system didn't have yet
+  [9800,  { phase: 'fanout'   }],   // three answers, side by side
+  [12100, { phase: 'pick'     }],   // the middle one is kept
+  [13100, { phase: 'prompt2', type: PROMPT2 }],
+  [14900, { phase: 'loading2' }],
+  [16000, { phase: 'branch'   }],   // its states branch off the frame
+  [18500, { phase: 'rest'     }],
+  [19200, { phase: 'done'     }],   // and it all goes, leaving the frame empty
 ]
-const LOOP_MS = 16500
+const LOOP_MS = 20500
+
+/* The component list the lab reads first - the Rayo iOS design system,
+   as the lab sees it. `use` is whether this screen needs it. The last
+   one is not in the list yet: it is the gap the prompt turns up. */
+const LIBRARY = [
+  { id: 'nowplaying', name: 'Now playing',  use: true  },
+  { id: 'station',    name: 'Station row',  use: true  },
+  { id: 'hero',       name: 'Artwork hero', use: true  },
+  { id: 'tiles',      name: 'Show tiles',   use: true  },
+  { id: 'tabbar',     name: 'Tab bar',      use: true  },
+  { id: 'search',     name: 'Search bar',   use: false },
+]
+const NEW_PART = 'Download toggle'
 
 const ICON_CHECK = 'M5 12.5l4.2 4.2L19 7'
 
@@ -118,6 +138,7 @@ const SCREENS = [
   ['row', 'toggle', 'row', 'row'],             // B: one toggle on the show page (kept)
   ['tiles', 'row', 'row'],                     // C: a grid of what you've downloaded
 ]
+const SCREEN_BUILD  = ['row', 'row', 'row']                 // B, before the system had a toggle
 const SCREEN_FAILED = ['row', 'toggle', 'alert', 'row']
 
 /* The states the second prompt turns up. Same tones the lab uses. */
@@ -204,10 +225,16 @@ const LabLoop = defineComponent({
       ])
     }
 
-    // The kept phone shows the failed state once the branch is drawn.
+    // The kept phone is built from the system first, gets the new part,
+    // and shows the failed state once the branch is drawn.
+    const BUILDING     = new Set(['library', 'select', 'assemble'])
     const AFTER_BRANCH = new Set(['branch', 'rest', 'done'])
-    const screenFor = (slot) =>
-      slot === 1 && AFTER_BRANCH.has(phase.value) ? SCREEN_FAILED : SCREENS[slot]
+    const screenFor = (slot) => {
+      if (slot !== 1) return SCREENS[slot]
+      if (BUILDING.has(phase.value)) return SCREEN_BUILD
+      if (AFTER_BRANCH.has(phase.value)) return SCREEN_FAILED
+      return SCREENS[slot]
+    }
 
     const phone = (slot) =>
       h('div', { class: 'rdlv-phone', 'data-slot': slot, key: 'phone' + slot }, [
@@ -218,7 +245,7 @@ const LabLoop = defineComponent({
             ])
           : null,
         h('span', { class: 'rdlv-notch' }),
-        h('div', { class: 'rdlv-screen', key: screenFor(slot).join() }, [
+        h('div', { class: 'rdlv-screen' }, [
           h('span', { class: 'rdlv-title' }),
           ...screenFor(slot).map((kind, i) => part(kind, i)),
         ]),
@@ -236,6 +263,24 @@ const LabLoop = defineComponent({
           h('span', { class: 'rdlv-text' }, typed.value),
           h('span', { class: 'rdlv-caret' }),
           h('span', { class: 'rdlv-load' }),
+        ]),
+
+        // the system, read before anything is drawn
+        h('div', { class: 'rdlv-lib' }, [
+          h('span', { class: 'rdlv-lib-head' }, 'Components'),
+          h('span', { class: 'rdlv-lib-scan' }),
+          ...LIBRARY.map((c, i) =>
+            h('span', {
+              class: ['rdlv-chip', c.use ? 'rdlv-chip--use' : ''].filter(Boolean).join(' '),
+              style: { '--i': i },
+              key: c.id,
+            }, [h('i', { class: 'rdlv-chip-ico rdlv-chip-ico--' + c.id }), h('span', { class: 'rdlv-chip-name' }, c.name)])
+          ),
+          h('span', { class: 'rdlv-chip rdlv-chip--use rdlv-chip--new', style: { '--i': LIBRARY.length }, key: 'new' }, [
+            h('i', { class: 'rdlv-chip-ico rdlv-chip-ico--toggle' }),
+            h('span', { class: 'rdlv-chip-name' }, NEW_PART),
+            h('span', { class: 'rdlv-chip-tag' }, 'New'),
+          ]),
         ]),
 
         // the three answers: the kept one is in the middle, so the

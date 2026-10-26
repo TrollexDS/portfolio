@@ -134,6 +134,10 @@
 
 .rdlv[data-phase='prompt']   .rdlv-prompt,
 .rdlv[data-phase='loading']  .rdlv-prompt,
+.rdlv[data-phase='library']  .rdlv-prompt,
+.rdlv[data-phase='select']   .rdlv-prompt,
+.rdlv[data-phase='assemble'] .rdlv-prompt,
+.rdlv[data-phase='new']      .rdlv-prompt,
 .rdlv[data-phase='fanout']   .rdlv-prompt,
 .rdlv[data-phase='pick']     .rdlv-prompt,
 .rdlv[data-phase='prompt2']  .rdlv-prompt,
@@ -255,6 +259,12 @@
   transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.4, 0, 0.6, 1);
 }
 
+/* it moves aside while the system is read, and comes back for the answer */
+.rdlv[data-phase='library']  .rdlv-phone[data-slot='1'],
+.rdlv[data-phase='select']   .rdlv-phone[data-slot='1'],
+.rdlv[data-phase='assemble'] .rdlv-phone[data-slot='1'],
+.rdlv[data-phase='new']      .rdlv-phone[data-slot='1'] { --x: 16.5cqmin; }
+
 /* then moves aside for the branch */
 .rdlv[data-phase='branch'] .rdlv-phone[data-slot='1'],
 .rdlv[data-phase='rest']   .rdlv-phone[data-slot='1'] { --x: -17cqmin; }
@@ -342,7 +352,9 @@
 .rdlv[data-phase='boot']    .rdlv-screen,
 .rdlv[data-phase='clear']   .rdlv-screen,
 .rdlv[data-phase='prompt']  .rdlv-screen,
-.rdlv[data-phase='loading'] .rdlv-screen { opacity: 0; }
+.rdlv[data-phase='loading'] .rdlv-screen,
+.rdlv[data-phase='library'] .rdlv-screen,
+.rdlv[data-phase='select']  .rdlv-screen { opacity: 0; }
 .rdlv[data-phase='boot'] .rdlv-mini,
 .rdlv[data-phase='boot'] .rdlv-tabs,
 .rdlv[data-phase='boot'] .rdlv-notch { opacity: 0; }
@@ -494,6 +506,17 @@
   box-shadow: 0 1px 2px rgba(42, 10, 94, 0.18);
 }
 
+/* The part the system didn't have: it arrives with a ring that fades,
+   so you can see which piece of the screen is the new one. */
+.rdlv[data-phase='new'] .rdlv-tg-s {
+  animation: rdlv-new-ring 1.4s cubic-bezier(0.2, 0.8, 0.3, 1) 0.35s both;
+}
+
+@keyframes rdlv-new-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(129, 50, 254, 0.55); }
+  100% { box-shadow: 0 0 0 2.2cqmin rgba(129, 50, 254, 0); }
+}
+
 /* The failed state: the one real colour on the screen, because it is
    the one thing on it that is the answer to the second prompt. */
 .rdlv-alert {
@@ -546,6 +569,142 @@
   height: 2cqmin;
   border-radius: 0.6cqmin;
   background: rgba(31, 28, 43, 0.13);
+}
+
+
+/* ── The system, read first ──────────────────────────────────────────
+
+   The component list beside the frame: the design system as the lab
+   sees it. A scan passes down it, the ones this screen needs light up,
+   and the one the system didn't have yet is added at the bottom.    */
+.rdlv-lib {
+  position: absolute;
+  right: calc(50% + 0.5cqmin);
+  top: 54%;
+  width: 35cqmin;
+  display: flex;
+  flex-direction: column;
+  gap: 1.3cqmin;
+  padding: 2.2cqmin;
+  border-radius: 3.2cqmin;
+  background: var(--rdlv-glass);
+  border: 1px solid var(--rdlv-line);
+  box-shadow: var(--rdlv-shadow);
+  opacity: 0;
+  transform: translate(8px, -50%);
+  transition: opacity 0.35s ease, transform 0.55s cubic-bezier(0.32, 1.04, 0.35, 1);
+  pointer-events: none;
+}
+
+.rdlv[data-phase='library']  .rdlv-lib,
+.rdlv[data-phase='select']   .rdlv-lib,
+.rdlv[data-phase='assemble'] .rdlv-lib,
+.rdlv[data-phase='new']      .rdlv-lib { opacity: 1; transform: translate(0, -50%); }
+
+.rdlv-lib-head {
+  font-family: var(--font-family-primary);
+  font-size: 1.9cqmin;
+  line-height: 1;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(31, 28, 43, 0.5);
+  margin: 0.4cqmin 0 1cqmin 0.6cqmin;
+}
+
+/* the read: one highlight, travelling the list top to bottom */
+.rdlv-lib-scan {
+  position: absolute;
+  left: 2.2cqmin;
+  right: 2.2cqmin;
+  top: 5.6cqmin;
+  height: 4.8cqmin;
+  border-radius: 999px;
+  background: rgba(71, 0, 163, 0.10);
+  opacity: 0;
+}
+
+.rdlv[data-phase='library'] .rdlv-lib-scan {
+  animation: rdlv-scan 1.25s cubic-bezier(0.4, 0, 0.3, 1) 0.3s both;
+}
+
+@keyframes rdlv-scan {
+  0%   { opacity: 0; transform: translateY(0); }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { opacity: 0; transform: translateY(30.5cqmin); }   /* 5 pitches of 6.1cqmin */
+}
+
+.rdlv-chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.4cqmin;
+  height: 4.8cqmin;
+  padding: 0 1.6cqmin;
+  border-radius: 999px;
+  color: var(--rdlv-ink);
+  box-shadow: inset 0 0 0 1px transparent;
+  opacity: 0.55;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, transform 0.45s cubic-bezier(0.32, 1.04, 0.35, 1);
+}
+
+.rdlv-chip-ico {
+  flex: 0 0 auto;
+  width: 2.4cqmin;
+  height: 2.4cqmin;
+  border-radius: 0.7cqmin;
+  background: rgba(31, 28, 43, 0.18);
+  transition: background 0.3s ease;
+}
+.rdlv-chip-ico--nowplaying { background: linear-gradient(135deg, #ED4AD9, #8132FE); }
+.rdlv-chip-ico--tabbar     { border-radius: 999px; }
+.rdlv-chip-ico--toggle     { width: 3.2cqmin; border-radius: 999px; }
+
+.rdlv-chip-name {
+  font-family: var(--font-family-primary);
+  font-size: 2.3cqmin;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* lit: the ones this screen needs (the new one lights with the rest, but
+   only once it exists - see below) */
+.rdlv[data-phase='select']   .rdlv-chip--use:not(.rdlv-chip--new),
+.rdlv[data-phase='assemble'] .rdlv-chip--use:not(.rdlv-chip--new),
+.rdlv[data-phase='new']      .rdlv-chip--use {
+  opacity: 1;
+  background: rgba(71, 0, 163, 0.07);
+  box-shadow: inset 0 0 0 1px rgba(71, 0, 163, 0.28);
+  transition-delay: calc(var(--i) * 0.07s), calc(var(--i) * 0.07s), calc(var(--i) * 0.07s), 0s;
+}
+.rdlv[data-phase='select']   .rdlv-chip--use .rdlv-chip-ico,
+.rdlv[data-phase='assemble'] .rdlv-chip--use .rdlv-chip-ico,
+.rdlv[data-phase='new']      .rdlv-chip--use .rdlv-chip-ico { background-color: var(--rdlv-accent); }
+
+/* the one that wasn't there: it has no place in the list until it is added */
+.rdlv-chip--new {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition-delay: 0s;
+}
+
+.rdlv[data-phase='new'] .rdlv-chip--new {
+  opacity: 1;
+  transform: none;
+  transition-delay: 0.1s, 0.1s, 0.1s, 0.1s;
+}
+
+.rdlv-chip-tag {
+  margin-left: auto;
+  padding: 0.7cqmin 1.1cqmin;
+  border-radius: 999px;
+  font-family: var(--font-family-primary);
+  font-size: 1.7cqmin;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #ED4AD9, #8132FE);
 }
 
 
@@ -676,6 +835,8 @@
   .rdlv-load,
   .rdlv-boot-mark,
   .rdlv-boot-word,
+  .rdlv-lib-scan,
+  .rdlv-tg-s,
   .rdlv-screen > * { animation: none; }
   .rdlv * { transition: none !important; }
 }
@@ -734,3 +895,19 @@
 [data-theme="dark"] .rdlv-state::before { background: rgba(160, 150, 255, 0.38); }
 
 [data-theme="dark"] .rdlv-label { color: rgba(248, 247, 252, 0.55); }
+
+[data-theme="dark"] .rdlv-lib-head { color: rgba(248, 247, 252, 0.5); }
+[data-theme="dark"] .rdlv-lib-scan { background: rgba(160, 150, 255, 0.16); }
+[data-theme="dark"] .rdlv-chip-ico { background: rgba(248, 247, 252, 0.22); }
+[data-theme="dark"] .rdlv-chip-ico--nowplaying { background: linear-gradient(135deg, #ED4AD9, #8132FE); }
+[data-theme="dark"] .rdlv[data-phase='select']   .rdlv-chip--use,
+[data-theme="dark"] .rdlv[data-phase='assemble'] .rdlv-chip--use,
+[data-theme="dark"] .rdlv[data-phase='new']      .rdlv-chip--use {
+  background: rgba(160, 150, 255, 0.10);
+  box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.38);
+}
+[data-theme="dark"] .rdlv[data-phase='new'] .rdlv-tg-s { animation-name: rdlv-new-ring-dark; }
+@keyframes rdlv-new-ring-dark {
+  0%   { box-shadow: 0 0 0 0 rgba(225, 220, 255, 0.6); }
+  100% { box-shadow: 0 0 0 2.2cqmin rgba(225, 220, 255, 0); }
+}
