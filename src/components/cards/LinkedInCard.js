@@ -1,4 +1,4 @@
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, ref, onMounted, onBeforeUnmount } from 'vue'
 import { ICON_EXTERNAL_LINK } from '../../assets/icons/icons.js'
 
 const HREF    = 'https://www.linkedin.com/in/alexmchiu/'
@@ -12,22 +12,25 @@ export default defineComponent({
   },
 
   setup(props) {
-    // Incrementing this key forces Vue to recreate the SVG element,
-    // which restarts the CSS animations from scratch.
-    const animKey = ref(0)
+    // intro: the "in" draws itself once on mount, then hands over to the idle loop
+    const intro   = ref(true)
+    const hovered = ref(false)
+    let introTimer = null
 
-    function replay() {
-      animKey.value++
-    }
+    onMounted(() => {
+      introTimer = setTimeout(() => { intro.value = false }, 1400)
+    })
+    onBeforeUnmount(() => clearTimeout(introTimer))
 
     return () => {
-      const classes = ['bento-card', 'linkedin-card', props.classes]
+      const classes = ['bento-card', 'linkedin-card', hovered.value && 'is-hovered', props.classes]
         .filter(Boolean).join(' ')
 
       return h('div', {
         class: classes,
         'data-tooltip': TOOLTIP,
-        onMouseenter: replay,
+        onMouseenter: () => { hovered.value = true },
+        onMouseleave: () => { hovered.value = false },
         onClick: () => window.open(HREF, '_blank', 'noopener,noreferrer'),
       }, [
         // Action icon link
@@ -41,16 +44,19 @@ export default defineComponent({
           h('img', { src: ICON_EXTERNAL_LINK, alt: 'Open LinkedIn' }),
         ]),
 
-        // Animated LinkedIn "in" SVG — key changes on each mouseenter to replay
+        // LinkedIn "in". Idle: the dot of the i nods every few seconds.
+        // Hover: the blue tile pops in behind and the letters redraw in white.
         h('svg', {
-          key: animKey.value,
-          class: 'li-svg',
+          class: `li-svg${intro.value ? ' li-svg--intro' : ''}`,
           viewBox: '0 0 36 36',
           fill: 'none',
           width: '88',
           height: '88',
           xmlns: 'http://www.w3.org/2000/svg',
+          'aria-hidden': 'true',
         }, [
+          // Brand tile — hidden until hover
+          h('rect', { class: 'li-tile', x: '4', y: '4', width: '28', height: '28', rx: '6' }),
           // Dot above the "i"
           h('circle', {
             class: 'li-dot',

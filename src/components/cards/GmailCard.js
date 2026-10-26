@@ -16,7 +16,7 @@ export default defineComponent({
 
   setup(props) {
     const copied   = ref(false)
-    const animKey  = ref(0)
+    const hovered  = ref(false)
     const checkEl  = ref(null)
     const { spawnRipple, renderRipples } = useRipple()
     let lottieAnim = null
@@ -56,18 +56,19 @@ export default defineComponent({
       })
     }
 
-    function replay() {
-      animKey.value++
-    }
+    // Hover "reads" the unread badge; leaving restores it
+    function onEnter() { hovered.value = true }
+    function onLeave() { hovered.value = false }
 
     return () => {
-      const classes = ['bento-card', 'gmail-card', props.classes]
+      const classes = ['bento-card', 'gmail-card', hovered.value && 'is-hovered', props.classes]
         .filter(Boolean).join(' ')
 
       return h('div', {
         class: classes,
         onClick: (e) => { handleCopy(); spawnRipple(e) },
-        onMouseenter: replay,
+        onMouseenter: onEnter,
+        onMouseleave: onLeave,
         'data-tooltip': 'Click to copy my email address 📨',
       }, [
         // Action icon — single persistent element so CSS transitions can fire
@@ -83,23 +84,32 @@ export default defineComponent({
           ]),
         ]),
 
-        // Animated Gmail logo SVG — key changes on mouseenter to replay animation
+        // Gmail logo + unread badge. Logo slides in once on mount; the badge
+        // pings while idle and is "read" (scales out, logo wiggles) on hover.
         h('svg', {
-          key: animKey.value,
           class: 'gm-svg',
-          viewBox: '52 42 88 66',
-          width: '64',
-          height: '64',
+          viewBox: '48 30 104 82',
+          width: '76',
+          height: '60',
           xmlns: 'http://www.w3.org/2000/svg',
+          'aria-hidden': 'true',
         }, [
-          // 1 & 2 & 3: dark-red corner, red M-chevron, yellow corner — slide from top
-          h('path', { class: 'gm-from-top', fill: '#c5221f', d: 'M52 51v8l20 15V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4 7.2' }),
-          h('path', { class: 'gm-from-top', fill: '#ea4335', d: 'M72 74V48l24 18 24-18v26L96 92' }),
-          h('path', { class: 'gm-from-top', fill: '#fbbc04', d: 'M120 48v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2' }),
-          // 4: blue left pillar — slide from left
-          h('path', { class: 'gm-from-left',  fill: '#4285f4', d: 'M58 108h14V74L52 59v43c0 3.32 2.69 6 6 6' }),
-          // 5: green right pillar — slide from right
-          h('path', { class: 'gm-from-right', fill: '#34a853', d: 'M120 108h14c3.32 0 6-2.69 6-6V59l-20 15' }),
+          h('g', { class: 'gm-logo' }, [
+            // 1 & 2 & 3: dark-red corner, red M-chevron, yellow corner — slide from top
+            h('path', { class: 'gm-from-top', fill: '#c5221f', d: 'M52 51v8l20 15V48l-5.6-4.2c-5.94-4.45-14.4-.22-14.4 7.2' }),
+            h('path', { class: 'gm-from-top', fill: '#ea4335', d: 'M72 74V48l24 18 24-18v26L96 92' }),
+            h('path', { class: 'gm-from-top', fill: '#fbbc04', d: 'M120 48v26l20-15v-8c0-7.42-8.47-11.65-14.4-7.2' }),
+            // 4: blue left pillar — slide from left
+            h('path', { class: 'gm-from-left',  fill: '#4285f4', d: 'M58 108h14V74L52 59v43c0 3.32 2.69 6 6 6' }),
+            // 5: green right pillar — slide from right
+            h('path', { class: 'gm-from-right', fill: '#34a853', d: 'M120 108h14c3.32 0 6-2.69 6-6V59l-20 15' }),
+          ]),
+          // Unread badge: ping ring behind, badge on top
+          h('circle', { class: 'gm-badge-ring', cx: '138', cy: '44', r: '10' }),
+          h('g', { class: 'gm-badge' }, [
+            h('circle', { class: 'gm-badge-dot', cx: '138', cy: '44', r: '10' }),
+            h('text', { class: 'gm-badge-num', x: '138', y: '44', 'text-anchor': 'middle', 'dominant-baseline': 'central' }, '1'),
+          ]),
         ]),
 
         // Ripples

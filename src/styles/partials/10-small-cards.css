@@ -23,10 +23,11 @@
 
 .li-dot {
   fill: var(--color-brand-linkedin);
-  transform-origin: 11px 10px;
-  transform: scale(0);
-  opacity: 0;
-  animation: li-pop-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: fill 0.2s ease;
+  /* Idle: a little nod every few seconds */
+  animation: li-nod 3.6s ease-in-out 0.4s infinite;
 }
 
 .li-path {
@@ -36,15 +37,64 @@
   stroke-linejoin: round;
   stroke-width: 3.2;
   stroke-dasharray: var(--len);
-  stroke-dashoffset: var(--len);
-  animation: li-draw var(--draw-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1) var(--draw-delay, 0s) forwards;
+  stroke-dashoffset: 0;
+  transition: stroke 0.2s ease;
+}
+
+.li-tile {
+  fill: var(--color-brand-linkedin);
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: scale(0.6);
+  transition:
+    opacity   0.2s ease,
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Intro — plays once on mount (class removed by the component) */
+.li-svg--intro .li-dot {
+  animation: li-pop-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) var(--card-enter-delay, 0s) both;
+}
+.li-svg--intro .li-path {
+  animation: li-draw var(--draw-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1)
+             calc(var(--card-enter-delay, 0s) + var(--draw-delay, 0s)) both;
+}
+
+/* Hover — tile springs in, letters redraw in white on top of it */
+.linkedin-card.is-hovered .li-tile {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity   0.15s ease,
+    transform 0.4s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+.linkedin-card.is-hovered .li-path {
+  stroke: #fff;
+  animation: li-draw var(--draw-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1)
+             calc(var(--draw-delay, 0s) + 0.08s) both;
+}
+.linkedin-card.is-hovered .li-dot {
+  fill: #fff;
+  animation: li-pop-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) 0.06s both;
 }
 
 @keyframes li-draw {
-  to { stroke-dashoffset: 0; }
+  /* opacity hides the round-cap dot left by a zero-length dash */
+  0%   { stroke-dashoffset: var(--len); opacity: 0; }
+  12%  { opacity: 1; }
+  100% { stroke-dashoffset: 0; opacity: 1; }
 }
 @keyframes li-pop-in {
-  to { transform: scale(1); opacity: 1; }
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+@keyframes li-nod {
+  0%, 72%, 100% { transform: translateY(0); }
+  79%           { transform: translateY(-2.2px); }
+  86%           { transform: translateY(0); }
+  91%           { transform: translateY(-0.8px); }
+  95%           { transform: translateY(0); }
 }
 
 /* ── Gmail copy animation ── */
@@ -113,22 +163,19 @@
   filter: var(--filter-checkmark);
 }
 
-/* ── Gmail animated icon ── */
+/* ── Gmail animated icon + unread badge ── */
 .gm-svg {
-  overflow: hidden;
+  overflow: visible; /* badge ping extends past the viewBox */
   display: block;
 }
 
-.gm-from-top   { transform: translateY(-50px); opacity: 0; }
-.gm-from-left  { transform: translateX(-70px); opacity: 0; }
-.gm-from-right { transform: translateX(70px);  opacity: 0; }
-
+/* Logo entrance — plays once on mount */
 .gm-from-top,
 .gm-from-left,
 .gm-from-right {
   animation-duration: 0.5s;
   animation-timing-function: cubic-bezier(0.34, 1.15, 0.64, 1);
-  animation-delay: 0s;
+  animation-delay: var(--card-enter-delay, 0s);
   animation-fill-mode: both;
 }
 
@@ -147,6 +194,66 @@
 @keyframes gm-in-right {
   from { transform: translateX(70px);  opacity: 0; }
   to   { transform: translateX(0);     opacity: 1; }
+}
+
+/* Hover: logo gives a small wiggle as the message is "read" */
+.gm-logo {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+}
+.gmail-card.is-hovered .gm-logo {
+  animation: gm-wiggle 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+@keyframes gm-wiggle {
+  25% { transform: rotate(-7deg); }
+  55% { transform: rotate(5deg); }
+  80% { transform: rotate(-2deg); }
+}
+
+/* Badge — pops in after the logo lands, scales out on hover,
+   springs back (short delay) when the pointer leaves */
+.gm-badge {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gm-badge-in 0.4s cubic-bezier(0.34, 1.6, 0.64, 1) calc(var(--card-enter-delay, 0s) + 0.55s) backwards;
+  transition: transform 0.35s cubic-bezier(0.34, 1.6, 0.64, 1) 0.4s;
+}
+.gmail-card.is-hovered .gm-badge {
+  transform: scale(0);
+  transition: transform 0.22s cubic-bezier(0.5, 0, 0.75, 0) 0.12s;
+}
+@keyframes gm-badge-in {
+  from { transform: scale(0); }
+  to   { transform: scale(1); }
+}
+
+.gm-badge-dot {
+  fill: #ea4335;
+  stroke: var(--color-surface-card);
+  stroke-width: 3;
+}
+.gm-badge-num {
+  fill: #fff;
+  font-family: var(--font-family-system);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Idle: ring pings out from the badge every few seconds */
+.gm-badge-ring {
+  fill: #ea4335;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: gm-ping 2.8s cubic-bezier(0, 0, 0.2, 1) calc(var(--card-enter-delay, 0s) + 1.4s) infinite;
+}
+.gmail-card.is-hovered .gm-badge-ring {
+  animation: none;
+  opacity: 0;
+}
+@keyframes gm-ping {
+  0%       { transform: scale(1);   opacity: 0.5; }
+  55%, 100% { transform: scale(2.4); opacity: 0; }
 }
 
 
