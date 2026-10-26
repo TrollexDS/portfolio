@@ -273,13 +273,15 @@
 .rdlv[data-phase='done']   .rdlv-slot[data-row='0'] { --y: -24cqmin; }
 
 /* the fold: every slot, both rows, pulls into the centre and goes, and
-   the project card grows out of the same point */
-.rdlv[data-phase='fold']  .rdlv-slot,
-.rdlv[data-phase='shelf'] .rdlv-slot,
-.rdlv[data-phase='done']  .rdlv-slot,
-.rdlv[data-phase='fold']  .rdlv-slot[data-row='1'],
-.rdlv[data-phase='shelf'] .rdlv-slot[data-row='1'],
-.rdlv[data-phase='done']  .rdlv-slot[data-row='1'] {
+   the file grows out of the same point */
+.rdlv[data-phase='fold']    .rdlv-slot,
+.rdlv[data-phase='archive'] .rdlv-slot,
+.rdlv[data-phase='slot']    .rdlv-slot,
+.rdlv[data-phase='done']    .rdlv-slot,
+.rdlv[data-phase='fold']    .rdlv-slot[data-row='1'],
+.rdlv[data-phase='archive'] .rdlv-slot[data-row='1'],
+.rdlv[data-phase='slot']    .rdlv-slot[data-row='1'],
+.rdlv[data-phase='done']    .rdlv-slot[data-row='1'] {
   --x: 0cqmin;
   --y: 0cqmin;
   --k: 0.1;
@@ -717,14 +719,14 @@
 }
 
 
-/* ── The shelf ───────────────────────────────────────────────────────
+/* ── The archive ─────────────────────────────────────────────────────
 
-   The lab's projects, on the same white cards the component library
-   used: a title, a strip of its screens, who it is shared with, when.
-   The new one grows out of the fold at the centre and the others fade
-   in around it. The pass ends here, and the next one starts from the
-   prompt - the system feeds the work, the work feeds the system.    */
-.rdlv-shelf {
+   Where it ends up. The exploration folds into one file at the centre;
+   the lab's archive fades in around a gap; the file travels into the
+   gap and shrinks to a row's glyph, and the row's name and the people
+   it is shared with appear beside it. Then the pass starts again -
+   the system feeds the work, the work feeds the system.             */
+.rdlv-archive {
   position: absolute;
   left: 50%;
   top: 54%;
@@ -732,50 +734,123 @@
   height: 0;
 }
 
-.rdlv-proj {
+/* the file */
+.rdlv-file {
   position: absolute;
-  left: calc(var(--px) - 13cqmin);
-  top: calc(var(--py) - 8cqmin);
-  width: 26cqmin;
-  height: 16cqmin;
+  left: -4.5cqmin;
+  top: -6cqmin;
+  width: 9cqmin;
+  height: 12cqmin;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 1.5cqmin;
-  padding: 2.2cqmin;
-  border-radius: 2.6cqmin;
+  gap: 1cqmin;
+  padding: 2.6cqmin 1.2cqmin 1.2cqmin;
+  border-radius: 1.2cqmin;
   background: var(--rdlv-card);
-  box-shadow: 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
+  box-shadow: 0 8px 20px rgba(42, 10, 94, 0.18);
   opacity: 0;
-  transform: scale(0.9);
-  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.32, 1.04, 0.35, 1);
+  transform: scale(0.5);
+  transform-origin: 50% 50%;
+  transition: opacity 0.35s ease, transform var(--rdlv-fly);
 }
 
-.rdlv-proj-title { flex: 0 0 auto; width: 58%; height: 1.6cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.32); }
-.rdlv-proj-strip { flex: 1 1 auto; display: flex; gap: 1cqmin; min-height: 0; }
-.rdlv-proj-strip i { flex: 1 1 0; border-radius: 0.9cqmin; background: rgba(31, 28, 43, 0.09); }
-.rdlv-proj-foot { flex: 0 0 auto; display: flex; align-items: center; }
-.rdlv-proj-avs { display: flex; }
-.rdlv-proj-avs i { width: 2.8cqmin; height: 2.8cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.2); box-shadow: 0 0 0 1.5px var(--rdlv-card); }
-.rdlv-proj-avs i + i { margin-left: -0.9cqmin; }
-.rdlv-proj-date { margin-left: auto; width: 5.4cqmin; height: 1.4cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
+/* the corner: cut away in the ground colour, the flap folded back */
+.rdlv-file::before,
+.rdlv-file::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30%;
+  height: 22%;
+}
+.rdlv-file::before { background: #F8F7FC; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.rdlv-file::after  { background: rgba(22, 18, 31, 0.16); clip-path: polygon(0 0, 100% 100%, 0 100%); }
 
-/* the new one: lit, and its screens carry the purple it added */
-.rdlv-proj--new { box-shadow: 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05), 0 0 0 1.5px var(--rdlv-accent); }
-.rdlv-proj--new .rdlv-proj-strip i { background: rgba(129, 50, 254, 0.14); }
-.rdlv-proj--new .rdlv-proj-avs i:first-child { background: var(--rdlv-grad); }
+.rdlv-file-strip { display: flex; gap: 0.5cqmin; height: 2.6cqmin; }
+.rdlv-file-strip i { flex: 1 1 0; border-radius: 0.4cqmin; background: rgba(129, 50, 254, 0.18); }
+.rdlv-file-line { height: 0.9cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.22); }
+.rdlv-file-line--short { width: 60%; background: rgba(31, 28, 43, 0.12); }
 
-.rdlv[data-phase='fold'] .rdlv-proj--new {
+.rdlv[data-phase='fold']    .rdlv-file,
+.rdlv[data-phase='archive'] .rdlv-file {
   opacity: 1;
-  transform: scale(1.12);
+  transform: scale(1.1);
   transition-delay: 0.4s, 0.4s;
 }
 
-.rdlv[data-phase='shelf'] .rdlv-proj {
+.rdlv[data-phase='slot'] .rdlv-file {
+  opacity: 1;
+  transform: translate(var(--fx), var(--fy)) scale(var(--fk));
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* the rows */
+.rdlv-arow {
+  position: absolute;
+  left: -22cqmin;
+  top: calc(var(--ay) - 3.2cqmin);
+  width: 44cqmin;
+  height: 6.4cqmin;
+  display: flex;
+  align-items: center;
+  gap: 2cqmin;
+  padding: 0 1.4cqmin 0 0;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.35s ease, transform 0.5s cubic-bezier(0.32, 1.04, 0.35, 1);
+}
+
+.rdlv[data-phase='archive'] .rdlv-arow,
+.rdlv[data-phase='slot']    .rdlv-arow {
   opacity: 1;
   transform: none;
-  transition-delay: calc(var(--i) * 0.07s), calc(var(--i) * 0.07s);
+  transition-delay: calc(var(--i) * 0.06s), calc(var(--i) * 0.06s);
 }
+
+/* the file, in a row: a small sheet with the same corner */
+.rdlv-aglyph {
+  position: relative;
+  flex: 0 0 auto;
+  width: 4.6cqmin;
+  height: 6.1cqmin;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6cqmin;
+  padding: 1.5cqmin 0.7cqmin 0.7cqmin;
+  border-radius: 0.7cqmin;
+  background: var(--rdlv-card);
+  box-shadow: 0 2px 6px rgba(42, 10, 94, 0.12);
+  overflow: hidden;
+}
+.rdlv-aglyph::before,
+.rdlv-aglyph::after { content: ''; position: absolute; top: 0; right: 0; width: 30%; height: 22%; }
+.rdlv-aglyph::before { background: #F8F7FC; clip-path: polygon(0 0, 100% 0, 100% 100%); }
+.rdlv-aglyph::after  { background: rgba(22, 18, 31, 0.16); clip-path: polygon(0 0, 100% 100%, 0 100%); }
+.rdlv-aglyph i { height: 0.5cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.2); }
+.rdlv-aglyph i + i { width: 60%; background: rgba(31, 28, 43, 0.1); }
+
+/* the gap: nothing there until the file arrives */
+.rdlv-aglyph--gap { background: transparent; box-shadow: none; }
+.rdlv-aglyph--gap::before, .rdlv-aglyph--gap::after { display: none; }
+
+.rdlv-aname { flex: 0 0 auto; width: 42%; height: 1.5cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.3); }
+.rdlv-adate { margin-left: auto; width: 6cqmin; height: 1.4cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
+
+.rdlv-aavs { margin-left: auto; display: flex; }
+.rdlv-aavs i { width: 3cqmin; height: 3cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.2); box-shadow: 0 0 0 1.5px #F8F7FC; }
+.rdlv-aavs i + i { margin-left: -1cqmin; }
+.rdlv-aavs i:first-child { background: var(--rdlv-grad); }
+
+/* the new row's name and people only once the file has landed */
+.rdlv-arow--new .rdlv-aname,
+.rdlv-arow--new .rdlv-aavs { opacity: 0; transform: translateX(-4px); transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.32, 1.04, 0.35, 1); }
+.rdlv-arow--new .rdlv-aname { background: rgba(71, 0, 163, 0.6); }
+.rdlv[data-phase='slot'] .rdlv-arow--new .rdlv-aname,
+.rdlv[data-phase='slot'] .rdlv-arow--new .rdlv-aavs { opacity: 1; transform: none; transition-delay: 0.7s, 0.7s; }
+.rdlv[data-phase='slot'] .rdlv-arow--new .rdlv-aavs { transition-delay: 0.85s, 0.85s; }
 
 
 /* ── The name, quietly, for the whole pass ───────────────────────────── */
@@ -873,13 +948,19 @@
 [data-theme="dark"] .rdlv-alert .rdlv-l2 { background: rgba(255, 107, 125, 0.30); }
 
 [data-theme="dark"] .rdlv-stem { background: rgba(160, 150, 255, 0.38); }
-[data-theme="dark"] .rdlv-proj { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 6px 16px -4px rgba(0, 0, 0, 0.55); }
-[data-theme="dark"] .rdlv-proj--new { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 0 0 1.5px var(--rdlv-accent); }
-[data-theme="dark"] .rdlv-proj-title { background: rgba(248, 247, 252, 0.4); }
-[data-theme="dark"] .rdlv-proj-strip i { background: rgba(248, 247, 252, 0.12); }
-[data-theme="dark"] .rdlv-proj--new .rdlv-proj-strip i { background: rgba(160, 150, 255, 0.22); }
-[data-theme="dark"] .rdlv-proj-avs i { background: rgba(248, 247, 252, 0.26); }
-[data-theme="dark"] .rdlv-proj-date { background: rgba(248, 247, 252, 0.16); }
+[data-theme="dark"] .rdlv-file { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 8px 20px rgba(0, 0, 0, 0.5); }
+[data-theme="dark"] .rdlv-file::before, [data-theme="dark"] .rdlv-aglyph::before { background: #14121C; }
+[data-theme="dark"] .rdlv-file::after,  [data-theme="dark"] .rdlv-aglyph::after  { background: rgba(248, 247, 252, 0.14); }
+[data-theme="dark"] .rdlv-file-strip i { background: rgba(160, 150, 255, 0.26); }
+[data-theme="dark"] .rdlv-file-line, [data-theme="dark"] .rdlv-aglyph i { background: rgba(248, 247, 252, 0.3); }
+[data-theme="dark"] .rdlv-file-line--short, [data-theme="dark"] .rdlv-aglyph i + i { background: rgba(248, 247, 252, 0.14); }
+[data-theme="dark"] .rdlv-aglyph { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 2px 6px rgba(0, 0, 0, 0.4); }
+[data-theme="dark"] .rdlv-aglyph--gap { box-shadow: none; }
+[data-theme="dark"] .rdlv-aname { background: rgba(248, 247, 252, 0.4); }
+[data-theme="dark"] .rdlv-arow--new .rdlv-aname { background: rgba(225, 220, 255, 0.85); }
+[data-theme="dark"] .rdlv-adate { background: rgba(248, 247, 252, 0.16); }
+[data-theme="dark"] .rdlv-aavs i { background: rgba(248, 247, 252, 0.26); box-shadow: 0 0 0 1.5px #14121C; }
+[data-theme="dark"] .rdlv-aavs i:first-child { background: var(--rdlv-grad); }
 [data-theme="dark"] .rdlv-sched i, [data-theme="dark"] .rdlv-button, [data-theme="dark"] .rdlv-segment i:first-child,
 [data-theme="dark"] .rdlv-card b, [data-theme="dark"] .rdlv-stat b, [data-theme="dark"] .rdlv-playbar b,
 [data-theme="dark"] .rdlv-nav i, [data-theme="dark"] .rdlv-nav b { background: rgba(248, 247, 252, 0.3); }

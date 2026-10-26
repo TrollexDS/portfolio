@@ -90,9 +90,9 @@ const themed = (light, dark, alt, cls = 'cs-cover-img') =>
    purple. Then a follow-up prompt is asked of all five at once: the
    row moves up and under each screen its state arrives - loading,
    failed, offline - on a stem. Then the whole exploration folds into
-   one project card and takes its place among the lab's other projects,
-   and the pass starts again: the system feeds the work, the work feeds
-   the system.
+   one file, and the file slots into the archive with the lab's other
+   files, and the pass starts again: the system feeds the work, the
+   work feeds the system.
 
    Every part on a screen is a free element on the face rather than a
    child of the phone, because a part has to travel from where it sat
@@ -116,17 +116,22 @@ const TIMELINE = [
   [11200, { phase: 'loading2' }],
   [12300, { phase: 'branch'   }],   // the row moves up; under each, its state
   [15800, { phase: 'rest'     }],
-  [16600, { phase: 'fold'     }],   // it all folds into one project card
-  [17700, { phase: 'shelf'    }],   // which takes its place among the others
-  [20400, { phase: 'done'     }],   // and it all goes, leaving the face empty
+  [16600, { phase: 'fold'     }],   // it all folds into one file
+  [17700, { phase: 'archive'  }],   // the archive appears, with a gap in it
+  [18600, { phase: 'slot'     }],   // the file slots in
+  [21000, { phase: 'done'     }],   // and it all goes, leaving the face empty
 ]
-const LOOP_MS = 21700
+const LOOP_MS = 22300
 
-/* The shelf the pass ends on: the lab's projects, three by three, the
-   new one in the middle. Same card as the component library. */
-const SHELF_COLS = [-30, 0, 30]
-const SHELF_ROWS = [-20, 0, 20]
-const SHELF_NEW = 4
+/* The archive the pass ends on: the lab's files, in a list, with a gap
+   where this one goes. Row centres from the face's centre, in cqmin. */
+const ARCHIVE_ROWS = 6
+const ARCHIVE_PITCH = 8.4
+const ARCHIVE_GAP = 2                 // the row the file slots into
+const ARCHIVE_W = 44
+const FILE_W = 9, FILE_H = 12         // the file, folded
+const GLYPH_W = 4.6                   // a file, in a row
+const archiveY = i => (i - (ARCHIVE_ROWS - 1) / 2) * ARCHIVE_PITCH
 
 /* The states the second prompt turns up, one under each screen. Same
    tones the lab uses. `part` is what it puts on the screen. */
@@ -382,21 +387,38 @@ const LabLoop = defineComponent({
       ])
     }
 
-    const project = (i) => {
-      const isNew = i === SHELF_NEW
+    /* A row of the archive. The gap row has no glyph of its own - the
+       folded file becomes it - and carries who it is shared with. */
+    const archiveRow = (i) => {
+      const gap = i === ARCHIVE_GAP
       return h('div', {
-        class: ['rdlv-proj', isNew ? 'rdlv-proj--new' : ''].filter(Boolean).join(' '),
-        style: { '--px': cq(SHELF_COLS[i % 3]), '--py': cq(SHELF_ROWS[Math.floor(i / 3)]), '--i': isNew ? 0 : (i < SHELF_NEW ? i + 1 : i) },
-        key: 'proj' + i,
+        class: ['rdlv-arow', gap ? 'rdlv-arow--new' : ''].filter(Boolean).join(' '),
+        style: { '--ay': cq(archiveY(i)), '--i': i },
+        key: 'arow' + i,
       }, [
-        h('span', { class: 'rdlv-proj-title' }),
-        h('span', { class: 'rdlv-proj-strip' }, [h('i'), h('i'), h('i'), h('i'), h('i')]),
-        h('span', { class: 'rdlv-proj-foot' }, [
-          h('span', { class: 'rdlv-proj-avs' }, [h('i'), h('i'), h('i')]),
-          h('i', { class: 'rdlv-proj-date' }),
-        ]),
+        gap ? h('span', { class: 'rdlv-aglyph rdlv-aglyph--gap' }) : h('span', { class: 'rdlv-aglyph' }, [h('i'), h('i')]),
+        h('span', { class: 'rdlv-aname' }),
+        gap
+          ? h('span', { class: 'rdlv-aavs' }, [h('i'), h('i'), h('i')])
+          : h('i', { class: 'rdlv-adate' }),
       ])
     }
+
+    /* The file: the exploration, folded. It grows out of the fold at the
+       centre and travels into the gap, shrinking to a row's glyph. */
+    const file = () =>
+      h('div', {
+        class: 'rdlv-file',
+        style: {
+          '--fx': cq(-ARCHIVE_W / 2 + GLYPH_W / 2),
+          '--fy': cq(archiveY(ARCHIVE_GAP)),
+          '--fk': (GLYPH_W / FILE_W).toFixed(3),
+        },
+      }, [
+        h('span', { class: 'rdlv-file-strip' }, [h('i'), h('i'), h('i'), h('i'), h('i')]),
+        h('span', { class: 'rdlv-file-line' }),
+        h('span', { class: 'rdlv-file-line rdlv-file-line--short' }),
+      ])
 
     return () =>
       h('div', { class: 'rdlv', ref: root, 'data-phase': phase.value, 'aria-hidden': 'true' }, [
@@ -415,8 +437,11 @@ const LabLoop = defineComponent({
           ...[0, 1, 2, 3, 4].map(child),
         ]),
 
-        // where it ends up: one project among the lab's others
-        h('div', { class: 'rdlv-shelf' }, [0, 1, 2, 3, 4, 5, 6, 7, 8].map(project)),
+        // where it ends up: a file in the archive, with the lab's others
+        h('div', { class: 'rdlv-archive' }, [
+          ...Array.from({ length: ARCHIVE_ROWS }, (_, i) => archiveRow(i)),
+          file(),
+        ]),
 
         // the name, quietly, for the whole pass
         h('span', { class: 'rdlv-label' }, WORD),
