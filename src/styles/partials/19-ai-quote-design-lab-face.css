@@ -817,6 +817,13 @@
   transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* and leaves with its row */
+.rdlv[data-phase='done'] .rdlv-folder {
+  opacity: 0;
+  transform: translate(calc(var(--fx) - 6cqmin), var(--fy)) scale(var(--fk));
+  transition: opacity 0.4s ease 0.14s, transform 0.5s cubic-bezier(0.4, 0, 0.6, 1) 0.14s;
+}
+
 /* the rows */
 .rdlv-arow {
   position: absolute;
@@ -838,6 +845,13 @@
   opacity: 1;
   transform: none;
   transition-delay: calc(var(--i) * 0.06s), calc(var(--i) * 0.06s);
+}
+
+/* the end: the list slides off to the left, top row first */
+.rdlv[data-phase='done'] .rdlv-arow {
+  opacity: 0;
+  transform: translateX(-6cqmin);
+  transition: opacity 0.4s ease calc(var(--i) * 0.07s), transform 0.5s cubic-bezier(0.4, 0, 0.6, 1) calc(var(--i) * 0.07s);
 }
 
 /* a folder, in a row: the same two layers, small and grey */
