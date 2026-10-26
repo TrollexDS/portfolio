@@ -1,8 +1,48 @@
-/* ── Layer Lint card ── */
+/* ── Layer Lint card ──
+   The face follows [data-theme]: a light Figma-style panel by default,
+   the original #1a1a1a panel in dark. Row colours are one ink at
+   different alphas, so each theme only swaps the ink and the ground. */
+:root {
+  --ll-ground:     #F5F5F4;
+  --ll-ink:        26, 23, 38;     /* rgb triplet, used with alphas below */
+  --ll-row-bg:     rgba(255, 255, 255, 0.85);
+  --ll-row-op:     0.4;            /* visible row */
+  --ll-row-op-hid: 0.2;            /* hidden layer, before it's wiped */
+  --ll-title:      #1A1726;
+  --ll-teal:       #0d9488;
+}
+[data-theme="dark"] {
+  --ll-ground:     #1a1a1a;
+  --ll-ink:        255, 255, 255;
+  --ll-row-bg:     rgba(255, 255, 255, 0.03);
+  --ll-row-op:     0.3;
+  --ll-row-op-hid: 0.15;
+  --ll-title:      #f5f5f5;
+  --ll-teal:       #0d9488;
+}
+
 .ll-card {
-  background: #1a1a1a;
+  background: var(--ll-ground);
   position: relative;
   overflow: hidden;
+}
+/* The card was dark-only; in light it takes the light card edges */
+.ll-card.bento-card.dark {
+  background: var(--ll-ground);
+  --color-card-inset-top:    rgba(255, 255, 255, 0.90);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.04);
+  --card-grain-opacity:      0.028;
+  --card-grain-image:        var(--grain-specks-dark);
+  --color-card-ripple:       var(--color-primitive-alpha-teal-10);
+  border-color: rgba(0, 0, 0, 0.06);
+}
+[data-theme="dark"] .ll-card.bento-card.dark {
+  --color-card-inset-top:    rgba(255, 255, 255, 0.05);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.30);
+  --card-grain-opacity:      0.05;
+  --card-grain-image:        var(--grain-specks-light);
+  --color-card-ripple:       rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 /* ── Layer panel animated background ── */
@@ -31,10 +71,10 @@
   height: 26px;
   padding: 0 8px;
   border-radius: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(var(--ll-ink), 0.1);
+  background: var(--ll-row-bg);
   font-size: var(--text-2xs);
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(var(--ll-ink), 0.55);
   opacity: 0;
   transform: translateY(6px);
   clip-path: inset(0 0 0 0);
@@ -43,17 +83,17 @@
 }
 
 .ll-bg-row--visible {
-  opacity: 0.3;
+  opacity: var(--ll-row-op);
   transform: translateY(0);
 }
 
 /* Hidden layers: dashed border, lower opacity */
 .ll-bg-row--hidden {
   border-style: dashed;
-  border-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(var(--ll-ink), 0.08);
 }
 .ll-bg-row--hidden.ll-bg-row--visible {
-  opacity: 0.15;
+  opacity: var(--ll-row-op-hid);
 }
 
 /* Right-to-left wipe for hidden layer removal */
@@ -64,7 +104,7 @@
 
 /* Renamed layer: teal text */
 .ll-bg-row--renamed .ll-bg-name {
-  color: #0d9488;
+  color: var(--ll-teal);
 }
 
 .ll-bg-icon {
@@ -72,7 +112,7 @@
   flex-shrink: 0;
   text-align: center;
   font-size: var(--text-3xs);
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(var(--ll-ink), 0.3);
   line-height: 1;
 }
 
@@ -91,14 +131,14 @@
   display: inline-block;
   width: 1px;
   height: 11px;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(var(--ll-ink), 0.7);
   margin-left: 1px;
   vertical-align: middle;
   animation: ll-blink 0.6s step-end infinite;
 }
 
 .ll-bg-row--renamed .ll-bg-cursor {
-  background: #0d9488;
+  background: var(--ll-teal);
 }
 
 @keyframes ll-blink {
@@ -113,11 +153,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.25);
+  color: rgba(var(--ll-ink), 0.25);
 }
 
 .ll-bg-eye--closed {
-  color: rgba(255, 255, 255, 0.12);
+  color: rgba(var(--ll-ink), 0.12);
 }
 
 .ll-card-face {
@@ -142,7 +182,7 @@
   font-size: var(--text-7xl);
   font-weight: 600;
   line-height: 1.05;
-  color: #f5f5f5;
+  color: var(--ll-title);
   text-align: center;
   white-space: pre-line;
   margin: 0;
@@ -158,6 +198,7 @@
   border-radius: 32px;
   overflow: hidden;
   margin-top: 40px;
+  background: var(--ll-ground);
 }
 
 .ll-hero-wrap .cs-hero-video {
@@ -169,12 +210,13 @@
   inset: 0;
   border-radius: inherit;
   overflow: hidden;
-  background: #1a1a1a;
+  background: var(--ll-ground);
 }
 
 .ll-fly-overlay {
   position: absolute;
   inset: 0;
+  background: var(--ll-ground);
   display: flex;
   flex-direction: column;
   align-items: center;
