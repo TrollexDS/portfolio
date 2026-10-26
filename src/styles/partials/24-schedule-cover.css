@@ -1,0 +1,256 @@
+/* ═══════════════════════════════════════════════════════════════════
+ *  SCHEDULE — card face (ScheduleCard → ScheduleFace)
+ *  The brief › User testing › Build › Shipped: the station page is taken
+ *  apart by testing, the schedule survives, flips to the shipped screen on
+ *  an iPhone 16 Pro, and the results take its place. Light and dark follow
+ *  [data-theme]; the ground matches the other Rayo faces (#F8F7FC light).
+ *  Everything is sized in em on a 1cqmin stage, so one drawing serves the
+ *  522 card, the 448 hero and the mobile tile. Positions and per-frame
+ *  styles are written by ScheduleFace.js; this file holds the look.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --schf-ground:    #F8F7FC;
+  --schf-ink:       #1A1726;
+  --schf-muted:     rgba(26, 23, 38, 0.50);
+  --schf-faint:     rgba(26, 23, 38, 0.10);
+  --schf-rayo:      #8A3FF5;
+  --schf-rayo-2:    #D63FD9;
+  --schf-surface:   #FFFFFF;
+  --schf-surface-2: #F1EFF6;
+  --schf-edge:      rgba(26, 23, 38, 0.08);
+  --schf-drop:      rgba(54, 36, 110, 0.12);
+  --schf-note:      #FFE58A;
+  --schf-note-ink:  #3A3000;
+  --schf-strike:    #E0435C;
+  --schf-live:      #12C2A5;
+  /* iPhone 16 Pro */
+  --schf-ti:        #9C978F;
+  --schf-ti-hi:     #C9C4BB;
+  --schf-scr-ink:   #160E21;   /* the shipped UI's ink, for the pause button */
+  --schf-scr-inv:   #FFFFFF;
+  --schf-mp-bg:     rgba(255, 255, 255, 0.94);
+  --schf-mp-ink:    #160E21;
+  --schf-mp-muted:  rgba(22, 14, 33, 0.55);
+}
+[data-theme="dark"] {
+  --schf-ground:    #0D0C14;
+  --schf-ink:       #F4F2FA;
+  --schf-muted:     rgba(244, 242, 250, 0.46);
+  --schf-faint:     rgba(244, 242, 250, 0.10);
+  --schf-rayo:      #B46BFF;
+  --schf-rayo-2:    #E45BE8;
+  --schf-surface:   #17151F;
+  --schf-surface-2: #211E2B;
+  --schf-edge:      rgba(255, 255, 255, 0.07);
+  --schf-drop:      rgba(0, 0, 0, 0.45);
+  --schf-note:      #E8C95A;
+  --schf-note-ink:  #2A2200;
+  --schf-strike:    #FF6B81;
+  --schf-live:      #3FE0C2;
+  --schf-ti:        #4A4743;
+  --schf-ti-hi:     #6E6A64;
+  --schf-scr-ink:   #FFFFFF;
+  --schf-scr-inv:   #160E21;
+  --schf-mp-bg:     rgba(44, 38, 56, 0.96);
+  --schf-mp-ink:    #FFFFFF;
+  --schf-mp-muted:  rgba(255, 255, 255, 0.60);
+}
+
+/* ── Card ground: follows the theme (the card was dark-only before) ── */
+.schedule-card,
+.schedule-card.bento-card.dark {
+  background: var(--schf-ground);
+  --color-card-inset-top:    rgba(255, 255, 255, 0.90);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.04);
+  --card-grain-opacity:      0.028;
+  --card-grain-image:        var(--grain-specks-dark);
+  border-color: rgba(22, 14, 33, 0.06);
+}
+[data-theme="dark"] .schedule-card,
+[data-theme="dark"] .schedule-card.bento-card.dark {
+  --color-card-inset-top:    rgba(255, 255, 255, 0.10);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.30);
+  --card-grain-opacity:      0.045;
+  --card-grain-image:        var(--grain-specks-light);
+  border-color: rgba(160, 150, 255, 0.16);
+}
+
+/* Empty placeholder under the face: sizes the card, fly and hero */
+.schf-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.schf-hero-wrap {
+  border-radius: 32px;
+  overflow: hidden;
+  margin-top: 40px;
+  background: var(--schf-ground);
+}
+.schf-hero-wrap .cs-hero-video { margin-top: 0; }
+
+.schf-hero-overlay,
+.schf-fly-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Face ── */
+.schf {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  container-type: size;
+  background: var(--schf-ground);
+  color: var(--schf-ink);
+  font-family: var(--font-family-system);
+}
+.schf-stage { position: absolute; inset: 0; font-size: 1cqmin; }
+.schf-stage * { position: absolute; box-sizing: border-box; }
+
+/* ── Steps ── */
+.schf-steps { left: 5em; top: 5em; display: flex; align-items: center; gap: 1.2em; z-index: 6; }
+.schf-step {
+  position: relative;
+  height: 5.2em;
+  padding: 0 2.2em;
+  border-radius: 3em;
+  background: var(--schf-surface);
+  border: .2em solid var(--schf-edge);
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+.schf-step span { position: relative; font-size: 2.3em; font-weight: 700; color: var(--schf-ink); letter-spacing: -.01em; }
+.schf-step i { position: relative; display: block; width: 0; height: 1.2em; border-radius: 50%; background: var(--schf-rayo); }
+.schf-sep {
+  position: relative;
+  width: 1.1em;
+  height: 1.1em;
+  border-right: .3em solid var(--schf-muted);
+  border-top: .3em solid var(--schf-muted);
+}
+
+/* ── The station page from the brief ── */
+.schf-frame {
+  border-radius: 3.2em;
+  background: var(--schf-surface);
+  border: .2em solid var(--schf-edge);
+  box-shadow: 0 1.6em 4em var(--schf-drop);
+}
+.schf-frame-title { left: 1em; top: 1em; font-size: 2.3em; font-weight: 800; color: var(--schf-ink); white-space: nowrap; }
+.schf-sec { border-radius: 1.8em; background: var(--schf-surface-2); overflow: hidden; }
+.schf-sec--hero { background: linear-gradient(135deg, var(--schf-rayo), var(--schf-rayo-2)); }
+.schf-sec-lbl { left: 1.6em; top: 1.2em; font-size: 1.9em; font-weight: 700; color: var(--schf-muted); white-space: nowrap; }
+.schf-sec--hero .schf-sec-lbl { color: rgba(255, 255, 255, .85); }
+.schf-bar { height: .9em; border-radius: 1em; background: var(--schf-faint); }
+.schf-hero-logo { right: 2em; bottom: 2em; width: 6em; height: 6em; border-radius: 50%; background: rgba(255, 255, 255, .9); }
+.schf-strike { left: 1.2em; top: 50%; width: 0; height: .35em; border-radius: 1em; background: var(--schf-strike); }
+
+/* ── Findings ── */
+.schf-note {
+  width: 25em;
+  padding: 1.8em 1.9em 2em;
+  background: var(--schf-note);
+  border-radius: .8em;
+  box-shadow: 0 1em 2.4em var(--schf-drop);
+  z-index: 2;
+}
+.schf-note span { position: relative; display: block; color: var(--schf-note-ink); font-weight: 700; }
+.schf-note-k { font-size: 1.6em; opacity: .55; margin-bottom: .5em; text-transform: uppercase; letter-spacing: .08em; }
+.schf-note-t { font-size: 2.15em; line-height: 1.28; }
+
+/* ── The schedule: the surviving block, then the card ── */
+.schf-sched { overflow: hidden; z-index: 3; }
+.schf-mini { inset: 0; }
+.schf-mini-lbl { left: 1.6em; top: 1.2em; font-size: 1.9em; font-weight: 800; color: var(--schf-rayo); white-space: nowrap; }
+.schf-mini-pills { left: 1.6em; bottom: 1.3em; display: flex; gap: .8em; }
+.schf-mini-pills span { position: relative; font-size: 1.5em; font-weight: 700; color: var(--schf-ink); background: var(--schf-surface); border-radius: 1em; padding: .15em .6em; }
+.schf-full { left: 0; top: 0; width: 44em; height: 72em; }
+.schf-title { left: .88em; top: .85em; font-size: 3.4em; font-weight: 800; color: var(--schf-ink); letter-spacing: -.02em; }
+.schf-tabs { left: 3em; top: 9.6em; display: flex; gap: 1em; }
+.schf-tabs span {
+  position: relative;
+  font-size: 1.8em;
+  font-weight: 700;
+  padding: .45em 1em;
+  border-radius: 2em;
+  background: var(--schf-surface);
+  color: var(--schf-muted);
+  border: .1em solid var(--schf-edge);
+}
+.schf-tabs span.on { background: var(--schf-ink); color: var(--schf-ground); border-color: var(--schf-ink); }
+.schf-row { left: 2em; width: 40em; height: 11.6em; border-radius: 1.6em; }
+.schf-row-art { left: 1.2em; top: 1.4em; width: 8.8em; height: 8.8em; border-radius: 1.2em; }
+.schf-row-tm { left: 7.06em; top: .9em; font-size: 1.7em; font-weight: 700; color: var(--schf-muted); }
+.schf-row-nm { left: 5.45em; top: 1.6em; font-size: 2.2em; font-weight: 800; color: var(--schf-ink); white-space: nowrap; }
+.schf-tag { left: 12em; top: 7.9em; height: 2.6em; }
+.schf-tag div { left: 0; top: 0; font-size: 1.55em; font-weight: 800; padding: .15em .6em; border-radius: 1em; white-space: nowrap; }
+.schf-tag-ep  { background: var(--schf-faint); color: var(--schf-muted); }
+.schf-tag-cu  { background: color-mix(in srgb, var(--schf-rayo) 16%, transparent); color: var(--schf-rayo); }
+.schf-tag-air { background: color-mix(in srgb, var(--schf-live) 18%, transparent); color: var(--schf-live); }
+.schf-row-play { right: 1.6em; top: 3.4em; width: 4.8em; height: 4.8em; border-radius: 50%; background: var(--schf-ink); }
+.schf-row-play::after {
+  content: "";
+  position: absolute;
+  left: 1.85em;
+  top: 1.35em;
+  border-left: 1.5em solid var(--schf-ground);
+  border-top: 1.05em solid transparent;
+  border-bottom: 1.05em solid transparent;
+}
+.schf-ripple { border-radius: 50%; border: .4em solid var(--schf-rayo); opacity: 0; }
+
+/* ── iPhone 16 Pro: titanium rim, thin black bezel, Dynamic Island ── */
+.schf-phone {
+  z-index: 4;
+  opacity: 0;
+  transform-origin: 50% 0;
+  border-radius: 7.35em;
+  background: linear-gradient(90deg, var(--schf-ti-hi), var(--schf-ti) 12%, var(--schf-ti) 88%, var(--schf-ti-hi));
+  box-shadow: 0 2.4em 6em var(--schf-drop);
+}
+.schf-phone-btn { width: .5em; border-radius: .3em; background: var(--schf-ti); }
+.schf-bezel { inset: .35em; border-radius: 7em; background: #050505; }
+.schf-screen { left: 1.35em; top: 1.35em; width: 43.3em; height: 94.13em; border-radius: 6em; overflow: hidden; background: #000; }
+.schf-screen img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.schf-island { left: 50%; top: 1.18em; width: 13.55em; height: 3.99em; margin-left: -6.775em; border-radius: 2em; background: #000; }
+.schf-pause { border-radius: 50%; background: var(--schf-scr-ink); opacity: 0; }
+.schf-pause i,
+.schf-mp-pause i { position: absolute; top: 30%; width: 14%; height: 40%; border-radius: .2em; background: var(--schf-scr-inv); }
+
+/* now-playing bar, above the tab bar */
+.schf-mp { border-radius: 2.6em; background: var(--schf-mp-bg); box-shadow: 0 .8em 2.4em rgba(0, 0, 0, .18); overflow: hidden; opacity: 0; }
+.schf-mp-art { left: .7em; top: .7em; width: 3.9em; height: 3.9em; border-radius: .9em; background-repeat: no-repeat; }
+.schf-mp-title { left: 5.4em; top: 1.05em; white-space: nowrap; }
+.schf-mp-title span { position: relative; font-size: 1.45em; font-weight: 800; color: var(--schf-mp-ink); }
+.schf-mp-sub { left: 7.2em; top: 2.95em; white-space: nowrap; }
+.schf-mp-sub span { position: relative; font-size: 1.2em; font-weight: 600; color: var(--schf-mp-muted); }
+.schf-mp-eq { left: 5.4em; top: 3.05em; width: 1.4em; height: 1.2em; }
+.schf-mp-eq div { bottom: 0; width: .3em; border-radius: .15em; background: var(--schf-rayo); }
+.schf-mp-pause { right: .9em; top: 1.05em; width: 3.2em; height: 3.2em; border-radius: 50%; background: var(--schf-mp-ink); }
+.schf-mp-pause i { background: var(--schf-mp-bg); }
+
+/* ── Results: numbers in the brand gradient ── */
+.schf-stat { z-index: 5; opacity: 0; text-align: center; white-space: nowrap; transform: translateX(-50%); }
+.schf-stat span { position: relative; display: block; }
+.schf-stat-n {
+  font-weight: 800;
+  letter-spacing: -.03em;
+  line-height: 1.05;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.schf-stat-l { font-weight: 700; color: var(--schf-muted); margin-top: .5em; }
+.schf-rule { height: .2em; border-radius: .2em; background: var(--schf-faint); opacity: 0; }

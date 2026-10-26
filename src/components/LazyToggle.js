@@ -23,8 +23,8 @@ export default defineComponent({
     function onRelease() { toggleLazy() }
 
     const tooltip = () => isLazy.value
-      ? 'Smooth scroll on · click for instant'
-      : 'Instant scroll on · click for smooth'
+      ? 'Switch to instant scroll ⚡️'
+      : 'Switch to smooth scroll 🍃'
 
     return () =>
       h('button', {

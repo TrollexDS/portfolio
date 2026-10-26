@@ -3,8 +3,10 @@ import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import TldrToggle from '../TldrToggle.js'
 import InteractiveTag from '../InteractiveTag.js'
 import { useResponsiveScale } from '../../composables/useResponsiveScale.js'
+import ScheduleFace from './ScheduleFace.js'
 
-const VIDEO_SRC = '/src/assets/videos/rayo-schedule.mp4'
+// Empty 448 square: sizes the card, fly and hero; the face paints over it
+const SCHEDULE_HERO = '/src/assets/images/rayo/schedule/schedule-hero.svg'
 
 // ── Image assets ──
 const IMG_MOCKUP         = '/src/assets/images/rayo/schedule/schedule-iphone-mockup.png'
@@ -682,11 +684,17 @@ export default defineComponent({
       h(CaseStudyOverlay, {
         cardKey: 'schedule',
         cardClass: 'schedule-card',
-        videoSrc: VIDEO_SRC,
-        videoClass: 'schedule-video',
+        imageSrc: SCHEDULE_HERO,
+        imageClass: 'schf-hero-img',
+        heroWrapClass: 'schf-hero-wrap',
         tooltip: 'Utilising research to kill a feature\nbefore we build the wrong thing ↩️',
         heroSize: 448,
       }, {
+        // ── Card face: the brief › user testing › build › shipped ──
+        default: () => [h(ScheduleFace)],
+        heroOverlay: () => h('div', { class: 'schf-hero-overlay' }, [h(ScheduleFace)]),
+        flyContent: () => h('div', { class: 'schf-fly-overlay' }, [h(ScheduleFace)]),
+
         content: () => [
 
           // ── TL;DR toggle ──
