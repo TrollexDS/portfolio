@@ -272,6 +272,21 @@
 .rdlv[data-phase='rest']   .rdlv-slot[data-row='0'],
 .rdlv[data-phase='done']   .rdlv-slot[data-row='0'] { --y: -24cqmin; }
 
+/* the fold: every slot, both rows, pulls into the centre and goes, and
+   the project card grows out of the same point */
+.rdlv[data-phase='fold']  .rdlv-slot,
+.rdlv[data-phase='shelf'] .rdlv-slot,
+.rdlv[data-phase='done']  .rdlv-slot,
+.rdlv[data-phase='fold']  .rdlv-slot[data-row='1'],
+.rdlv[data-phase='shelf'] .rdlv-slot[data-row='1'],
+.rdlv[data-phase='done']  .rdlv-slot[data-row='1'] {
+  --x: 0cqmin;
+  --y: 0cqmin;
+  --k: 0.1;
+  opacity: 0;
+  transition: transform 0.7s cubic-bezier(0.5, 0, 0.2, 1), opacity 0.35s ease 0.3s;
+}
+
 /* the children: only rendered from `branch`, so they arrive by animation,
    left to right, once the row above has moved */
 .rdlv-slot[data-row='1'] {
@@ -702,6 +717,67 @@
 }
 
 
+/* ── The shelf ───────────────────────────────────────────────────────
+
+   The lab's projects, on the same white cards the component library
+   used: a title, a strip of its screens, who it is shared with, when.
+   The new one grows out of the fold at the centre and the others fade
+   in around it. The pass ends here, and the next one starts from the
+   prompt - the system feeds the work, the work feeds the system.    */
+.rdlv-shelf {
+  position: absolute;
+  left: 50%;
+  top: 54%;
+  width: 0;
+  height: 0;
+}
+
+.rdlv-proj {
+  position: absolute;
+  left: calc(var(--px) - 13cqmin);
+  top: calc(var(--py) - 8cqmin);
+  width: 26cqmin;
+  height: 16cqmin;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5cqmin;
+  padding: 2.2cqmin;
+  border-radius: 2.6cqmin;
+  background: var(--rdlv-card);
+  box-shadow: 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.4s ease, transform 0.6s cubic-bezier(0.32, 1.04, 0.35, 1);
+}
+
+.rdlv-proj-title { flex: 0 0 auto; width: 58%; height: 1.6cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.32); }
+.rdlv-proj-strip { flex: 1 1 auto; display: flex; gap: 1cqmin; min-height: 0; }
+.rdlv-proj-strip i { flex: 1 1 0; border-radius: 0.9cqmin; background: rgba(31, 28, 43, 0.09); }
+.rdlv-proj-foot { flex: 0 0 auto; display: flex; align-items: center; }
+.rdlv-proj-avs { display: flex; }
+.rdlv-proj-avs i { width: 2.8cqmin; height: 2.8cqmin; border-radius: 50%; background: rgba(31, 28, 43, 0.2); box-shadow: 0 0 0 1.5px var(--rdlv-card); }
+.rdlv-proj-avs i + i { margin-left: -0.9cqmin; }
+.rdlv-proj-date { margin-left: auto; width: 5.4cqmin; height: 1.4cqmin; border-radius: 999px; background: rgba(31, 28, 43, 0.12); }
+
+/* the new one: lit, and its screens carry the purple it added */
+.rdlv-proj--new { box-shadow: 0 6px 16px -4px rgba(42, 10, 94, 0.10), 0 1px 3px 0 rgba(42, 10, 94, 0.05), 0 0 0 1.5px var(--rdlv-accent); }
+.rdlv-proj--new .rdlv-proj-strip i { background: rgba(129, 50, 254, 0.14); }
+.rdlv-proj--new .rdlv-proj-avs i:first-child { background: var(--rdlv-grad); }
+
+.rdlv[data-phase='fold'] .rdlv-proj--new {
+  opacity: 1;
+  transform: scale(1.12);
+  transition-delay: 0.4s, 0.4s;
+}
+
+.rdlv[data-phase='shelf'] .rdlv-proj {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i) * 0.07s), calc(var(--i) * 0.07s);
+}
+
+
 /* ── The name, quietly, for the whole pass ───────────────────────────── */
 .rdlv-label {
   position: absolute;
@@ -797,6 +873,13 @@
 [data-theme="dark"] .rdlv-alert .rdlv-l2 { background: rgba(255, 107, 125, 0.30); }
 
 [data-theme="dark"] .rdlv-stem { background: rgba(160, 150, 255, 0.38); }
+[data-theme="dark"] .rdlv-proj { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 6px 16px -4px rgba(0, 0, 0, 0.55); }
+[data-theme="dark"] .rdlv-proj--new { box-shadow: inset 0 0 0 1px rgba(160, 150, 255, 0.16), 0 6px 16px -4px rgba(0, 0, 0, 0.55), 0 0 0 1.5px var(--rdlv-accent); }
+[data-theme="dark"] .rdlv-proj-title { background: rgba(248, 247, 252, 0.4); }
+[data-theme="dark"] .rdlv-proj-strip i { background: rgba(248, 247, 252, 0.12); }
+[data-theme="dark"] .rdlv-proj--new .rdlv-proj-strip i { background: rgba(160, 150, 255, 0.22); }
+[data-theme="dark"] .rdlv-proj-avs i { background: rgba(248, 247, 252, 0.26); }
+[data-theme="dark"] .rdlv-proj-date { background: rgba(248, 247, 252, 0.16); }
 [data-theme="dark"] .rdlv-sched i, [data-theme="dark"] .rdlv-button, [data-theme="dark"] .rdlv-segment i:first-child,
 [data-theme="dark"] .rdlv-card b, [data-theme="dark"] .rdlv-stat b, [data-theme="dark"] .rdlv-playbar b,
 [data-theme="dark"] .rdlv-nav i, [data-theme="dark"] .rdlv-nav b { background: rgba(248, 247, 252, 0.3); }
