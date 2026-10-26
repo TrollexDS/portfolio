@@ -1,8 +1,10 @@
 import { defineComponent, h, ref } from 'vue'
 import CaseStudyOverlay from '../CaseStudyOverlay.js'
 import TldrToggle from '../TldrToggle.js'
+import AlexaFace from './AlexaFace.js'
 
-const VIDEO_SRC = '/src/assets/videos/rayo-alexa.mp4'
+// Empty 448 square: sizes the card, fly and hero; the face paints over it
+const ALEXA_HERO = '/src/assets/images/rayo/alexa/alexa-hero.svg'
 
 // ── Image assets ──
 const IMG_SKILL           = '/src/assets/images/rayo/alexa/rayo-alexa-skill.png'
@@ -303,11 +305,17 @@ export default defineComponent({
       h(CaseStudyOverlay, {
         cardKey: 'alexa',
         cardClass: 'alexa-card',
-        videoSrc: VIDEO_SRC,
-        videoClass: 'alexa-video',
+        imageSrc: ALEXA_HERO,
+        imageClass: 'alxf-hero-img',
+        heroWrapClass: 'alxf-hero-wrap',
         tooltip: 'Improve the voice UX of\nthe Rayo skill in Alexa 🗣️',
         heroSize: 448,
       }, {
+        // ── Card face: the link crossing the partner boundary and back ──
+        default: () => [h(AlexaFace)],
+        heroOverlay: () => h('div', { class: 'alxf-hero-overlay' }, [h(AlexaFace)]),
+        flyContent: () => h('div', { class: 'alxf-fly-overlay' }, [h(AlexaFace)]),
+
         content: () => [
 
           // ── TL;DR toggle ──

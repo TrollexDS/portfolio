@@ -1,0 +1,545 @@
+/* ═══════════════════════════════════════════════════════════════════
+ *  ALEXA — card face (AlexaCard → AlexaFace)
+ *  The linking journey across the partner boundary: voice on Rayo's
+ *  side (left), the notification and the Alexa app on Amazon's (right),
+ *  back to voice. Light and dark follow [data-theme]; the ground matches
+ *  the other Rayo faces (#F8F7FC light). Everything is sized in cqmin,
+ *  so one drawing serves the 522 card, the 448 hero and the mobile tile.
+ * ═══════════════════════════════════════════════════════════════════ */
+
+:root {
+  --alxf-ground:      #F8F7FC;
+  --alxf-ink:         #1A1726;
+  --alxf-muted:       rgba(26, 23, 38, 0.50);
+  --alxf-faint:       rgba(26, 23, 38, 0.14);
+  --alxf-rayo:        #8A3FF5;
+  --alxf-rayo-2:      #D63FD9;
+  --alxf-amazon:      #12A5DE;
+  --alxf-amazon-2:    #2F5BEA;
+  --alxf-amazon-3:    #7FDDFF;
+  --alxf-amazon-pill: #0E8FC4;   /* the blue under white pill text */
+  --alxf-pill-drop:   rgba(60, 40, 140, 0.22);
+  --alxf-rayo-glow:   rgba(138, 63, 245, 0.10);
+  --alxf-zone:        rgba(18, 165, 222, 0.035);
+  --alxf-zone-glow:   rgba(18, 165, 222, 0.06);
+  --alxf-glow-listen: rgba(18, 165, 222, 0.22);
+  --alxf-glow-linked: rgba(138, 63, 245, 0.22);
+  --alxf-dot-a:       #FFFFFF;
+  --alxf-dot-b:       #E9E6F1;
+  --alxf-dot-edge:    rgba(26, 23, 38, 0.06);
+  --alxf-button:      rgba(26, 23, 38, 0.06);
+  --alxf-button-edge: rgba(26, 23, 38, 0.08);
+  --alxf-chip:        rgba(255, 255, 255, 0.85);
+  --alxf-chip-edge:   rgba(26, 23, 38, 0.09);
+  --alxf-status:      rgba(138, 63, 245, 0.10);
+  --alxf-status-edge: rgba(138, 63, 245, 0.30);
+  --alxf-phone:       #E7E4EE;   /* screen off */
+  --alxf-phone-rim:   #DEDAE7;
+  --alxf-phone-drop:  rgba(54, 36, 110, 0.12);
+  --alxf-island:      #1A1726;
+  --alxf-screen:      #FFFFFF;
+  --alxf-screen-off:  0.0;
+  --alxf-banner:      #F1EFF6;
+  --alxf-banner-edge: rgba(26, 23, 38, 0.06);
+  --alxf-rail:        rgba(26, 23, 38, 0.12);
+  --alxf-step-off:    #FFFFFF;
+  --alxf-step-edge:   rgba(26, 23, 38, 0.25);
+  --alxf-step-glow:   rgba(18, 165, 222, 0.35);
+}
+[data-theme="dark"] {
+  --alxf-ground:      #0D0C14;
+  --alxf-ink:         #F4F2FA;
+  --alxf-muted:       rgba(244, 242, 250, 0.46);
+  --alxf-faint:       rgba(244, 242, 250, 0.14);
+  --alxf-rayo:        #B46BFF;
+  --alxf-rayo-2:      #E45BE8;
+  --alxf-amazon:      #4FC8F5;
+  --alxf-amazon-2:    #3E6BFF;
+  --alxf-amazon-3:    #9FE9FF;
+  --alxf-amazon-pill: #1E9FD6;
+  --alxf-pill-drop:   rgba(0, 0, 0, 0.45);
+  --alxf-rayo-glow:   rgba(180, 107, 255, 0.10);
+  --alxf-zone:        rgba(79, 200, 245, 0.025);
+  --alxf-zone-glow:   rgba(79, 200, 245, 0.07);
+  --alxf-glow-listen: rgba(79, 200, 245, 0.30);
+  --alxf-glow-linked: rgba(180, 107, 255, 0.32);
+  --alxf-dot-a:       #24222E;
+  --alxf-dot-b:       #15131C;
+  --alxf-dot-edge:    rgba(255, 255, 255, 0.04);
+  --alxf-button:      rgba(255, 255, 255, 0.05);
+  --alxf-button-edge: rgba(255, 255, 255, 0.06);
+  --alxf-chip:        rgba(255, 255, 255, 0.06);
+  --alxf-chip-edge:   rgba(255, 255, 255, 0.08);
+  --alxf-status:      rgba(180, 107, 255, 0.16);
+  --alxf-status-edge: rgba(180, 107, 255, 0.35);
+  --alxf-phone:       #08070C;
+  --alxf-phone-rim:   #24222C;
+  --alxf-phone-drop:  rgba(0, 0, 0, 0.45);
+  --alxf-island:      #000000;
+  --alxf-screen:      #17151F;
+  --alxf-screen-off:  0.12;
+  --alxf-banner:      rgba(255, 255, 255, 0.10);
+  --alxf-banner-edge: rgba(255, 255, 255, 0.08);
+  --alxf-rail:        rgba(255, 255, 255, 0.12);
+  --alxf-step-off:    #17151F;
+  --alxf-step-edge:   rgba(255, 255, 255, 0.22);
+  --alxf-step-glow:   rgba(79, 200, 245, 0.6);
+}
+
+/* ── Card ground: follows the theme (the card was dark-only before) ── */
+.alexa-card,
+.alexa-card.bento-card.dark {
+  background: var(--alxf-ground);
+  --color-card-inset-top:    rgba(255, 255, 255, 0.90);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.04);
+  --card-grain-opacity:      0.028;
+  --card-grain-image:        var(--grain-specks-dark);
+  border-color: rgba(22, 14, 33, 0.06);
+}
+[data-theme="dark"] .alexa-card,
+[data-theme="dark"] .alexa-card.bento-card.dark {
+  --color-card-inset-top:    rgba(255, 255, 255, 0.10);
+  --color-card-inset-bottom: rgba(0, 0, 0, 0.30);
+  --card-grain-opacity:      0.045;
+  --card-grain-image:        var(--grain-specks-light);
+  border-color: rgba(160, 150, 255, 0.16);
+}
+
+/* Empty placeholder under the face: sizes the card, fly and hero */
+.alxf-hero-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.alxf-hero-wrap {
+  border-radius: 32px;
+  overflow: hidden;
+  margin-top: 40px;
+  background: var(--alxf-ground);
+}
+.alxf-hero-wrap .cs-hero-video { margin-top: 0; }
+
+.alxf-hero-overlay,
+.alxf-fly-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Face ── */
+.alxf {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  container-type: size;
+  background:
+    radial-gradient(60% 50% at 25% 42%, var(--alxf-rayo-glow), transparent 70%),
+    var(--alxf-ground);
+  color: var(--alxf-ink);
+  font-family: var(--font-family-system);
+}
+
+/* Amazon's half, and the boundary between the two */
+.alxf-zone {
+  position: absolute;
+  top: 0; bottom: 0; left: 50%; right: 0;
+  background:
+    radial-gradient(70% 55% at 55% 42%, var(--alxf-zone-glow), transparent 70%),
+    var(--alxf-zone);
+}
+.alxf-boundary {
+  position: absolute;
+  left: 50%;
+  top: 4%;
+  bottom: 22%;
+  width: 1px;
+  transform: translateX(-0.5px);
+  background: repeating-linear-gradient(to bottom, var(--alxf-faint) 0 1.2cqmin, transparent 1.2cqmin 2.4cqmin);
+}
+
+/* ── The pills that cross the boundary ──
+   Two layers, each clipped to one half, run the same pills in step, so
+   a pill is Rayo purple left of the line and Amazon blue right of it. */
+.alxf-pills {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+.alxf-pills--rayo   { clip-path: inset(0 50% 0 0); }
+.alxf-pills--amazon { clip-path: inset(0 0 0 50%); }
+
+.alxf-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1cqmin;
+  height: 6.4cqmin;
+  padding: 0 2.4cqmin 0 1.9cqmin;
+  border-radius: 99px;
+  white-space: nowrap;
+  font-size: 2.6cqmin;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 1.2cqmin 3cqmin var(--alxf-pill-drop);
+  opacity: 0;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+.alxf-pills--rayo   .alxf-pill { background: var(--alxf-rayo); }
+.alxf-pills--amazon .alxf-pill { background: var(--alxf-amazon-pill); }
+.alxf-pill-icon {
+  width: 2.8cqmin;
+  height: 2.8cqmin;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.alxf-pill--out  { animation-name: alxf-pill-out; }
+.alxf-pill--back { animation-name: alxf-pill-back; }
+
+/* Speaker (25, 42) up and over the boundary, onto the phone where the
+   notification lands. Keyframes are spaced to ease in and out. */
+@keyframes alxf-pill-out {
+  0%   { left: 33%; top: 31%;   opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+  10%  { left: 35%; top: 28%;   opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  30%  { left: 42%; top: 22.5%; }
+  50%  { left: 50%; top: 20.5%; }
+  70%  { left: 59%; top: 21%; }
+  86%  { left: 67%; top: 22.5%; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { left: 74%; top: 23.5%; opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+}
+/* From under the phone, round the bottom and into the speaker */
+@keyframes alxf-pill-back {
+  0%   { left: 72%; top: 61%;   opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+  10%  { left: 69%; top: 64%;   opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  30%  { left: 61%; top: 68%; }
+  50%  { left: 50%; top: 69.5%; }
+  70%  { left: 41%; top: 67%; }
+  86%  { left: 35%; top: 61%;   opacity: 1; transform: translate(-50%, -50%) scale(0.95); }
+  100% { left: 30%; top: 53%;   opacity: 0; transform: translate(-50%, -50%) scale(0.6); }
+}
+
+/* ── The speaker, seen from above ── */
+.alxf-speaker {
+  position: absolute;
+  left: 12%;
+  top: 29%;
+  width: 26%;
+  height: 26%;
+}
+.alxf-dot {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+.alxf-dot::before {            /* glow, outside the mask */
+  content: '';
+  position: absolute;
+  inset: -12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--alxf-glow, transparent) 55%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+.alxf-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--alxf-faint);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5cqmin), #000 calc(100% - 1.4cqmin));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 1.5cqmin), #000 calc(100% - 1.4cqmin));
+  transition: background 0.4s ease;
+}
+.alxf-dot-top {
+  position: absolute;
+  inset: 1.7cqmin;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--alxf-dot-a), var(--alxf-dot-b) 70%);
+  box-shadow: inset 0 0 0 1px var(--alxf-dot-edge);
+}
+.alxf-dot-top i {               /* the four buttons */
+  position: absolute;
+  width: 3.2cqmin;
+  height: 3.2cqmin;
+  margin: -1.6cqmin 0 0 -1.6cqmin;
+  border-radius: 50%;
+  background: var(--alxf-button);
+  box-shadow: inset 0 0 0 1px var(--alxf-button-edge);
+}
+.alxf-dot-top i:nth-child(1) { left: 50%; top: 24%; }
+.alxf-dot-top i:nth-child(2) { left: 76%; top: 50%; }
+.alxf-dot-top i:nth-child(3) { left: 50%; top: 76%; }
+.alxf-dot-top i:nth-child(4) { left: 24%; top: 50%; }
+
+.alxf--listening .alxf-ring {
+  background: conic-gradient(from var(--alxf-spin, 0deg), var(--alxf-amazon-2), var(--alxf-amazon), var(--alxf-amazon-3), var(--alxf-amazon), var(--alxf-amazon-2));
+  animation: alxf-spin 1.8s linear infinite;
+}
+.alxf--listening .alxf-dot { --alxf-glow: var(--alxf-glow-listen); }
+.alxf--is-linked .alxf-ring {
+  background: conic-gradient(var(--alxf-rayo), var(--alxf-rayo-2), var(--alxf-rayo));
+}
+.alxf--is-linked .alxf-dot { --alxf-glow: var(--alxf-glow-linked); }
+.alxf--listening .alxf-dot::before,
+.alxf--is-linked .alxf-dot::before { opacity: 1; }
+
+@property --alxf-spin { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes alxf-spin { to { --alxf-spin: 360deg; } }
+
+/* The three checks, under the speaker */
+.alxf-checks {
+  position: absolute;
+  top: 112%;
+  left: -24%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1cqmin;
+}
+.alxf-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1cqmin;
+  width: max-content;
+  padding: 0.7cqmin 1.8cqmin 0.7cqmin 1.2cqmin;
+  border-radius: 99px;
+  font-size: 2.3cqmin;
+  color: var(--alxf-ink);
+  background: var(--alxf-chip);
+  box-shadow: inset 0 0 0 1px var(--alxf-chip-edge);
+  opacity: 0;
+  transform: translateY(0.8cqmin);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.alxf-check::before {
+  content: '';
+  width: 1.1cqmin;
+  height: 0.6cqmin;
+  border: solid var(--alxf-amazon);
+  border-width: 0 0 0.35cqmin 0.35cqmin;
+  transform: translateY(-0.2cqmin) rotate(-45deg);
+}
+.alxf--checks .alxf-check {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(var(--i) * 0.35s + 0.15s);
+}
+
+/* Linked, under the speaker at the end */
+.alxf-status {
+  position: absolute;
+  top: 114%;
+  left: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 1.1cqmin;
+  padding: 0.8cqmin 2cqmin 0.8cqmin 1.5cqmin;
+  border-radius: 99px;
+  font-size: 2.5cqmin;
+  font-weight: 600;
+  background: var(--alxf-status);
+  box-shadow: inset 0 0 0 1px var(--alxf-status-edge);
+  opacity: 0;
+  transform: translate(-50%, 0.8cqmin);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.alxf-status i {
+  width: 1.3cqmin;
+  height: 1.3cqmin;
+  border-radius: 50%;
+  background: var(--alxf-rayo);
+  box-shadow: 0 0 1.2cqmin var(--alxf-rayo);
+}
+.alxf--is-linked .alxf-status { opacity: 1; transform: translate(-50%, 0); }
+
+/* ── The phone (the Alexa app, drawn unbranded) ── */
+.alxf-phone {
+  position: absolute;
+  left: 65%;
+  top: 18%;
+  width: 22%;
+  height: 46%;
+  border-radius: 3.6cqmin;
+  background: var(--alxf-phone);
+  box-shadow: 0 0 0 0.7cqmin var(--alxf-phone-rim), 0 2cqmin 5cqmin var(--alxf-phone-drop);
+  overflow: hidden;
+}
+.alxf-island {
+  position: absolute;
+  top: 1.4cqmin;
+  left: 50%;
+  width: 6cqmin;
+  height: 1.6cqmin;
+  transform: translateX(-50%);
+  border-radius: 99px;
+  background: var(--alxf-island);
+  z-index: 2;
+}
+.alxf-screen {
+  position: absolute;
+  inset: 0;
+  background: var(--alxf-screen);
+  opacity: var(--alxf-screen-off);
+  transition: opacity 0.4s ease;
+}
+.alxf--phone-on .alxf-screen { opacity: 1; }
+
+.alxf-banner {
+  position: absolute;
+  left: 1.1cqmin;
+  right: 1.1cqmin;
+  top: 4.4cqmin;
+  display: flex;
+  align-items: center;
+  gap: 1cqmin;
+  padding: 1.2cqmin;
+  border-radius: 1.8cqmin;
+  background: var(--alxf-banner);
+  box-shadow: inset 0 0 0 1px var(--alxf-banner-edge);
+  opacity: 0;
+  transform: translateY(-4cqmin);
+  transition: opacity 0.3s ease, transform 0.45s cubic-bezier(.2, .9, .3, 1.15);
+}
+.alxf-banner-icon {
+  flex: 0 0 auto;
+  width: 3.4cqmin;
+  height: 3.4cqmin;
+  border-radius: 0.9cqmin;
+  background: linear-gradient(135deg, var(--alxf-amazon), var(--alxf-amazon-2));
+}
+.alxf-banner-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-size: 1.75cqmin;
+  line-height: 1.25;
+  color: var(--alxf-ink);
+}
+.alxf-banner-text b { font-weight: 600; font-size: 1.6cqmin; color: var(--alxf-muted); }
+.alxf--notify .alxf-banner { opacity: 1; transform: none; }
+.alxf--tap .alxf-banner { opacity: 0; transform: scale(0.94); transition: opacity 0.25s ease, transform 0.25s ease; }
+
+.alxf-link {
+  position: absolute;
+  left: 2.2cqmin;
+  right: 2.2cqmin;
+  top: 7cqmin;
+  opacity: 0;
+  transform: translateY(1.5cqmin);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.alxf--linking .alxf-link { opacity: 1; transform: none; transition-delay: 0.15s; }
+.alxf-link-title {
+  margin: 0 0 2.4cqmin;
+  font-size: 2.3cqmin;
+  font-weight: 600;
+  color: var(--alxf-ink);
+}
+.alxf-steps {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4cqmin;
+}
+.alxf-steps::before {            /* the rail the steps hang on */
+  content: '';
+  position: absolute;
+  left: 0.85cqmin;
+  top: 1cqmin;
+  bottom: 1cqmin;
+  width: 1px;
+  background: var(--alxf-rail);
+}
+.alxf-step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1.4cqmin;
+  font-size: 2cqmin;
+  color: var(--alxf-muted);
+  transition: color 0.3s ease;
+}
+.alxf-step-dot {
+  flex: 0 0 auto;
+  width: 1.7cqmin;
+  height: 1.7cqmin;
+  border-radius: 50%;
+  background: var(--alxf-step-off);
+  box-shadow: inset 0 0 0 1px var(--alxf-step-edge);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.alxf--linking .alxf-step { color: var(--alxf-ink); transition-delay: calc(var(--i) * 0.42s + 0.5s); }
+.alxf--linking .alxf-step-dot {
+  background: var(--alxf-amazon);
+  box-shadow: 0 0 1cqmin var(--alxf-step-glow);
+  transition-delay: calc(var(--i) * 0.42s + 0.5s);
+}
+
+/* ── Caption: who said what ── */
+.alxf-caption {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  top: 81%;
+}
+.alxf-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1cqmin;
+}
+/* A new line rises into place; a finished one slides up and fades */
+.alxf-line {
+  animation: alxf-enter 0.35s cubic-bezier(.2, 0, .2, 1) both;
+}
+@keyframes alxf-enter {
+  from { transform: translateY(3cqmin); opacity: 0; }
+}
+.alxf-line--leave {
+  animation: alxf-leave 0.55s cubic-bezier(.4, 0, .2, 1) forwards;
+}
+@keyframes alxf-leave {
+  to { transform: translateY(-4cqmin); opacity: 0; }
+}
+.alxf-who {
+  font-family: var(--font-family-primary);
+  font-size: 2.1cqmin;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.alxf-who--user  { color: var(--alxf-rayo); }
+.alxf-who--alexa { color: var(--alxf-amazon); }
+.alxf-said {
+  font-family: var(--font-family-primary);
+  font-size: 3.9cqmin;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--alxf-ink);
+  white-space: nowrap;
+}
+.alxf-caret {
+  display: inline-block;
+  width: 0.35cqmin;
+  height: 3.6cqmin;
+  margin-left: 0.4cqmin;
+  vertical-align: -0.5cqmin;
+  background: currentColor;
+  animation: alxf-blink 0.9s steps(1) infinite;
+}
+@keyframes alxf-blink { 50% { opacity: 0; } }
+
+/* ── End of the pass: everything settles out before the loop ── */
+.alxf--out .alxf-status { opacity: 0; }
