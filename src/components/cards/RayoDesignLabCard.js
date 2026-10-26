@@ -83,8 +83,7 @@ const themed = (light, dark, alt, cls = 'cs-cover-img') =>
    one at a time, it adds to the system where the system has a gap, and
    a second prompt turns up the states nobody had designed yet.
 
-   The lab boots like the app it builds - the name is the splash on a
-   phone's screen - then a prompt is typed and worked on. The answer
+   A prompt is typed and worked on. The answer
    starts with the system: the component library is laid out on the
    face, the parts it needs fly into five phone screens (the outer two
    run off the card), and the parts the system didn't have arrive in
@@ -105,20 +104,18 @@ const PROMPT2 = 'What if the download fails?'
 const TYPE_MS = 46
 
 const TIMELINE = [
-  [0,     { phase: 'boot'     }],   // the lab starts: name on the phone's screen
-  [1100,  { phase: 'clear'    }],   // splash and frame leave; an empty face
-  [1700,  { phase: 'prompt',  type: PROMPT }],
-  [3900,  { phase: 'loading'  }],
-  [4600,  { phase: 'library'  }],   // the design system, laid out
-  [6900,  { phase: 'build'    }],   // the parts it needs fly into five screens
-  [8800,  { phase: 'new'      }],   // and the parts the system didn't have arrive
-  [10800, { phase: 'prompt2', type: PROMPT2 }],
-  [12600, { phase: 'loading2' }],
-  [13700, { phase: 'branch'   }],   // the row moves up; under each, its state
-  [17200, { phase: 'rest'     }],
-  [17900, { phase: 'done'     }],   // and it all goes, leaving the frame empty
+  [300,   { phase: 'prompt',  type: PROMPT }],
+  [2500,  { phase: 'loading'  }],
+  [3200,  { phase: 'library'  }],   // the design system, laid out
+  [5500,  { phase: 'build'    }],   // the parts it needs fly into five screens
+  [7400,  { phase: 'new'      }],   // and the parts the system didn't have arrive
+  [9400,  { phase: 'prompt2', type: PROMPT2 }],
+  [11200, { phase: 'loading2' }],
+  [12300, { phase: 'branch'   }],   // the row moves up; under each, its state
+  [15800, { phase: 'rest'     }],
+  [16500, { phase: 'done'     }],   // and it all goes, leaving the face empty
 ]
-const LOOP_MS = 19200
+const LOOP_MS = 17800
 
 /* The states the second prompt turns up, one under each screen. Same
    tones the lab uses. `part` is what it puts on the screen. */
@@ -160,7 +157,7 @@ const NEW_PARTS = {                   // [index, kind] inserted at `new`
   3: [4, 'progress'],
 }
 const STATE_AT = 3                    // the part a state replaces, on every screen
-const KEPT = 2                        // the one that boots
+const KEPT = 2                        // the middle one; the spare library cards live here
 
 /* The library: five columns, four rows, no grid lines; the outer
    columns run off the card. Each kind sits on a white card. Rows are
@@ -225,7 +222,7 @@ const UNUSED = Object.keys(LIB_POS).filter(k => !FLYER[k])
 const LabLoop = defineComponent({
   name: 'LabLoop',
   setup() {
-    const phase = ref('boot')
+    const phase = ref('idle')
     const typed = ref('')
     const root  = ref(null)
 
@@ -260,7 +257,7 @@ const LabLoop = defineComponent({
     }
 
     function run() {
-      phase.value = 'boot'
+      phase.value = 'idle'
       typed.value = ''
       TIMELINE.forEach(([at, change]) => {
         timers.push(setTimeout(() => {
@@ -354,15 +351,7 @@ const LabLoop = defineComponent({
 
     const phone = (slot) =>
       h('div', { class: 'rdlv-slot', 'data-slot': slot, 'data-row': 0, style: { '--s': slot }, key: 'slot' + slot }, [
-        h('div', { class: 'rdlv-frame' }, [
-          slot === KEPT
-            ? h('div', { class: 'rdlv-boot' }, [
-                h('span', { class: 'rdlv-boot-mark' }),
-                h('span', { class: 'rdlv-boot-word' }, WORD),
-              ])
-            : null,
-          h('span', { class: 'rdlv-notch' }),
-        ]),
+        h('div', { class: 'rdlv-frame' }, [h('span', { class: 'rdlv-notch' })]),
         ...layoutScreen(screenKinds(slot, phase.value)).map((p, i) => tile(slot, p, i)),
         ...(slot === KEPT ? UNUSED.map(spare) : []),
       ])
