@@ -2,8 +2,10 @@
  * filterLayouts.js
  *
  * Grid position (and dim state) for every card in each nav-filter state.
- * Keys match the slot keys in App.js — every key in CARD_ENTRIES must appear
- * in all eight maps below or the card renders with no grid position.
+ * Keys match the slot keys in App.js. A key left out of a map is off the
+ * grid in that state: the card isn't rendered at all, except while its case
+ * study is open from its URL (see offGridKey in App.js). Simplestream (ssds)
+ * is off the grid everywhere; its page still works from the old link.
  *
  * col / row are passed straight through as gridColumn / gridRow.
  * dim: true → de-prioritised (30 % opacity).
@@ -23,7 +25,7 @@ export const LAYOUTS = {
   // Row 4-5   AI quote(c1-2, r4)  Agentic(c3) + Rayo DS(c4) (r4-5, tall pair)
   // Row 5-6   Schedule(c1-2)  DS quote(c3-4, r6)
   // Row 7-8   UX quote(c1-2, r7)  Voice UX(c3-4)
-  // Row 8-9   Simplestream(c1-2)  Strava(c3, r9)  Duolingo(c4, r9)
+  // Row 8     Strava(c1)  Duolingo(c2)
   All: {
     about:      { col: '1 / 3',    row: '1' },
     gmail:      { col: '3',        row: '1' },
@@ -38,12 +40,13 @@ export const LAYOUTS = {
     dsquote:    { col: '3 / 5',    row: '6' },
     uxquote:    { col: '1 / 3',    row: '7' },
     alexa:      { col: '3 / 5',    row: '7 / 9' },
-    ssds:       { col: '1 / 3',    row: '8 / 10' },
-    strava:     { col: '3',        row: '9' },
-    duolingo:   { col: '4',        row: '9' },
+    strava:     { col: '1',        row: '8' },
+    duolingo:   { col: '2',        row: '8' },
   },
 
   // ── ABOUT ────────────────────────────────────────────────────────────────
+  // Rows 1-3 the about cards; the dimmed work staggers below so the grid
+  // closes with no gaps, Strava + Duolingo in the last row.
   About: {
     about:      { col: '1 / 3',    row: '1' },
     gmail:      { col: '3',        row: '1' },
@@ -51,16 +54,15 @@ export const LAYOUTS = {
     uxquote:    { col: '1 / 3',    row: '2' },
     dsquote:    { col: '3 / 5',    row: '2' },
     aiquote:    { col: '1 / 3',    row: '3' },
-    strava:     { col: '3',        row: '3',  dim: true },
-    duolingo:   { col: '4',        row: '3',  dim: true },
-    designlab:  { col: '1 / 3',   row: '4 / 6',  dim: true },
-    plugin:     { col: '1',       row: '8 / 10',  dim: true },
-    ds:         { col: '4',       row: '4 / 6',  dim: true },
-    agenticds:  { col: '3',       row: '4 / 6',  dim: true },
-    layerlint:  { col: '2',       row: '8 / 10',  dim: true },
-    schedule:   { col: '1 / 3',   row: '6 / 8',  dim: true },
-    alexa:      { col: '3 / 5',   row: '6 / 8',  dim: true },
-    ssds:       { col: '3 / 5',   row: '8 / 10',  dim: true },
+    designlab:  { col: '3 / 5',    row: '3 / 5',  dim: true },
+    schedule:   { col: '1 / 3',    row: '4 / 6',  dim: true },
+    alexa:      { col: '3 / 5',    row: '5 / 7',  dim: true },
+    plugin:     { col: '1',        row: '6 / 8',  dim: true },
+    layerlint:  { col: '2',        row: '6 / 8',  dim: true },
+    agenticds:  { col: '3',        row: '7 / 9',  dim: true },
+    ds:         { col: '4',        row: '7 / 9',  dim: true },
+    strava:     { col: '1',        row: '8',  dim: true },
+    duolingo:   { col: '2',        row: '8',  dim: true },
   },
 
   // ── WORK ─────────────────────────────────────────────────────────────────
@@ -71,18 +73,17 @@ export const LAYOUTS = {
     ds:         { col: '3 / 5',    row: '1 / 3' },
     schedule:   { col: '1 / 3',    row: '3 / 5' },
     alexa:      { col: '3 / 5',    row: '3 / 5' },
-    ssds:       { col: '1 / 3',    row: '5 / 7' },
-    plugin:     { col: '3',        row: '5 / 7',  dim: true },
-    layerlint:  { col: '4',        row: '5 / 7',  dim: true },
-    agenticds:  { col: '1',        row: '7 / 9',  dim: true },
-    about:      { col: '2 / 4',    row: '7',  dim: true },
-    gmail:      { col: '4',        row: '7',  dim: true },
-    uxquote:    { col: '2 / 4',    row: '8',  dim: true },
-    linkedin:   { col: '4',        row: '8',  dim: true },
-    aiquote:    { col: '1 / 3',    row: '9',  dim: true },
-    dsquote:    { col: '3 / 5',    row: '9',  dim: true },
-    strava:     { col: '1',        row: '10',  dim: true },
-    duolingo:   { col: '2',        row: '10',  dim: true },
+    plugin:     { col: '1',        row: '5 / 7',  dim: true },
+    layerlint:  { col: '2',        row: '5 / 7',  dim: true },
+    agenticds:  { col: '3',        row: '5 / 7',  dim: true },
+    gmail:      { col: '4',        row: '5',  dim: true },
+    linkedin:   { col: '4',        row: '6',  dim: true },
+    about:      { col: '1 / 3',    row: '7',  dim: true },
+    uxquote:    { col: '3 / 5',    row: '7',  dim: true },
+    aiquote:    { col: '1 / 3',    row: '8',  dim: true },
+    dsquote:    { col: '3 / 5',    row: '8',  dim: true },
+    strava:     { col: '1',        row: '9',  dim: true },
+    duolingo:   { col: '2',        row: '9',  dim: true },
   },
 
   // ── SIDE QUESTS ──────────────────────────────────────────────────────────
@@ -99,12 +100,11 @@ export const LAYOUTS = {
     designlab:  { col: '1 / 3',    row: '4 / 6',  dim: true },
     schedule:   { col: '3 / 5',    row: '4 / 6',  dim: true },
     alexa:      { col: '1 / 3',    row: '6 / 8',  dim: true },
-    ssds:       { col: '3 / 5',    row: '6 / 8',  dim: true },
-    ds:         { col: '1',        row: '8 / 10',  dim: true },
-    aiquote:    { col: '2 / 4',    row: '8',  dim: true },
-    gmail:      { col: '4',        row: '8',  dim: true },
-    dsquote:    { col: '2 / 4',    row: '9',  dim: true },
-    linkedin:   { col: '4',        row: '9',  dim: true },
+    ds:         { col: '3',        row: '6 / 8',  dim: true },
+    gmail:      { col: '4',        row: '6',  dim: true },
+    linkedin:   { col: '4',        row: '7',  dim: true },
+    aiquote:    { col: '1 / 3',    row: '8',  dim: true },
+    dsquote:    { col: '3 / 5',    row: '8',  dim: true },
   },
 }
 
@@ -121,13 +121,12 @@ export const MOBILE_LAYOUTS = {
     aiquote:    { col: '1 / 3',    row: '7' },
     agenticds:  { col: '1',        row: '8 / 10' },
     ds:         { col: '2',        row: '8 / 10' },
-    schedule:   { col: '1 / 3',    row: '10 / 12' },
-    dsquote:    { col: '1 / 3',    row: '12' },
+    dsquote:    { col: '1 / 3',    row: '10' },
+    schedule:   { col: '1 / 3',    row: '11 / 13' },
     uxquote:    { col: '1 / 3',    row: '13' },
     alexa:      { col: '1 / 3',    row: '14 / 16' },
-    ssds:       { col: '1 / 3',    row: '16 / 18' },
-    strava:     { col: '1',        row: '18' },
-    duolingo:   { col: '2',        row: '18' },
+    strava:     { col: '1',        row: '16' },
+    duolingo:   { col: '2',        row: '16' },
   },
 
   About: {
@@ -138,15 +137,14 @@ export const MOBILE_LAYOUTS = {
     dsquote:    { col: '1 / 3',    row: '4' },
     aiquote:    { col: '1 / 3',    row: '5' },
     designlab:  { col: '1 / 3',    row: '6 / 8',  dim: true },
-    schedule:   { col: '1 / 3',   row: '12 / 14',  dim: true },
-    plugin:     { col: '1',         row: '8 / 10',  dim: true },
-    ds:         { col: '2',       row: '10 / 12',  dim: true },
-    agenticds:  { col: '1',       row: '10 / 12',  dim: true },
-    layerlint:  { col: '2',         row: '8 / 10',  dim: true },
-    alexa:      { col: '1 / 3',   row: '14 / 16',  dim: true },
-    ssds:       { col: '1 / 3',   row: '16 / 18',  dim: true },
-    strava:     { col: '1',       row: '18',  dim: true },
-    duolingo:   { col: '2',       row: '18',  dim: true },
+    plugin:     { col: '1',        row: '8 / 10',  dim: true },
+    layerlint:  { col: '2',        row: '8 / 10',  dim: true },
+    agenticds:  { col: '1',        row: '10 / 12',  dim: true },
+    ds:         { col: '2',        row: '10 / 12',  dim: true },
+    schedule:   { col: '1 / 3',    row: '12 / 14',  dim: true },
+    alexa:      { col: '1 / 3',    row: '14 / 16',  dim: true },
+    strava:     { col: '1',        row: '16',  dim: true },
+    duolingo:   { col: '2',        row: '16',  dim: true },
   },
 
   Work: {
@@ -154,18 +152,17 @@ export const MOBILE_LAYOUTS = {
     ds:         { col: '1 / 3',    row: '3 / 5' },
     schedule:   { col: '1 / 3',    row: '5 / 7' },
     alexa:      { col: '1 / 3',    row: '7 / 9' },
-    ssds:       { col: '1 / 3',    row: '9 / 11' },
-    plugin:     { col: '1',        row: '11 / 13',  dim: true },
-    layerlint:  { col: '2',        row: '11 / 13',  dim: true },
-    agenticds:  { col: '1',        row: '13 / 15',  dim: true },
-    gmail:      { col: '2',        row: '13',  dim: true },
-    linkedin:   { col: '2',        row: '14',  dim: true },
-    about:      { col: '1 / 3',    row: '15',  dim: true },
-    aiquote:    { col: '1 / 3',    row: '16',  dim: true },
-    uxquote:    { col: '1 / 3',    row: '17',  dim: true },
-    dsquote:    { col: '1 / 3',    row: '18',  dim: true },
-    strava:     { col: '1',        row: '19',  dim: true },
-    duolingo:   { col: '2',        row: '19',  dim: true },
+    plugin:     { col: '1',        row: '9 / 11',  dim: true },
+    layerlint:  { col: '2',        row: '9 / 11',  dim: true },
+    agenticds:  { col: '1',        row: '11 / 13',  dim: true },
+    gmail:      { col: '2',        row: '11',  dim: true },
+    linkedin:   { col: '2',        row: '12',  dim: true },
+    about:      { col: '1 / 3',    row: '13',  dim: true },
+    aiquote:    { col: '1 / 3',    row: '14',  dim: true },
+    uxquote:    { col: '1 / 3',    row: '15',  dim: true },
+    dsquote:    { col: '1 / 3',    row: '16',  dim: true },
+    strava:     { col: '1',        row: '17',  dim: true },
+    duolingo:   { col: '2',        row: '17',  dim: true },
   },
 
   'Side Quests': {
@@ -182,9 +179,8 @@ export const MOBILE_LAYOUTS = {
     linkedin:   { col: '2',        row: '10',  dim: true },
     schedule:   { col: '1 / 3',    row: '11 / 13',  dim: true },
     alexa:      { col: '1 / 3',    row: '13 / 15',  dim: true },
-    ssds:       { col: '1 / 3',    row: '15 / 17',  dim: true },
-    uxquote:    { col: '1 / 3',    row: '17',  dim: true },
-    dsquote:    { col: '1 / 3',    row: '18',  dim: true },
+    uxquote:    { col: '1 / 3',    row: '15',  dim: true },
+    dsquote:    { col: '1 / 3',    row: '16',  dim: true },
   },
 }
 

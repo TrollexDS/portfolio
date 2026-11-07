@@ -102,9 +102,19 @@ export default defineComponent({
       return null
     }
 
+    // A card with no grid position in the current layout (Simplestream) is
+    // only rendered while its case study is open from its URL: off-screen,
+    // so the overlay inside it can open from there. It goes when it closes.
+    const offGridKey = ref(null)
+    function onCaseStudyClosed(e) {
+      const key = e.detail && e.detail.cardKey
+      if (key && key === offGridKey.value) offGridKey.value = null
+    }
+
     function openCardFromUrl() {
       const cardKey = resolveCardKey()
       if (!cardKey) return
+      offGridKey.value = cardKey
       // Small delay to ensure cards are mounted and listening
       setTimeout(() => {
         window.dispatchEvent(new CustomEvent('cs:open', { detail: cardKey }))
@@ -114,10 +124,12 @@ export default defineComponent({
       openCardFromUrl()
       window.addEventListener('hashchange', openCardFromUrl)
       window.addEventListener('popstate', openCardFromUrl)
+      window.addEventListener('cs:closed', onCaseStudyClosed)
     })
     onUnmounted(() => {
       window.removeEventListener('hashchange', openCardFromUrl)
       window.removeEventListener('popstate', openCardFromUrl)
+      window.removeEventListener('cs:closed', onCaseStudyClosed)
     })
 
     // Direct DOM refs for each grid-slot wrapper (keyed by card key).
@@ -200,7 +212,14 @@ export default defineComponent({
 
       const cardSlots = CARD_ENTRIES.map(({ key, comp, props }) => {
         const pos = layout[key]
-        if (!pos) return null
+        if (!pos) {
+          if (key !== offGridKey.value) return null
+          return h('div', {
+            key,
+            class: 'grid-slot grid-slot--offgrid',
+            ref: el => { slotEls[key] = el },
+          }, [h(comp, props || {})])
+        }
 
         return h('div', {
           key,

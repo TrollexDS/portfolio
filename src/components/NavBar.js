@@ -10,7 +10,7 @@ import { ICON_SHRINK } from '../assets/icons/icons.js'
 const NAV_ITEMS = ['All', 'About', 'Work', 'Side Quests']
 
 // Shorter labels for mobile to avoid two-line pills
-const MOBILE_LABELS = { 'Side Quests': 'Hobbies' }
+const MOBILE_LABELS = { 'Side Quests': 'Play' }
 const SCROLL_THRESHOLD = 80  // px from top before hide kicks in
 
 export default defineComponent({

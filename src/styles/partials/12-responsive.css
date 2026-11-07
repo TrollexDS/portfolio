@@ -14,9 +14,19 @@
     border: none;
   }
 
-  /* Never hide on mobile — thumb needs it reachable */
+  /* Never hide on mobile — thumb needs it reachable. No transform at all,
+     so the toggles below can be fixed to the viewport, not to the nav. */
+  .nav,
   .nav--hidden {
     transform: none;
+  }
+
+  /* Theme toggle: out of the bottom bar, pinned top-right, its centre
+     level with the mobile page logo (40px padding + 48px logo) */
+  .nav-toggles {
+    position: fixed;
+    top: 46px;
+    right: 24px;
   }
 
   /* Logo lives at top of page on mobile, not in the nav */
@@ -27,7 +37,8 @@
   /* The case study keeps its own close on mobile; the header's minimise
      and the room made for it are desktop-only. */
   .nav-close, .nav-goo { display: none; }
-  body.cs-open .nav-toggles { margin-right: 0; }
+  /* No theme toggle over an open case study on mobile */
+  body.cs-open .nav-toggles { display: none; }
   .nav-inner { max-width: none; }
 
   /* Hide lazy-mode toggle on mobile — the theme toggle stays */

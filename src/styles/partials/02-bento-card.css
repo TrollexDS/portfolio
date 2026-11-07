@@ -208,6 +208,18 @@
   pointer-events: none;
 }
 
+/* ── Off-grid card (Simplestream) ──
+   Rendered only while its case study is open from its URL. Parked just
+   below the viewport so the overlay grows up from there; fixed, so it
+   never shows in the page. No transform: the overlay inside is fixed too. */
+.grid-slot--offgrid {
+  position: fixed;
+  top: 100vh;
+  left: calc(50% - 126px);
+  width: 252px;
+  height: 252px;
+}
+
 /* ══════════════════════════════════════
    GRID PLACEMENT (legacy — kept for
    reference; overridden by inline styles
