@@ -165,17 +165,23 @@ body.cs-open .nav-pills {
 .nav-toggles { transition: margin-right 0.6s cubic-bezier(0.65, 0, 0.35, 1); }
 body.cs-open .nav-toggles { margin-right: 44px; transition: margin-right 0.5s cubic-bezier(0.22, 1, 0.36, 1); }
 
-/* The minimise: its own fixed layer in the same column, so the scroll-hide
-   never takes it. The one thing in the row that stays, so it is drawn as
-   the exception: a quiet ghost ring rather than a sibling of the toggles,
-   and it comes forward on hover. */
+/* The minimise: its own fixed layer in the same column (so the goo can
+   sit behind it), hiding with the row on scroll. Drawn as a quiet ghost
+   ring rather than a sibling of the toggles; it comes forward on hover. */
 .nav-close {
   position: fixed;
   top: 20px; left: 0; right: 0;
   z-index: 360;
   padding: 0 48px;
   pointer-events: none;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
+/* Hides with the row on scroll, on the nav's curve: up past its own
+   top offset so its shadow and ring leave the screen too. */
+.nav-close--hidden {
+  transform: translateY(calc(-100% - 28px));
+}
+.nav-close--hidden .nav-close__btn { pointer-events: none; }
 .nav-close__inner {
   display: flex;
   justify-content: flex-end;
@@ -440,6 +446,7 @@ body.cs-open .nav-goo { z-index: 345; }
 }
 
 /* ── Mobile-only page logo (above the grid) ── */
+.mobile-page-header,
 .mobile-page-logo {
   display: none; /* hidden on desktop */
 }

@@ -1,0 +1,156 @@
+/* ══════════════════════════════════════
+   END OF A CASE STUDY (CaseStudyEnd.js)
+   Next case study (the weighty one), back to home, and a quiet
+   copy-email. Same column and gutter as .cs-body.
+══════════════════════════════════════ */
+.cse {
+  width: 100%;
+  max-width: var(--cs-column);
+  box-sizing: border-box;
+  padding: 0 24px;
+  margin-top: 80px;
+}
+.cse::before {
+  content: '';
+  display: block;
+  height: 1px;
+  margin-bottom: 48px;
+  background: var(--color-border-card);
+}
+
+/* ── Next case study ── */
+.cse-next {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 28px 28px 28px 32px;
+  border-radius: 24px;
+  background: var(--color-surface-card);
+  border: 1px solid var(--color-border-card);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, background 0.5s ease;
+}
+.cse-next:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px var(--color-shadow-action-icon);
+}
+.cse-next:focus-visible,
+.cse-home:focus-visible,
+.cse-contact:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+.cse-next__text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+.cse-next__label {
+  font-family: var(--font-family-primary);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+.cse-next__title {
+  font-family: var(--font-family-primary);
+  font-size: var(--cs-section-size);
+  font-weight: var(--cs-section-weight);
+  line-height: 1.3;
+  color: var(--color-text-primary);
+  transition: color 0.5s ease;
+}
+.cse-next__arrow {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  background: var(--gradient-brand);
+  color: var(--color-text-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cse-next:hover .cse-next__arrow { transform: translateX(4px); }
+
+/* ── Home + contact row ── */
+.cse-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+.cse-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px 0 16px;
+  box-sizing: border-box;
+  border-radius: 999px;
+  border: 1px solid var(--color-text-muted);
+  font-family: var(--font-family-primary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.5s ease;
+}
+.cse-home:hover { background: var(--color-surface-card); }
+
+/* Copies the email - never opens a mail client */
+.cse-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-family-primary);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+}
+.cse-contact__email {
+  color: var(--color-text-primary);
+  text-underline-offset: 3px;
+}
+.cse-contact:hover .cse-contact__email { text-decoration: underline; }
+.cse-contact__icon { display: inline-flex; }
+.cse-contact__tick { color: var(--color-primary); }
+
+@media (max-width: 768px) {
+  .cse { margin-top: 64px; margin-bottom: 40px; }
+  .cse::before { margin-bottom: 32px; }
+  .cse-next {
+    gap: 16px;
+    padding: 20px 20px 20px 22px;
+    border-radius: 20px;
+  }
+  .cse-next:hover { transform: none; box-shadow: none; }
+  .cse-next__text { gap: 6px; }
+  .cse-next__title { font-size: calc(var(--cs-section-size) * 0.8); }
+  .cse-next__arrow { width: 44px; height: 44px; }
+  .cse-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .cse-home { justify-content: center; height: 48px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cse-next, .cse-next__arrow { transition: none; }
+  .cse-next:hover, .cse-next:hover .cse-next__arrow { transform: none; }
+}

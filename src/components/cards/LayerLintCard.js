@@ -663,7 +663,7 @@ export default defineComponent({
           // ═══════════════════════════════════════════
           h('div', { class: 'cs-body cs-body--continued' }, [
 
-            h('h2', { class: 'cs-section-title' }, 'The other side of the agentic equation'),
+            h('h2', { class: ['cs-section-title', tldr.value ? 'll-tldr-hide-title' : ''].filter(Boolean).join(' ') }, 'The other side of the agentic equation'),
             full(
               h('p', { class: 'cs-body-text' }, [
                 'In the ',

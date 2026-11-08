@@ -21,6 +21,7 @@ import AIQuoteCard   from './components/cards/AIQuoteCard.js'
 import CursorTooltip  from './components/CursorTooltip.js'
 import CursorShape    from './components/CursorShape.js'
 import BackToTop      from './components/BackToTop.js'
+import ThemeToggle    from './components/ThemeToggle.js'
 import { LAYOUTS, MOBILE_LAYOUTS, MOBILE_BREAKPOINT } from './filterLayouts.js'
 
 
@@ -249,7 +250,11 @@ export default defineComponent({
 
         // ── Bento Grid ──────────────────────────
         h('main', { class: 'main' }, [
-          h('img', { class: 'mobile-page-logo', src: '/src/assets/logos/alex-logo.svg', alt: 'Alex Chiu' }),
+          // Mobile only: logo left, theme toggle right, both scroll with the page
+          h('div', { class: 'mobile-page-header' }, [
+            h('img', { class: 'mobile-page-logo', src: '/src/assets/logos/alex-logo.svg', alt: 'Alex Chiu' }),
+            h('div', { class: 'mobile-page-toggle' }, [h(ThemeToggle)]),
+          ]),
           h('div', { class: 'grid' }, cardSlots),
         ]),
       ])

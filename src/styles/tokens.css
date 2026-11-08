@@ -250,6 +250,7 @@
   --color-text-primary:       var(--color-primitive-neutral-750);
   --color-text-body:          var(--color-text-primary);           /* consolidated — was neutral-950 */
   --color-text-subtle:        var(--color-primitive-neutral-300);
+  --color-text-secondary:     var(--color-primitive-neutral-450);  /* small labels that must pass 4.5:1 */
   --color-text-on-dark:       var(--color-primitive-alpha-white-80);
   --color-text-on-primary:    var(--color-primitive-neutral-0);  /* white text on teal/gradient bg */
   --color-text-muted:         var(--color-primitive-alpha-neutral900-30);
@@ -519,6 +520,7 @@
   --color-text-primary:            var(--color-primitive-indigo-100);
   --color-text-body:               var(--color-text-primary);        /* consolidated — was indigo-200 */
   --color-text-subtle:             var(--color-primitive-indigo-400);
+  --color-text-secondary:          var(--color-primitive-neutral-350);
   --color-text-muted:              var(--color-primitive-alpha-indigo-text-30);
   --color-text-muted-dark:         var(--color-primitive-alpha-white-40);
 

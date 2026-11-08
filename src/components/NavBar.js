@@ -118,9 +118,10 @@ export default defineComponent({
     }
     function onPointerLeave() { peek.value = false }
 
-    // The whole row hides together - logo, toggles, and the case study's
-    // Detailed / TL;DR pill, which lives in the overlay and follows this
-    // class. Only the minimise stays: an exit shouldn't move.
+    // The whole row hides together - logo, toggles, the minimise, and the
+    // case study's Detailed / TL;DR pill, which lives in the overlay and
+    // follows this class. Scrolling up (or the peek) brings it all back,
+    // and the end of every case study has its own way home.
     const rowHidden = computed(() => hidden.value && !peek.value)
     watch(rowHidden, v => document.body.classList.toggle('nav-hidden', v), { immediate: true })
 
@@ -295,9 +296,10 @@ export default defineComponent({
           ])
         : null,
 
-      // The minimise lives outside the nav so the scroll-hide never takes it.
+      // The minimise lives outside the nav (its own layer, for the goo) but
+      // hides with it on scroll: see nav-close--hidden.
       (csOpen.value || closing.value)
-        ? h('div', { class: 'nav-close' }, [
+        ? h('div', { class: ['nav-close', rowHidden.value ? 'nav-close--hidden' : ''].filter(Boolean).join(' ') }, [
             h('div', { class: 'nav-close__inner' }, [
               h('button', {
                 class:          ['nav-close__btn', closing.value ? 'nav-close__btn--out' : '', goo.value ? `nav-close__btn--goo-${goo.value}` : ''],

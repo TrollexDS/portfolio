@@ -1,4 +1,4 @@
-import { defineComponent, h, ref, nextTick, Teleport } from 'vue'
+import { defineComponent, h, ref, nextTick, Teleport, onMounted, onUnmounted } from 'vue'
 
 /* ── Theme toggle ─────────────────────────────────────────────────────
    Sits next to the smooth-scroll toggle in the nav and shares its round
@@ -86,6 +86,17 @@ export default defineComponent({
 
   setup() {
     const isDark = ref(document.documentElement.dataset.theme === 'dark')
+
+    // There are two toggles in the DOM (nav on desktop, page header on
+    // mobile). Whichever is hidden must still show the right icon.
+    let themeObserver = null
+    onMounted(() => {
+      themeObserver = new MutationObserver(() => {
+        isDark.value = document.documentElement.dataset.theme === 'dark'
+      })
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
+    })
+    onUnmounted(() => themeObserver && themeObserver.disconnect())
     const button = ref(null)
     const lens   = ref(null)
     const spot   = ref(null)   // where the lens sits, once it has been hovered

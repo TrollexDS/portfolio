@@ -2,6 +2,7 @@ import { defineComponent, h, ref, nextTick, onUnmounted, watch, onMounted } from
 import { ICON_SHRINK, ICON_FULL_SCREEN } from '../assets/icons/icons.js'
 import { useRipple } from '../composables/useRipple.js'
 import { isLazy } from '../lazyMode.js'
+import CaseStudyEnd from './CaseStudyEnd.js'
 
 const ANIM_MS = 700
 const EASE = 'cubic-bezier(0.34, 1.1, 0.64, 1)'
@@ -584,6 +585,9 @@ export default defineComponent({
 
               // Case study sections (passed via slot)
               slots.content?.(),
+
+              // Next case study / back to home / get in touch
+              h(CaseStudyEnd, { cardKey: props.cardKey }),
             ]),
           ]),
 
