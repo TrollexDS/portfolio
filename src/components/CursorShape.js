@@ -3,6 +3,14 @@ import { isLazy } from '../lazyMode.js'
 
 const TEXT_SELECTOR = 'p, h1, h2, h3, h4, h5, h6, span, a, li, label, td, th, blockquote'
 
+// Clickable things get the dot, and never the I-beam, even when the
+// pointer is over their text (a card title, a link label). Whole bento
+// cards count: they open on click.
+const CLICKABLE_SELECTOR = 'a[href], button:not(:disabled), [role="button"], select, summary, .bento-card'
+// Clickable, but they draw their own hover: the nav's ghost pill, and the
+// scroll toggle's ghosts/ticks (which are drawn from the arrow).
+const OWN_HOVER_SELECTOR = '.nav-pills, .lazy-toggle:not(.theme-toggle)'
+
 /* ── Shape definitions ──────────────────────────────────────
    Each shape = { start: [x,y], segs: [[cp1x,cp1y, cp2x,cp2y, ex,ey], …] }
    Both must have exactly 8 cubic-bézier segments so every
@@ -40,12 +48,36 @@ const BEAM = {
   ],
 }
 
+// Dot — a circle in 8 x 45° arcs, starting top-left and running clockwise
+// like the arrow (which starts at its tip), so each arc meets the arrow
+// segment nearest it and the morph doesn't twist.
+const DOT_R  = 13          // viewBox units (≈ 16 px across as drawn; 13.25 is the most that fits the 28 × 30 box with its stroke)
+const DOT_CX = 14
+const DOT_CY = 15
+const DOT = (() => {
+  const k  = 4 / 3 * Math.tan(Math.PI / 16)   // 45° arc → cubic handle length
+  const pt = a => [DOT_CX + DOT_R * Math.cos(a), DOT_CY + DOT_R * Math.sin(a)]
+  const a0 = -3 * Math.PI / 4
+  const segs = []
+  for (let i = 0; i < 8; i++) {
+    const a = a0 + i * Math.PI / 4, b = a + Math.PI / 4
+    const [x0, y0] = pt(a), [x1, y1] = pt(b)
+    segs.push([
+      x0 - k * DOT_R * Math.sin(a), y0 + k * DOT_R * Math.cos(a),
+      x1 + k * DOT_R * Math.sin(b), y1 - k * DOT_R * Math.cos(b),
+      x1, y1,
+    ])
+  }
+  return { start: pt(a0), segs }
+})()
+
 /* ── Hotspot offsets (px) ───────────────────────────────────
    Arrow tip  ≈ (1, 2)  in viewBox → basically (0, 0) in px
    Beam centre ≈ (2, 15) in viewBox → needs ≈ (−1.2, −9) px
 ────────────────────────────────────────────────────────── */
 const ARROW_OFFSET = [0, 0]
 const BEAM_OFFSET  = [-1.2, -9]
+const DOT_OFFSET   = [-DOT_CX * 17 / 28, -DOT_CY * 18 / 30]   // centre on the pointer
 
 const ARROW_SCALE  = 17 / 28   // viewBox units → px, as the cursor is drawn
 
@@ -66,6 +98,9 @@ const SVG_NS        = 'http://www.w3.org/2000/svg'
 
 const ARROW_STROKE = 2
 const BEAM_STROKE  = 1.2
+const DOT_STROKE   = 1.5
+// The dot sits on top of what it points at, so it's see-through
+const DOT_FILL_OPACITY = 0.55
 const DURATION     = 200  // ms
 const LERP_POS     = 0.25 // responsive but still smooth (overridden to 1.0 when lazy off)
 
@@ -88,6 +123,28 @@ function buildPath(a, b, t) {
   return d + 'Z'
 }
 
+/* ── Cursor states ──────────────────────────────────────────
+   Everything the morph tweens, per state, as one flat object, so a
+   change of target can start from whatever is drawn mid-morph.
+─────────────────────────────────────────────────────────── */
+const STATES = {
+  arrow: { shape: ARROW, offset: ARROW_OFFSET, stroke: ARROW_STROKE, fill: 1 },
+  beam:  { shape: BEAM,  offset: BEAM_OFFSET,  stroke: BEAM_STROKE,  fill: 1 },
+  dot:   { shape: DOT,   offset: DOT_OFFSET,   stroke: DOT_STROKE,   fill: DOT_FILL_OPACITY },
+}
+
+function mixState(a, b, t) {
+  return {
+    shape: {
+      start: [lerp(a.shape.start[0], b.shape.start[0], t), lerp(a.shape.start[1], b.shape.start[1], t)],
+      segs:  a.shape.segs.map((sa, i) => sa.map((v, j) => lerp(v, b.shape.segs[i][j], t))),
+    },
+    offset: [lerp(a.offset[0], b.offset[0], t), lerp(a.offset[1], b.offset[1], t)],
+    stroke: lerp(a.stroke, b.stroke, t),
+    fill:   lerp(a.fill, b.fill, t),
+  }
+}
+
 /* ── Component ──────────────────────────────────────────── */
 export default defineComponent({
   name: 'CursorShape',
@@ -103,10 +160,10 @@ export default defineComponent({
     const visible = ref(false)
 
     // Morph state (all mutated inside rAF — not reactive on purpose)
-    let isText   = false
-    let current  = 0       // 0 = arrow, 1 = beam
-    let animFrom = 0
-    let animTo   = 0
+    let mode     = 'arrow' // 'arrow' | 'beam' | 'dot'
+    let shown    = STATES.arrow   // what's drawn now (may be mid-morph)
+    let animFrom = STATES.arrow
+    let animTo   = STATES.arrow
     let animStart = null
     let rafId    = null
     let isNavPill = false
@@ -123,7 +180,7 @@ export default defineComponent({
     let beatStart = 0
     const ghosts = []        // { el, born }
     let arrowD = ''
-    let drawn  = NaN         // morph value last written to the path
+    let dirty  = true        // shape changed since last written to the path
 
     function shedGhost(now) {
       const el = document.createElementNS(SVG_NS, 'path')
@@ -208,36 +265,37 @@ export default defineComponent({
         probeDirty = false; probeX = rawX; probeY = rawY; lastProbe = now
         const el = document.elementFromPoint(rawX, rawY)
         onToggle = !!el?.closest?.(FX_SELECTOR)
-        const newIsText = !!el?.closest?.(TEXT_SELECTOR)
-          && !el?.closest?.('.action-icon, .about-shrink-btn, .nav-pills, .cv-wrap, .cc-outer')
-        if (newIsText !== isText) {
-          isText = newIsText
-          const target = isText ? 1 : 0
-          if (target !== animTo) {
-            animFrom  = current
-            animTo    = target
-            animStart = performance.now()
-          }
+        const clickable = !!el?.closest?.(CLICKABLE_SELECTOR)
+        const newMode =
+            clickable && !el.closest(OWN_HOVER_SELECTOR) ? 'dot'
+          : !clickable && el?.closest?.(TEXT_SELECTOR)
+              && !el.closest('.about-shrink-btn, .nav-pills, .cv-wrap, .cc-outer') ? 'beam'
+          : 'arrow'
+        if (newMode !== mode) {
+          mode      = newMode
+          animFrom  = shown            // start from what's on screen
+          animTo    = STATES[mode]
+          animStart = performance.now()
         }
       }
 
       // Advance morph
       if (animStart !== null) {
         const raw = Math.min((now - animStart) / DURATION, 1)
-        current = animFrom + (animTo - animFrom) * easeInOut(raw)
-        if (raw >= 1) { current = animTo; animStart = null }
+        shown = raw >= 1 ? animTo : mixState(animFrom, animTo, easeInOut(raw))
+        if (raw >= 1) animStart = null
+        dirty = true
       }
 
-      if (svgEl && pathEl && current !== drawn) {
-        drawn = current
+      if (svgEl && pathEl && dirty) {
+        dirty = false
         // Hotspot offset
-        const ox = lerp(ARROW_OFFSET[0], BEAM_OFFSET[0], current)
-        const oy = lerp(ARROW_OFFSET[1], BEAM_OFFSET[1], current)
-        svgEl.style.transform = `translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px)`
+        svgEl.style.transform = `translate(${shown.offset[0].toFixed(1)}px,${shown.offset[1].toFixed(1)}px)`
 
-        // Path + stroke
-        pathEl.setAttribute('d', buildPath(ARROW, BEAM, current))
-        pathEl.setAttribute('stroke-width', lerp(ARROW_STROKE, BEAM_STROKE, current).toFixed(2))
+        // Path + stroke + fill
+        pathEl.setAttribute('d', buildPath(shown.shape, shown.shape, 0))
+        pathEl.setAttribute('stroke-width', shown.stroke.toFixed(2))
+        pathEl.setAttribute('fill-opacity', shown.fill.toFixed(2))
       }
 
       tickFx(now)

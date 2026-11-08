@@ -66,8 +66,8 @@
 }
 .cse-next__arrow {
   flex-shrink: 0;
-  width: 56px;
-  height: 56px;
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   background: var(--gradient-brand);
   color: var(--color-text-on-primary);
@@ -140,7 +140,7 @@
   .cse-next:hover { transform: none; box-shadow: none; }
   .cse-next__text { gap: 6px; }
   .cse-next__title { font-size: calc(var(--cs-section-size) * 0.8); }
-  .cse-next__arrow { width: 44px; height: 44px; }
+  .cse-next__arrow { width: 36px; height: 36px; }
   .cse-row {
     flex-direction: column;
     align-items: stretch;

@@ -202,12 +202,6 @@
   .cs-back-to-top {
     bottom: 48px;
   }
-  /* Dark mode: --filter-action-icon inverts everything it is on, which
-     turned the button's own fill white under a white icon. Drop it here;
-     the button's surface and icon colour already flip with the theme. */
-  [data-theme="dark"] .cs-back-to-top {
-    filter: none;
-  }
 
   /* ── Captions: keep to the page margin, and stack the Interactive tag
      above its text instead of beside it ── */

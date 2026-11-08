@@ -103,7 +103,9 @@ strong, b {
   transform: scale(0.8);
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease, background 0.5s ease;
-  filter: var(--filter-action-icon);
+  /* No --filter-action-icon here: it's for black <img> icons and would
+     paint the whole button white in dark mode. The inline SVG uses
+     currentColor, which already flips with --color-text-primary. */
 }
 
 .back-to-top--visible {
